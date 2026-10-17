@@ -5,12 +5,15 @@ using UnityEngine.InputSystem;
 
 namespace Memories.Infrastructure.Input
 {
-    public sealed class PlayerInputService : IPlayerInput, IDisposable
+    public sealed class PlayerInputService : IPlayerInput, IInteractionInput, IDisposable
     {
         private readonly InputAction move = new InputAction("Move", InputActionType.Value);
         private readonly InputAction look = new InputAction("Look", InputActionType.Value, "<Mouse>/delta");
         private readonly InputAction release = new InputAction("ReleaseCursor", InputActionType.Button, "<Keyboard>/escape");
         private readonly InputAction capture = new InputAction("CaptureCursor", InputActionType.Button, "<Mouse>/leftButton");
+        private readonly InputAction interact = new InputAction("Interact", InputActionType.Button, "<Keyboard>/e");
+        public bool InteractionEnabled => active && captured && Application.isFocused && Cursor.lockState == CursorLockMode.Locked;
+        public bool InteractPressed => InteractionEnabled && Time.frameCount > captureFrame && interact.WasPressedThisFrame();
         private bool active;
         private bool captured;
         private int captureFrame;
@@ -64,11 +67,13 @@ namespace Memories.Infrastructure.Input
                 captureFrame = Time.frameCount;
                 move.Enable();
                 look.Enable();
+                interact.Enable();
             }
             else
             {
                 move.Disable();
                 look.Disable();
+                interact.Disable();
             }
             Cursor.lockState = value ? CursorLockMode.Locked : CursorLockMode.None;
             Cursor.visible = !value;
@@ -93,6 +98,7 @@ namespace Memories.Infrastructure.Input
             look.Dispose();
             release.Dispose();
             capture.Dispose();
+            interact.Dispose();
         }
     }
 }

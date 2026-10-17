@@ -21,7 +21,7 @@ namespace Memories.Bootstrap
             builder.Register<ApplicationContext>(Lifetime.Singleton);
             playerMovement.Validate();
             builder.RegisterInstance(playerMovement);
-            builder.Register<PlayerInputService>(Lifetime.Singleton).As<IPlayerInput>();
+            builder.Register<PlayerInputService>(Lifetime.Singleton).As<IPlayerInput>().As<IInteractionInput>();
             builder.Register<GameSession>(Lifetime.Singleton).AsSelf().AsImplementedInterfaces();
             if (startAutomatically)
                 builder.RegisterEntryPoint<BootstrapEntryPoint>().WithParameter(initialLocationPath);

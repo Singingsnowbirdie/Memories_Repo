@@ -1,6 +1,9 @@
 using VContainer;
 using VContainer.Unity;
 using Memories.Gameplay.Player;
+using Memories.Gameplay.Interaction;
+using Memories.Gameplay.UI;
+using UnityEngine;
 
 namespace Memories.Bootstrap
 {
@@ -15,6 +18,16 @@ namespace Memories.Bootstrap
             builder.Register<PlayerMovementModel>(Lifetime.Singleton);
             builder.Register<PlayerPresenter>(Lifetime.Singleton);
             builder.RegisterEntryPoint<PlayerEntryPoint>();
+            builder.Register<InteractionProbe>(container => new InteractionProbe(
+                container.Resolve<PlayerMotor>().GetComponentInChildren<Camera>()), Lifetime.Singleton);
+            builder.Register<IInteractionView>(container =>
+            {
+                var hud = new GameObject("Interaction HUD", typeof(RectTransform));
+                hud.transform.SetParent(transform, false);
+                return hud.AddComponent<InteractionHud>();
+            }, Lifetime.Singleton);
+            builder.Register<InteractionPresenter>(Lifetime.Singleton);
+            builder.RegisterEntryPoint<InteractionEntryPoint>();
         }
     }
 }

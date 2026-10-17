@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 using VContainer;
 using Memories.Gameplay.Player;
+using Memories.Gameplay.Interaction;
+using Memories.Gameplay.UI;
 
 namespace Memories.Tests.PlayMode
 {
@@ -32,10 +34,23 @@ namespace Memories.Tests.PlayMode
                 Assert.IsNotNull(motor.GetComponent<CharacterController>());
                 Assert.AreEqual(1, motor.GetComponentsInChildren<Camera>().Length);
                 Assert.AreEqual(1, motor.GetComponentsInChildren<AudioListener>().Length);
+                Physics.SyncTransforms();
+                var probe = session.LocationScope.Container.Resolve<InteractionProbe>();
+                var target = probe.FindTarget();
+                Assert.IsInstanceOf<TestLightSwitch>(target, "The test switch must be reachable from spawn.");
+                Assert.AreEqual("Включить свет", target.Prompt);
+                target.Interact();
+                Assert.AreEqual("Выключить свет", target.Prompt);
+                var hud = session.LocationScope.Container.Resolve<IInteractionView>() as InteractionHud;
+                Assert.IsNotNull(hud);
+                hud.Show(true, true, "[E] " + target.Prompt);
+                Assert.IsTrue(hud.GetComponent<Canvas>().enabled);
                 var application = app.Container.Resolve<ApplicationContext>();
                 var sessionContext = session.SessionScope.Container.Resolve<SessionContext>();
                 var location = session.LocationScope.Container.Resolve<LocationContext>();
                 await session.EndAsync();
+                Assert.IsTrue(hud == null, "HUD must be destroyed with its location.");
+                Assert.IsTrue(target == null, "Test switch must be destroyed with its location.");
                 await SceneManager.UnloadSceneAsync(scene);
                 Assert.IsTrue(application.Token.IsCancellationRequested);
                 Assert.IsTrue(sessionContext.Token.IsCancellationRequested);
