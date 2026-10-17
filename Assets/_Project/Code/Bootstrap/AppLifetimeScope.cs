@@ -1,4 +1,5 @@
 using UnityEngine;
+using Memories.Gameplay.UI;
 using Memories.Contracts;
 using Memories.Gameplay.Player;
 using Memories.Infrastructure.Input;
@@ -19,6 +20,8 @@ namespace Memories.Bootstrap
         protected override void Configure(IContainerBuilder builder)
         {
             builder.Register<ApplicationContext>(Lifetime.Singleton);
+            builder.Register<AudioVolumeSettings>(Lifetime.Singleton);
+            builder.RegisterBuildCallback(container => container.Resolve<AudioVolumeSettings>());
             playerMovement.Validate();
             builder.RegisterInstance(playerMovement);
             builder.Register<PlayerInputService>(Lifetime.Singleton).As<IPlayerInput>().As<IInteractionInput>().As<IPauseInput>();

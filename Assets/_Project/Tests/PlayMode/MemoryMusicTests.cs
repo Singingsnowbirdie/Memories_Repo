@@ -30,14 +30,13 @@ namespace Memories.Tests.PlayMode
                 Assert.IsTrue(source.ignoreListenerPause);
                 Assert.AreEqual(0, source.spatialBlend);
                 Set(node, "clip", clip);
-                Set(node, "volume", .6f);
                 Set(node, "fadeDuration", .08f);
                 player.Execute(node);
                 Assert.AreSame(clip, source.clip);
                 Assert.IsTrue(source.loop);
                 Assert.AreEqual(0, source.volume);
                 await UniTask.Delay(130, ignoreTimeScale: true);
-                Assert.That(source.volume, Is.EqualTo(.6f).Within(.01f));
+                Assert.That(source.volume, Is.EqualTo(1f).Within(.01f));
                 Set(node, "clip", null);
                 player.Execute(node);
                 Assert.AreSame(clip, source.clip, "An empty node should not cut off existing music.");
@@ -55,7 +54,7 @@ namespace Memories.Tests.PlayMode
                 Assert.AreEqual(0, source.volume, "Cancelled fade must not restore volume.");
                 Set(node, "fadeDuration", 0f);
                 player.Execute(node);
-                Assert.AreEqual(.6f, source.volume);
+                Assert.AreEqual(1f, source.volume);
                 root.SetActive(false);
                 Assert.IsNull(source.clip);
             }

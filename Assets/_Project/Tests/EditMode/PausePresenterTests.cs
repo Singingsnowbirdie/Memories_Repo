@@ -19,6 +19,14 @@ namespace Memories.Tests.EditMode
         {
             public event Action ResumeRequested;
             public event Action QuitRequested { add { } remove { } }
+            public event Action SettingsRequested;
+            public event Action BackRequested { add { } remove { } }
+            public event Action<float> MasterChanged { add { } remove { } }
+            public event Action<float> MusicChanged { add { } remove { } }
+            public event Action<float> SoundsChanged { add { } remove { } }
+            public bool SettingsVisible;
+            public void ShowSettings(bool visible, float master, float music, float sounds) => SettingsVisible = visible;
+            public void Settings() => SettingsRequested?.Invoke();
             public bool Visible;
             public void Show(bool visible) => Visible = visible;
             public void Resume() => ResumeRequested?.Invoke();
@@ -28,10 +36,11 @@ namespace Memories.Tests.EditMode
         public void EscapeAndResumeButtonRestorePreviousTimeAndAudio()
         {
             float oldTime = Time.timeScale;
+            float oldVolume = AudioListener.volume;
             bool oldAudio = AudioListener.pause;
             var input = new Input();
             var view = new View();
-            var presenter = new PausePresenter(input, view, new GameplayModeState(input));
+            var presenter = new PausePresenter(input, view, new GameplayModeState(input), new AudioVolumeSettings());
             try
             {
                 Time.timeScale = .5f;
@@ -40,6 +49,12 @@ namespace Memories.Tests.EditMode
                 Assert.IsTrue(presenter.IsPaused && input.Paused && view.Visible);
                 Assert.AreEqual(0, Time.timeScale);
                 Assert.IsTrue(AudioListener.pause);
+                view.Settings();
+                Assert.IsTrue(view.SettingsVisible);
+                input.Escape();
+                Assert.IsFalse(view.SettingsVisible);
+                Assert.IsTrue(presenter.IsPaused && input.Paused);
+                Assert.AreEqual(0, Time.timeScale);
                 view.Resume();
                 Assert.IsFalse(presenter.IsPaused || input.Paused || view.Visible);
                 Assert.AreEqual(.5f, Time.timeScale);
@@ -60,6 +75,7 @@ namespace Memories.Tests.EditMode
             {
                 presenter.Dispose();
                 Time.timeScale = oldTime;
+                AudioListener.volume = oldVolume;
                 AudioListener.pause = oldAudio;
             }
         }

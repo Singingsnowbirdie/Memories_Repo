@@ -21,8 +21,8 @@ namespace Memories.Editor
             if (action.enumValueIndex == (int)MemoryMusicAction.Play)
             {
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("clip"), new GUIContent("Аудиоклип"));
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("volume"), new GUIContent("Громкость"));
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("loop"), new GUIContent("Зацикливание"));
+                var loop = serializedObject.FindProperty("loop");
+                loop.boolValue = EditorGUILayout.ToggleLeft("Зацикливание", loop.boolValue);
                 if (serializedObject.FindProperty("clip").objectReferenceValue == null)
                     EditorGUILayout.HelpBox("Клип не назначен. Нода будет пропущена, воспоминание продолжится без новой музыки.", MessageType.Info);
             }

@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using Memories.Gameplay.UI;
 
 namespace Memories.Gameplay.Memories
 {
@@ -9,16 +10,20 @@ namespace Memories.Gameplay.Memories
     public sealed class MemoryMusicPlayer : MonoBehaviour, IMemoryMusic
     {
         private AudioSource source;
+        private AudioVolumeBinding volume;
         private CancellationTokenSource fade;
 
         private void Awake()
         {
             source = GetComponent<AudioSource>();
+            volume = gameObject.AddComponent<AudioVolumeBinding>();
             source.playOnAwake = false;
             source.spatialBlend = 0;
             source.ignoreListenerPause = true;
             source.Stop();
         }
+
+        public void Initialize(AudioVolumeSettings settings) => volume.Initialize(settings, AudioChannel.Music);
 
         public void Execute(MemoryMusicNode node)
         {
@@ -31,15 +36,15 @@ namespace Memories.Gameplay.Memories
                 source.Stop();
                 source.clip = node.Clip;
                 source.loop = node.Loop;
-                source.volume = node.FadeDuration > 0 ? 0 : node.Volume;
+                volume.Volume = node.FadeDuration > 0 ? 0 : 1f;
                 source.Play();
-                target = node.Volume;
+                target = 1f;
             }
             else target = 0;
 
             if (node.FadeDuration <= 0)
             {
-                source.volume = target;
+                volume.Volume = target;
                 if (node.Action == MemoryMusicAction.Stop) StopImmediately();
                 return;
             }
@@ -49,7 +54,7 @@ namespace Memories.Gameplay.Memories
 
         private async UniTask FadeAsync(float target, float duration, bool stop, CancellationToken token)
         {
-            float start = source.volume;
+            float start = volume.Volume;
             float elapsed = 0;
             try
             {
@@ -57,7 +62,7 @@ namespace Memories.Gameplay.Memories
                 {
                     await UniTask.NextFrame(cancellationToken: token);
                     elapsed += Time.unscaledDeltaTime;
-                    source.volume = Mathf.Lerp(start, target, elapsed / duration);
+                    volume.Volume = Mathf.Lerp(start, target, elapsed / duration);
                 }
                 if (stop)
                 {
@@ -74,7 +79,7 @@ namespace Memories.Gameplay.Memories
             if (source == null) return;
             source.Stop();
             source.clip = null;
-            source.volume = 0;
+            volume.Volume = 0;
         }
 
         private void CancelFade()

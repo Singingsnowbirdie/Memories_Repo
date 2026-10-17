@@ -36,9 +36,8 @@ namespace Memories.Gameplay.Memories
                 }
                 else if (node is MemoryMusicNode music)
                 {
-                    if (!System.Enum.IsDefined(typeof(MemoryMusicAction), music.Action) || !ValidTime(music.FadeDuration) ||
-                        !ValidTime(music.Volume) || music.Volume > 1)
-                    { error = "У ноды музыки некорректны настройки действия, громкости или фейда."; return false; }
+                    if (!System.Enum.IsDefined(typeof(MemoryMusicAction), music.Action) || !ValidTime(music.FadeDuration))
+                    { error = "У ноды музыки некорректны настройки действия или фейда."; return false; }
                     frames.Add(music);
                 }
                 else if (!(node is MemoryStartNode))

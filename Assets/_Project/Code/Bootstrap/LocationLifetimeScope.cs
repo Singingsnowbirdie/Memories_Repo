@@ -58,7 +58,9 @@ namespace Memories.Bootstrap
             {
                 var audio = new GameObject("Memory music");
                 audio.transform.SetParent(transform, false);
-                return audio.AddComponent<MemoryMusicPlayer>();
+                var player = audio.AddComponent<MemoryMusicPlayer>();
+                player.Initialize(container.Resolve<AudioVolumeSettings>());
+                return player;
             }, Lifetime.Singleton);
             builder.RegisterBuildCallback(container =>
             {
