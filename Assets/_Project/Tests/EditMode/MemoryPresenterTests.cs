@@ -36,6 +36,12 @@ namespace Memories.Tests.EditMode
             public void StopImmediately() => Stopped++;
         }
 
+        private sealed class Sounds : IMemorySound
+        {
+            public UniTask PlayAsync(MemorySoundNode node, CancellationToken token) => UniTask.CompletedTask;
+            public void StopAll() { }
+        }
+
         [Test]
         public void GraphRejectsMissingImageBrokenConnectionAndCycle()
         {
@@ -75,7 +81,7 @@ namespace Memories.Tests.EditMode
             float time = Time.timeScale;
             bool audio = AudioListener.pause;
             var music = new Music();
-            using var presenter = new MemoryPresenter(collection, state, view, input, music);
+            using var presenter = new MemoryPresenter(collection, state, view, input, music, new Sounds());
             try
             {
                 LogAssert.Expect(LogType.Warning, new System.Text.RegularExpressions.Regex("Воспоминание не запущено"));

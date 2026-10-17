@@ -16,18 +16,20 @@ namespace Memories.Gameplay.Memories
         private readonly IMemoryView view;
         private readonly IPauseInput input;
         private readonly IMemoryMusic music;
+        private readonly IMemorySound sounds;
         private CancellationTokenSource playback;
         private string currentId;
         private bool disposed;
         public bool IsPlaying => playback != null;
 
-        public MemoryPresenter(MemoryCollection collection, GameplayModeState state, IMemoryView view, IPauseInput input, IMemoryMusic music)
+        public MemoryPresenter(MemoryCollection collection, GameplayModeState state, IMemoryView view, IPauseInput input, IMemoryMusic music, IMemorySound sounds)
         {
             this.collection = collection;
             this.state = state;
             this.view = view;
             this.input = input;
             this.music = music;
+            this.sounds = sounds;
             input.PauseRequested += Close;
             view.Hide();
         }
@@ -62,6 +64,13 @@ namespace Memories.Gameplay.Memories
                         music.Execute(musicNode);
                         continue;
                     }
+                    if (step is MemorySoundNode soundNode)
+                    {
+                        var sound = sounds.PlayAsync(soundNode, source.Token);
+                        if (soundNode.WaitForCompletion) await sound;
+                        else sound.Forget();
+                        continue;
+                    }
                     var frame = (MemoryFrameNode)step;
                     await view.ShowFrameAsync(frame, source.Token);
                     await UniTask.Delay(TimeSpan.FromSeconds(frame.DisplayDuration), ignoreTimeScale: true, cancellationToken: source.Token);
@@ -78,6 +87,7 @@ namespace Memories.Gameplay.Memories
                     if (completed) collection.Collect(currentId);
                     currentId = null;
                     music.StopImmediately();
+                    sounds.StopAll();
                     view.Hide();
                     state.Exit(GameplayMode.Reading);
                 }
@@ -96,6 +106,7 @@ namespace Memories.Gameplay.Memories
             currentId = null;
             source.Cancel();
             music.StopImmediately();
+            sounds.StopAll();
             view.Hide();
             state.Exit(GameplayMode.Reading, restoreControl);
         }

@@ -40,6 +40,12 @@ namespace Memories.Gameplay.Memories
                     { error = "У ноды музыки некорректны настройки действия или фейда."; return false; }
                     frames.Add(music);
                 }
+                else if (node is MemorySoundNode sound)
+                {
+                    if (!ValidTime(sound.Delay))
+                    { error = "У ноды звука некорректна задержка."; return false; }
+                    frames.Add(sound);
+                }
                 else if (!(node is MemoryStartNode))
                 { error = "Неподдерживаемая нода."; return false; }
                 var output = node.GetOutputPort("next");

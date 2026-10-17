@@ -13,6 +13,7 @@ namespace Memories.Editor
             if (type == typeof(MemoryFrameNode)) return "Кадр";
             if (type == typeof(MemoryEndNode)) return "Конец";
             if (type == typeof(MemoryMusicNode)) return "Музыка";
+            if (type == typeof(MemorySoundNode)) return "Звук";
             return null;
         }
     }

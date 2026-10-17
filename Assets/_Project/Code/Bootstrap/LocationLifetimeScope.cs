@@ -54,6 +54,14 @@ namespace Memories.Bootstrap
                 return window.AddComponent<MemoryView>();
             }, Lifetime.Singleton);
             builder.Register<MemoryPresenter>(Lifetime.Singleton).AsSelf().AsImplementedInterfaces();
+            builder.Register<IMemorySound>(container =>
+            {
+                var audio = new GameObject("Memory sounds");
+                audio.transform.SetParent(transform, false);
+                var player = audio.AddComponent<MemorySoundPlayer>();
+                player.Initialize(container.Resolve<AudioVolumeSettings>());
+                return player;
+            }, Lifetime.Singleton);
             builder.Register<IMemoryMusic>(container =>
             {
                 var audio = new GameObject("Memory music");
