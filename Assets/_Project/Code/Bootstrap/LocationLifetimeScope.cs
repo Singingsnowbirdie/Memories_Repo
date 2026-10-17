@@ -1,5 +1,6 @@
 using VContainer;
 using VContainer.Unity;
+using Memories.Gameplay.Player;
 
 namespace Memories.Bootstrap
 {
@@ -9,6 +10,11 @@ namespace Memories.Bootstrap
         {
             builder.Register<LocationContext>(Lifetime.Singleton);
             builder.RegisterBuildCallback(container => container.Resolve<LocationContext>());
+            builder.Register<PlayerMotor>(container => PlayerFactory.Create(this, container.Resolve<PlayerMovementSettings>()), Lifetime.Singleton)
+                .AsSelf().As<IPlayerView>();
+            builder.Register<PlayerMovementModel>(Lifetime.Singleton);
+            builder.Register<PlayerPresenter>(Lifetime.Singleton);
+            builder.RegisterEntryPoint<PlayerEntryPoint>();
         }
     }
 }

@@ -164,6 +164,17 @@ MonoBehaviour:
   autoInjectGameObjects: []
   initialLocationPath: Assets/Scenes/FirstPersonTest/FirstPersonTest.unity
   startAutomatically: 1
+  playerMovement:
+    WalkSpeed: 4
+    MouseSensitivity: 0.12
+    PitchLimit: 85
+    Gravity: -20
+    TerminalSpeed: 50
+    Height: 1.8
+    Radius: 0.3
+    EyeHeight: 1.65
+    StepOffset: 0.3
+    SlopeLimit: 45
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
