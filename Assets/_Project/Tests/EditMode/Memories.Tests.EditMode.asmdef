@@ -1,0 +1,34 @@
+{
+    "name":  "Memories.Tests.EditMode",
+    "rootNamespace":  "Memories.Tests.EditMode",
+    "references":  [
+                       "Memories.Contracts",
+                       "Memories.Gameplay",
+                       "Memories.Infrastructure",
+                       "Memories.Bootstrap",
+                       "UniTask",
+                       "R3.Unity"
+                   ],
+    "includePlatforms":  [
+                             "Editor"
+                         ],
+    "excludePlatforms":  [
+
+                         ],
+    "allowUnsafeCode":  false,
+    "overrideReferences":  true,
+    "precompiledReferences":  [
+                                  "R3.dll"
+                              ],
+    "autoReferenced":  false,
+    "defineConstraints":  [
+                              "UNITY_INCLUDE_TESTS"
+                          ],
+    "versionDefines":  [
+
+                       ],
+    "noEngineReferences":  false,
+    "optionalUnityReferences":  [
+                                    "TestAssemblies"
+                                ]
+}
