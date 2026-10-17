@@ -8,6 +8,10 @@ namespace Memories.Editor
     public sealed class MemoryGraphEditor : NodeGraphEditor
     {
         public override string GetNodeMenuName(Type type)
-            => type == typeof(MemoryStartNode) ? "Начало" : null;
+        {
+            if (type == typeof(MemoryStartNode)) return "Начало";
+            if (type == typeof(MemoryFrameNode)) return "Кадр";
+            return null;
+        }
     }
 }
