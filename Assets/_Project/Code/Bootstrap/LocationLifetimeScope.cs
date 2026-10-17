@@ -4,6 +4,8 @@ using Memories.Gameplay.Player;
 using Memories.Gameplay.Interaction;
 using Memories.Gameplay.UI;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem.UI;
 
 namespace Memories.Bootstrap
 {
@@ -28,6 +30,21 @@ namespace Memories.Bootstrap
             }, Lifetime.Singleton);
             builder.Register<InteractionPresenter>(Lifetime.Singleton);
             builder.RegisterEntryPoint<InteractionEntryPoint>();
+            builder.Register<IPauseView>(container =>
+            {
+                if (EventSystem.current == null)
+                {
+                    var events = new GameObject("UI EventSystem");
+                    events.transform.SetParent(transform, false);
+                    events.AddComponent<EventSystem>();
+                    events.AddComponent<InputSystemUIInputModule>();
+                }
+                var menu = new GameObject("Pause menu", typeof(RectTransform));
+                menu.transform.SetParent(transform, false);
+                return menu.AddComponent<PauseMenuView>();
+            }, Lifetime.Singleton);
+            builder.Register<PausePresenter>(Lifetime.Singleton).AsSelf().AsImplementedInterfaces();
+            builder.RegisterBuildCallback(container => container.Resolve<PausePresenter>());
         }
     }
 }

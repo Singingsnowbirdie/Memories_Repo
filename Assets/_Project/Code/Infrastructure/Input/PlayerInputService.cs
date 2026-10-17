@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 namespace Memories.Infrastructure.Input
 {
-    public sealed class PlayerInputService : IPlayerInput, IInteractionInput, IDisposable
+    public sealed class PlayerInputService : IPlayerInput, IInteractionInput, IPauseInput, IDisposable
     {
         private readonly InputAction move = new InputAction("Move", InputActionType.Value);
         private readonly InputAction look = new InputAction("Look", InputActionType.Value, "<Mouse>/delta");
@@ -15,6 +15,8 @@ namespace Memories.Infrastructure.Input
         public bool InteractionEnabled => active && captured && Application.isFocused && Cursor.lockState == CursorLockMode.Locked;
         public bool InteractPressed => InteractionEnabled && Time.frameCount > captureFrame && interact.WasPressedThisFrame();
         private bool active;
+        private bool paused;
+        public event Action PauseRequested;
         private bool captured;
         private int captureFrame;
         private CursorLockMode previousLock;
@@ -45,11 +47,17 @@ namespace Memories.Infrastructure.Input
         public void Poll()
         {
             if (!active) return;
-            if (!Application.isFocused || release.WasPressedThisFrame())
+            if (!Application.isFocused)
             {
                 SetCaptured(false);
                 return;
             }
+            if (release.WasPressedThisFrame())
+            {
+                PauseRequested?.Invoke();
+                return;
+            }
+            if (paused) return;
             if (captured && Cursor.lockState != CursorLockMode.Locked) SetCaptured(false);
             if (!captured && capture.WasPressedThisFrame()) SetCaptured(true);
         }
@@ -57,6 +65,12 @@ namespace Memories.Infrastructure.Input
         private void OnFocusChanged(bool focused)
         {
             if (active && !focused) SetCaptured(false);
+        }
+
+        public void SetPaused(bool value)
+        {
+            paused = value;
+            if (active) SetCaptured(!paused && Application.isFocused);
         }
 
         private void SetCaptured(bool value)
@@ -86,6 +100,7 @@ namespace Memories.Infrastructure.Input
             release.Disable();
             capture.Disable();
             active = false;
+            paused = false;
             Cursor.lockState = previousLock;
             Cursor.visible = previousVisibility;
         }

@@ -48,7 +48,18 @@ namespace Memories.Tests.PlayMode
                 var application = app.Container.Resolve<ApplicationContext>();
                 var sessionContext = session.SessionScope.Container.Resolve<SessionContext>();
                 var location = session.LocationScope.Container.Resolve<LocationContext>();
+                var pause = session.LocationScope.Container.Resolve<PausePresenter>();
+                var pauseView = session.LocationScope.Container.Resolve<IPauseView>() as PauseMenuView;
+                Assert.IsNotNull(pauseView);
+                pause.Toggle();
+                Assert.AreEqual(0, Time.timeScale);
+                Assert.IsTrue(AudioListener.pause);
+                Assert.IsTrue(pauseView.transform.GetChild(0).gameObject.activeSelf);
+                Assert.IsFalse(app.Container.Resolve<Memories.Contracts.IInteractionInput>().InteractionEnabled);
                 await session.EndAsync();
+                Assert.AreEqual(1, Time.timeScale);
+                Assert.IsFalse(AudioListener.pause);
+                Assert.IsTrue(pauseView == null);
                 Assert.IsTrue(hud == null, "HUD must be destroyed with its location.");
                 Assert.IsTrue(target == null, "Test switch must be destroyed with its location.");
                 await SceneManager.UnloadSceneAsync(scene);
