@@ -9,9 +9,9 @@ namespace Memories.Gameplay.Memories
     [NodeGraph.RequireNode(typeof(MemoryStartNode))]
     public sealed class MemoryGraph : NodeGraph
     {
-        public bool TryGetSequence(out List<MemoryFrameNode> frames, out string error)
+        public bool TryGetSequence(out List<Node> frames, out string error)
         {
-            frames = new List<MemoryFrameNode>();
+            frames = new List<Node>();
             error = null;
             if (nodes.Any(n => n == null) || nodes.OfType<MemoryStartNode>().Count() != 1 || nodes.OfType<MemoryEndNode>().Count() != 1)
             { error = "Нужны ровно одно «Начало» и один «Конец», без отсутствующих нод."; return false; }
@@ -23,7 +23,7 @@ namespace Memories.Gameplay.Memories
                 { error = "В графе цикл или ссылка на чужую ноду."; return false; }
                 if (node is MemoryEndNode)
                 {
-                    if (frames.Count == 0 || visited.Count != nodes.Count)
+                    if (!frames.OfType<MemoryFrameNode>().Any() || visited.Count != nodes.Count)
                     { error = "Добавьте кадры и подключите все ноды к основной цепочке."; return false; }
                     return true;
                 }
@@ -33,6 +33,13 @@ namespace Memories.Gameplay.Memories
                         !ValidTime(frame.TransitionDuration) || !System.Enum.IsDefined(typeof(MemoryFrameTransition), frame.Transition))
                     { error = "У кадра отсутствует изображение или некорректны настройки времени/перехода."; return false; }
                     frames.Add(frame);
+                }
+                else if (node is MemoryMusicNode music)
+                {
+                    if (!System.Enum.IsDefined(typeof(MemoryMusicAction), music.Action) || !ValidTime(music.FadeDuration) ||
+                        !ValidTime(music.Volume) || music.Volume > 1)
+                    { error = "У ноды музыки некорректны настройки действия, громкости или фейда."; return false; }
+                    frames.Add(music);
                 }
                 else if (!(node is MemoryStartNode))
                 { error = "Неподдерживаемая нода."; return false; }

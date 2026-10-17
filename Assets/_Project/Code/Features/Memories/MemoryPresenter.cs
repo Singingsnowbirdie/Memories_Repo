@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using Memories.Contracts;
 using Memories.Gameplay.UI;
 using UnityEngine;
+using XNode;
 
 namespace Memories.Gameplay.Memories
 {
@@ -14,17 +15,19 @@ namespace Memories.Gameplay.Memories
         private readonly GameplayModeState state;
         private readonly IMemoryView view;
         private readonly IPauseInput input;
+        private readonly IMemoryMusic music;
         private CancellationTokenSource playback;
         private string currentId;
         private bool disposed;
         public bool IsPlaying => playback != null;
 
-        public MemoryPresenter(MemoryCollection collection, GameplayModeState state, IMemoryView view, IPauseInput input)
+        public MemoryPresenter(MemoryCollection collection, GameplayModeState state, IMemoryView view, IPauseInput input, IMemoryMusic music)
         {
             this.collection = collection;
             this.state = state;
             this.view = view;
             this.input = input;
+            this.music = music;
             input.PauseRequested += Close;
             view.Hide();
         }
@@ -45,15 +48,21 @@ namespace Memories.Gameplay.Memories
             return true;
         }
 
-        private async UniTask PlayAsync(List<MemoryFrameNode> frames, CancellationTokenSource source)
+        private async UniTask PlayAsync(List<Node> frames, CancellationTokenSource source)
         {
             bool completed = false;
             try
             {
                 view.Show();
-                foreach (var frame in frames)
+                foreach (var step in frames)
                 {
                     source.Token.ThrowIfCancellationRequested();
+                    if (step is MemoryMusicNode musicNode)
+                    {
+                        music.Execute(musicNode);
+                        continue;
+                    }
+                    var frame = (MemoryFrameNode)step;
                     await view.ShowFrameAsync(frame, source.Token);
                     await UniTask.Delay(TimeSpan.FromSeconds(frame.DisplayDuration), ignoreTimeScale: true, cancellationToken: source.Token);
                 }
@@ -68,6 +77,7 @@ namespace Memories.Gameplay.Memories
                     playback = null;
                     if (completed) collection.Collect(currentId);
                     currentId = null;
+                    music.StopImmediately();
                     view.Hide();
                     state.Exit(GameplayMode.Reading);
                 }
@@ -85,6 +95,7 @@ namespace Memories.Gameplay.Memories
             playback = null;
             currentId = null;
             source.Cancel();
+            music.StopImmediately();
             view.Hide();
             state.Exit(GameplayMode.Reading, restoreControl);
         }

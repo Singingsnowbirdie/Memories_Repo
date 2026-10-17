@@ -29,13 +29,20 @@ namespace Memories.Tests.EditMode
             public UniTask ShowFrameAsync(MemoryFrameNode frame, CancellationToken token)
                 => UniTask.WaitUntilCanceled(token);
         }
+        private sealed class Music : IMemoryMusic
+        {
+            public int Executed, Stopped;
+            public void Execute(MemoryMusicNode node) => Executed++;
+            public void StopImmediately() => Stopped++;
+        }
 
         [Test]
         public void GraphRejectsMissingImageBrokenConnectionAndCycle()
         {
             var asset = AssetDatabase.LoadAssetAtPath<MemoryGraph>("Assets/_Project/Configs/FirstMemoryGraph.asset");
             Assert.IsTrue(asset.TryGetSequence(out var frames, out var error), error);
-            Assert.AreEqual(3, frames.Count);
+            Assert.AreEqual(3, frames.OfType<MemoryFrameNode>().Count());
+            Assert.IsInstanceOf<MemoryMusicNode>(frames[0]);
             var graph = (MemoryGraph)asset.Copy();
             try
             {
@@ -67,22 +74,26 @@ namespace Memories.Tests.EditMode
             var invalid = ScriptableObject.CreateInstance<MemoryGraph>();
             float time = Time.timeScale;
             bool audio = AudioListener.pause;
-            using var presenter = new MemoryPresenter(collection, state, view, input);
+            var music = new Music();
+            using var presenter = new MemoryPresenter(collection, state, view, input, music);
             try
             {
                 LogAssert.Expect(LogType.Warning, new System.Text.RegularExpressions.Regex("Воспоминание не запущено"));
                 Assert.IsFalse(presenter.Open("bad", invalid));
                 Assert.IsFalse(input.Blocked || view.Visible);
                 Assert.IsTrue(presenter.Open("first", graph));
+                Assert.AreEqual(1, music.Executed);
                 Assert.IsTrue(input.Blocked && view.Visible);
                 Assert.AreEqual(0, Time.timeScale);
                 Assert.IsFalse(presenter.Open("second", graph));
                 input.Escape();
+                Assert.AreEqual(1, music.Stopped);
                 Assert.IsFalse(presenter.IsPlaying || view.Visible || input.Blocked);
                 Assert.IsFalse(collection.Contains("first"));
                 Assert.AreEqual(time, Time.timeScale);
                 Assert.IsTrue(presenter.Open("first", graph));
                 presenter.Dispose();
+                Assert.AreEqual(2, music.Stopped);
                 Assert.AreEqual(time, Time.timeScale);
                 Assert.AreEqual(audio, AudioListener.pause);
                 Assert.IsFalse(collection.Contains("first"));

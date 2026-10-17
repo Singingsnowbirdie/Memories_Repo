@@ -54,6 +54,12 @@ namespace Memories.Bootstrap
                 return window.AddComponent<MemoryView>();
             }, Lifetime.Singleton);
             builder.Register<MemoryPresenter>(Lifetime.Singleton).AsSelf().AsImplementedInterfaces();
+            builder.Register<IMemoryMusic>(container =>
+            {
+                var audio = new GameObject("Memory music");
+                audio.transform.SetParent(transform, false);
+                return audio.AddComponent<MemoryMusicPlayer>();
+            }, Lifetime.Singleton);
             builder.RegisterBuildCallback(container =>
             {
                 // Register Escape handling after pause: reading consumes it by closing its own window.
