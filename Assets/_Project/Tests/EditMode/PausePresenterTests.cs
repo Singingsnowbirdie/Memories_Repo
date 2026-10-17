@@ -31,7 +31,7 @@ namespace Memories.Tests.EditMode
             bool oldAudio = AudioListener.pause;
             var input = new Input();
             var view = new View();
-            var presenter = new PausePresenter(input, view);
+            var presenter = new PausePresenter(input, view, new GameplayModeState(input));
             try
             {
                 Time.timeScale = .5f;

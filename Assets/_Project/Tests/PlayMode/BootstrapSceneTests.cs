@@ -9,6 +9,7 @@ using VContainer;
 using Memories.Gameplay.Player;
 using Memories.Gameplay.Interaction;
 using Memories.Gameplay.UI;
+using Memories.Gameplay.Memories;
 
 namespace Memories.Tests.PlayMode
 {
@@ -48,6 +49,19 @@ namespace Memories.Tests.PlayMode
                 var application = app.Container.Resolve<ApplicationContext>();
                 var sessionContext = session.SessionScope.Container.Resolve<SessionContext>();
                 var location = session.LocationScope.Container.Resolve<LocationContext>();
+                MemoryShard shard = null;
+                foreach (var root in motor.gameObject.scene.GetRootGameObjects())
+                    foreach (var candidate in root.GetComponentsInChildren<MemoryShard>()) shard = candidate;
+                Assert.IsNotNull(shard);
+                Assert.IsTrue(shard.CanInteract);
+                shard.Interact();
+                Assert.AreEqual(GameplayMode.Reading, session.LocationScope.Container.Resolve<GameplayModeState>().Mode);
+                Assert.AreEqual(0, Time.timeScale);
+                session.LocationScope.Container.Resolve<MemoryPresenter>().Close();
+                await UniTask.NextFrame();
+                Assert.IsFalse(shard.gameObject.activeSelf);
+                Assert.IsFalse(shard.CanInteract);
+                Assert.IsTrue(session.SessionScope.Container.Resolve<MemoryCollection>().Contains("test-memory-01"));
                 var pause = session.LocationScope.Container.Resolve<PausePresenter>();
                 var pauseView = session.LocationScope.Container.Resolve<IPauseView>() as PauseMenuView;
                 Assert.IsNotNull(pauseView);

@@ -8,15 +8,15 @@ namespace Memories.Gameplay.UI
     {
         private readonly IPauseInput input;
         private readonly IPauseView view;
-        private float previousTimeScale;
-        private bool previousAudioPause;
+        private readonly GameplayModeState state;
         private bool disposed;
-        public bool IsPaused { get; private set; }
+        public bool IsPaused => state.Mode == GameplayMode.Paused;
 
-        public PausePresenter(IPauseInput input, IPauseView view)
+        public PausePresenter(IPauseInput input, IPauseView view, GameplayModeState state)
         {
             this.input = input;
             this.view = view;
+            this.state = state;
             input.PauseRequested += Toggle;
             view.ResumeRequested += Resume;
             view.QuitRequested += Quit;
@@ -27,28 +27,15 @@ namespace Memories.Gameplay.UI
         {
             if (disposed) return;
             if (IsPaused) { Resume(); return; }
-            previousTimeScale = Time.timeScale;
-            previousAudioPause = AudioListener.pause;
-            IsPaused = true;
-            Time.timeScale = 0;
-            AudioListener.pause = true;
-            input.SetPaused(true);
+            if (!state.TryEnter(GameplayMode.Paused)) return;
             view.Show(true);
         }
 
         public void Resume()
         {
             if (disposed || !IsPaused) return;
-            RestoreTime();
-            input.SetPaused(false);
+            state.Exit(GameplayMode.Paused);
             view.Show(false);
-        }
-
-        private void RestoreTime()
-        {
-            Time.timeScale = previousTimeScale;
-            AudioListener.pause = previousAudioPause;
-            IsPaused = false;
         }
 
         private void Quit()
@@ -69,7 +56,7 @@ namespace Memories.Gameplay.UI
             view.ResumeRequested -= Resume;
             view.QuitRequested -= Quit;
             // The player owns cursor cleanup; do not recapture it while unloading.
-            if (IsPaused) RestoreTime();
+            state.Exit(GameplayMode.Paused, false);
         }
     }
 }

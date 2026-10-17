@@ -6,6 +6,7 @@ using Memories.Gameplay.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
+using Memories.Gameplay.Memories;
 
 namespace Memories.Bootstrap
 {
@@ -14,6 +15,7 @@ namespace Memories.Bootstrap
         protected override void Configure(IContainerBuilder builder)
         {
             builder.Register<LocationContext>(Lifetime.Singleton);
+            builder.Register<GameplayModeState>(Lifetime.Singleton);
             builder.RegisterBuildCallback(container => container.Resolve<LocationContext>());
             builder.Register<PlayerMotor>(container => PlayerFactory.Create(this, container.Resolve<PlayerMovementSettings>()), Lifetime.Singleton)
                 .AsSelf().As<IPlayerView>();
@@ -45,6 +47,23 @@ namespace Memories.Bootstrap
             }, Lifetime.Singleton);
             builder.Register<PausePresenter>(Lifetime.Singleton).AsSelf().AsImplementedInterfaces();
             builder.RegisterBuildCallback(container => container.Resolve<PausePresenter>());
+            builder.Register<IMemoryView>(container =>
+            {
+                var window = new GameObject("Memory window", typeof(RectTransform));
+                window.transform.SetParent(transform, false);
+                return window.AddComponent<MemoryView>();
+            }, Lifetime.Singleton);
+            builder.Register<MemoryPresenter>(Lifetime.Singleton).AsSelf().AsImplementedInterfaces();
+            builder.RegisterBuildCallback(container =>
+            {
+                // Register Escape handling after pause: reading consumes it by closing its own window.
+                container.Resolve<PausePresenter>();
+                var presenter = container.Resolve<MemoryPresenter>();
+                var collection = container.Resolve<MemoryCollection>();
+                foreach (var root in gameObject.scene.GetRootGameObjects())
+                    foreach (var shard in root.GetComponentsInChildren<MemoryShard>(true))
+                        shard.Initialize(presenter, collection);
+            });
         }
     }
 }

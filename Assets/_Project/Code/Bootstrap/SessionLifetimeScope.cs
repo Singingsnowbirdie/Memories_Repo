@@ -1,5 +1,6 @@
 using VContainer;
 using VContainer.Unity;
+using Memories.Gameplay.Memories;
 
 namespace Memories.Bootstrap
 {
@@ -8,6 +9,7 @@ namespace Memories.Bootstrap
         protected override void Configure(IContainerBuilder builder)
         {
             builder.Register<SessionContext>(Lifetime.Singleton);
+            builder.Register<MemoryCollection>(Lifetime.Singleton);
             builder.RegisterBuildCallback(container => container.Resolve<SessionContext>());
         }
     }

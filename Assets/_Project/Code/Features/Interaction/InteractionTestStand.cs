@@ -1,4 +1,5 @@
 using UnityEngine;
+using Memories.Gameplay.Memories;
 
 namespace Memories.Gameplay.Interaction
 {
@@ -29,6 +30,12 @@ namespace Memories.Gameplay.Interaction
             light.intensity = 5;
             light.enabled = false;
             button.AddComponent<TestLightSwitch>().Initialize(light);
+            var shard = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            shard.name = "Memory shard - E";
+            shard.transform.SetParent(transform, false);
+            shard.transform.localPosition = new Vector3(1.5f, 1.4f, -.5f);
+            shard.transform.localScale = Vector3.one * .45f;
+            shard.AddComponent<MemoryShard>();
         }
     }
 }
