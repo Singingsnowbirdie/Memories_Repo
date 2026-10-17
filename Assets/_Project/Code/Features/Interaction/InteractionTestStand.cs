@@ -6,6 +6,7 @@ namespace Memories.Gameplay.Interaction
     // Test-scene fixture. The primitives belong to this scene object.
     public sealed class InteractionTestStand : MonoBehaviour
     {
+        [SerializeField] private MemoryGraph memoryGraph;
         private void Awake()
         {
             var pedestal = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -35,7 +36,7 @@ namespace Memories.Gameplay.Interaction
             shard.transform.SetParent(transform, false);
             shard.transform.localPosition = new Vector3(1.5f, 1.4f, -.5f);
             shard.transform.localScale = Vector3.one * .45f;
-            shard.AddComponent<MemoryShard>().SetComic(Resources.Load<MemoryComic>("Memories/FirstMemoryComic"));
+            shard.AddComponent<MemoryShard>().SetGraph(memoryGraph);
         }
     }
 }

@@ -1,26 +1,22 @@
-using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Memories.Gameplay.Memories;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Memories.Gameplay.UI
 {
     public sealed class MemoryView : MonoBehaviour, IMemoryView
     {
-        public event Action CloseRequested;
-        public event Action AdvanceRequested;
-        public bool IsTransitioning { get; private set; }
+        private sealed class Layer
+        {
+            public CanvasGroup Group;
+            public RawImage Image;
+            public Text Text;
+        }
         private GameObject panel;
-        private Text heading;
-        private Text body;
-        private Button close;
-        private Text buttonLabel;
-        private RawImage illustration;
-        private CancellationTokenSource transition;
-        private bool showingComic;
+        private Layer front, back;
+        private bool hasFrame;
 
         private void Awake()
         {
@@ -31,39 +27,47 @@ namespace Memories.Gameplay.UI
             scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
             scaler.referenceResolution = new Vector2(1920, 1080);
             scaler.matchWidthOrHeight = .5f;
-            gameObject.AddComponent<GraphicRaycaster>();
             panel = new GameObject("Memory panel", typeof(RectTransform));
             panel.transform.SetParent(transform, false);
-            var rect = (RectTransform)panel.transform;
-            rect.anchorMin = Vector2.zero;
-            rect.anchorMax = Vector2.one;
-            rect.offsetMin = rect.offsetMax = Vector2.zero;
+            Stretch((RectTransform)panel.transform);
             panel.AddComponent<Image>().color = Color.black;
-            var artRect = Center("Comic frame", 50, new Vector2(1760, 880));
-            illustration = artRect.gameObject.AddComponent<RawImage>();
-            illustration.raycastTarget = false;
-            heading = MakeText("Title", 40, 150, 90);
-            body = MakeText("Text", 28, 0, 180);
-            var buttonRect = Center("Return", -465, new Vector2(420, 65));
-            var background = buttonRect.gameObject.AddComponent<Image>();
-            background.color = new Color(.22f, .25f, .3f);
-            close = buttonRect.gameObject.AddComponent<Button>();
-            close.targetGraphic = background;
-            close.onClick.AddListener(() =>
-            {
-                if (IsTransitioning) return;
-                if (showingComic) AdvanceRequested?.Invoke();
-                else CloseRequested?.Invoke();
-            });
-            buttonLabel = MakeText("Return label", 26, -465, 65);
-            buttonLabel.text = "Вернуться";
+            front = CreateLayer("Current frame");
+            back = CreateLayer("Incoming frame");
             Hide();
         }
 
-        private RectTransform Center(string name, float y, Vector2 size)
+        private static void Stretch(RectTransform rect)
+        {
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = Vector2.one;
+            rect.offsetMin = rect.offsetMax = Vector2.zero;
+        }
+
+        private Layer CreateLayer(string name)
+        {
+            var root = new GameObject(name, typeof(RectTransform), typeof(CanvasGroup));
+            root.transform.SetParent(panel.transform, false);
+            Stretch((RectTransform)root.transform);
+            root.AddComponent<Image>().color = Color.black;
+            var layer = new Layer { Group = root.GetComponent<CanvasGroup>() };
+            layer.Group.blocksRaycasts = false;
+            var art = Center(root.transform, "Image", 70, new Vector2(1760, 800));
+            layer.Image = art.gameObject.AddComponent<RawImage>();
+            layer.Image.raycastTarget = false;
+            var textRect = Center(root.transform, "Caption", -440, new Vector2(1640, 140));
+            layer.Text = textRect.gameObject.AddComponent<Text>();
+            layer.Text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            layer.Text.fontSize = 28;
+            layer.Text.alignment = TextAnchor.MiddleCenter;
+            layer.Text.raycastTarget = false;
+            layer.Text.supportRichText = false;
+            return layer;
+        }
+
+        private static RectTransform Center(Transform parent, string name, float y, Vector2 size)
         {
             var item = new GameObject(name, typeof(RectTransform));
-            item.transform.SetParent(panel.transform, false);
+            item.transform.SetParent(parent, false);
             var rect = (RectTransform)item.transform;
             rect.anchorMin = rect.anchorMax = rect.pivot = Vector2.one * .5f;
             rect.sizeDelta = size;
@@ -71,88 +75,97 @@ namespace Memories.Gameplay.UI
             return rect;
         }
 
-        private Text MakeText(string name, int size, float y, float height)
+        public void Show()
         {
-            var text = Center(name, y, new Vector2(900, height)).gameObject.AddComponent<Text>();
-            text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            text.fontSize = size;
-            text.alignment = TextAnchor.MiddleCenter;
-            text.raycastTarget = false;
-            return text;
-        }
-
-        public void Show(string title, string text)
-        {
-            CancelTransition();
-            showingComic = false;
-            illustration.texture = null;
-            illustration.gameObject.SetActive(false);
-            close.interactable = true;
-            buttonLabel.text = "Вернуться";
-            heading.text = title;
-            body.text = text;
+            ResetLayers();
             panel.SetActive(true);
-            if (EventSystem.current != null) EventSystem.current.SetSelectedGameObject(close.gameObject);
         }
 
-        public void Hide()
+        public async UniTask ShowFrameAsync(MemoryFrameNode frame, CancellationToken token)
         {
-            CancelTransition();
-            panel.SetActive(false);
-            illustration.texture = null;
-            if (EventSystem.current != null) EventSystem.current.SetSelectedGameObject(null);
-        }
-
-        public void ShowFrame(Texture2D frame, bool isLast)
-        {
-            CancelTransition();
-            showingComic = true;
-            buttonLabel.text = isLast ? "Вернуться" : "Далее";
-            illustration.gameObject.SetActive(true);
-            transition = new CancellationTokenSource();
-            FadeFrame(frame, transition.Token).Forget();
-        }
-
-        private async UniTask FadeFrame(Texture2D frame, CancellationToken token)
-        {
-            IsTransitioning = true;
-            close.interactable = false;
-            try
+            using var linked = CancellationTokenSource.CreateLinkedTokenSource(token, this.GetCancellationTokenOnDestroy());
+            token = linked.Token;
+            token.ThrowIfCancellationRequested();
+            var duration = frame.TransitionDuration;
+            SetContent(back, frame);
+            back.Group.transform.SetAsLastSibling();
+            back.Group.alpha = 0;
+            if (frame.Transition == MemoryFrameTransition.Instant || duration <= 0)
             {
-                if (illustration.texture != null) await Fade(1, 0, token);
-                token.ThrowIfCancellationRequested();
-                illustration.texture = frame;
-                float ratio = (float)frame.width / frame.height;
-                illustration.rectTransform.sizeDelta = ratio > 2f
-                    ? new Vector2(1760, 1760 / ratio) : new Vector2(880 * ratio, 880);
-                await Fade(0, 1, token);
-                IsTransitioning = false;
-                close.interactable = true;
+                front.Group.alpha = 0;
+                back.Group.alpha = 1;
             }
-            catch (OperationCanceledException) { }
+            else if (frame.Transition == MemoryFrameTransition.FadeThroughBlack)
+            {
+                if (hasFrame) await Fade(front.Group, 1, 0, duration * .5f, token);
+                await Fade(back.Group, 0, 1, hasFrame ? duration * .5f : duration, token);
+            }
+            else
+            {
+                // Each layer includes its black background and caption.
+                await CrossFade(duration, token);
+            }
+            token.ThrowIfCancellationRequested();
+            front.Group.alpha = 0;
+            back.Group.alpha = 1;
+            var old = front;
+            front = back;
+            back = old;
+            back.Image.texture = null;
+            back.Text.text = "";
+            hasFrame = true;
         }
 
-        private async UniTask Fade(float from, float to, CancellationToken token)
+        private static void SetContent(Layer layer, MemoryFrameNode frame)
         {
-            const float duration = .25f;
+            layer.Image.texture = frame.Image;
+            float scale = Mathf.Min(1760f / frame.Image.width, 800f / frame.Image.height);
+            layer.Image.rectTransform.sizeDelta = new Vector2(frame.Image.width * scale, frame.Image.height * scale);
+            layer.Text.text = frame.Text;
+            layer.Text.gameObject.SetActive(!string.IsNullOrEmpty(frame.Text));
+            layer.Text.color = Color.white;
+        }
+
+        private async UniTask CrossFade(float duration, CancellationToken token)
+        {
             float elapsed = 0;
-            illustration.color = new Color(1, 1, 1, from);
             while (elapsed < duration)
             {
                 await UniTask.NextFrame(cancellationToken: token);
                 elapsed += Time.unscaledDeltaTime;
-                illustration.color = new Color(1, 1, 1, Mathf.Lerp(from, to, elapsed / duration));
+                float t = Mathf.Clamp01(elapsed / duration);
+                back.Group.alpha = t;
             }
         }
 
-        private void CancelTransition()
+        private static async UniTask Fade(CanvasGroup group, float from, float to, float duration, CancellationToken token)
         {
-            transition?.Cancel();
-            transition?.Dispose();
-            transition = null;
-            IsTransitioning = false;
+            float elapsed = 0;
+            group.alpha = from;
+            while (elapsed < duration)
+            {
+                await UniTask.NextFrame(cancellationToken: token);
+                elapsed += Time.unscaledDeltaTime;
+                group.alpha = Mathf.Lerp(from, to, elapsed / duration);
+            }
         }
 
-        private void OnDestroy() => CancelTransition();
+        private void ResetLayers()
+        {
+            hasFrame = false;
+            foreach (var layer in new[] { front, back })
+            {
+                layer.Group.alpha = 0;
+                layer.Image.texture = null;
+                layer.Text.text = "";
+                layer.Text.color = Color.white;
+            }
+        }
+
+        public void Hide()
+        {
+            panel.SetActive(false);
+            ResetLayers();
+        }
     }
 }

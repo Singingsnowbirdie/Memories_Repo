@@ -6,11 +6,9 @@ namespace Memories.Gameplay.Memories
     public sealed class MemoryShard : Interactable
     {
         [SerializeField] private string memoryId = "test-memory-01";
-        [SerializeField] private string title = "Первое воспоминание";
-        [SerializeField, TextArea] private string text = "Я кого-то ждала.\nНо пока не могу вспомнить кого.";
         private MemoryPresenter presenter;
-        [SerializeField] private MemoryComic comic;
-        public void SetComic(MemoryComic value) => comic = value;
+        [SerializeField] private MemoryGraph graph;
+        public void SetGraph(MemoryGraph value) => graph = value;
         private MemoryCollection collection;
         public override string Prompt => "Вспомнить";
         public override bool CanInteract => base.CanInteract && presenter != null && presenter.CanOpen(memoryId);
@@ -30,7 +28,7 @@ namespace Memories.Gameplay.Memories
 
         public override void Interact()
         {
-            if (CanInteract) presenter.Open(memoryId, title, text, comic);
+            if (CanInteract) presenter.Open(memoryId, graph);
         }
     }
 }

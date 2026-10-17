@@ -1,9 +1,14 @@
 using System;
+using System.Linq;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using Memories.Contracts;
 using Memories.Gameplay.Memories;
 using Memories.Gameplay.UI;
 using NUnit.Framework;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.TestTools;
 
 namespace Memories.Tests.EditMode
 {
@@ -18,92 +23,83 @@ namespace Memories.Tests.EditMode
         }
         private sealed class View : IMemoryView
         {
-            public event Action CloseRequested;
-            public event Action AdvanceRequested { add { } remove { } }
-            public bool IsTransitioning => false;
-            public void ShowFrame(Texture2D frame, bool isLast) { }
             public bool Visible;
-            public void Show(string title, string text) => Visible = true;
+            public void Show() => Visible = true;
             public void Hide() => Visible = false;
-            public void Close() => CloseRequested?.Invoke();
-        }
-        private sealed class PauseView : IPauseView
-        {
-            public event Action ResumeRequested { add { } remove { } }
-            public event Action QuitRequested { add { } remove { } }
-            public void Show(bool visible) { }
+            public UniTask ShowFrameAsync(MemoryFrameNode frame, CancellationToken token)
+                => UniTask.WaitUntilCanceled(token);
         }
 
         [Test]
-        public void CollectOnCloseRejectDuplicatesAndKeepPauseExclusive()
+        public void GraphRejectsMissingImageBrokenConnectionAndCycle()
         {
-            float time = Time.timeScale;
-            bool audio = AudioListener.pause;
+            var asset = AssetDatabase.LoadAssetAtPath<MemoryGraph>("Assets/_Project/Configs/FirstMemoryGraph.asset");
+            Assert.IsTrue(asset.TryGetSequence(out var frames, out var error), error);
+            Assert.AreEqual(3, frames.Count);
+            var graph = (MemoryGraph)asset.Copy();
+            try
+            {
+                var frame = graph.nodes.OfType<MemoryFrameNode>().First();
+                var data = new SerializedObject(frame);
+                var image = frame.Image;
+                data.FindProperty("image").objectReferenceValue = null;
+                data.ApplyModifiedPropertiesWithoutUndo();
+                Assert.IsFalse(graph.TryGetSequence(out _, out _));
+                data.Update();
+                data.FindProperty("image").objectReferenceValue = image;
+                data.ApplyModifiedPropertiesWithoutUndo();
+                frame.GetOutputPort("next").ClearConnections();
+                Assert.IsFalse(graph.TryGetSequence(out _, out _));
+                frame.GetOutputPort("next").Connect(frame.GetInputPort("previous"));
+                Assert.IsFalse(graph.TryGetSequence(out _, out _));
+            }
+            finally { DestroyGraph(graph); }
+        }
+
+        [Test]
+        public void InvalidGraphDoesNotBlockInputAndEscapeDoesNotCollect()
+        {
             var input = new Input();
             var state = new GameplayModeState(input);
             var collection = new MemoryCollection();
             var view = new View();
-            using var pause = new PausePresenter(input, new PauseView(), state);
-            using var memory = new MemoryPresenter(collection, state, view, input);
+            var graph = AssetDatabase.LoadAssetAtPath<MemoryGraph>("Assets/_Project/Configs/FirstMemoryGraph.asset");
+            var invalid = ScriptableObject.CreateInstance<MemoryGraph>();
+            float time = Time.timeScale;
+            bool audio = AudioListener.pause;
+            using var presenter = new MemoryPresenter(collection, state, view, input);
             try
             {
-                Assert.IsFalse(memory.Open("", "", ""));
-                Assert.IsTrue(memory.Open("first", "Title", "Text"));
-                Assert.IsTrue(view.Visible && input.Blocked);
+                LogAssert.Expect(LogType.Warning, new System.Text.RegularExpressions.Regex("Воспоминание не запущено"));
+                Assert.IsFalse(presenter.Open("bad", invalid));
+                Assert.IsFalse(input.Blocked || view.Visible);
+                Assert.IsTrue(presenter.Open("first", graph));
+                Assert.IsTrue(input.Blocked && view.Visible);
                 Assert.AreEqual(0, Time.timeScale);
+                Assert.IsFalse(presenter.Open("second", graph));
+                input.Escape();
+                Assert.IsFalse(presenter.IsPlaying || view.Visible || input.Blocked);
                 Assert.IsFalse(collection.Contains("first"));
-                Assert.IsFalse(memory.Open("second", "", ""));
-                pause.Toggle();
-                Assert.IsFalse(pause.IsPaused);
-                input.Escape();
-                Assert.IsTrue(collection.Contains("first"));
-                Assert.AreEqual(GameplayMode.Playing, state.Mode);
-                Assert.IsFalse(view.Visible || input.Blocked);
                 Assert.AreEqual(time, Time.timeScale);
-                Assert.IsFalse(memory.Open("first", "", ""));
-                input.Escape();
-                Assert.IsTrue(pause.IsPaused);
-                Assert.IsFalse(memory.Open("second", "", ""));
-                input.Escape();
-                Assert.IsTrue(memory.Open("second", "", ""));
-                view.Close();
-                Assert.IsTrue(collection.Contains("second"));
-                Assert.IsFalse(new MemoryCollection().Contains("first"));
+                Assert.IsTrue(presenter.Open("first", graph));
+                presenter.Dispose();
+                Assert.AreEqual(time, Time.timeScale);
+                Assert.AreEqual(audio, AudioListener.pause);
+                Assert.IsFalse(collection.Contains("first"));
             }
             finally
             {
-                memory.Dispose();
-                pause.Dispose();
+                presenter.Dispose();
+                UnityEngine.Object.DestroyImmediate(invalid);
                 Time.timeScale = time;
                 AudioListener.pause = audio;
             }
         }
 
-        [Test]
-        public void InterruptedViewingRestoresTimeWithoutCollecting()
+        private static void DestroyGraph(MemoryGraph graph)
         {
-            var input = new Input();
-            var state = new GameplayModeState(input);
-            var collection = new MemoryCollection();
-            float time = Time.timeScale;
-            bool audio = AudioListener.pause;
-            var memory = new MemoryPresenter(collection, state, new View(), input);
-            try
-            {
-                memory.Open("first", "", "");
-                memory.Dispose();
-                Assert.AreEqual(time, Time.timeScale);
-                Assert.AreEqual(audio, AudioListener.pause);
-                Assert.IsFalse(collection.Contains("first"));
-                input.Escape();
-                Assert.IsFalse(memory.Open("first", "", ""));
-            }
-            finally
-            {
-                memory.Dispose();
-                Time.timeScale = time;
-                AudioListener.pause = audio;
-            }
+            foreach (var node in graph.nodes.ToArray()) UnityEngine.Object.DestroyImmediate(node);
+            UnityEngine.Object.DestroyImmediate(graph);
         }
     }
 }

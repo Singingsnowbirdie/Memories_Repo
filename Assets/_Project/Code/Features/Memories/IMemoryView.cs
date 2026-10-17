@@ -1,15 +1,12 @@
-using System;
-using UnityEngine;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 
 namespace Memories.Gameplay.Memories
 {
     public interface IMemoryView
     {
-        event Action CloseRequested;
-        event Action AdvanceRequested;
-        bool IsTransitioning { get; }
-        void ShowFrame(Texture2D frame, bool isLast);
-        void Show(string title, string text);
+        void Show();
+        UniTask ShowFrameAsync(MemoryFrameNode frame, CancellationToken token);
         void Hide();
     }
 }
