@@ -19,6 +19,9 @@ namespace Memories.Tests.EditMode
         private sealed class View : IMemoryView
         {
             public event Action CloseRequested;
+            public event Action AdvanceRequested { add { } remove { } }
+            public bool IsTransitioning => false;
+            public void ShowFrame(Texture2D frame, bool isLast) { }
             public bool Visible;
             public void Show(string title, string text) => Visible = true;
             public void Hide() => Visible = false;

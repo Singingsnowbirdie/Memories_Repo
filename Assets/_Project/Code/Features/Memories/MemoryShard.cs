@@ -9,6 +9,8 @@ namespace Memories.Gameplay.Memories
         [SerializeField] private string title = "Первое воспоминание";
         [SerializeField, TextArea] private string text = "Я кого-то ждала.\nНо пока не могу вспомнить кого.";
         private MemoryPresenter presenter;
+        [SerializeField] private MemoryComic comic;
+        public void SetComic(MemoryComic value) => comic = value;
         private MemoryCollection collection;
         public override string Prompt => "Вспомнить";
         public override bool CanInteract => base.CanInteract && presenter != null && presenter.CanOpen(memoryId);
@@ -28,7 +30,7 @@ namespace Memories.Gameplay.Memories
 
         public override void Interact()
         {
-            if (CanInteract) presenter.Open(memoryId, title, text);
+            if (CanInteract) presenter.Open(memoryId, title, text, comic);
         }
     }
 }

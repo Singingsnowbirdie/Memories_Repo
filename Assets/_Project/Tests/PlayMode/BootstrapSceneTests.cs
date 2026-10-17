@@ -57,7 +57,23 @@ namespace Memories.Tests.PlayMode
                 shard.Interact();
                 Assert.AreEqual(GameplayMode.Reading, session.LocationScope.Container.Resolve<GameplayModeState>().Mode);
                 Assert.AreEqual(0, Time.timeScale);
-                session.LocationScope.Container.Resolve<MemoryPresenter>().Close();
+                var comic = Resources.Load<MemoryComic>("Memories/FirstMemoryComic");
+                Assert.IsNotNull(comic);
+                Assert.IsTrue(comic.IsValid);
+                Assert.AreEqual(3, comic.FrameCount);
+                var memoryPresenter = session.LocationScope.Container.Resolve<MemoryPresenter>();
+                var memoryView = session.LocationScope.Container.Resolve<IMemoryView>();
+                for (int frame = 0; frame < comic.FrameCount; frame++)
+                {
+                    Assert.IsTrue(memoryView.IsTransitioning);
+                    memoryPresenter.Advance(); // Repeated input during fade must be ignored.
+                    float fadeDeadline = Time.realtimeSinceStartup + 3;
+                    while (memoryView.IsTransitioning && Time.realtimeSinceStartup < fadeDeadline)
+                        await UniTask.NextFrame();
+                    Assert.IsFalse(memoryView.IsTransitioning, "Fade must finish while timeScale is zero.");
+                    Assert.IsFalse(session.SessionScope.Container.Resolve<MemoryCollection>().Contains("test-memory-01"));
+                    memoryPresenter.Advance();
+                }
                 await UniTask.NextFrame();
                 Assert.IsFalse(shard.gameObject.activeSelf);
                 Assert.IsFalse(shard.CanInteract);
