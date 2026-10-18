@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
 using Memories.Gameplay.Memories;
+using Memories.Gameplay.Triggers;
 
 namespace Memories.Bootstrap
 {
@@ -84,8 +85,12 @@ namespace Memories.Bootstrap
                 var presenter = container.Resolve<MemoryPresenter>();
                 var collection = container.Resolve<MemoryCollection>();
                 foreach (var root in gameObject.scene.GetRootGameObjects())
+                {
                     foreach (var shard in root.GetComponentsInChildren<MemoryShard>(true))
                         shard.Initialize(presenter, collection);
+                    foreach (var triggerEvent in root.GetComponentsInChildren<TriggerEvent>(true))
+                        triggerEvent.Initialize(container.Resolve<StoryTextPresenter>(), presenter);
+                }
             });
         }
     }
