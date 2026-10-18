@@ -1604,7 +1604,6 @@ GameObject:
   - component: {fileID: 547126603}
   - component: {fileID: 547126601}
   - component: {fileID: 547126600}
-  - component: {fileID: 547126602}
   m_Layer: 0
   m_Name: Test Trigger - Story Text
   m_TagString: Untagged
@@ -1624,7 +1623,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd14158a76054520bd36bc41c4ab05ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Triggers.SceneTrigger
-  triggerEvent: {fileID: 547126602}
+  graph: {fileID: 11400000, guid: 783384ad77ec8304bb79a40bc5d90fd7, type: 2}
+  triggerEvent: {fileID: 0}
   triggerOnce: 1
 --- !u!54 &547126601
 Rigidbody:
@@ -1653,19 +1653,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &547126602
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 547126599}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f81ba45cf82486ebd0269b7daa2a6a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Triggers.ShowStoryTextEvent
-  graph: {fileID: 11400000, guid: 148d7b1b8111986478ebc94663dd1478, type: 2}
 --- !u!23 &547126603
 MeshRenderer:
   m_ObjectHideFlags: 0

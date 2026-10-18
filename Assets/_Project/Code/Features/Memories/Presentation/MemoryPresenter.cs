@@ -21,6 +21,7 @@ namespace Memories.Gameplay.Memories
         private string currentId;
         private bool disposed;
         public bool IsPlaying => playback != null;
+        public bool CanStartPlayback => !disposed && state.Mode == GameplayMode.Playing;
 
         public MemoryPresenter(MemoryCollection collection, GameplayModeState state, IMemoryView view, IPauseInput input, IMemoryMusic music, IMemorySound sounds)
         {
@@ -34,12 +35,12 @@ namespace Memories.Gameplay.Memories
             view.Hide();
         }
 
-        public bool CanOpen(string id) => !disposed && !string.IsNullOrWhiteSpace(id)
-            && state.Mode == GameplayMode.Playing && !collection.Contains(id);
+        public bool CanOpen(string id, bool allowReplay = false) => CanStartPlayback && !string.IsNullOrWhiteSpace(id)
+            && (allowReplay || !collection.Contains(id));
 
-        public bool Open(string id, MemoryGraph graph)
+        public bool Open(string id, MemoryGraph graph, bool allowReplay = false)
         {
-            if (!CanOpen(id)) return false;
+            if (!CanOpen(id, allowReplay)) return false;
             if (graph == null) { Debug.LogWarning("Осколку не назначен граф воспоминания."); return false; }
             if (!graph.TryGetSequence(out var frames, out var error))
             { Debug.LogWarning("Воспоминание не запущено: " + error, graph); return false; }

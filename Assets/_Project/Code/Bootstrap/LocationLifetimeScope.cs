@@ -90,6 +90,8 @@ namespace Memories.Bootstrap
                         shard.Initialize(presenter, collection);
                     foreach (var triggerEvent in root.GetComponentsInChildren<TriggerEvent>(true))
                         triggerEvent.Initialize(container.Resolve<StoryTextPresenter>(), presenter);
+                    foreach (var trigger in root.GetComponentsInChildren<SceneTrigger>(true))
+                        trigger.Initialize(container.Resolve<StoryTextPresenter>(), presenter);
                 }
             });
         }
