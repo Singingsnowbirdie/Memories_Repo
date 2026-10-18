@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Memories.Gameplay.Story;
 
 namespace Memories.Gameplay.UI
 {
@@ -14,6 +15,15 @@ namespace Memories.Gameplay.UI
         public bool IsPlaying => current != null;
 
         public StoryTextPresenter(IStoryTextView view) => this.view = view;
+
+        public UniTask ShowAsync(StoryTextGraph graph, CancellationToken token = default)
+        {
+            if (disposed) throw new ObjectDisposedException(nameof(StoryTextPresenter));
+            if (graph == null) throw new ArgumentNullException(nameof(graph));
+            if (!graph.TryGetSequence(out var fragments, out var error))
+                throw new ArgumentException(error, nameof(graph));
+            return ShowAsync(fragments, token);
+        }
 
         public UniTask ShowAsync(string text, float duration = 3f, CancellationToken token = default)
             => ShowAsync(new[] { new StoryTextFragment(text, duration) }, token);

@@ -1,0 +1,89 @@
+using System;
+using Memories.Gameplay.Story;
+using UnityEditor;
+using UnityEngine;
+using XNodeEditor;
+
+namespace Memories.Editor
+{
+    [CustomNodeGraphEditor(typeof(StoryTextGraph))]
+    public sealed class StoryTextGraphEditor : NodeGraphEditor
+    {
+        public override string GetNodeMenuName(Type type)
+        {
+            if (type == typeof(StoryTextStartNode)) return "Начало";
+            if (type == typeof(StoryTextNode)) return "Текст";
+            if (type == typeof(StoryTextEndNode)) return "Конец";
+            return null;
+        }
+
+        [MenuItem("Assets/Create/Memories/Text Graph")]
+        private static void CreateGraph()
+        {
+            string path = EditorUtility.SaveFilePanelInProject("Создать граф текста", "TextGraph", "asset", "Выберите место для графа текста.");
+            if (string.IsNullOrEmpty(path)) return;
+            var graph = ScriptableObject.CreateInstance<StoryTextGraph>();
+            var start = graph.AddNode<StoryTextStartNode>();
+            var text = graph.AddNode<StoryTextNode>();
+            var end = graph.AddNode<StoryTextEndNode>();
+            start.position = Vector2.zero;
+            text.position = new Vector2(220, 0);
+            end.position = new Vector2(640, 0);
+            start.GetOutputPort("next").Connect(text.GetInputPort("previous"));
+            text.GetOutputPort("next").Connect(end.GetInputPort("previous"));
+            AssetDatabase.CreateAsset(graph, path);
+            foreach (var node in graph.nodes) AssetDatabase.AddObjectToAsset(node, graph);
+            EditorUtility.SetDirty(graph);
+            AssetDatabase.SaveAssets();
+            Selection.activeObject = graph;
+            NodeEditorWindow.Open(graph);
+        }
+    }
+
+    [CustomNodeEditor(typeof(StoryTextStartNode))]
+    public sealed class StoryTextStartNodeEditor : NodeEditor
+    {
+        public override void OnHeaderGUI() => GUILayout.Label("Начало", NodeEditorResources.styles.nodeHeader, GUILayout.Height(30));
+        public override void OnBodyGUI() => NodeEditorGUILayout.PortField(new GUIContent("Далее"), target.GetOutputPort("next"));
+    }
+
+    [CustomNodeEditor(typeof(StoryTextEndNode))]
+    public sealed class StoryTextEndNodeEditor : NodeEditor
+    {
+        public override void OnHeaderGUI() => GUILayout.Label("Конец", NodeEditorResources.styles.nodeHeader, GUILayout.Height(30));
+        public override void OnBodyGUI() => NodeEditorGUILayout.PortField(new GUIContent("Вход"), target.GetInputPort("previous"));
+    }
+
+    [CustomNodeEditor(typeof(StoryTextNode))]
+    public sealed class StoryTextNodeEditor : NodeEditor
+    {
+        public override void OnHeaderGUI() => GUILayout.Label("Текст", NodeEditorResources.styles.nodeHeader, GUILayout.Height(30));
+        public override void OnBodyGUI()
+        {
+            serializedObject.Update();
+            NodeEditorGUILayout.PortField(new GUIContent("Вход"), target.GetInputPort("previous"));
+            NodeEditorGUILayout.PortField(new GUIContent("Далее"), target.GetOutputPort("next"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("text"), new GUIContent("Текст"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("duration"), new GUIContent("Показ, сек.", "Время чтения после появления текста. Следующий фрагмент сменит его через фейд."));
+            serializedObject.ApplyModifiedProperties();
+            var node = (StoryTextNode)target;
+            if (string.IsNullOrWhiteSpace(node.Text)) EditorGUILayout.HelpBox("Введите текст фрагмента.", MessageType.Warning);
+            if (float.IsNaN(node.Duration) || float.IsInfinity(node.Duration) || node.Duration <= 0)
+                EditorGUILayout.HelpBox("Укажите положительное время показа.", MessageType.Warning);
+        }
+    }
+
+    [CustomEditor(typeof(StoryTextGraph))]
+    public sealed class StoryTextGraphInspector : UnityEditor.Editor
+    {
+        public override void OnInspectorGUI()
+        {
+            var graph = (StoryTextGraph)target;
+            EditorGUILayout.HelpBox("Соедините ноды: Начало → Текст → … → Конец. Тексты автоматически сменяются через фейд в нижней плашке.", MessageType.Info);
+            if (GUILayout.Button("Открыть граф текста")) NodeEditorWindow.Open(graph);
+            if (graph.TryGetSequence(out var fragments, out var error))
+                EditorGUILayout.HelpBox("Граф готов. Фрагментов: " + fragments.Count, MessageType.Info);
+            else EditorGUILayout.HelpBox(error, MessageType.Warning);
+        }
+    }
+}

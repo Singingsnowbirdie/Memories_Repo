@@ -45,7 +45,7 @@ namespace Memories.Tests.EditMode
         [Test]
         public void GraphRejectsMissingImageBrokenConnectionAndCycle()
         {
-            var asset = AssetDatabase.LoadAssetAtPath<MemoryGraph>("Assets/_Project/Configs/FirstMemoryGraph.asset");
+            var asset = AssetDatabase.LoadAssetAtPath<MemoryGraph>("Assets/_Project/Configs/Memories/FirstMemoryGraph.asset");
             Assert.IsTrue(asset.TryGetSequence(out var frames, out var error), error);
             Assert.AreEqual(3, frames.OfType<MemoryFrameNode>().Count());
             Assert.IsInstanceOf<MemoryMusicNode>(frames[0]);
@@ -76,7 +76,7 @@ namespace Memories.Tests.EditMode
             var state = new GameplayModeState(input);
             var collection = new MemoryCollection();
             var view = new View();
-            var graph = AssetDatabase.LoadAssetAtPath<MemoryGraph>("Assets/_Project/Configs/FirstMemoryGraph.asset");
+            var graph = AssetDatabase.LoadAssetAtPath<MemoryGraph>("Assets/_Project/Configs/Memories/FirstMemoryGraph.asset");
             var invalid = ScriptableObject.CreateInstance<MemoryGraph>();
             float time = Time.timeScale;
             bool audio = AudioListener.pause;
