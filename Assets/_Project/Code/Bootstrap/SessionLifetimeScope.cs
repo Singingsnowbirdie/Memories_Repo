@@ -1,3 +1,6 @@
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem.UI;
 using VContainer;
 using VContainer.Unity;
 using Memories.Gameplay.Memories;
@@ -10,7 +13,18 @@ namespace Memories.Bootstrap
         {
             builder.Register<SessionContext>(Lifetime.Singleton);
             builder.Register<MemoryCollection>(Lifetime.Singleton);
-            builder.RegisterBuildCallback(container => container.Resolve<SessionContext>());
+            builder.RegisterBuildCallback(container =>
+            {
+                container.Resolve<SessionContext>();
+                // UI input must outlive overlapping location loads and unloads.
+                if (EventSystem.current == null)
+                {
+                    var events = new GameObject("UI EventSystem");
+                    events.transform.SetParent(transform, false);
+                    events.AddComponent<EventSystem>();
+                    events.AddComponent<InputSystemUIInputModule>();
+                }
+            });
         }
     }
 }

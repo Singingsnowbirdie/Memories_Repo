@@ -7,11 +7,13 @@ using Memories.Bootstrap;
 using Memories.Contracts;
 using Memories.Gameplay.Memories;
 using Memories.Gameplay.Player;
+using Memories.Gameplay.UI;
 using Memories.Gameplay.Reactions;
 using Memories.Gameplay.Triggers;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 using UnityEngine.TestTools;
 using VContainer;
 
@@ -36,6 +38,8 @@ namespace Memories.Tests.PlayMode
                 while (!session.IsRunning && Time.realtimeSinceStartup < deadline) await UniTask.NextFrame();
                 Assert.IsTrue(session.IsRunning);
                 Assert.AreEqual(Forest, session.LocationScope.gameObject.scene.path);
+                var uiEvents = EventSystem.current;
+                Assert.IsNotNull(uiEvents, "UI input must exist in the initial location.");
                 var sessionContext = session.SessionScope.Container.Resolve<SessionContext>();
                 var oldLocation = session.LocationScope.Container.Resolve<LocationContext>();
                 var collection = session.SessionScope.Container.Resolve<MemoryCollection>();
@@ -61,6 +65,18 @@ namespace Memories.Tests.PlayMode
                      !session.CanChangeLocation(Forest))) await UniTask.NextFrame();
                 Assert.AreEqual(Airport, session.LocationScope.gameObject.scene.path);
                 Assert.IsFalse(SceneManager.GetSceneByPath(Forest).isLoaded);
+                Assert.IsNotNull(EventSystem.current, "UI input must survive a location transition.");
+                Assert.AreSame(uiEvents, EventSystem.current);
+                Assert.IsTrue(EventSystem.current.isActiveAndEnabled);
+                Assert.IsNotNull(EventSystem.current.currentInputModule);
+                var pause = session.LocationScope.Container.Resolve<PausePresenter>();
+                pause.Toggle();
+                Assert.IsTrue(pause.IsPaused);
+                var resumeButton = EventSystem.current.currentSelectedGameObject;
+                Assert.IsNotNull(resumeButton);
+                Assert.IsTrue(ExecuteEvents.Execute(resumeButton,
+                    new BaseEventData(EventSystem.current), ExecuteEvents.submitHandler));
+                Assert.IsFalse(pause.IsPaused, "Resume button must work after changing location.");
                 Assert.AreSame(sessionContext, session.SessionScope.Container.Resolve<SessionContext>());
                 Assert.IsFalse(sessionContext.IsDisposed);
                 Assert.IsTrue(oldLocation.IsDisposed);

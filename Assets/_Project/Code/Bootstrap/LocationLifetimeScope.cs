@@ -5,8 +5,6 @@ using Memories.Gameplay.Player;
 using Memories.Gameplay.Interaction;
 using Memories.Gameplay.UI;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem.UI;
 using Memories.Gameplay.Memories;
 using Memories.Gameplay.Triggers;
 
@@ -43,13 +41,6 @@ namespace Memories.Bootstrap
             builder.Register<StoryTextPresenter>(Lifetime.Singleton).AsSelf().AsImplementedInterfaces();
             builder.Register<IPauseView>(container =>
             {
-                if (EventSystem.current == null)
-                {
-                    var events = new GameObject("UI EventSystem");
-                    events.transform.SetParent(transform, false);
-                    events.AddComponent<EventSystem>();
-                    events.AddComponent<InputSystemUIInputModule>();
-                }
                 var menu = new GameObject("Pause menu", typeof(RectTransform));
                 menu.transform.SetParent(transform, false);
                 return menu.AddComponent<PauseMenuView>();
