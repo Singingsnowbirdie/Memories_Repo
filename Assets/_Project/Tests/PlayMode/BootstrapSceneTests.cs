@@ -76,12 +76,15 @@ namespace Memories.Tests.PlayMode
                 var application = app.Container.Resolve<ApplicationContext>();
                 var sessionContext = session.SessionScope.Container.Resolve<SessionContext>();
                 var location = session.LocationScope.Container.Resolve<LocationContext>();
-                MemoryShard shard = null;
+                ReactionInteractable shard = null;
                 foreach (var root in motor.gameObject.scene.GetRootGameObjects())
-                    foreach (var candidate in root.GetComponentsInChildren<MemoryShard>()) shard = candidate;
+                    foreach (var candidate in root.GetComponentsInChildren<ReactionInteractable>()) shard = candidate;
                 Assert.IsNotNull(shard);
                 Assert.IsTrue(shard.CanInteract);
                 shard.Interact();
+                deadline = Time.realtimeSinceStartup + 5;
+                while (session.LocationScope.Container.Resolve<GameplayModeState>().Mode != GameplayMode.Reading &&
+                    Time.realtimeSinceStartup < deadline) await UniTask.NextFrame();
                 Assert.AreEqual(GameplayMode.Reading, session.LocationScope.Container.Resolve<GameplayModeState>().Mode);
                 Assert.AreEqual(0, Time.timeScale);
                 var memoryPresenter = session.LocationScope.Container.Resolve<MemoryPresenter>();
@@ -91,7 +94,8 @@ namespace Memories.Tests.PlayMode
                 Assert.IsFalse(memoryPresenter.IsPlaying, "Graph should complete automatically while timeScale is zero.");
                 Assert.GreaterOrEqual(Time.realtimeSinceStartup - playbackStart, 13.4f);
                 await UniTask.NextFrame();
-                Assert.IsFalse(shard.gameObject.activeSelf);
+                Assert.IsTrue(shard.gameObject.activeSelf);
+                Assert.IsFalse(shard.IsRunning);
                 Assert.IsFalse(shard.CanInteract);
                 Assert.IsTrue(session.SessionScope.Container.Resolve<MemoryCollection>().Contains("test-memory-01"));
                 var pause = session.LocationScope.Container.Resolve<PausePresenter>();

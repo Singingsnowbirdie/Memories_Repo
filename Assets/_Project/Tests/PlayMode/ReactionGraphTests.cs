@@ -6,6 +6,9 @@ using Memories.Bootstrap;
 using Memories.Gameplay.Memories;
 using Memories.Gameplay.Story;
 using Memories.Gameplay.Triggers;
+using Memories.Gameplay.Reactions;
+using Memories.Gameplay.Interaction;
+using Memories.Contracts;
 using Memories.Gameplay.UI;
 using NUnit.Framework;
 using UnityEngine;
@@ -16,15 +19,15 @@ using XNode;
 
 namespace Memories.Tests.PlayMode
 {
-    public sealed class TriggerGraphTests
+    public sealed class ReactionGraphTests
     {
         private readonly List<Object> owned = new List<Object>();
-        private TriggerGraph graph;
+        private ReactionGraph graph;
         private StoryTextGraph textGraph;
         private MemoryGraph memoryGraph;
-        private TriggerStartNode start;
-        private TriggerActionNode first, memory, last;
-        private TriggerEndNode end;
+        private ReactionStartNode start;
+        private ReactionNode first, memory, last;
+        private ReactionEndNode end;
 
         private T Own<T>(T value) where T : Object { owned.Add(value); return value; }
         private static void Set(object target, string field, object value) =>
@@ -48,14 +51,14 @@ namespace Memories.Tests.PlayMode
             Set(frame, "displayDuration", .1f);
             var me = Own(memoryGraph.AddNode<MemoryEndNode>());
             Connect(ms, frame); Connect(frame, me);
-            graph = Own(ScriptableObject.CreateInstance<TriggerGraph>());
-            start = Own(graph.AddNode<TriggerStartNode>());
-            first = Own(graph.AddNode<TriggerActionNode>());
-            memory = Own(graph.AddNode<TriggerActionNode>());
-            last = Own(graph.AddNode<TriggerActionNode>());
-            end = Own(graph.AddNode<TriggerEndNode>());
+            graph = Own(ScriptableObject.CreateInstance<ReactionGraph>());
+            start = Own(graph.AddNode<ReactionStartNode>());
+            first = Own(graph.AddNode<ReactionNode>());
+            memory = Own(graph.AddNode<ReactionNode>());
+            last = Own(graph.AddNode<ReactionNode>());
+            end = Own(graph.AddNode<ReactionEndNode>());
             Set(first, "textGraph", textGraph); Set(last, "textGraph", textGraph);
-            Set(memory, "kind", TriggerActionKind.Memory);
+            Set(memory, "kind", ReactionKind.Memory);
             Set(memory, "memoryGraph", memoryGraph); Set(memory, "memoryId", "graph-test-memory");
             Connect(start, first); Connect(first, memory); Connect(memory, last); Connect(last, end);
         }
@@ -73,7 +76,7 @@ namespace Memories.Tests.PlayMode
             Assert.IsFalse(graph.TryGetSequence(out _, out _), "Cycles must be rejected.");
             last.GetOutputPort("next").ClearConnections();
             Connect(start, first); Connect(last, end);
-            var disconnected = Own(graph.AddNode<TriggerActionNode>());
+            var disconnected = Own(graph.AddNode<ReactionNode>());
             Set(disconnected, "textGraph", textGraph);
             Assert.IsFalse(graph.TryGetSequence(out _, out _), "Disconnected actions must be rejected.");
         }
@@ -107,13 +110,49 @@ namespace Memories.Tests.PlayMode
                 var other = CreateTrigger(texts, memories);
                 Assert.IsTrue(other.TryActivate(), "Sharing an asset must not share fired state.");
                 await WaitUntil(() => !other.IsRunning);
-                Set(start, "triggerOnce", false);
+                Set(start, "runOnce", false);
                 Assert.IsTrue(trigger.TryActivate(), "Repeat also replays already collected memories.");
                 await WaitUntil(() => memories.IsPlaying);
                 trigger.gameObject.SetActive(false);
                 await WaitUntil(() => !trigger.IsRunning);
                 Assert.IsFalse(memories.IsPlaying);
                 Assert.AreEqual(1, Time.timeScale);
+                Set(start, "runOnce", true);
+                var objectRoot = Own(GameObject.CreatePrimitive(PrimitiveType.Cube));
+                objectRoot.transform.position = Vector3.one * 600;
+                var interactable = objectRoot.AddComponent<ReactionInteractable>();
+                Set(interactable, "graph", graph);
+                Set(interactable, "prompt", "Прочитать");
+                interactable.Initialize(texts, memories);
+                var cameraRoot = Own(new GameObject("Interaction test camera"));
+                var camera = cameraRoot.AddComponent<Camera>();
+                camera.transform.position = objectRoot.transform.position - Vector3.forward * 2;
+                Physics.SyncTransforms();
+                var probe = new InteractionProbe(camera);
+                var input = new TestInput();
+                var view = new TestView();
+                var interaction = new InteractionPresenter(input, probe, view);
+                interaction.Tick();
+                Assert.AreSame(interactable, probe.FindTarget());
+                Assert.AreEqual("[E] Прочитать", view.Prompt);
+                input.Pressed = true;
+                interaction.Tick();
+                input.Pressed = false;
+                Assert.IsTrue(interactable.IsRunning);
+                Assert.IsFalse(interactable.CanInteract);
+                Assert.IsTrue(objectRoot.GetComponent<Renderer>().enabled, "Interactive objects stay visible.");
+                await WaitUntil(() => !interactable.IsRunning);
+                interaction.Tick();
+                Assert.IsFalse(view.Available, "One-shot interaction no longer offers a prompt.");
+                Set(start, "runOnce", false);
+                interaction.Tick();
+                Assert.IsTrue(view.Available);
+                input.Pressed = true;
+                interaction.Tick();
+                Assert.IsTrue(interactable.IsRunning);
+                objectRoot.SetActive(false);
+                await WaitUntil(() => !interactable.IsRunning);
+                Assert.IsFalse(texts.IsPlaying);
             }
             finally
             {
@@ -121,6 +160,19 @@ namespace Memories.Tests.PlayMode
                 if (scene.isLoaded) await SceneManager.UnloadSceneAsync(scene);
             }
         });
+
+        private sealed class TestInput : IInteractionInput
+        {
+            public bool Pressed;
+            public bool InteractionEnabled => true;
+            public bool InteractPressed => Pressed;
+        }
+        private sealed class TestView : IInteractionView
+        {
+            public string Prompt;
+            public bool Available;
+            public void Show(bool visible, bool available, string prompt) { Prompt = prompt; Available = available; }
+        }
 
         private SceneTrigger CreateTrigger(StoryTextPresenter texts, MemoryPresenter memories)
         {

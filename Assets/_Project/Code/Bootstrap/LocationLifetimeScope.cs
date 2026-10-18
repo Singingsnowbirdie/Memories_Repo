@@ -83,15 +83,14 @@ namespace Memories.Bootstrap
                 // Register Escape handling after pause: reading consumes it by closing its own window.
                 container.Resolve<PausePresenter>();
                 var presenter = container.Resolve<MemoryPresenter>();
-                var collection = container.Resolve<MemoryCollection>();
                 foreach (var root in gameObject.scene.GetRootGameObjects())
                 {
-                    foreach (var shard in root.GetComponentsInChildren<MemoryShard>(true))
-                        shard.Initialize(presenter, collection);
                     foreach (var triggerEvent in root.GetComponentsInChildren<TriggerEvent>(true))
                         triggerEvent.Initialize(container.Resolve<StoryTextPresenter>(), presenter);
                     foreach (var trigger in root.GetComponentsInChildren<SceneTrigger>(true))
                         trigger.Initialize(container.Resolve<StoryTextPresenter>(), presenter);
+                    foreach (var interactable in root.GetComponentsInChildren<ReactionInteractable>(true))
+                        interactable.Initialize(container.Resolve<StoryTextPresenter>(), presenter);
                 }
             });
         }
