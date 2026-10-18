@@ -6,7 +6,7 @@ using XNode;
 
 namespace Memories.Gameplay.Reactions
 {
-    public enum ReactionKind { StoryText, Memory }
+    public enum ReactionKind { StoryText, Memory, ChangeLocation }
 
     [Node.CreateNodeMenu("Реакция"), Node.NodeWidth(320)]
     [MovedFrom(true, sourceNamespace: "Memories.Gameplay.Triggers", sourceAssembly: "Memories.Gameplay", sourceClassName: "TriggerActionNode")]
@@ -18,16 +18,24 @@ namespace Memories.Gameplay.Reactions
         [SerializeField] private StoryTextGraph textGraph;
         [SerializeField] private MemoryGraph memoryGraph;
         [SerializeField] private string memoryId;
+        [SerializeField] private string locationScenePath;
         public ReactionKind Kind => kind;
         public StoryTextGraph TextGraph => textGraph;
         public MemoryGraph MemoryGraph => memoryGraph;
         public string MemoryId => memoryId;
+        public string LocationScenePath => locationScenePath;
         protected override void Init() => name = "Реакция";
         public override object GetValue(NodePort port) => null;
 
         public bool Validate(out string error)
         {
             error = null;
+            if (kind == ReactionKind.ChangeLocation)
+            {
+                if (string.IsNullOrWhiteSpace(locationScenePath) || !locationScenePath.EndsWith(".unity"))
+                { error = "Назначьте сцену следующей локации."; return false; }
+                return true;
+            }
             if (kind == ReactionKind.StoryText)
             {
                 if (textGraph == null) { error = "Назначьте граф текста."; return false; }

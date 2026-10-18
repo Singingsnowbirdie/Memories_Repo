@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Memories.Contracts;
 using Memories.Gameplay.Memories;
 using Memories.Gameplay.UI;
 using Memories.Gameplay.Player;
@@ -19,10 +20,10 @@ namespace Memories.Gameplay.Triggers
         private bool fired;
         private ReactionRunner runner;
         public bool IsRunning => runner != null && runner.IsRunning;
-        public void Initialize(StoryTextPresenter texts, MemoryPresenter memories)
+        public void Initialize(StoryTextPresenter texts, MemoryPresenter memories, ILocationTransition locations = null)
         {
             runner?.Dispose();
-            runner = new ReactionRunner(texts, memories, this);
+            runner = new ReactionRunner(texts, memories, this, locations);
         }
         public bool TryActivate()
         {

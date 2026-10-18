@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Memories.Contracts;
 using Memories.Gameplay.Memories;
 using Memories.Gameplay.UI;
 using UnityEngine;
@@ -14,11 +15,13 @@ namespace Memories.Gameplay.Reactions
         private readonly StoryTextPresenter texts;
         private readonly MemoryPresenter memories;
         private readonly UnityEngine.Object owner;
+        private readonly ILocationTransition locations;
         private CancellationTokenSource playback;
         private bool fired;
         public bool IsRunning => playback != null;
-        public ReactionRunner(StoryTextPresenter texts, MemoryPresenter memories, UnityEngine.Object owner)
-        { this.texts = texts; this.memories = memories; this.owner = owner; }
+        public ReactionRunner(StoryTextPresenter texts, MemoryPresenter memories, UnityEngine.Object owner,
+            ILocationTransition locations = null)
+        { this.texts = texts; this.memories = memories; this.owner = owner; this.locations = locations; }
         public bool CanRun(ReactionGraph graph) => graph != null && !IsRunning &&
             !(graph.RunOnce && fired) && texts != null && memories != null && memories.CanStartPlayback;
         public bool TryRun(ReactionGraph graph)
@@ -26,6 +29,9 @@ namespace Memories.Gameplay.Reactions
             if (!CanRun(graph)) return false;
             if (!graph.TryGetSequence(out var actions, out var error))
             { Debug.LogWarning("Цепочка реакций не запущена: " + error, owner); return false; }
+            foreach (var action in actions)
+                if (action.Kind == ReactionKind.ChangeLocation &&
+                    (locations == null || !locations.CanChangeLocation(action.LocationScenePath))) return false;
             fired = true;
             playback = new CancellationTokenSource();
             RunAsync(actions, playback).Forget();
@@ -43,6 +49,11 @@ namespace Memories.Gameplay.Reactions
                     source.Token.ThrowIfCancellationRequested();
                     if (action.Kind == ReactionKind.StoryText)
                         await texts.ShowAsync(action.TextGraph, source.Token);
+                    else if (action.Kind == ReactionKind.ChangeLocation)
+                    {
+                        await locations.ChangeLocationAsync(action.LocationScenePath);
+                        return;
+                    }
                     else
                     {
                         // Other triggers may already be showing a memory; keep sequence order.

@@ -66,13 +66,22 @@ namespace Memories.Editor
             NodeEditorGUILayout.PortField(new GUIContent("Вход"), target.GetInputPort("previous"));
             NodeEditorGUILayout.PortField(new GUIContent("Далее"), target.GetOutputPort("next"));
             var kind = serializedObject.FindProperty("kind");
-            kind.enumValueIndex = EditorGUILayout.Popup("Действие", kind.enumValueIndex, new[] { "Показать текст", "Показать воспоминание" });
+            kind.enumValueIndex = EditorGUILayout.Popup("Действие", kind.enumValueIndex, new[] { "Показать текст", "Показать воспоминание", "Перейти в локацию" });
             if (kind.enumValueIndex == 0)
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("textGraph"), new GUIContent("Граф текста"));
-            else
+            else if (kind.enumValueIndex == 1)
             {
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("memoryGraph"), new GUIContent("Граф воспоминания"));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("memoryId"), new GUIContent("ID воспоминания"));
+            }
+            else
+            {
+                var path = serializedObject.FindProperty("locationScenePath");
+                var current = AssetDatabase.LoadAssetAtPath<SceneAsset>(path.stringValue);
+                EditorGUI.BeginChangeCheck();
+                var scene = (SceneAsset)EditorGUILayout.ObjectField("Сцена локации", current, typeof(SceneAsset), false);
+                if (EditorGUI.EndChangeCheck()) path.stringValue = scene == null ? "" : AssetDatabase.GetAssetPath(scene);
+                EditorGUILayout.HelpBox("Переход завершает цепочку. Сцена должна быть включена в Build Settings.", MessageType.Info);
             }
             serializedObject.ApplyModifiedProperties();
             if (!((ReactionNode)target).Validate(out var error)) EditorGUILayout.HelpBox(error, MessageType.Warning);

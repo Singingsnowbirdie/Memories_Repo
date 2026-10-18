@@ -1,4 +1,5 @@
 using VContainer;
+using Memories.Contracts;
 using VContainer.Unity;
 using Memories.Gameplay.Player;
 using Memories.Gameplay.Interaction;
@@ -88,9 +89,9 @@ namespace Memories.Bootstrap
                     foreach (var triggerEvent in root.GetComponentsInChildren<TriggerEvent>(true))
                         triggerEvent.Initialize(container.Resolve<StoryTextPresenter>(), presenter);
                     foreach (var trigger in root.GetComponentsInChildren<SceneTrigger>(true))
-                        trigger.Initialize(container.Resolve<StoryTextPresenter>(), presenter);
+                        trigger.Initialize(container.Resolve<StoryTextPresenter>(), presenter, container.Resolve<ILocationTransition>());
                     foreach (var interactable in root.GetComponentsInChildren<ReactionInteractable>(true))
-                        interactable.Initialize(container.Resolve<StoryTextPresenter>(), presenter);
+                        interactable.Initialize(container.Resolve<StoryTextPresenter>(), presenter, container.Resolve<ILocationTransition>());
                 }
             });
         }

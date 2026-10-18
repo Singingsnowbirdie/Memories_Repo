@@ -31,6 +31,8 @@ namespace Memories.Gameplay.Reactions
                 }
                 if (node is ReactionNode action)
                 {
+                    if (actions.Any(previous => previous.Kind == ReactionKind.ChangeLocation))
+                    { error = "Переход в локацию должен быть последней реакцией перед концом графа."; return false; }
                     if (!action.Validate(out error)) return false;
                     actions.Add(action);
                 }

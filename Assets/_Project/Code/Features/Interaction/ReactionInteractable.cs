@@ -1,4 +1,5 @@
 using Memories.Gameplay.Memories;
+using Memories.Contracts;
 using Memories.Gameplay.Reactions;
 using Memories.Gameplay.UI;
 using UnityEngine;
@@ -22,10 +23,10 @@ namespace Memories.Gameplay.Interaction
             prompt = interactionPrompt;
         }
 
-        public void Initialize(StoryTextPresenter texts, MemoryPresenter memories)
+        public void Initialize(StoryTextPresenter texts, MemoryPresenter memories, ILocationTransition locations = null)
         {
             runner?.Dispose();
-            runner = new ReactionRunner(texts, memories, this);
+            runner = new ReactionRunner(texts, memories, this, locations);
         }
         public override void Interact()
         {
