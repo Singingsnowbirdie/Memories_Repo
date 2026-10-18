@@ -32,6 +32,13 @@ namespace Memories.Bootstrap
             }, Lifetime.Singleton);
             builder.Register<InteractionPresenter>(Lifetime.Singleton);
             builder.RegisterEntryPoint<InteractionEntryPoint>();
+            builder.Register<IStoryTextView>(container =>
+            {
+                var window = new GameObject("Story text", typeof(RectTransform));
+                window.transform.SetParent(transform, false);
+                return window.AddComponent<StoryTextView>();
+            }, Lifetime.Singleton);
+            builder.Register<StoryTextPresenter>(Lifetime.Singleton).AsSelf().AsImplementedInterfaces();
             builder.Register<IPauseView>(container =>
             {
                 if (EventSystem.current == null)
