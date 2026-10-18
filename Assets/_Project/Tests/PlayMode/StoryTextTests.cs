@@ -127,7 +127,7 @@ namespace Memories.Tests.PlayMode
         [UnityTest]
         public IEnumerator LocationProvidesPanelAndCancelsPlaybackWhenUnloaded() => UniTask.ToCoroutine(async () =>
         {
-            const string path = "Assets/_Project/Locations/ForestIsland/ForestIslandBootstrap.unity";
+            const string path = "Assets/_Project/Scenes/Bootstrap.unity";
             await SceneManager.LoadSceneAsync(path, LoadSceneMode.Additive);
             var scene = SceneManager.GetSceneByPath(path);
             AppLifetimeScope app = null;

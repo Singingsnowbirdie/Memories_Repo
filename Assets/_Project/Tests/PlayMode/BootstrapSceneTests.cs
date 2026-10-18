@@ -16,9 +16,35 @@ namespace Memories.Tests.PlayMode
     public sealed class BootstrapSceneTests
     {
         [UnityTest]
-        public IEnumerator BootstrapSceneStartsLocationAutomatically() => UniTask.ToCoroutine(async () =>
+        public IEnumerator MainBootstrapStartsForestIsland() => UniTask.ToCoroutine(async () =>
         {
             const string path = "Assets/_Project/Scenes/Bootstrap.unity";
+            await SceneManager.LoadSceneAsync(path, LoadSceneMode.Additive);
+            var scene = SceneManager.GetSceneByPath(path);
+            GameSession session = null;
+            try
+            {
+                foreach (var root in scene.GetRootGameObjects())
+                    if (root.TryGetComponent<AppLifetimeScope>(out var app))
+                        session = app.Container.Resolve<GameSession>();
+                Assert.IsNotNull(session);
+                float deadline = Time.realtimeSinceStartup + 20;
+                while (!session.IsRunning && Time.realtimeSinceStartup < deadline) await UniTask.NextFrame();
+                Assert.IsTrue(session.IsRunning);
+                Assert.AreEqual("Assets/_Project/Locations/ForestIsland/ForestIsland.unity", session.LocationScope.gameObject.scene.path);
+                Assert.IsNotNull(session.LocationScope.Container.Resolve<PlayerMotor>());
+            }
+            finally
+            {
+                if (session != null && session.IsRunning) await session.EndAsync();
+                if (scene.isLoaded) await SceneManager.UnloadSceneAsync(scene);
+            }
+        });
+
+        [UnityTest]
+        public IEnumerator BootstrapSceneStartsLocationAutomatically() => UniTask.ToCoroutine(async () =>
+        {
+            const string path = "Assets/_Project/Scenes/TestBootstrap.unity";
             await SceneManager.LoadSceneAsync(path, LoadSceneMode.Additive);
             var scene = SceneManager.GetSceneByPath(path);
             AppLifetimeScope app = null;
@@ -31,6 +57,7 @@ namespace Memories.Tests.PlayMode
                 float deadline = Time.realtimeSinceStartup + 20;
                 while (!session.IsRunning && Time.realtimeSinceStartup < deadline) await UniTask.NextFrame();
                 Assert.IsTrue(session.IsRunning, "Bootstrap did not start the initial location.");
+                Assert.AreEqual("Assets/Scenes/FirstPersonTest/FirstPersonTest.unity", session.LocationScope.gameObject.scene.path);
                 var motor = session.LocationScope.Container.Resolve<PlayerMotor>();
                 Assert.IsNotNull(motor.GetComponent<CharacterController>());
                 Assert.AreEqual(1, motor.GetComponentsInChildren<Camera>().Length);
