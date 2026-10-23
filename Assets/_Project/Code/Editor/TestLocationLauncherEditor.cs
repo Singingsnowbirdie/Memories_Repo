@@ -16,7 +16,7 @@ namespace Memories.Editor
             {
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("location"), new GUIContent("Локация для теста"));
                 serializedObject.ApplyModifiedProperties();
-                EditorGUILayout.HelpBox("Загрузится только выбранная локация. Игрок появится в начале шоссе или перед входом в дом. Обычный Bootstrap не меняется.", MessageType.Info);
+                EditorGUILayout.HelpBox("Загрузится только выбранная локация. Игрок появится в начале шоссе, перед домом или перед аркой двора. Обычный Bootstrap не меняется.", MessageType.Info);
                 if (GUILayout.Button("Запустить выбранную локацию"))
                 {
                     var launcher = (TestLocationLauncher)target;
