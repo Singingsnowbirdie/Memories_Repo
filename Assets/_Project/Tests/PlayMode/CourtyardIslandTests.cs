@@ -62,7 +62,7 @@ namespace Memories.Tests.PlayMode
                 Walk(0, 20);
                 Walk(0, -8);
                 for (int i = 0; i < 200; i++) motor.Move(new Vector3(0, -.04f, -.08f));
-                Assert.Greater(motor.transform.position.z, -12, "The player must not fall off the island.");
+                Assert.Greater(motor.transform.position.z, -24, "The player must not fall off the extended island.");
             }
             finally
             {

@@ -16,6 +16,7 @@ namespace Memories.Gameplay.Player
         }
 
         public void SetInitialYaw(float yaw) => Yaw = yaw;
+        public void SetInitialPitch(float pitch) => Pitch = Math.Max(-settings.PitchLimit, Math.Min(settings.PitchLimit, pitch));
 
         public void Look(float horizontalDelta, float verticalDelta)
         {
