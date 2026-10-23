@@ -52,13 +52,13 @@ namespace Memories.Tests.PlayMode
                     for (int step = 0; step < 4000; step++)
                         motor.Move(direction * 0.08f + Vector3.down * 0.04f);
                     var position = motor.transform.position;
-                    float sideLimit = position.z < 300.9f ? 4.5f : (position.x < 0 ? 6 * Mathf.Sqrt(2) : 6 * Mathf.Sqrt(2) + 8);
+                    float sideLimit = position.z < 300 ? 4.5f : (position.x < 0 ? 32f : 24f);
                     Assert.Less(Mathf.Abs(position.x), sideLimit,
                         "Player must stay inside the highway or house approach boundaries.");
-                    Assert.That(position.z, Is.InRange(100f, 308 + 14 * Mathf.Sqrt(2)), "North/south barrier failed.");
+                    Assert.That(position.z, Is.InRange(100f, 340f), "North/south barrier failed.");
                     if (direction == Vector3.forward)
                         Assert.Greater(position.z, 299, "The highway must be walkable to the far end.");
-                    Assert.That(position.y, Is.InRange(-0.1f, 0.15f), "Player left the floor.");
+                    Assert.That(position.y, Is.InRange(-0.1f, 0.3f), "Player left the floor or pool coping.");
                 }
 
                 controller.enabled = false;
@@ -82,6 +82,21 @@ namespace Memories.Tests.PlayMode
                 WalkWorldTo(garageCenterX, 318, 0);
                 WalkWorldTo(garageCenterX, 305, 0); // Open vehicle entrance.
                 WalkWorldTo(0, 305, 0); // Continuous terrace back to the highway.
+                WalkWorldTo(-13, 305, 0);
+                WalkWorldTo(-13, 317, 0);
+                for (int step = 0; step < 100; step++) motor.Move(new Vector3(-.08f, -.04f, 0));
+                Assert.Greater(motor.transform.position.x, -16, "Pool edge must prevent falling into the basin.");
+                Assert.GreaterOrEqual(motor.transform.position.y, -.1f);
+                WalkWorldTo(-13, 317, 0);
+                WalkWorldTo(-13, 327, 0);
+                WalkWorldTo(-29, 327, 0);
+                WalkWorldTo(-29, 307, 0);
+                WalkWorldTo(-13, 307, 0);
+                WalkWorldTo(-10, 307, 0);
+                WalkWorldTo(-10, 331, 0);
+                WalkWorldTo(18.8f, 331, 0);
+                WalkWorldTo(18.8f, 305, 0);
+                WalkWorldTo(0, 305, 0);
                 WalkWorldTo(0, 299, 0);
 
                 void WalkTo(float x, float z, float floorY)
