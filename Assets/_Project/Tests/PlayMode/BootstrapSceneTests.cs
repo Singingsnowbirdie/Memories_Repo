@@ -16,7 +16,7 @@ namespace Memories.Tests.PlayMode
     public sealed class BootstrapSceneTests
     {
         [UnityTest]
-        public IEnumerator MainBootstrapStartsForestIsland() => UniTask.ToCoroutine(async () =>
+        public IEnumerator MainBootstrapStartsDarknessWithSafeWalkingArea() => UniTask.ToCoroutine(async () =>
         {
             const string path = "Assets/_Project/Scenes/Bootstrap.unity";
             await SceneManager.LoadSceneAsync(path, LoadSceneMode.Additive);
@@ -31,8 +31,30 @@ namespace Memories.Tests.PlayMode
                 float deadline = Time.realtimeSinceStartup + 20;
                 while (!session.IsRunning && Time.realtimeSinceStartup < deadline) await UniTask.NextFrame();
                 Assert.IsTrue(session.IsRunning);
-                Assert.AreEqual("Assets/_Project/Locations/ForestIsland/ForestIsland.unity", session.LocationScope.gameObject.scene.path);
-                Assert.IsNotNull(session.LocationScope.Container.Resolve<PlayerMotor>());
+                Assert.AreEqual("Assets/_Project/Locations/Darkness/Darkness.unity", session.LocationScope.gameObject.scene.path);
+                var motor = session.LocationScope.Container.Resolve<PlayerMotor>();
+                var camera = motor.GetComponentInChildren<Camera>();
+                Assert.AreEqual(CameraClearFlags.SolidColor, camera.clearFlags);
+                Assert.AreEqual(Color.black, camera.backgroundColor);
+                Assert.IsNull(RenderSettings.skybox);
+                Assert.AreEqual(0, RenderSettings.ambientIntensity);
+                var controller = motor.GetComponent<CharacterController>();
+                foreach (var direction in new[] { Vector3.forward, Vector3.back, Vector3.left, Vector3.right,
+                    new Vector3(1, 0, 1).normalized, new Vector3(-1, 0, 1).normalized,
+                    new Vector3(1, 0, -1).normalized, new Vector3(-1, 0, -1).normalized })
+                {
+                    controller.enabled = false;
+                    motor.transform.position = new Vector3(0, 0.05f, 0);
+                    controller.enabled = true;
+                    Physics.SyncTransforms();
+                    for (int step = 0; step < 500; step++)
+                        motor.Move(direction * 0.08f + Vector3.down * 0.04f);
+                    var position = motor.transform.position;
+                    Assert.Greater(new Vector2(position.x, position.z).magnitude, 10, "Player must be able to walk.");
+                    Assert.Less(Mathf.Abs(position.x), 14, "East/west barrier failed.");
+                    Assert.Less(Mathf.Abs(position.z), 14, "North/south barrier failed.");
+                    Assert.That(position.y, Is.InRange(-0.1f, 0.15f), "Player left the floor.");
+                }
             }
             finally
             {
