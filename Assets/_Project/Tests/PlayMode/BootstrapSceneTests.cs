@@ -44,15 +44,16 @@ namespace Memories.Tests.PlayMode
                     new Vector3(1, 0, -1).normalized, new Vector3(-1, 0, -1).normalized })
                 {
                     controller.enabled = false;
-                    motor.transform.position = new Vector3(0, 0.05f, 0);
+                    motor.transform.position = new Vector3(0, 0.05f, 100.5f);
                     controller.enabled = true;
                     Physics.SyncTransforms();
-                    for (int step = 0; step < 500; step++)
+                    for (int step = 0; step < 4000; step++)
                         motor.Move(direction * 0.08f + Vector3.down * 0.04f);
                     var position = motor.transform.position;
-                    Assert.Greater(new Vector2(position.x, position.z).magnitude, 10, "Player must be able to walk.");
-                    Assert.Less(Mathf.Abs(position.x), 14, "East/west barrier failed.");
-                    Assert.Less(Mathf.Abs(position.z), 14, "North/south barrier failed.");
+                    Assert.Less(Mathf.Abs(position.x), 4.5f, "Player must stay inside the asphalt edges.");
+                    Assert.That(position.z, Is.InRange(100f, 300f), "North/south barrier failed.");
+                    if (direction == Vector3.forward)
+                        Assert.Greater(position.z, 299, "The highway must be walkable to the far end.");
                     Assert.That(position.y, Is.InRange(-0.1f, 0.15f), "Player left the floor.");
                 }
             }

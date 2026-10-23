@@ -57,6 +57,29 @@ namespace Memories.Tests.EditMode
         }
 
         [Test]
+        public void DisabledControlsBlockMovementAndLookUntilReleased()
+        {
+            var settings = new PlayerMovementSettings();
+            var input = new InputStub { Move = Vector2.up, LookDelta = new Vector2(10, 10) };
+            var view = new ViewStub { InitialYaw = 30 };
+            using var presenter = new PlayerPresenter(input, new PlayerMovementModel(settings), view, settings);
+            presenter.ControlsEnabled = false;
+            presenter.Start();
+            for (int i = 0; i < 60; i++) presenter.Tick(1f / 60);
+            Assert.AreEqual(0, view.Position.x);
+            Assert.AreEqual(0, view.Position.z);
+            Assert.AreEqual(30, view.Yaw);
+            Assert.AreEqual(0, view.Pitch);
+            Assert.IsTrue(input.Enabled, "Pause input must remain available during the introduction.");
+
+            presenter.ControlsEnabled = true;
+            presenter.Tick(1f / 60);
+            Assert.Greater(new Vector2(view.Position.x, view.Position.z).magnitude, 0);
+            Assert.Greater(view.Yaw, 30);
+            Assert.Less(view.Pitch, 0);
+        }
+
+        [Test]
         public void MovementFollowsSpawnYawAndStopsAfterDisposal()
         {
             var settings = new PlayerMovementSettings();
