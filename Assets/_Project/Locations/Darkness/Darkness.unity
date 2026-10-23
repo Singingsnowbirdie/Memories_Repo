@@ -214,6 +214,8 @@ GameObject:
   - component: {fileID: 110040295}
   - component: {fileID: 110040294}
   - component: {fileID: 110040293}
+  - component: {fileID: 110040296}
+  - component: {fileID: 110040297}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -238,7 +240,7 @@ Camera:
   m_GameObject: {fileID: 110040292}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 2
+  m_ClearFlags: 1
   m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -20506,6 +20508,29 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &110040296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 110040292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7fdafb1db2045c0b79146d84b31d882, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  skyMaterial: {fileID: 2100000, guid: 1d06f9b7001848bd93dce65bcd218fa2, type: 2}
+  shimmer: 0.025
+--- !u!45 &110040297
+Skybox:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 110040292}
+  m_Enabled: 1
+  m_CustomSkybox: {fileID: 2100000, guid: 1d06f9b7001848bd93dce65bcd218fa2, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

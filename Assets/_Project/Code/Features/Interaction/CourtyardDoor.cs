@@ -55,6 +55,12 @@ namespace Memories.Gameplay.Interaction
                 portalCamera.cullingMask = 1 << 30;
                 portalCamera.clearFlags = CameraClearFlags.SolidColor;
                 portalCamera.backgroundColor = Color.black;
+                var destinationSky = arrival.root.GetComponentInChildren<Skybox>(true);
+                if (destinationSky != null && destinationSky.material != null)
+                {
+                    go.AddComponent<Skybox>().material = destinationSky.material;
+                    portalCamera.clearFlags = CameraClearFlags.Skybox;
+                }
                 texture = new RenderTexture(Mathf.Max(640, Screen.width), Mathf.Max(360, Screen.height), 24);
                 texture.Create();
                 portalCamera.targetTexture = texture;
