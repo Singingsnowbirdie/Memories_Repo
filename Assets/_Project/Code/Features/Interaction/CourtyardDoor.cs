@@ -12,6 +12,8 @@ namespace Memories.Gameplay.Interaction
         [SerializeField] private Renderer view;
         [SerializeField] private Collider closedDoor;
         [SerializeField] private string destination = "Assets/_Project/Locations/CourtyardIsland/CourtyardIsland.unity";
+        [SerializeField] private string arrivalMarker = "Вход из дома";
+        [SerializeField, Min(0f)] private float arrivalForwardOffset;
         private Func<string, UniTask<Scene>> load;
         private Func<Scene, Vector3, Quaternion, float, UniTask> enter;
         private PlayerMotor player;
@@ -45,8 +47,8 @@ namespace Memories.Gameplay.Interaction
                 if (this == null) return;
                 foreach (var root in courtyard.GetRootGameObjects())
                     foreach (var t in root.GetComponentsInChildren<Transform>(true))
-                        if (t.name == "Вход из дома") arrival = t;
-                if (arrival == null) throw new InvalidOperationException("Courtyard entrance marker is missing.");
+                        if (t.name == arrivalMarker) arrival = t;
+                if (arrival == null) throw new InvalidOperationException("Destination entrance marker is missing: " + arrivalMarker);
                 var go = new GameObject("Вид двора через дверь");
                 go.transform.SetParent(transform, false);
                 portalCamera = go.AddComponent<Camera>();
@@ -98,7 +100,8 @@ namespace Memories.Gameplay.Interaction
             if (Mathf.Abs(local.x) < .65f && local.z >= -.42f && previousDistance < -.42f)
             {
                 crossing = true;
-                Vector3 position = arrival.TransformPoint(local);
+                // Keep the visual portal aligned, but place the capsule clear of the destination door.
+                Vector3 position = arrival.TransformPoint(local + Vector3.forward * arrivalForwardOffset);
                 Quaternion rotation = arrival.rotation * Quaternion.Inverse(transform.rotation) * player.transform.rotation;
                 float pitch = Mathf.DeltaAngle(0, playerCamera.transform.localEulerAngles.x);
                 enter(courtyard, position, rotation, pitch).Forget();
@@ -114,6 +117,11 @@ namespace Memories.Gameplay.Interaction
             portalCamera.fieldOfView = playerCamera.fieldOfView;
             portalCamera.aspect = playerCamera.aspect;
             portalCamera.projectionMatrix = playerCamera.projectionMatrix;
+            // Clip the destination wall/closed side door between the remote camera and the entrance.
+            Vector3 clipPoint = portalCamera.worldToCameraMatrix.MultiplyPoint(arrival.position);
+            Vector3 clipNormal = portalCamera.worldToCameraMatrix.MultiplyVector(arrival.forward).normalized;
+            var clipPlane = new Vector4(clipNormal.x, clipNormal.y, clipNormal.z, -Vector3.Dot(clipPoint, clipNormal));
+            portalCamera.projectionMatrix = portalCamera.CalculateObliqueMatrix(clipPlane);
             var previous = SceneManager.GetActiveScene();
             try
             {

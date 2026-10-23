@@ -174,9 +174,11 @@ namespace Memories.Bootstrap
                     await CleanupAsync();
                     throw new OperationCanceledException("Session closed while opening the courtyard.");
                 }
+                // Keep successive connected locations outside the current camera range.
+                float destinationOffset = LocationScope.Container.Resolve<PlayerMotor>().transform.position.x + 2000f;
                 foreach (var root in scene.GetRootGameObjects())
                 {
-                    root.transform.position += Vector3.right * 2000;
+                    root.transform.position += Vector3.right * destinationOffset;
                     foreach (var t in root.GetComponentsInChildren<Transform>(true)) t.gameObject.layer = 30;
                     foreach (var camera in root.GetComponentsInChildren<Camera>(true)) camera.enabled = false;
                     foreach (var listener in root.GetComponentsInChildren<AudioListener>(true)) listener.enabled = false;
