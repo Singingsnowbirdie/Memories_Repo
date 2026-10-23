@@ -5,7 +5,7 @@ namespace Memories.Gameplay
 {
     public sealed class HighwayLights : MonoBehaviour
     {
-        [SerializeField, Min(0)] private float startDelay = 10f;
+        [SerializeField, Min(0)] private float startDelay = 5f;
         [SerializeField, Min(0.01f)] private float fadeDuration = 4f;
         [SerializeField, Min(0.01f)] private float pairInterval = 1f;
         [SerializeField, Min(0.01f)] private float pairSpacing = 10f;
