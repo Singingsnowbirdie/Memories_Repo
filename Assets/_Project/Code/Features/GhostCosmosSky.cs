@@ -7,6 +7,11 @@ namespace Memories.Gameplay
     {
         [SerializeField] private Material skyMaterial;
         [SerializeField, Range(0, 0.1f)] private float shimmer = 0.025f;
+        [SerializeField] private Mesh[] asteroidMeshes;
+        [SerializeField] private Material asteroidMaterial;
+        [SerializeField, Range(16, 400)] private int asteroidCount = 180;
+        private AsteroidBelt asteroidBelt;
+        private Camera skyCamera;
         private Material instance;
         private Color tint;
         private HighwayLights highway;
@@ -19,10 +24,16 @@ namespace Memories.Gameplay
             highway = FindFirstObjectByType<HighwayLights>();
             GetComponent<Skybox>().material = instance;
             GetComponent<Camera>().clearFlags = CameraClearFlags.Skybox;
+            skyCamera = GetComponent<Camera>();
+            asteroidBelt = new AsteroidBelt(asteroidMeshes, asteroidMaterial, asteroidCount);
             Apply();
         }
 
-        private void LateUpdate() => Apply();
+        private void LateUpdate()
+        {
+            Apply();
+            asteroidBelt?.Draw(skyCamera);
+        }
 
         private void Apply()
         {
