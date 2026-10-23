@@ -21,6 +21,8 @@ namespace Memories.Gameplay
         private readonly List<Lamp> lamps = new List<Lamp>();
         private MaterialPropertyBlock properties;
         private float elapsed;
+        public bool IsFullyLit { get; private set; }
+        public float FadeDuration => Mathf.Max(0.01f, fadeDuration);
         private static readonly int EmissionColor = Shader.PropertyToID("_EmissionColor");
 
         private void Awake()
@@ -45,16 +47,23 @@ namespace Memories.Gameplay
             foreach (var lamp in lamps) Apply(lamp, 0);
         }
 
-        private void OnEnable() => elapsed = 0;
+        private void OnEnable()
+        {
+            elapsed = 0;
+            IsFullyLit = false;
+        }
 
         private void Update()
         {
             elapsed += Time.deltaTime;
+            bool complete = lamps.Count > 0;
             foreach (var lamp in lamps)
             {
                 float progress = Mathf.Clamp01((elapsed - startDelay - lamp.Delay) / Mathf.Max(0.01f, fadeDuration));
                 Apply(lamp, Mathf.SmoothStep(0, 1, progress));
+                if (progress < 1) complete = false;
             }
+            IsFullyLit = complete;
         }
 
         private void Apply(Lamp group, float brightness)
@@ -75,6 +84,7 @@ namespace Memories.Gameplay
 
         private void OnDisable()
         {
+            IsFullyLit = false;
             foreach (var lamp in lamps) Apply(lamp, 0);
         }
     }

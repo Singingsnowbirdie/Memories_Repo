@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Memories.Contracts;
@@ -14,6 +15,7 @@ namespace Memories.Bootstrap
         private readonly ApplicationContext application;
         private readonly CancellationTokenSource shutdown = new CancellationTokenSource();
         private Scene locationScene;
+        private readonly List<Scene> additionalScenes = new List<Scene>();
         private bool busy;
         private bool disposed;
 
@@ -48,6 +50,18 @@ namespace Memories.Bootstrap
                 locationScene = SceneManager.GetSceneByPath(scenePath);
                 cancellation.Token.ThrowIfCancellationRequested();
 
+                foreach (var additionalPath in applicationScope.AdditionalLocationScenes)
+                {
+                    if (string.IsNullOrWhiteSpace(additionalPath) || !Application.CanStreamedLevelBeLoaded(additionalPath))
+                        throw new ArgumentException("Additional scene must be enabled in Build Settings: " + additionalPath);
+                    if (SceneManager.GetSceneByPath(additionalPath).isLoaded)
+                        throw new InvalidOperationException("Additional scene is already loaded: " + additionalPath);
+                    await SceneManager.LoadSceneAsync(additionalPath, LoadSceneMode.Additive);
+                    additionalScenes.Add(SceneManager.GetSceneByPath(additionalPath));
+                    cancellation.Token.ThrowIfCancellationRequested();
+                }
+
+                applicationScope.TestLauncher?.Prepare(locationScene);
                 var root = new GameObject("LocationLifetimeScope");
                 root.SetActive(false);
                 SceneManager.MoveGameObjectToScene(root, locationScene);
@@ -100,6 +114,7 @@ namespace Memories.Bootstrap
                 foreach (var previousRoot in previousScene.GetRootGameObjects()) previousRoot.SetActive(false);
                 previousScope.Dispose();
                 await SceneManager.UnloadSceneAsync(previousScene);
+                await UnloadAdditionalScenesAsync();
                 if (disposed) await CleanupAsync();
             }
             catch
@@ -129,9 +144,17 @@ namespace Memories.Bootstrap
             ReleaseScopes();
             if (applicationScope != null && applicationScope.gameObject.scene.isLoaded)
                 SceneManager.SetActiveScene(applicationScope.gameObject.scene);
+            await UnloadAdditionalScenesAsync();
             if (locationScene.IsValid() && locationScene.isLoaded)
                 await SceneManager.UnloadSceneAsync(locationScene);
             locationScene = default;
+        }
+
+        private async UniTask UnloadAdditionalScenesAsync()
+        {
+            foreach (var scene in additionalScenes)
+                if (scene.IsValid() && scene.isLoaded) await SceneManager.UnloadSceneAsync(scene);
+            additionalScenes.Clear();
         }
 
         private void ReleaseScopes()
@@ -151,6 +174,11 @@ namespace Memories.Bootstrap
             // An in-flight StartAsync owns cleanup after its scene load finishes.
             if (busy) return;
             ReleaseScopes();
+            if (Application.isPlaying)
+                foreach (var scene in additionalScenes)
+                    if (scene.IsValid() && scene.isLoaded && SceneManager.sceneCount > 1)
+                        SceneManager.UnloadSceneAsync(scene);
+            additionalScenes.Clear();
             if (Application.isPlaying && locationScene.IsValid() && locationScene.isLoaded
                 && SceneManager.sceneCount > 1)
                 SceneManager.UnloadSceneAsync(locationScene);

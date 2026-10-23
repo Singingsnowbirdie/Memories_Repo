@@ -32,6 +32,8 @@ namespace Memories.Tests.PlayMode
                 while (!session.IsRunning && Time.realtimeSinceStartup < deadline) await UniTask.NextFrame();
                 Assert.IsTrue(session.IsRunning);
                 Assert.AreEqual("Assets/_Project/Locations/Darkness/Darkness.unity", session.LocationScope.gameObject.scene.path);
+                Assert.IsTrue(SceneManager.GetSceneByPath("Assets/_Project/Locations/House/House.unity").isLoaded,
+                    "Bootstrap must load the house alongside the highway.");
                 var motor = session.LocationScope.Container.Resolve<PlayerMotor>();
                 var camera = motor.GetComponentInChildren<Camera>();
                 Assert.AreEqual(CameraClearFlags.SolidColor, camera.clearFlags);
@@ -50,17 +52,65 @@ namespace Memories.Tests.PlayMode
                     for (int step = 0; step < 4000; step++)
                         motor.Move(direction * 0.08f + Vector3.down * 0.04f);
                     var position = motor.transform.position;
-                    Assert.Less(Mathf.Abs(position.x), 4.5f, "Player must stay inside the asphalt edges.");
-                    Assert.That(position.z, Is.InRange(100f, 300f), "North/south barrier failed.");
+                    float sideLimit = position.z < 300.9f ? 4.5f : (position.x < 0 ? 6 * Mathf.Sqrt(2) : 6 * Mathf.Sqrt(2) + 8);
+                    Assert.Less(Mathf.Abs(position.x), sideLimit,
+                        "Player must stay inside the highway or house approach boundaries.");
+                    Assert.That(position.z, Is.InRange(100f, 308 + 14 * Mathf.Sqrt(2)), "North/south barrier failed.");
                     if (direction == Vector3.forward)
                         Assert.Greater(position.z, 299, "The highway must be walkable to the far end.");
                     Assert.That(position.y, Is.InRange(-0.1f, 0.15f), "Player left the floor.");
+                }
+
+                controller.enabled = false;
+                motor.transform.position = new Vector3(0, 0.05f, 299);
+                controller.enabled = true;
+                Physics.SyncTransforms();
+                // Walk continuously from the road through every room, upstairs and back out.
+                WalkTo(0, 311, 0); WalkTo(-3.6f, 311, 0); WalkTo(0, 311, 0);
+                WalkTo(3.6f, 311, 0); WalkTo(0, 311, 0);
+                WalkTo(0, 318, 0); WalkTo(-3.6f, 318, 0); WalkTo(0, 318, 0);
+                WalkTo(0, 314, 0); WalkTo(3.8f, 314, 0);
+                WalkTo(3.8f, 321.2f, 3.2f); WalkTo(0, 321.2f, 3.2f);
+                WalkTo(0, 318, 3.2f); WalkTo(-3.6f, 318, 3.2f); WalkTo(0, 318, 3.2f);
+                WalkTo(0, 311, 3.2f); WalkTo(-3.6f, 311, 3.2f); WalkTo(0, 311, 3.2f);
+                WalkTo(3.6f, 311, 3.2f); WalkTo(0, 311, 3.2f);
+                WalkTo(0, 321.2f, 3.2f); WalkTo(3.8f, 321.2f, 3.2f);
+                WalkTo(3.8f, 314, 0); WalkTo(0, 314, 0);
+                WalkTo(0, 311, 0); WalkTo(3.6f, 311, 0);
+                float garageCenterX = 6 * Mathf.Sqrt(2) + 4;
+                WalkWorldTo(garageCenterX, 308 + 3 * Mathf.Sqrt(2), 0); // Door from house to garage.
+                WalkWorldTo(garageCenterX, 318, 0);
+                WalkWorldTo(garageCenterX, 305, 0); // Open vehicle entrance.
+                WalkWorldTo(0, 305, 0); // Continuous terrace back to the highway.
+                WalkWorldTo(0, 299, 0);
+
+                void WalkTo(float x, float z, float floorY)
+                {
+                    float scale = Mathf.Sqrt(2);
+                    WalkWorldTo(x * scale, z >= 308 ? 308 + (z - 308) * scale : z, floorY);
+                }
+
+                void WalkWorldTo(float x, float z, float floorY)
+                {
+                    for (int step = 0; step < 600; step++)
+                    {
+                        var delta = new Vector3(x - motor.transform.position.x, 0, z - motor.transform.position.z);
+                        if (delta.magnitude < 0.04f) break;
+                        motor.Move(Vector3.ClampMagnitude(delta, 0.05f) + Vector3.down * 0.04f);
+                    }
+                    for (int step = 0; step < 20; step++) motor.Move(Vector3.down * 0.04f);
+                    var p = motor.transform.position;
+                    Assert.Less(Vector2.Distance(new Vector2(p.x, p.z), new Vector2(x, z)), 0.15f,
+                        $"Blocked route to ({x}, {z}); stopped at {p}.");
+                    Assert.That(p.y, Is.InRange(floorY - 0.1f, floorY + 0.15f), "Wrong floor or missing support.");
                 }
             }
             finally
             {
                 if (session != null && session.IsRunning) await session.EndAsync();
                 if (scene.isLoaded) await SceneManager.UnloadSceneAsync(scene);
+                Assert.IsFalse(SceneManager.GetSceneByPath("Assets/_Project/Locations/House/House.unity").isLoaded,
+                    "The session must unload its additional house scene.");
             }
         });
 

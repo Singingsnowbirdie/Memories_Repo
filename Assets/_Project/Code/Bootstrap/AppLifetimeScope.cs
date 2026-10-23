@@ -12,10 +12,14 @@ namespace Memories.Bootstrap
     {
         public const string DefaultLocationPath = "Assets/Scenes/FirstPersonTest/FirstPersonTest.unity";
         [SerializeField] private string initialLocationPath = DefaultLocationPath;
+        [SerializeField] private string[] additionalLocationScenes = System.Array.Empty<string>();
         [SerializeField] private bool startAutomatically = true;
         [SerializeField] private PlayerMovementSettings playerMovement = new PlayerMovementSettings();
 
         public bool StartAutomatically { get => startAutomatically; set => startAutomatically = value; }
+        internal TestLocationLauncher TestLauncher => GetComponent<TestLocationLauncher>();
+        public System.Collections.Generic.IReadOnlyList<string> AdditionalLocationScenes =>
+            TestLauncher != null ? System.Array.Empty<string>() : additionalLocationScenes;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -27,7 +31,8 @@ namespace Memories.Bootstrap
             builder.Register<PlayerInputService>(Lifetime.Singleton).As<IPlayerInput>().As<IInteractionInput>().As<IPauseInput>();
             builder.Register<GameSession>(Lifetime.Singleton).AsSelf().AsImplementedInterfaces();
             if (startAutomatically)
-                builder.RegisterEntryPoint<BootstrapEntryPoint>().WithParameter(initialLocationPath);
+                builder.RegisterEntryPoint<BootstrapEntryPoint>().WithParameter(
+                    TestLauncher != null ? TestLauncher.ScenePath : initialLocationPath);
         }
     }
 }
