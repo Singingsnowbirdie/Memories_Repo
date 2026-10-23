@@ -37,9 +37,13 @@ namespace Memories.Bootstrap
             if (disposed) throw new ObjectDisposedException(nameof(GameSession));
             if (busy || SessionScope != null) throw new InvalidOperationException("A session is already running or transitioning.");
             cancellationToken.ThrowIfCancellationRequested();
-            if (string.IsNullOrWhiteSpace(scenePath) || !Application.CanStreamedLevelBeLoaded(scenePath))
+            bool useOpenScene = false;
+#if UNITY_EDITOR
+            useOpenScene = applicationScope.UseOpenLocationForEditorPlay && SceneManager.GetSceneByPath(scenePath).isLoaded;
+#endif
+            if (string.IsNullOrWhiteSpace(scenePath) || (!useOpenScene && !Application.CanStreamedLevelBeLoaded(scenePath)))
                 throw new ArgumentException("Location must be enabled in Build Settings: " + scenePath, nameof(scenePath));
-            if (SceneManager.GetSceneByPath(scenePath).isLoaded)
+            if (!useOpenScene && SceneManager.GetSceneByPath(scenePath).isLoaded)
                 throw new InvalidOperationException("Location is already loaded. Start the game from Bootstrap.");
 
             busy = true;
@@ -49,7 +53,7 @@ namespace Memories.Bootstrap
                 SessionScope = applicationScope.CreateChild<SessionLifetimeScope>(childScopeName: "SessionLifetimeScope");
                 // Unity scene loading cannot be interrupted safely. Finish the operation,
                 // then honour cancellation and unload the scene we own.
-                await SceneManager.LoadSceneAsync(scenePath, LoadSceneMode.Additive);
+                if (!useOpenScene) await SceneManager.LoadSceneAsync(scenePath, LoadSceneMode.Additive);
                 locationScene = SceneManager.GetSceneByPath(scenePath);
                 cancellation.Token.ThrowIfCancellationRequested();
 

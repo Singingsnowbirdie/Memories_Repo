@@ -16,6 +16,10 @@ namespace Memories.Bootstrap
         [SerializeField] private bool startAutomatically = true;
         [SerializeField] private PlayerMovementSettings playerMovement = new PlayerMovementSettings();
 
+#if UNITY_EDITOR
+        public bool UseOpenLocationForEditorPlay { get; set; }
+#endif
+
         public bool StartAutomatically { get => startAutomatically; set => startAutomatically = value; }
         internal TestLocationLauncher TestLauncher => GetComponent<TestLocationLauncher>();
         public System.Collections.Generic.IReadOnlyList<string> AdditionalLocationScenes =>
