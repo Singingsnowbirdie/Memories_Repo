@@ -5,7 +5,7 @@ namespace Memories.Gameplay
 {
     public sealed class HighwayLights : MonoBehaviour
     {
-        [SerializeField, Min(0)] private float startDelay = 10f;
+        [SerializeField, Min(0)] private float startDelay = 5f;
         [SerializeField, Min(0.01f)] private float fadeDuration = 4f;
         [SerializeField, Min(0.01f)] private float pairInterval = 1f;
         [SerializeField, Min(0.01f)] private float pairSpacing = 10f;
@@ -23,6 +23,8 @@ namespace Memories.Gameplay
         private float elapsed;
         public bool IsFullyLit { get; private set; }
         public float FadeDuration => Mathf.Max(0.01f, fadeDuration);
+        public float SkyBrightness { get; private set; }
+        private float lastLampDelay;
         private static readonly int EmissionColor = Shader.PropertyToID("_EmissionColor");
 
         private void Awake()
@@ -42,7 +44,10 @@ namespace Memories.Gameplay
                 });
             }
             foreach (var lamp in lamps)
+            {
                 lamp.Delay = Mathf.Round((lamp.Distance - firstDistance) / Mathf.Max(0.01f, pairSpacing)) * pairInterval;
+                lastLampDelay = Mathf.Max(lastLampDelay, lamp.Delay);
+            }
             properties = new MaterialPropertyBlock();
             foreach (var lamp in lamps) Apply(lamp, 0);
         }
@@ -50,12 +55,15 @@ namespace Memories.Gameplay
         private void OnEnable()
         {
             elapsed = 0;
+            SkyBrightness = 0;
             IsFullyLit = false;
         }
 
         private void Update()
         {
             elapsed += Time.deltaTime;
+            SkyBrightness = Mathf.SmoothStep(0, 1,
+                Mathf.Clamp01((elapsed - startDelay) / (lastLampDelay + FadeDuration)));
             bool complete = lamps.Count > 0;
             foreach (var lamp in lamps)
             {

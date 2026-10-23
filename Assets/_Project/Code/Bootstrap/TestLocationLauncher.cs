@@ -10,12 +10,14 @@ namespace Memories.Bootstrap
         public const string BootstrapPath = "Assets/_Project/Scenes/TestBootstrap.unity";
         public const string HighwayPath = "Assets/_Project/Locations/Darkness/Darkness.unity";
         public const string HousePath = "Assets/_Project/Locations/House/House.unity";
+        public const string CourtyardPath = "Assets/_Project/Locations/CourtyardIsland/CourtyardIsland.unity";
 
         public enum Location
         {
             [InspectorName("Тестовая комната")] TestRoom,
             [InspectorName("Шоссе")] Highway,
-            [InspectorName("Дом")] House
+            [InspectorName("Дом")] House,
+            [InspectorName("Двор-колодец")] Courtyard
         }
 
         [SerializeField] private Location location;
@@ -24,6 +26,7 @@ namespace Memories.Bootstrap
         {
             Location.Highway => HighwayPath,
             Location.House => HousePath,
+            Location.Courtyard => CourtyardPath,
             _ => AppLifetimeScope.DefaultLocationPath
         };
 

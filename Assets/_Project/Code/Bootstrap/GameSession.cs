@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Memories.Contracts;
+using Memories.Gameplay.Interaction;
+using Memories.Gameplay.Player;
+using VContainer;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -34,9 +37,13 @@ namespace Memories.Bootstrap
             if (disposed) throw new ObjectDisposedException(nameof(GameSession));
             if (busy || SessionScope != null) throw new InvalidOperationException("A session is already running or transitioning.");
             cancellationToken.ThrowIfCancellationRequested();
-            if (string.IsNullOrWhiteSpace(scenePath) || !Application.CanStreamedLevelBeLoaded(scenePath))
+            bool useOpenScene = false;
+#if UNITY_EDITOR
+            useOpenScene = applicationScope.UseOpenLocationForEditorPlay && SceneManager.GetSceneByPath(scenePath).isLoaded;
+#endif
+            if (string.IsNullOrWhiteSpace(scenePath) || (!useOpenScene && !Application.CanStreamedLevelBeLoaded(scenePath)))
                 throw new ArgumentException("Location must be enabled in Build Settings: " + scenePath, nameof(scenePath));
-            if (SceneManager.GetSceneByPath(scenePath).isLoaded)
+            if (!useOpenScene && SceneManager.GetSceneByPath(scenePath).isLoaded)
                 throw new InvalidOperationException("Location is already loaded. Start the game from Bootstrap.");
 
             busy = true;
@@ -46,7 +53,7 @@ namespace Memories.Bootstrap
                 SessionScope = applicationScope.CreateChild<SessionLifetimeScope>(childScopeName: "SessionLifetimeScope");
                 // Unity scene loading cannot be interrupted safely. Finish the operation,
                 // then honour cancellation and unload the scene we own.
-                await SceneManager.LoadSceneAsync(scenePath, LoadSceneMode.Additive);
+                if (!useOpenScene) await SceneManager.LoadSceneAsync(scenePath, LoadSceneMode.Additive);
                 locationScene = SceneManager.GetSceneByPath(scenePath);
                 cancellation.Token.ThrowIfCancellationRequested();
 
@@ -68,6 +75,8 @@ namespace Memories.Bootstrap
                 LocationScope = root.AddComponent<LocationLifetimeScope>();
                 LocationScope.parentReference.Object = SessionScope;
                 root.SetActive(true);
+                BindDoors(locationScene, LocationScope);
+                foreach (var additional in additionalScenes) BindDoors(additional, LocationScope);
                 SceneManager.SetActiveScene(locationScene);
             }
             catch
@@ -106,6 +115,7 @@ namespace Memories.Bootstrap
                 nextScope = root.AddComponent<LocationLifetimeScope>();
                 nextScope.parentReference.Object = SessionScope;
                 root.SetActive(true);
+                BindDoors(nextScene, nextScope);
 
                 SceneManager.SetActiveScene(nextScene);
                 locationScene = nextScene;
@@ -136,6 +146,97 @@ namespace Memories.Bootstrap
             if (busy) throw new InvalidOperationException("A session transition is already in progress.");
             busy = true;
             try { await CleanupAsync(); }
+            finally { busy = false; }
+        }
+
+        private void BindDoors(Scene scene, LocationLifetimeScope scope)
+        {
+            foreach (var root in scene.GetRootGameObjects())
+                foreach (var door in root.GetComponentsInChildren<CourtyardDoor>(true))
+                    door.Initialize(scope.Container.Resolve<PlayerMotor>(),
+                        path => LoadConnectedSceneAsync(path, scene), EnterConnectedSceneAsync);
+        }
+
+        private async UniTask<Scene> LoadConnectedSceneAsync(string path, Scene doorwayScene)
+        {
+            var existing = SceneManager.GetSceneByPath(path);
+            if (existing.isLoaded) return existing;
+            if (disposed || busy || !Application.CanStreamedLevelBeLoaded(path))
+                throw new InvalidOperationException("Cannot open connected scene: " + path);
+            busy = true;
+            try
+            {
+                await SceneManager.LoadSceneAsync(path, LoadSceneMode.Additive);
+                var scene = SceneManager.GetSceneByPath(path);
+                additionalScenes.Add(scene);
+                if (disposed)
+                {
+                    await CleanupAsync();
+                    throw new OperationCanceledException("Session closed while opening the courtyard.");
+                }
+                foreach (var root in scene.GetRootGameObjects())
+                {
+                    root.transform.position += Vector3.right * 2000;
+                    foreach (var t in root.GetComponentsInChildren<Transform>(true)) t.gameObject.layer = 30;
+                    foreach (var camera in root.GetComponentsInChildren<Camera>(true)) camera.enabled = false;
+                    foreach (var listener in root.GetComponentsInChildren<AudioListener>(true)) listener.enabled = false;
+                    foreach (var light in root.GetComponentsInChildren<Light>(true)) light.cullingMask = 1 << 30;
+                }
+                // Keep the live player, camera and UI with the house before unloading
+                // the highway that originally owned their lifetime scope.
+                var highway = SceneManager.GetSceneByPath(TestLocationLauncher.HighwayPath);
+                if (highway.isLoaded && highway != doorwayScene &&
+                    (highway == locationScene || additionalScenes.Contains(highway)))
+                {
+                    if (highway == locationScene)
+                    {
+                        SceneManager.MoveGameObjectToScene(LocationScope.gameObject, doorwayScene);
+                        additionalScenes.Remove(doorwayScene);
+                        locationScene = doorwayScene;
+                        SceneManager.SetActiveScene(doorwayScene);
+                    }
+                    additionalScenes.Remove(highway);
+                    await SceneManager.UnloadSceneAsync(highway);
+                    if (disposed)
+                    {
+                        await CleanupAsync();
+                        throw new OperationCanceledException("Session closed while unloading the highway.");
+                    }
+                }
+                return scene;
+            }
+            finally { busy = false; }
+        }
+
+        private async UniTask EnterConnectedSceneAsync(Scene scene, Vector3 position, Quaternion rotation, float pitch)
+        {
+            if (disposed || busy || !additionalScenes.Contains(scene)) return;
+            busy = true;
+            var previous = locationScene;
+            var previousScope = LocationScope;
+            try
+            {
+                foreach (var root in scene.GetRootGameObjects())
+                    foreach (var t in root.GetComponentsInChildren<Transform>(true))
+                        if (t.name == "PlayerSpawn") t.SetPositionAndRotation(position, rotation);
+                var scopeRoot = new GameObject("LocationLifetimeScope");
+                scopeRoot.SetActive(false);
+                SceneManager.MoveGameObjectToScene(scopeRoot, scene);
+                var scope = scopeRoot.AddComponent<LocationLifetimeScope>();
+                scope.parentReference.Object = SessionScope;
+                scopeRoot.SetActive(true);
+                scope.Container.Resolve<PlayerMovementModel>().SetInitialPitch(pitch);
+                scope.Container.Resolve<PlayerMotor>().SetLook(rotation.eulerAngles.y, pitch);
+                locationScene = scene;
+                LocationScope = scope;
+                additionalScenes.Remove(scene);
+                SceneManager.SetActiveScene(scene);
+                BindDoors(scene, scope);
+                foreach (var root in previous.GetRootGameObjects()) root.SetActive(false);
+                previousScope.Dispose();
+                await SceneManager.UnloadSceneAsync(previous);
+                await UnloadAdditionalScenesAsync();
+            }
             finally { busy = false; }
         }
 

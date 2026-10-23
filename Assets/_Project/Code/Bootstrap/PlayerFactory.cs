@@ -29,6 +29,10 @@ namespace Memories.Bootstrap
             if (spawn == null || viewCamera == null)
                 throw new InvalidOperationException("Location requires one PlayerSpawn and one active MainCamera.");
 
+            viewCamera.enabled = true;
+            var listener = viewCamera.GetComponent<AudioListener>();
+            if (listener != null) listener.enabled = true;
+
             var player = new GameObject("Player");
             player.SetActive(false);
             player.transform.SetParent(scope.transform, false);
