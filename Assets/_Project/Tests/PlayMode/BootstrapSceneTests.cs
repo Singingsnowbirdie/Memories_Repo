@@ -16,7 +16,7 @@ namespace Memories.Tests.PlayMode
     public sealed class BootstrapSceneTests
     {
         [UnityTest]
-        public IEnumerator MainBootstrapStartsDarknessWithSafeWalkingArea() => UniTask.ToCoroutine(async () =>
+        public IEnumerator MainBootstrapStartsHighwayWithSafeWalkingArea() => UniTask.ToCoroutine(async () =>
         {
             const string path = "Assets/_Project/Scenes/Bootstrap.unity";
             await SceneManager.LoadSceneAsync(path, LoadSceneMode.Additive);
@@ -31,7 +31,7 @@ namespace Memories.Tests.PlayMode
                 float deadline = Time.realtimeSinceStartup + 20;
                 while (!session.IsRunning && Time.realtimeSinceStartup < deadline) await UniTask.NextFrame();
                 Assert.IsTrue(session.IsRunning);
-                Assert.AreEqual("Assets/_Project/Locations/Darkness/Darkness.unity", session.LocationScope.gameObject.scene.path);
+                Assert.AreEqual("Assets/_Project/Locations/Darkness/Highway.unity", session.LocationScope.gameObject.scene.path);
                 Assert.IsTrue(SceneManager.GetSceneByPath("Assets/_Project/Locations/House/House.unity").isLoaded,
                     "Bootstrap must load the house alongside the highway.");
                 var motor = session.LocationScope.Container.Resolve<PlayerMotor>();
