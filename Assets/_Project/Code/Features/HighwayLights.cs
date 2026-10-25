@@ -12,6 +12,16 @@ namespace Memories.Gameplay
         [SerializeField] private Color lightColor = new Color(0.65f, 0.8f, 1f);
         [SerializeField, Min(0)] private float intensity = 24f;
         [SerializeField] private Light[] additionalLights = new Light[0];
+        [SerializeField] private Transform[] vehicles = new Transform[0];
+        [SerializeField] private Material headlightMaterial;
+        private sealed class Headlight
+        {
+            public Renderer Renderer;
+            public int MaterialIndex;
+            public Color Emission;
+            public float Delay;
+        }
+        private readonly List<Headlight> headlights = new List<Headlight>();
         private sealed class AdditionalLight
         {
             public Light Light;
@@ -72,8 +82,33 @@ namespace Memories.Gameplay
                 });
             }
             properties = new MaterialPropertyBlock();
+            foreach (var vehicle in vehicles)
+            {
+                if (vehicle == null || headlightMaterial == null) continue;
+                float distance = transform.InverseTransformPoint(vehicle.position).z;
+                Lamp nearest = null;
+                foreach (var lamp in lamps)
+                    if (nearest == null || Mathf.Abs(lamp.Distance - distance) < Mathf.Abs(nearest.Distance - distance))
+                        nearest = lamp;
+                foreach (var renderer in vehicle.GetComponentsInChildren<Renderer>(true))
+                {
+                    var materials = renderer.sharedMaterials;
+                    for (int i = 0; i < materials.Length; i++)
+                    {
+                        if (materials[i] != headlightMaterial) continue;
+                        headlights.Add(new Headlight
+                        {
+                            Renderer = renderer,
+                            MaterialIndex = i,
+                            Emission = materials[i].GetColor(EmissionColor),
+                            Delay = nearest != null ? nearest.Delay : 0
+                        });
+                    }
+                }
+            }
             foreach (var lamp in lamps) Apply(lamp, 0);
             foreach (var light in additional) Apply(light, 0);
+            foreach (var headlight in headlights) Apply(headlight, 0);
         }
 
         private void OnEnable()
@@ -101,6 +136,20 @@ namespace Memories.Gameplay
                 Apply(light, Mathf.SmoothStep(0, 1, progress));
             }
             IsFullyLit = complete;
+            foreach (var headlight in headlights)
+            {
+                float progress = Mathf.Clamp01((elapsed - startDelay - headlight.Delay) / FadeDuration);
+                Apply(headlight, Mathf.SmoothStep(0, 1, progress));
+            }
+        }
+
+        private void Apply(Headlight headlight, float brightness)
+        {
+            if (headlight.Renderer == null) return;
+            properties.Clear();
+            headlight.Renderer.GetPropertyBlock(properties, headlight.MaterialIndex);
+            properties.SetColor(EmissionColor, headlight.Emission * brightness);
+            headlight.Renderer.SetPropertyBlock(properties, headlight.MaterialIndex);
         }
 
         private static void Apply(AdditionalLight entry, float brightness)
@@ -131,6 +180,7 @@ namespace Memories.Gameplay
             IsFullyLit = false;
             foreach (var lamp in lamps) Apply(lamp, 0);
             foreach (var light in additional) Apply(light, 0);
+            foreach (var headlight in headlights) Apply(headlight, 0);
         }
     }
 }
