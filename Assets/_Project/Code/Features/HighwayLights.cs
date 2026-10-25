@@ -11,6 +11,14 @@ namespace Memories.Gameplay
         [SerializeField, Min(0.01f)] private float pairSpacing = 10f;
         [SerializeField] private Color lightColor = new Color(0.65f, 0.8f, 1f);
         [SerializeField, Min(0)] private float intensity = 24f;
+        [SerializeField] private Light[] additionalLights = new Light[0];
+        private sealed class AdditionalLight
+        {
+            public Light Light;
+            public float TargetIntensity;
+            public float Delay;
+        }
+        private readonly List<AdditionalLight> additional = new List<AdditionalLight>();
         private sealed class Lamp
         {
             public Light[] Lights;
@@ -48,8 +56,24 @@ namespace Memories.Gameplay
                 lamp.Delay = Mathf.Round((lamp.Distance - firstDistance) / Mathf.Max(0.01f, pairSpacing)) * pairInterval;
                 lastLampDelay = Mathf.Max(lastLampDelay, lamp.Delay);
             }
+            foreach (var light in additionalLights)
+            {
+                if (light == null || !light.enabled || lamps.Count == 0) continue;
+                float distance = transform.InverseTransformPoint(light.transform.position).z;
+                Lamp nearest = lamps[0];
+                foreach (var lamp in lamps)
+                    if (Mathf.Abs(lamp.Distance - distance) < Mathf.Abs(nearest.Distance - distance))
+                        nearest = lamp;
+                additional.Add(new AdditionalLight
+                {
+                    Light = light,
+                    TargetIntensity = light.intensity,
+                    Delay = nearest.Delay
+                });
+            }
             properties = new MaterialPropertyBlock();
             foreach (var lamp in lamps) Apply(lamp, 0);
+            foreach (var light in additional) Apply(light, 0);
         }
 
         private void OnEnable()
@@ -71,7 +95,19 @@ namespace Memories.Gameplay
                 Apply(lamp, Mathf.SmoothStep(0, 1, progress));
                 if (progress < 1) complete = false;
             }
+            foreach (var light in additional)
+            {
+                float progress = Mathf.Clamp01((elapsed - startDelay - light.Delay) / FadeDuration);
+                Apply(light, Mathf.SmoothStep(0, 1, progress));
+            }
             IsFullyLit = complete;
+        }
+
+        private static void Apply(AdditionalLight entry, float brightness)
+        {
+            if (entry.Light == null) return;
+            entry.Light.intensity = entry.TargetIntensity * brightness;
+            entry.Light.enabled = brightness > 0;
         }
 
         private void Apply(Lamp group, float brightness)
@@ -94,6 +130,7 @@ namespace Memories.Gameplay
         {
             IsFullyLit = false;
             foreach (var lamp in lamps) Apply(lamp, 0);
+            foreach (var light in additional) Apply(light, 0);
         }
     }
 }
