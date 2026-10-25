@@ -8,7 +8,7 @@ namespace Memories.Bootstrap
     public sealed class TestLocationLauncher : MonoBehaviour
     {
         public const string BootstrapPath = "Assets/_Project/Scenes/TestBootstrap.unity";
-        public const string HighwayPath = "Assets/_Project/Locations/Darkness/Highway.unity";
+        public const string HighwayPath = "Assets/_Project/Locations/Highway/Highway.unity";
         public const string HousePath = "Assets/_Project/Locations/House/House.unity";
         public const string CourtyardPath = "Assets/_Project/Locations/CourtyardIsland/CourtyardIsland.unity";
 
