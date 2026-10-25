@@ -7,6 +7,7 @@ namespace Memories.Gameplay.Player
     public sealed class PlayerMovementSettings
     {
         [Min(0.1f)] public float WalkSpeed = 4f;
+        [Min(0.1f)] public float RunSpeed = 7f;
         [Min(0.001f)] public float MouseSensitivity = 0.12f;
         [Range(1f, 89f)] public float PitchLimit = 85f;
         public float Gravity = -20f;
@@ -19,7 +20,7 @@ namespace Memories.Gameplay.Player
 
         public void Validate()
         {
-            if (WalkSpeed <= 0 || MouseSensitivity <= 0 || Gravity >= 0 || TerminalSpeed <= 0
+            if (WalkSpeed <= 0 || RunSpeed <= 0 || MouseSensitivity <= 0 || Gravity >= 0 || TerminalSpeed <= 0
                 || Height <= 0 || Radius <= 0 || Height < Radius * 2 || EyeHeight <= 0 || EyeHeight > Height
                 || StepOffset < 0 || StepOffset > Height || PitchLimit <= 0 || PitchLimit >= 90
                 || SlopeLimit < 0 || SlopeLimit >= 90)

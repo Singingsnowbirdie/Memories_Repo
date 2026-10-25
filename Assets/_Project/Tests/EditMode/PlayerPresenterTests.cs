@@ -10,6 +10,7 @@ namespace Memories.Tests.EditMode
         private sealed class InputStub : IPlayerInput
         {
             public Vector2 Move { get; set; }
+            public bool SprintHeld { get; set; }
             public Vector2 LookDelta { get; set; }
             public bool Enabled;
             public void Enable() => Enabled = true;

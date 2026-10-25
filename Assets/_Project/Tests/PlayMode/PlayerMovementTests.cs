@@ -20,6 +20,7 @@ namespace Memories.Tests.PlayMode
         private sealed class InputStub : IPlayerInput
         {
             public Vector2 Move { get; set; }
+            public bool SprintHeld { get; set; }
             public Vector2 LookDelta => Vector2.zero;
             public void Enable() { }
             public void Disable() { }

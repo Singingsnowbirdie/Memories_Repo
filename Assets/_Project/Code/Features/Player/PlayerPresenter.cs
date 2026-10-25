@@ -39,7 +39,8 @@ namespace Memories.Gameplay.Player
             model.Look(look.x, look.y);
             view.SetLook(model.Yaw, model.Pitch);
             var move = ControlsEnabled ? Vector2.ClampMagnitude(input.Move, 1f) : Vector2.zero;
-            var velocity = Quaternion.Euler(0, model.Yaw, 0) * new Vector3(move.x, 0, move.y) * settings.WalkSpeed;
+            var speed = ControlsEnabled && input.SprintHeld ? settings.RunSpeed : settings.WalkSpeed;
+            var velocity = Quaternion.Euler(0, model.Yaw, 0) * new Vector3(move.x, 0, move.y) * speed;
             model.ApplyGravity(view.IsGrounded, deltaTime);
             velocity.y = model.VerticalSpeed;
             if ((view.Move(velocity * deltaTime) & CollisionFlags.Above) != 0) model.OnCeilingHit();
