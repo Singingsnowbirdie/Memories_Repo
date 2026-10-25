@@ -25326,6 +25326,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 73719787}
+  - component: {fileID: 880000002}
   m_Layer: 0
   m_Name: "\u0414\u0435\u043A\u043E\u0440"
   m_TagString: Untagged
@@ -25333,6 +25334,40 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &880000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 73719786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fca2ebe3e6854401a8bfc5b353d0e0a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  objects:
+  - {fileID: 10434068}
+  - {fileID: 42661287}
+  - {fileID: 47641405}
+  - {fileID: 138588233}
+  - {fileID: 231423047}
+  - {fileID: 287385734}
+  - {fileID: 391796610}
+  - {fileID: 931428564}
+  - {fileID: 1169909973}
+  - {fileID: 1378307745}
+  - {fileID: 1483094204}
+  - {fileID: 1734070090}
+  - {fileID: 1755629097}
+  - {fileID: 1794713171}
+  - {fileID: 1830064917}
+  - {fileID: 1882769937}
+  - {fileID: 2018805752}
+  bobHeight: 0.25
+  period: 14
+  tiltAngle: 2
+  turnAngle: 6
 --- !u!4 &73719787
 Transform:
   m_ObjectHideFlags: 0
