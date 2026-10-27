@@ -65,6 +65,18 @@ namespace Memories.Bootstrap
         public LocationLifetimeScope LocationScope { get; private set; }
         public bool IsRunning => LocationScope != null;
 
+        public bool RestartGame()
+        {
+            const string bootstrap = "Assets/_Project/Scenes/Bootstrap.unity";
+            if (disposed || busy || !IsRunning || !Application.CanStreamedLevelBeLoaded(bootstrap)) return false;
+            var loading = SceneManager.LoadSceneAsync(bootstrap, LoadSceneMode.Single);
+            if (loading == null) return false;
+            trackHouseCheckpoint = false;
+            busy = true;
+            progress.Reset();
+            return true;
+        }
+
         public bool ReturnToLocationStart()
         {
             if (disposed || busy || !IsRunning) return false;

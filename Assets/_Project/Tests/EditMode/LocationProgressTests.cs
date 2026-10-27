@@ -17,6 +17,8 @@ namespace Memories.Tests.EditMode
                 Assert.IsFalse(store.HasReachedHouse);
                 store.SaveHouse();
                 Assert.IsTrue(new LocationProgressStore(key).HasReachedHouse);
+                store.Reset();
+                Assert.IsFalse(new LocationProgressStore(key).HasReachedHouse);
                 PlayerPrefs.SetInt(key, 99);
                 Assert.IsFalse(new LocationProgressStore(key).HasReachedHouse);
             }

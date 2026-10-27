@@ -8,6 +8,12 @@ namespace Memories.Bootstrap
         public LocationProgressStore(string key = "Memories.Progress.Checkpoint.v1") => this.key = key;
         public bool HasReachedHouse => PlayerPrefs.GetInt(key, 0) == 1;
 
+        public void Reset()
+        {
+            PlayerPrefs.DeleteKey(key);
+            PlayerPrefs.Save();
+        }
+
         public void SaveHouse()
         {
             PlayerPrefs.SetInt(key, 1);

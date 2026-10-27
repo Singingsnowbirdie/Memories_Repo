@@ -11,18 +11,24 @@ namespace Memories.Gameplay.UI
         private readonly GameplayModeState state;
         private bool disposed;
         private bool settingsOpen;
+        private bool restartConfirmationOpen;
         private readonly AudioVolumeSettings audio;
         private readonly Func<bool> returnToStart;
+        private readonly Func<bool> restart;
         public bool IsPaused => state.Mode == GameplayMode.Paused;
 
         public PausePresenter(IPauseInput input, IPauseView view, GameplayModeState state, AudioVolumeSettings audio,
-            Func<bool> returnToStart = null)
+            Func<bool> returnToStart = null, Func<bool> restart = null)
         {
             this.input = input;
             this.view = view;
             this.state = state;
             this.audio = audio;
             this.returnToStart = returnToStart;
+            this.restart = restart;
+            view.RestartRequested += Restart;
+            view.RestartConfirmed += ConfirmRestart;
+            view.RestartCancelled += CancelRestart;
             view.ReturnToStartRequested += ReturnToStart;
             view.SettingsRequested += OpenSettings;
             view.BackRequested += Back;
@@ -38,7 +44,7 @@ namespace Memories.Gameplay.UI
         public void Toggle()
         {
             if (disposed) return;
-            if (IsPaused) { if (settingsOpen) Back(); else Resume(); return; }
+            if (IsPaused) { if (restartConfirmationOpen) CancelRestart(); else if (settingsOpen) Back(); else Resume(); return; }
             if (!state.TryEnter(GameplayMode.Paused)) return;
             view.Show(true);
         }
@@ -47,6 +53,7 @@ namespace Memories.Gameplay.UI
         {
             if (disposed || !IsPaused) return;
             settingsOpen = false;
+            restartConfirmationOpen = false;
             audio.Save();
             state.Exit(GameplayMode.Paused);
             view.Show(false);
@@ -56,6 +63,26 @@ namespace Memories.Gameplay.UI
         {
             if (disposed || !IsPaused || settingsOpen) return;
             if (returnToStart?.Invoke() == true) Resume();
+        }
+
+        private void Restart()
+        {
+            if (disposed || !IsPaused || settingsOpen) return;
+            restartConfirmationOpen = true;
+            view.ShowRestartConfirmation(true);
+        }
+
+        private void ConfirmRestart()
+        {
+            if (disposed || !IsPaused || !restartConfirmationOpen) return;
+            if (restart?.Invoke() == true) Resume();
+        }
+
+        private void CancelRestart()
+        {
+            if (disposed || !restartConfirmationOpen) return;
+            restartConfirmationOpen = false;
+            view.ShowRestartConfirmation(false);
         }
 
         private void OpenSettings()
@@ -91,6 +118,9 @@ namespace Memories.Gameplay.UI
             input.PauseRequested -= Toggle;
             view.ResumeRequested -= Resume;
             view.ReturnToStartRequested -= ReturnToStart;
+            view.RestartRequested -= Restart;
+            view.RestartConfirmed -= ConfirmRestart;
+            view.RestartCancelled -= CancelRestart;
             view.QuitRequested -= Quit;
             view.SettingsRequested -= OpenSettings;
             view.BackRequested -= Back;

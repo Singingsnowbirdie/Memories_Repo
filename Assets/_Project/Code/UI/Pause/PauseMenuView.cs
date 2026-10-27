@@ -9,6 +9,9 @@ namespace Memories.Gameplay.UI
     {
         public event Action ResumeRequested;
         public event Action ReturnToStartRequested;
+        public event Action RestartRequested;
+        public event Action RestartConfirmed;
+        public event Action RestartCancelled;
         public event Action QuitRequested;
         public event Action SettingsRequested;
         public event Action BackRequested;
@@ -18,6 +21,8 @@ namespace Memories.Gameplay.UI
         private GameObject panel;
         private GameObject menuContent;
         private GameObject settingsContent;
+        private GameObject restartConfirmation;
+        private Button cancelRestart;
         private Slider masterSlider, musicSlider, soundsSlider;
         private Button settingsButton;
         private Button resume;
@@ -50,11 +55,19 @@ namespace Memories.Gameplay.UI
             menuContent.transform.SetParent(panel.transform, false);
             settingsContent = new GameObject("Audio settings", typeof(RectTransform));
             settingsContent.transform.SetParent(panel.transform, false);
+            restartConfirmation = new GameObject("Restart confirmation", typeof(RectTransform));
+            restartConfirmation.transform.SetParent(panel.transform, false);
+            CreateText(restartConfirmation.transform, "Начать сначала?", 40, 150);
+            CreateText(restartConfirmation.transform, "Прогресс будет сброшен", 26, 75);
+            CreateButton(restartConfirmation.transform, "Начать сначала", -10, () => RestartConfirmed?.Invoke());
+            cancelRestart = CreateButton(restartConfirmation.transform, "Отмена", -95, () => RestartCancelled?.Invoke());
+            restartConfirmation.SetActive(false);
             CreateText(menuContent.transform, "Пауза", 40, 110);
             resume = CreateButton(menuContent.transform, "Продолжить", 10, () => ResumeRequested?.Invoke());
             settingsButton = CreateButton(menuContent.transform, "Настройки", -75, () => SettingsRequested?.Invoke());
             CreateButton(menuContent.transform, "Вернуться в начало локации", -160, () => ReturnToStartRequested?.Invoke());
-            CreateButton(menuContent.transform, "Выйти из игры", -245, () => QuitRequested?.Invoke());
+            CreateButton(menuContent.transform, "Начать сначала", -245, () => RestartRequested?.Invoke());
+            CreateButton(menuContent.transform, "Выйти из игры", -330, () => QuitRequested?.Invoke());
             CreateText(settingsContent.transform, "Настройки звука", 40, 240);
             masterSlider = CreateSlider("Общая громкость", 120, value => MasterChanged?.Invoke(value));
             musicSlider = CreateSlider("Музыка", 0, value => MusicChanged?.Invoke(value));
@@ -156,6 +169,15 @@ namespace Memories.Gameplay.UI
                 EventSystem.current.SetSelectedGameObject(visible ? masterSlider.gameObject : settingsButton.gameObject);
         }
 
+        public void ShowRestartConfirmation(bool visible)
+        {
+            menuContent.SetActive(!visible);
+            settingsContent.SetActive(false);
+            restartConfirmation.SetActive(visible);
+            if (EventSystem.current != null)
+                EventSystem.current.SetSelectedGameObject(visible ? cancelRestart.gameObject : resume.gameObject);
+        }
+
         public void Show(bool visible)
         {
             if (visible && !panel.activeSelf)
@@ -165,6 +187,7 @@ namespace Memories.Gameplay.UI
             }
             menuContent.SetActive(true);
             settingsContent.SetActive(false);
+            restartConfirmation.SetActive(false);
             panel.SetActive(visible);
             if (EventSystem.current != null)
                 EventSystem.current.SetSelectedGameObject(visible ? resume.gameObject : null);

@@ -50,7 +50,8 @@ namespace Memories.Bootstrap
             builder.Register<PausePresenter>(container => new PausePresenter(
                 container.Resolve<IPauseInput>(), container.Resolve<IPauseView>(),
                 container.Resolve<GameplayModeState>(), container.Resolve<AudioVolumeSettings>(),
-                container.Resolve<GameSession>().ReturnToLocationStart), Lifetime.Singleton).AsSelf().AsImplementedInterfaces();
+                container.Resolve<GameSession>().ReturnToLocationStart,
+                container.Resolve<GameSession>().RestartGame), Lifetime.Singleton).AsSelf().AsImplementedInterfaces();
             builder.RegisterBuildCallback(container => container.Resolve<PausePresenter>());
             builder.Register<IMemoryView>(container =>
             {
