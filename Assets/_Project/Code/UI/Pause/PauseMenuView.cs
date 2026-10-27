@@ -51,6 +51,13 @@ namespace Memories.Gameplay.UI
             musicSlider = CreateSlider("Музыка", 0, value => MusicChanged?.Invoke(value));
             soundsSlider = CreateSlider("Другие звуки", -120, value => SoundsChanged?.Invoke(value));
             CreateButton(settingsContent.transform, "Назад", -240, () => BackRequested?.Invoke());
+            var hint = CreateLabel(panel.transform, "Подсказка: удерживайте Shift, чтобы бежать", 0);
+            var hintRect = hint.rectTransform;
+            hintRect.anchorMin = new Vector2(.1f, 0);
+            hintRect.anchorMax = new Vector2(.9f, 0);
+            hintRect.pivot = new Vector2(.5f, 0);
+            hintRect.sizeDelta = new Vector2(0, 65);
+            hintRect.anchoredPosition = new Vector2(0, 24);
             settingsContent.SetActive(false);
             panel.SetActive(false);
         }
