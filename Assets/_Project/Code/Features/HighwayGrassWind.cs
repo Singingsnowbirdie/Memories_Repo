@@ -11,6 +11,7 @@ namespace Memories.Gameplay
         private float[] phases;
         private float elapsed;
         private GrassPatch[] patches;
+        internal bool PausedInsideHouse { get; set; }
 
         private sealed class GrassPatch
         {
@@ -59,6 +60,7 @@ namespace Memories.Gameplay
 
         private void Update()
         {
+            if (PausedInsideHouse) return;
             elapsed += Time.deltaTime;
             float time = elapsed * 2f * Mathf.PI / Mathf.Max(0.1f, period);
             float fade = Mathf.SmoothStep(0, 1, Mathf.Clamp01(elapsed));

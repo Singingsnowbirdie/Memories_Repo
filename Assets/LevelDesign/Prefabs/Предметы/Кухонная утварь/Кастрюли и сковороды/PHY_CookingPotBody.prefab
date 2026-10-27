@@ -52,43 +52,31 @@ PrefabInstance:
       propertyPath: m_Name
       value: PHY_CookingPotBody
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    - target: {fileID: 4359080643210041091, guid: ad709317b5ad55619b9b5576429ef002, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 5329676514618659367, guid: ad709317b5ad55619b9b5576429ef002, type: 3}
+    - {fileID: 2132322068584106322, guid: ad709317b5ad55619b9b5576429ef002, type: 3}
+    m_RemovedGameObjects:
+    - {fileID: 1333578490952263531, guid: ad709317b5ad55619b9b5576429ef002, type: 3}
+    - {fileID: 7514162803829074541, guid: ad709317b5ad55619b9b5576429ef002, type: 3}
+    - {fileID: 6159774653695105239, guid: ad709317b5ad55619b9b5576429ef002, type: 3}
+    - {fileID: 4359080643210041091, guid: ad709317b5ad55619b9b5576429ef002, type: 3}
+    - {fileID: 5422757908870747991, guid: ad709317b5ad55619b9b5576429ef002, type: 3}
+    - {fileID: 4165217231099923770, guid: ad709317b5ad55619b9b5576429ef002, type: 3}
+    - {fileID: 6660100739499082332, guid: ad709317b5ad55619b9b5576429ef002, type: 3}
+    - {fileID: 6727885516208262485, guid: ad709317b5ad55619b9b5576429ef002, type: 3}
+    - {fileID: 6534800898009835555, guid: ad709317b5ad55619b9b5576429ef002, type: 3}
+    - {fileID: 744282939178980321, guid: ad709317b5ad55619b9b5576429ef002, type: 3}
+    - {fileID: 6338544436817284983, guid: ad709317b5ad55619b9b5576429ef002, type: 3}
+    - {fileID: 6348856452460421462, guid: ad709317b5ad55619b9b5576429ef002, type: 3}
+    - {fileID: 4847216790425945003, guid: ad709317b5ad55619b9b5576429ef002, type: 3}
+    - {fileID: 9043933689945773130, guid: ad709317b5ad55619b9b5576429ef002, type: 3}
+    - {fileID: 4873860463058479387, guid: ad709317b5ad55619b9b5576429ef002, type: 3}
+    - {fileID: 2151324186219082963, guid: ad709317b5ad55619b9b5576429ef002, type: 3}
+    - {fileID: 9125876736139992396, guid: ad709317b5ad55619b9b5576429ef002, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3170981578358390307, guid: ad709317b5ad55619b9b5576429ef002, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3944247425827616283}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ad709317b5ad55619b9b5576429ef002, type: 3}
---- !u!1 &2335397887669986954 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3170981578358390307, guid: ad709317b5ad55619b9b5576429ef002, type: 3}
-  m_PrefabInstance: {fileID: 894130486666827945}
-  m_PrefabAsset: {fileID: 0}
---- !u!54 &3944247425827616283
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2335397887669986954}
-  serializedVersion: 5
-  m_Mass: 1.5
-  m_LinearDamping: 0.1
-  m_AngularDamping: 0.4
-  m_CenterOfMass: {x: 0, y: 0.02, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 0
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
