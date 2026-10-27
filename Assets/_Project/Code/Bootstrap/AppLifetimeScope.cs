@@ -34,6 +34,7 @@ namespace Memories.Bootstrap
             builder.RegisterInstance(playerMovement);
             builder.Register<PlayerInputService>(Lifetime.Singleton).As<IPlayerInput>().As<IInteractionInput>().As<IPauseInput>();
             builder.Register<GameSession>(Lifetime.Singleton).AsSelf().AsImplementedInterfaces();
+            builder.RegisterEntryPoint<HouseCheckpointEntryPoint>();
             if (startAutomatically)
                 builder.RegisterEntryPoint<BootstrapEntryPoint>().WithParameter(
                     TestLauncher != null ? TestLauncher.ScenePath : initialLocationPath);
