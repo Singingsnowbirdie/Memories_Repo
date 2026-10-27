@@ -47,7 +47,10 @@ namespace Memories.Bootstrap
                 menu.transform.SetParent(transform, false);
                 return menu.AddComponent<PauseMenuView>();
             }, Lifetime.Singleton);
-            builder.Register<PausePresenter>(Lifetime.Singleton).AsSelf().AsImplementedInterfaces();
+            builder.Register<PausePresenter>(container => new PausePresenter(
+                container.Resolve<IPauseInput>(), container.Resolve<IPauseView>(),
+                container.Resolve<GameplayModeState>(), container.Resolve<AudioVolumeSettings>(),
+                container.Resolve<GameSession>().ReturnToLocationStart), Lifetime.Singleton).AsSelf().AsImplementedInterfaces();
             builder.RegisterBuildCallback(container => container.Resolve<PausePresenter>());
             builder.Register<IMemoryView>(container =>
             {

@@ -5,6 +5,7 @@ namespace Memories.Gameplay.UI
     public interface IPauseView
     {
         event Action ResumeRequested;
+        event Action ReturnToStartRequested;
         event Action QuitRequested;
         event Action SettingsRequested;
         event Action BackRequested;

@@ -8,6 +8,7 @@ namespace Memories.Gameplay.Player
         private CharacterController controller;
         private Transform cameraTransform;
         public float InitialYaw { get; private set; }
+        public Vector3 InitialPosition { get; private set; }
         public bool IsGrounded => controller.isGrounded;
 
         public void Initialize(PlayerMovementSettings settings, Transform viewCamera)
@@ -22,6 +23,7 @@ namespace Memories.Gameplay.Player
             controller.skinWidth = settings.Radius * 0.1f;
             controller.minMoveDistance = 0;
             InitialYaw = transform.eulerAngles.y;
+            InitialPosition = transform.position;
             cameraTransform = viewCamera;
             cameraTransform.SetParent(transform, false);
             cameraTransform.localPosition = Vector3.up * settings.EyeHeight;
@@ -32,6 +34,16 @@ namespace Memories.Gameplay.Player
         {
             transform.rotation = Quaternion.Euler(0, yaw, 0);
             cameraTransform.localRotation = Quaternion.Euler(pitch, 0, 0);
+        }
+
+        public void Teleport(Vector3 position, float yaw)
+        {
+            bool wasEnabled = controller.enabled;
+            controller.enabled = false;
+            transform.position = position;
+            SetLook(yaw, 0);
+            Physics.SyncTransforms();
+            controller.enabled = wasEnabled;
         }
 
         public CollisionFlags Move(Vector3 displacement) => controller.Move(displacement);

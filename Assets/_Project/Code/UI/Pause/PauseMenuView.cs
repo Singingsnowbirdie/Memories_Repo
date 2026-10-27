@@ -8,6 +8,7 @@ namespace Memories.Gameplay.UI
     public sealed class PauseMenuView : MonoBehaviour, IPauseView
     {
         public event Action ResumeRequested;
+        public event Action ReturnToStartRequested;
         public event Action QuitRequested;
         public event Action SettingsRequested;
         public event Action BackRequested;
@@ -20,6 +21,13 @@ namespace Memories.Gameplay.UI
         private Slider masterSlider, musicSlider, soundsSlider;
         private Button settingsButton;
         private Button resume;
+        private Text hint;
+        private int nextHint;
+        private static readonly string[] Hints =
+        {
+            "Подсказка: удерживайте Shift, чтобы бежать",
+            "Подсказка: если вы застряли, нажмите «Вернуться в начало локации» в меню паузы"
+        };
 
         private void Awake()
         {
@@ -45,13 +53,14 @@ namespace Memories.Gameplay.UI
             CreateText(menuContent.transform, "Пауза", 40, 110);
             resume = CreateButton(menuContent.transform, "Продолжить", 10, () => ResumeRequested?.Invoke());
             settingsButton = CreateButton(menuContent.transform, "Настройки", -75, () => SettingsRequested?.Invoke());
-            CreateButton(menuContent.transform, "Выйти из игры", -160, () => QuitRequested?.Invoke());
+            CreateButton(menuContent.transform, "Вернуться в начало локации", -160, () => ReturnToStartRequested?.Invoke());
+            CreateButton(menuContent.transform, "Выйти из игры", -245, () => QuitRequested?.Invoke());
             CreateText(settingsContent.transform, "Настройки звука", 40, 240);
             masterSlider = CreateSlider("Общая громкость", 120, value => MasterChanged?.Invoke(value));
             musicSlider = CreateSlider("Музыка", 0, value => MusicChanged?.Invoke(value));
             soundsSlider = CreateSlider("Другие звуки", -120, value => SoundsChanged?.Invoke(value));
             CreateButton(settingsContent.transform, "Назад", -240, () => BackRequested?.Invoke());
-            var hint = CreateLabel(panel.transform, "Подсказка: удерживайте Shift, чтобы бежать", 0);
+            hint = CreateLabel(panel.transform, Hints[0], 0);
             var hintRect = hint.rectTransform;
             hintRect.anchorMin = new Vector2(.1f, 0);
             hintRect.anchorMax = new Vector2(.9f, 0);
@@ -149,6 +158,11 @@ namespace Memories.Gameplay.UI
 
         public void Show(bool visible)
         {
+            if (visible && !panel.activeSelf)
+            {
+                hint.text = Hints[nextHint];
+                nextHint = (nextHint + 1) % Hints.Length;
+            }
             menuContent.SetActive(true);
             settingsContent.SetActive(false);
             panel.SetActive(visible);

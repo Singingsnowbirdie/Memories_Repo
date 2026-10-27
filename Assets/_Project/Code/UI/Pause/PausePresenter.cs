@@ -12,14 +12,18 @@ namespace Memories.Gameplay.UI
         private bool disposed;
         private bool settingsOpen;
         private readonly AudioVolumeSettings audio;
+        private readonly Func<bool> returnToStart;
         public bool IsPaused => state.Mode == GameplayMode.Paused;
 
-        public PausePresenter(IPauseInput input, IPauseView view, GameplayModeState state, AudioVolumeSettings audio)
+        public PausePresenter(IPauseInput input, IPauseView view, GameplayModeState state, AudioVolumeSettings audio,
+            Func<bool> returnToStart = null)
         {
             this.input = input;
             this.view = view;
             this.state = state;
             this.audio = audio;
+            this.returnToStart = returnToStart;
+            view.ReturnToStartRequested += ReturnToStart;
             view.SettingsRequested += OpenSettings;
             view.BackRequested += Back;
             view.MasterChanged += audio.SetMaster;
@@ -46,6 +50,12 @@ namespace Memories.Gameplay.UI
             audio.Save();
             state.Exit(GameplayMode.Paused);
             view.Show(false);
+        }
+
+        private void ReturnToStart()
+        {
+            if (disposed || !IsPaused || settingsOpen) return;
+            if (returnToStart?.Invoke() == true) Resume();
         }
 
         private void OpenSettings()
@@ -80,6 +90,7 @@ namespace Memories.Gameplay.UI
             disposed = true;
             input.PauseRequested -= Toggle;
             view.ResumeRequested -= Resume;
+            view.ReturnToStartRequested -= ReturnToStart;
             view.QuitRequested -= Quit;
             view.SettingsRequested -= OpenSettings;
             view.BackRequested -= Back;

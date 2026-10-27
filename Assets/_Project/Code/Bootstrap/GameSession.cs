@@ -26,6 +26,25 @@ namespace Memories.Bootstrap
         public LocationLifetimeScope LocationScope { get; private set; }
         public bool IsRunning => LocationScope != null;
 
+        public bool ReturnToLocationStart()
+        {
+            if (disposed || busy || !IsRunning) return false;
+            var player = LocationScope.Container.Resolve<PlayerMotor>();
+            var position = player.InitialPosition;
+            float yaw = player.InitialYaw;
+            // The house and highway share a player until the next doorway transition.
+            var house = SceneManager.GetSceneByPath(TestLocationLauncher.HousePath);
+            if (house.isLoaded && (locationScene == house ||
+                (locationScene.path == TestLocationLauncher.HighwayPath && player.transform.position.z >= 300f)))
+            {
+                position = new Vector3(0, .05f, 305f);
+                yaw = 0;
+            }
+            player.Teleport(position, yaw);
+            LocationScope.Container.Resolve<PlayerMovementModel>().ResetMotion(yaw);
+            return true;
+        }
+
         public GameSession(AppLifetimeScope applicationScope, ApplicationContext application)
         {
             this.applicationScope = applicationScope;
