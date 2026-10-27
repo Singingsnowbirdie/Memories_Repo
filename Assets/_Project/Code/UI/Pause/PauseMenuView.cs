@@ -14,6 +14,7 @@ namespace Memories.Gameplay.UI
         public event Action RestartCancelled;
         public event Action QuitRequested;
         public event Action SettingsRequested;
+        public event Action CreditsRequested;
         public event Action BackRequested;
         public event Action<float> MasterChanged;
         public event Action<float> MusicChanged;
@@ -21,6 +22,9 @@ namespace Memories.Gameplay.UI
         private GameObject panel;
         private GameObject menuContent;
         private GameObject settingsContent;
+        private GameObject creditsContent;
+        private Button creditsButton;
+        private Button creditsBack;
         private GameObject restartConfirmation;
         private Button cancelRestart;
         private Slider masterSlider, musicSlider, soundsSlider;
@@ -62,12 +66,18 @@ namespace Memories.Gameplay.UI
             CreateButton(restartConfirmation.transform, "Начать сначала", -10, () => RestartConfirmed?.Invoke());
             cancelRestart = CreateButton(restartConfirmation.transform, "Отмена", -95, () => RestartCancelled?.Invoke());
             restartConfirmation.SetActive(false);
-            CreateText(menuContent.transform, "Пауза", 40, 110);
-            resume = CreateButton(menuContent.transform, "Продолжить", 10, () => ResumeRequested?.Invoke());
-            settingsButton = CreateButton(menuContent.transform, "Настройки", -75, () => SettingsRequested?.Invoke());
-            CreateButton(menuContent.transform, "Вернуться в начало локации", -160, () => ReturnToStartRequested?.Invoke());
-            CreateButton(menuContent.transform, "Начать сначала", -245, () => RestartRequested?.Invoke());
+            CreateText(menuContent.transform, "Пауза", 40, 195);
+            resume = CreateButton(menuContent.transform, "Продолжить", 95, () => ResumeRequested?.Invoke());
+            settingsButton = CreateButton(menuContent.transform, "Настройки", 10, () => SettingsRequested?.Invoke());
+            CreateButton(menuContent.transform, "Вернуться в начало локации", -75, () => ReturnToStartRequested?.Invoke());
+            CreateButton(menuContent.transform, "Начать сначала", -160, () => RestartRequested?.Invoke());
+            creditsButton = CreateButton(menuContent.transform, "Титры", -245, () => CreditsRequested?.Invoke());
             CreateButton(menuContent.transform, "Выйти из игры", -330, () => QuitRequested?.Invoke());
+            creditsContent = new GameObject("Credits", typeof(RectTransform));
+            creditsContent.transform.SetParent(panel.transform, false);
+            CreateText(creditsContent.transform, "Титры", 40, 195);
+            creditsBack = CreateButton(creditsContent.transform, "Назад", -240, () => BackRequested?.Invoke());
+            creditsContent.SetActive(false);
             CreateText(settingsContent.transform, "Настройки звука", 40, 240);
             masterSlider = CreateSlider("Общая громкость", 120, value => MasterChanged?.Invoke(value));
             musicSlider = CreateSlider("Музыка", 0, value => MusicChanged?.Invoke(value));
@@ -169,6 +179,16 @@ namespace Memories.Gameplay.UI
                 EventSystem.current.SetSelectedGameObject(visible ? masterSlider.gameObject : settingsButton.gameObject);
         }
 
+        public void ShowCredits(bool visible)
+        {
+            menuContent.SetActive(!visible);
+            settingsContent.SetActive(false);
+            restartConfirmation.SetActive(false);
+            creditsContent.SetActive(visible);
+            if (EventSystem.current != null)
+                EventSystem.current.SetSelectedGameObject(visible ? creditsBack.gameObject : creditsButton.gameObject);
+        }
+
         public void ShowRestartConfirmation(bool visible)
         {
             menuContent.SetActive(!visible);
@@ -188,6 +208,7 @@ namespace Memories.Gameplay.UI
             menuContent.SetActive(true);
             settingsContent.SetActive(false);
             restartConfirmation.SetActive(false);
+            creditsContent.SetActive(false);
             panel.SetActive(visible);
             if (EventSystem.current != null)
                 EventSystem.current.SetSelectedGameObject(visible ? resume.gameObject : null);

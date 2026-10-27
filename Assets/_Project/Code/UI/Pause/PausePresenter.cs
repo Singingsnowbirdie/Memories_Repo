@@ -11,6 +11,7 @@ namespace Memories.Gameplay.UI
         private readonly GameplayModeState state;
         private bool disposed;
         private bool settingsOpen;
+        private bool creditsOpen;
         private bool restartConfirmationOpen;
         private readonly AudioVolumeSettings audio;
         private readonly Func<bool> returnToStart;
@@ -31,6 +32,7 @@ namespace Memories.Gameplay.UI
             view.RestartCancelled += CancelRestart;
             view.ReturnToStartRequested += ReturnToStart;
             view.SettingsRequested += OpenSettings;
+            view.CreditsRequested += OpenCredits;
             view.BackRequested += Back;
             view.MasterChanged += audio.SetMaster;
             view.MusicChanged += audio.SetMusic;
@@ -44,7 +46,7 @@ namespace Memories.Gameplay.UI
         public void Toggle()
         {
             if (disposed) return;
-            if (IsPaused) { if (restartConfirmationOpen) CancelRestart(); else if (settingsOpen) Back(); else Resume(); return; }
+            if (IsPaused) { if (restartConfirmationOpen) CancelRestart(); else if (settingsOpen || creditsOpen) Back(); else Resume(); return; }
             if (!state.TryEnter(GameplayMode.Paused)) return;
             view.Show(true);
         }
@@ -53,6 +55,7 @@ namespace Memories.Gameplay.UI
         {
             if (disposed || !IsPaused) return;
             settingsOpen = false;
+            creditsOpen = false;
             restartConfirmationOpen = false;
             audio.Save();
             state.Exit(GameplayMode.Paused);
@@ -92,8 +95,22 @@ namespace Memories.Gameplay.UI
             view.ShowSettings(true, audio.Master, audio.Music, audio.Sounds);
         }
 
+        private void OpenCredits()
+        {
+            if (disposed || !IsPaused || settingsOpen || restartConfirmationOpen) return;
+            creditsOpen = true;
+            view.ShowCredits(true);
+        }
+
         private void Back()
         {
+            if (disposed) return;
+            if (creditsOpen)
+            {
+                creditsOpen = false;
+                view.ShowCredits(false);
+                return;
+            }
             if (disposed || !settingsOpen) return;
             settingsOpen = false;
             audio.Save();
@@ -123,6 +140,7 @@ namespace Memories.Gameplay.UI
             view.RestartCancelled -= CancelRestart;
             view.QuitRequested -= Quit;
             view.SettingsRequested -= OpenSettings;
+            view.CreditsRequested -= OpenCredits;
             view.BackRequested -= Back;
             view.MasterChanged -= audio.SetMaster;
             view.MusicChanged -= audio.SetMusic;

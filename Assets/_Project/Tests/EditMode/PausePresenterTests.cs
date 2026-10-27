@@ -31,7 +31,12 @@ namespace Memories.Tests.EditMode
             public void ReturnToStart() => ReturnToStartRequested?.Invoke();
             public event Action QuitRequested { add { } remove { } }
             public event Action SettingsRequested;
-            public event Action BackRequested { add { } remove { } }
+            public event Action CreditsRequested;
+            public void Credits() => CreditsRequested?.Invoke();
+            public bool CreditsVisible;
+            public void ShowCredits(bool visible) => CreditsVisible = visible;
+            public event Action BackRequested;
+            public void Back() => BackRequested?.Invoke();
             public event Action<float> MasterChanged { add { } remove { } }
             public event Action<float> MusicChanged { add { } remove { } }
             public event Action<float> SoundsChanged { add { } remove { } }
@@ -153,6 +158,16 @@ namespace Memories.Tests.EditMode
                 Assert.IsFalse(view.SettingsVisible);
                 Assert.IsTrue(presenter.IsPaused && input.Paused);
                 Assert.AreEqual(0, Time.timeScale);
+                view.Credits();
+                Assert.IsTrue(view.CreditsVisible);
+                Assert.AreEqual(0, Time.timeScale);
+                input.Escape();
+                Assert.IsFalse(view.CreditsVisible);
+                Assert.IsTrue(presenter.IsPaused);
+                view.Credits();
+                view.Back();
+                Assert.IsFalse(view.CreditsVisible);
+                Assert.IsTrue(presenter.IsPaused);
                 view.Resume();
                 Assert.IsFalse(presenter.IsPaused || input.Paused || view.Visible);
                 Assert.AreEqual(.5f, Time.timeScale);
