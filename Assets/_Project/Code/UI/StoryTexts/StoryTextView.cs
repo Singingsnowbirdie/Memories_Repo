@@ -9,9 +9,11 @@ namespace Memories.Gameplay.UI
     [RequireComponent(typeof(RectTransform))]
     public sealed class StoryTextView : MonoBehaviour, IStoryTextView
     {
-        [SerializeField, Min(0)] private float slideDuration = .3f;
-        [SerializeField, Min(0)] private float textFadeDuration = .2f;
-        private const float BottomMargin = 48f;
+        [SerializeField, Min(0)] private float slideDuration = 1.5f;
+        [SerializeField, Min(0)] private float initialTextDelay = .7f;
+        [SerializeField, Min(0)] private float textFadeDuration = .8f;
+        private const float BottomMargin = 0f;
+        private const float PanelHeight = 50f;
         private Canvas canvas;
         private RectTransform panel;
         private Text caption;
@@ -36,8 +38,8 @@ namespace Memories.Gameplay.UI
             panel.anchorMin = new Vector2(.12f, 0);
             panel.anchorMax = new Vector2(.88f, 0);
             panel.pivot = new Vector2(.5f, 0);
-            panel.sizeDelta = new Vector2(0, 150);
-            background.GetComponent<Image>().color = Color.black;
+            panel.sizeDelta = new Vector2(0, PanelHeight);
+            background.GetComponent<Image>().color = new Color(0, 0, 0, .5f);
             background.GetComponent<Image>().raycastTarget = false;
             var group = background.GetComponent<CanvasGroup>();
             group.blocksRaycasts = false;
@@ -47,8 +49,8 @@ namespace Memories.Gameplay.UI
             var rect = (RectTransform)label.transform;
             rect.anchorMin = Vector2.zero;
             rect.anchorMax = Vector2.one;
-            rect.offsetMin = new Vector2(44, 28);
-            rect.offsetMax = new Vector2(-44, -28);
+            rect.offsetMin = new Vector2(44, 5);
+            rect.offsetMax = new Vector2(-44, -5);
             textGroup = label.GetComponent<CanvasGroup>();
             textGroup.blocksRaycasts = false;
             caption = label.GetComponent<Text>();
@@ -81,10 +83,12 @@ namespace Memories.Gameplay.UI
             int version = ++animationVersion;
             canvas.enabled = true;
             SetText(text);
-            textGroup.alpha = 1;
+            textGroup.alpha = 0;
             float hidden = -panel.rect.height - 16;
             panel.anchoredPosition = new Vector2(0, hidden);
             await Animate(slideDuration, t => panel.anchoredPosition = new Vector2(0, Mathf.Lerp(hidden, BottomMargin, t)), version, token);
+            await Animate(initialTextDelay, _ => { }, version, token);
+            await Animate(textFadeDuration, t => textGroup.alpha = t, version, token);
         }
 
         public async UniTask ChangeTextAsync(string text, CancellationToken token)
@@ -94,9 +98,11 @@ namespace Memories.Gameplay.UI
             token.ThrowIfCancellationRequested();
             int version = ++animationVersion;
             float from = textGroup.alpha;
-            await Animate(textFadeDuration, t => textGroup.alpha = Mathf.Lerp(from, 0, t), version, token);
+            if (from > 0)
+                await Animate(textFadeDuration, t => textGroup.alpha = Mathf.Lerp(from, 0, t), version, token);
             SetText(text);
-            await Animate(textFadeDuration, t => textGroup.alpha = t, version, token);
+            if (!string.IsNullOrEmpty(text))
+                await Animate(textFadeDuration, t => textGroup.alpha = t, version, token);
         }
 
         public async UniTask HideAsync(CancellationToken token)
@@ -115,7 +121,7 @@ namespace Memories.Gameplay.UI
         {
             caption.text = text;
             Canvas.ForceUpdateCanvases();
-            panel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Mathf.Max(150, caption.preferredHeight + 56));
+            panel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, PanelHeight);
         }
 
         private async UniTask Animate(float duration, Action<float> update, int version, CancellationToken token)

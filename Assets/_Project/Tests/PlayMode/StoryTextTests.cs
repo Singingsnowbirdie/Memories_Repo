@@ -35,10 +35,10 @@ namespace Memories.Tests.PlayMode
                 var reveal = view.ShowAsync("Я помню этот сад.", CancellationToken.None);
                 Assert.Less(panel.anchoredPosition.y, 0);
                 await UniTask.Delay(100);
-                Assert.Less(panel.anchoredPosition.y, 48);
+                Assert.Less(panel.anchoredPosition.y, 0);
                 await reveal;
-                Assert.That(panel.anchoredPosition.y, Is.EqualTo(48).Within(.001f));
-                Assert.AreEqual(Color.black, panel.GetComponent<Image>().color);
+                Assert.That(panel.anchoredPosition.y, Is.EqualTo(0).Within(.001f));
+                Assert.AreEqual(new Color(0, 0, 0, .5f), panel.GetComponent<Image>().color);
                 Assert.AreEqual(Color.white, text.color);
                 Assert.IsFalse(panel.GetComponent<CanvasGroup>().blocksRaycasts);
                 Assert.IsFalse(text.raycastTarget);
@@ -46,7 +46,7 @@ namespace Memories.Tests.PlayMode
                 await UniTask.Delay(60);
                 Assert.That(group.alpha, Is.InRange(.01f, .99f));
                 Assert.AreEqual("Я помню этот сад.", text.text);
-                Assert.That(panel.anchoredPosition.y, Is.EqualTo(48).Within(.001f));
+                Assert.That(panel.anchoredPosition.y, Is.EqualTo(0).Within(.001f));
                 Assert.AreEqual(1, panel.GetComponent<CanvasGroup>().alpha);
                 await fade;
                 Assert.AreEqual("Но не помню, с кем сюда приходила.", text.text);

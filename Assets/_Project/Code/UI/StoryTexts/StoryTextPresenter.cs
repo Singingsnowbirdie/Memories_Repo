@@ -29,9 +29,12 @@ namespace Memories.Gameplay.UI
             => ShowAsync(new[] { new StoryTextFragment(text, duration) }, token);
 
         // A new request replaces the active sequence. Invalid requests leave it untouched.
-        public async UniTask ShowAsync(IReadOnlyList<StoryTextFragment> fragments, CancellationToken token = default)
+        public async UniTask ShowAsync(IReadOnlyList<StoryTextFragment> fragments, CancellationToken token = default,
+            float pauseBetweenFragments = 0, bool keepVisible = false)
         {
             if (disposed) throw new ObjectDisposedException(nameof(StoryTextPresenter));
+            if (float.IsNaN(pauseBetweenFragments) || float.IsInfinity(pauseBetweenFragments) || pauseBetweenFragments < 0)
+                throw new ArgumentOutOfRangeException(nameof(pauseBetweenFragments));
             if (fragments == null) throw new ArgumentNullException(nameof(fragments));
             if (fragments.Count == 0) throw new ArgumentException("The sequence must contain at least one fragment.", nameof(fragments));
             var snapshot = new StoryTextFragment[fragments.Count];
@@ -46,16 +49,27 @@ namespace Memories.Gameplay.UI
             Stop();
             using var playback = CancellationTokenSource.CreateLinkedTokenSource(token, view.LifetimeToken);
             current = playback;
+            bool completed = false;
             try
             {
                 await view.ShowAsync(snapshot[0].Text, playback.Token);
                 for (int i = 0; i < snapshot.Length; i++)
                 {
-                    if (i > 0) await view.ChangeTextAsync(snapshot[i].Text, playback.Token);
+                    if (i > 0)
+                    {
+                        if (pauseBetweenFragments > 0)
+                        {
+                            await view.ChangeTextAsync(string.Empty, playback.Token);
+                            await UniTask.Delay(TimeSpan.FromSeconds(pauseBetweenFragments), cancellationToken: playback.Token);
+                        }
+                        await view.ChangeTextAsync(snapshot[i].Text, playback.Token);
+                    }
                     // Read time starts after the text is fully visible and freezes with the game.
                     await UniTask.Delay(TimeSpan.FromSeconds(snapshot[i].Duration), cancellationToken: playback.Token);
                 }
-                await view.HideAsync(playback.Token);
+                if (keepVisible) await view.ChangeTextAsync(string.Empty, playback.Token);
+                else await view.HideAsync(playback.Token);
+                completed = true;
             }
             finally
             {
@@ -63,7 +77,7 @@ namespace Memories.Gameplay.UI
                 if (ReferenceEquals(current, playback))
                 {
                     current = null;
-                    view.HideImmediately();
+                    if (!completed || !keepVisible) view.HideImmediately();
                 }
             }
         }
