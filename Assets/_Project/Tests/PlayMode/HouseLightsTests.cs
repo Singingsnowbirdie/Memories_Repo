@@ -24,8 +24,11 @@ namespace Memories.Tests.PlayMode
                 var house = Object.FindFirstObjectByType<HouseLights>();
                 Assert.IsNotNull(highway);
                 Assert.IsNotNull(house);
-                var lights = house.GetComponentsInChildren<Light>(true);
+                var lights = house.gameObject.scene.GetRootGameObjects()
+                    .SelectMany(root => root.GetComponentsInChildren<Light>(true)).ToArray();
                 Assert.IsNotEmpty(lights);
+                Assert.IsTrue(lights.Any(light => !light.transform.IsChildOf(house.transform)),
+                    "Test must include lights on separate house scene roots.");
                 Assert.IsTrue(lights.All(light => !light.enabled), "House must start completely unlit.");
                 Time.timeScale = 20;
                 float deadline = Time.realtimeSinceStartup + 10;
@@ -80,7 +83,8 @@ namespace Memories.Tests.PlayMode
                 await UniTask.NextFrame();
                 var house = Object.FindFirstObjectByType<HouseLights>();
                 Assert.IsNotNull(house);
-                Assert.IsTrue(house.GetComponentsInChildren<Light>(true).All(light => light.enabled));
+                Assert.IsTrue(house.gameObject.scene.GetRootGameObjects()
+                    .SelectMany(root => root.GetComponentsInChildren<Light>(true)).All(light => light.enabled));
             }
             finally
             {

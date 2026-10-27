@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Memories.Gameplay
@@ -13,7 +14,11 @@ namespace Memories.Gameplay
 
         private void Awake()
         {
-            lights = GetComponentsInChildren<Light>(true);
+            // Floors can be separate scene roots, outside this controller's hierarchy.
+            var sceneLights = new List<Light>();
+            foreach (var root in gameObject.scene.GetRootGameObjects())
+                sceneLights.AddRange(root.GetComponentsInChildren<Light>(true));
+            lights = sceneLights.ToArray();
             initiallyEnabled = new bool[lights.Length];
             targetIntensities = new float[lights.Length];
             for (int i = 0; i < lights.Length; i++)
