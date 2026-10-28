@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using Memories.Gameplay.Player;
 using Memories.Gameplay.UI;
+using Memories.Gameplay.Story;
 using UnityEngine;
 using VContainer.Unity;
 
@@ -33,14 +34,11 @@ namespace Memories.Bootstrap
 
         private async UniTask PlayAsync()
         {
-            var fragments = new[]
-            {
-                new StoryTextFragment("Пахнет прелой листвой и гнилью.", 5f),
-                new StoryTextFragment("Где я?", 3f),
-                new StoryTextFragment("Кто… я?", 3f),
-                new StoryTextFragment("Не помню, как я тут оказался.", 5f),
-                new StoryTextFragment("Я что, умер?", 3f)
-            };
+            var graph = Resources.Load<StoryTextGraph>("HighwayIntroText");
+            if (graph == null)
+                throw new System.InvalidOperationException("Missing HighwayIntroText story graph.");
+            if (!graph.TryGetSequence(out var fragments, out var error))
+                throw new System.InvalidOperationException(error);
             await texts.ShowAsync(fragments, location.Token, pauseBetweenFragments: 5f, keepVisible: true);
         }
     }
