@@ -12,6 +12,7 @@ namespace Memories.Gameplay.Interaction
         {
             public int version = 1;
             public List<string> ids = new List<string>();
+            public List<string> consumedIds = new List<string>();
         }
 
         private readonly QuestInventory inventory;
@@ -31,6 +32,8 @@ namespace Memories.Gameplay.Interaction
                 try
                 {
                     var saved = JsonUtility.FromJson<SavedInventory>(PlayerPrefs.GetString(key));
+                    if (saved != null && saved.version == 1 && saved.consumedIds != null)
+                        foreach (var id in saved.consumedIds) inventory.RestoreConsumed(id);
                     if (saved != null && saved.version == 1 && saved.ids != null)
                         foreach (string id in saved.ids)
                         {
@@ -51,6 +54,7 @@ namespace Memories.Gameplay.Interaction
         {
             var saved = new SavedInventory();
             foreach (var item in inventory.Items) saved.ids.Add(item.Id);
+            foreach (var id in inventory.ConsumedIds) saved.consumedIds.Add(id);
             foreach (string id in unresolved)
                 if (!saved.ids.Contains(id)) saved.ids.Add(id);
             PlayerPrefs.SetString(key, JsonUtility.ToJson(saved));

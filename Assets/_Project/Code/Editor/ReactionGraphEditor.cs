@@ -68,7 +68,7 @@ namespace Memories.Editor
             NodeEditorGUILayout.PortField(new GUIContent("Далее"), target.GetOutputPort("next"));
             var kind = serializedObject.FindProperty("kind");
             EditorGUILayout.LabelField("Действие");
-            kind.enumValueIndex = EditorGUILayout.Popup(kind.enumValueIndex, new[] { "Показать текст", "Показать воспоминание", "Перейти в локацию", "Запустить реакцию объекта", "Установить кастомную переменную", "Активность объекта", "Добавить предмет в инвентарь", "Запустить подсказки", "Остановить подсказки" });
+            kind.enumValueIndex = EditorGUILayout.Popup(kind.enumValueIndex, new[] { "Показать текст", "Показать воспоминание", "Перейти в локацию", "Запустить реакцию объекта", "Установить кастомную переменную", "Активность объекта", "Добавить предмет в инвентарь", "Запустить подсказки", "Остановить подсказки", "Использовать предмет" });
             EditorGUILayout.Space(8);
             if (kind.enumValueIndex == 0)
             {
@@ -152,7 +152,7 @@ namespace Memories.Editor
                 }
                 EditorGUILayout.HelpBox("ID действует в пределах объекта, запустившего граф. При отключении объекта или выгрузке сцены таймеры прекращаются; между запусками игры не сохраняются.", MessageType.Info);
             }
-            else if (kind.enumValueIndex == 6)
+            else if (kind.enumValueIndex == 6 || kind.enumValueIndex == 9)
             {
                 EditorGUILayout.LabelField("Предмет");
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("item"), GUIContent.none);
@@ -175,9 +175,9 @@ namespace Memories.Editor
             EditorGUILayout.Space(8);
             EditorGUILayout.LabelField("Тип проверки");
             kind.enumValueIndex = EditorGUILayout.Popup(kind.enumValueIndex,
-                new[] { "Предмет в инвентаре", "Значение кастомной переменной" });
+                new[] { "Предмет в инвентаре", "Значение кастомной переменной", "Предмет уже подобран", "Предмет использован" });
             EditorGUILayout.Space(8);
-            if (kind.intValue == (int)ReactionConditionKind.InventoryItem)
+            if (kind.intValue != (int)ReactionConditionKind.CustomVariable)
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("item"), new GUIContent("Предмет"));
             else if (kind.intValue == (int)ReactionConditionKind.CustomVariable)
             {
@@ -252,6 +252,7 @@ namespace Memories.Editor
         {
             serializedObject.Update();
             EditorGUILayout.PropertyField(serializedObject.FindProperty("prompt"), new GUIContent("Подсказка"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("initializationGraph"), new GUIContent("Граф восстановления"));
             var graph = serializedObject.FindProperty("graph");
             EditorGUILayout.PropertyField(graph, new GUIContent("Граф реакций"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("objectBindings"), new GUIContent("Объекты графа"), true);

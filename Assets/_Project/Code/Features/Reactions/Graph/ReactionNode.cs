@@ -6,7 +6,7 @@ using XNode;
 
 namespace Memories.Gameplay.Reactions
 {
-    public enum ReactionKind { StoryText, Memory, ChangeLocation, CustomReaction, SetCustomVariable, ObjectActivity, AddInventoryItem, StartHints, StopHints }
+    public enum ReactionKind { StoryText, Memory, ChangeLocation, CustomReaction, SetCustomVariable, ObjectActivity, AddInventoryItem, StartHints, StopHints, ConsumeInventoryItem }
 
     [Node.CreateNodeMenu("Реакция"), Node.NodeWidth(320), Node.NodeTint("#284C53")]
     [MovedFrom(true, sourceNamespace: "Memories.Gameplay.Triggers", sourceAssembly: "Memories.Gameplay", sourceClassName: "TriggerActionNode")]
@@ -63,7 +63,7 @@ namespace Memories.Gameplay.Reactions
                     { error = "Граф подсказки не должен запускать таймеры или менять локацию."; return false; }
                 return hintGraph.TryGetSequence(out _, out error);
             }
-            if (kind == ReactionKind.AddInventoryItem)
+            if (kind == ReactionKind.AddInventoryItem || kind == ReactionKind.ConsumeInventoryItem)
             {
                 if (item != null && item.IsValid) return true;
                 error = "Назначьте предмет для добавления в инвентарь.";

@@ -37,7 +37,7 @@ namespace Memories.Gameplay.Reactions
             if (!CanRun(graph)) return false;
             if (!graph.TryGetSequence(out var actions, out var error))
             { Debug.LogWarning("Цепочка реакций не запущена: " + error, owner); return false; }
-            if (inventory == null && (graph.nodes.OfType<ReactionConditionNode>().Any(condition => condition.RequiresInventory) || actions.Any(action => action.Kind == ReactionKind.AddInventoryItem)))
+            if (inventory == null && (graph.nodes.OfType<ReactionConditionNode>().Any(condition => condition.RequiresInventory) || actions.Any(action => action.Kind == ReactionKind.AddInventoryItem || action.Kind == ReactionKind.ConsumeInventoryItem)))
             { Debug.LogWarning("Для проверки предмета нужен инвентарь игрока.", owner); return false; }
             if (variables == null && (graph.nodes.OfType<ReactionConditionNode>().Any(condition => condition.Kind == ReactionConditionKind.CustomVariable) ||
                 actions.Any(action => action.Kind == ReactionKind.SetCustomVariable)))
@@ -153,6 +153,8 @@ namespace Memories.Gameplay.Reactions
                     }
                     else if (action.Kind == ReactionKind.AddInventoryItem)
                         inventory.TryAdd(action.Item);
+                    else if (action.Kind == ReactionKind.ConsumeInventoryItem)
+                        inventory.TryConsume(action.Item);
                     else if (action.Kind == ReactionKind.SetCustomVariable)
                         variables.Set(action.VariableBank, action.VariableId, action.VariableValue);
                     else if (action.Kind == ReactionKind.StoryText)
