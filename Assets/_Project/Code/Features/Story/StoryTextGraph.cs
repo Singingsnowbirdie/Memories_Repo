@@ -7,10 +7,15 @@ namespace Memories.Gameplay.Story
 {
     public sealed class StoryTextGraph : NodeGraph
     {
+        [UnityEngine.SerializeField, UnityEngine.Min(0)] private float pauseBetweenFragments;
+        public float PauseBetweenFragments => pauseBetweenFragments;
+
         public bool TryGetSequence(out List<StoryTextFragment> fragments, out string error)
         {
             fragments = new List<StoryTextFragment>();
             error = null;
+            if (pauseBetweenFragments < 0 || float.IsNaN(pauseBetweenFragments) || float.IsInfinity(pauseBetweenFragments))
+            { error = "Пауза между фразами должна быть конечным неотрицательным числом."; return false; }
             if (nodes == null || nodes.Any(n => n == null) || nodes.OfType<StoryTextStartNode>().Count() != 1 ||
                 nodes.OfType<StoryTextEndNode>().Count() != 1)
             { error = "Нужны ровно одно «Начало» и один «Конец», без отсутствующих нод."; return false; }

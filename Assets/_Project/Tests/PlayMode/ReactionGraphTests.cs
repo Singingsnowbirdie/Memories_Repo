@@ -351,6 +351,125 @@ namespace Memories.Tests.PlayMode
             for (int i = owned.Count - 1; i >= 0; i--) if (owned[i] != null) Object.DestroyImmediate(owned[i]);
             owned.Clear();
         }
+
+        private ReactionGraph HintTestGraph(out ReactionNode action)
+        {
+            var result = Own(ScriptableObject.CreateInstance<ReactionGraph>());
+            var entry = Own(result.AddNode<ReactionStartNode>());
+            Set(entry, "runOnce", false);
+            action = Own(result.AddNode<ReactionNode>());
+            var exit = Own(result.AddNode<ReactionEndNode>());
+            Connect(entry, action); Connect(action, exit);
+            return result;
+        }
+
+        [UnityTest]
+        public IEnumerator PickupCanShowStoryTextAfterHidingItself() => UniTask.ToCoroutine(async () =>
+        {
+            var pickupGraph = HintTestGraph(out var add);
+            var item = Own(ScriptableObject.CreateInstance<QuestItem>());
+            Set(item, "id", "pickup-with-story");
+            Set(add, "kind", ReactionKind.AddInventoryItem); Set(add, "item", item);
+            Set(pickupGraph, "objectKeys", new List<string> { "Pickup" });
+            var hide = Own(pickupGraph.AddNode<ReactionNode>());
+            Set(hide, "kind", ReactionKind.ObjectActivity); Set(hide, "objectKey", "Pickup"); Set(hide, "active", false);
+            var say = Own(pickupGraph.AddNode<ReactionNode>());
+            Set(say, "textGraph", textGraph);
+            var exit = pickupGraph.nodes.Find(node => node is ReactionEndNode);
+            add.GetOutputPort("next").ClearConnections();
+            Connect(add, hide); Connect(hide, say); Connect(say, exit);
+            var host = Own(new GameObject("Pickup with story"));
+            var interactable = host.AddComponent<ReactionInteractable>();
+            interactable.Configure(pickupGraph, "Pick up");
+            Set(interactable, "objectBindings", new[] { new ReactionObjectBinding("Pickup", host) });
+            var viewHost = Own(new GameObject("Pickup story view", typeof(RectTransform)));
+            using var texts = new StoryTextPresenter(viewHost.AddComponent<StoryTextView>());
+            var inventory = new QuestInventory();
+            interactable.Initialize(texts, null, inventory: inventory);
+            interactable.Interact();
+            Assert.IsTrue(inventory.Contains(item.Id));
+            Assert.IsFalse(host.activeSelf);
+            Assert.IsTrue(texts.IsPlaying, "Hiding the pickup must not cancel the following text.");
+            await WaitUntil(() => !interactable.IsRunning);
+            Assert.IsFalse(texts.IsPlaying);
+        });
+
+        [UnityTest]
+        public IEnumerator HintTimeoutPausesAndStopCancelsPendingHint() => UniTask.ToCoroutine(async () =>
+        {
+            var item = Own(ScriptableObject.CreateInstance<QuestItem>());
+            Set(item, "id", "hint-test-item");
+            var hint = HintTestGraph(out var reward);
+            Set(reward, "kind", ReactionKind.AddInventoryItem); Set(reward, "item", item);
+            var launch = HintTestGraph(out var timer);
+            Set(timer, "kind", ReactionKind.StartHints); Set(timer, "hintId", "test");
+            Set(timer, "hintGraph", hint); Set(timer, "hintTimeout", .1f); Set(timer, "repeatHint", false);
+            var inventory = new QuestInventory();
+            using var runner = new ReactionRunner(null, null, launch, inventory: inventory);
+            float originalScale = Time.timeScale;
+            try
+            {
+                Time.timeScale = 0;
+                Assert.IsTrue(runner.TryRun(launch));
+                await UniTask.Delay(200, ignoreTimeScale: true);
+                Assert.IsFalse(inventory.Contains(item.Id), "Paused time must not consume the timeout.");
+                Time.timeScale = 1;
+                await WaitUntil(() => inventory.Contains(item.Id));
+                var other = Own(ScriptableObject.CreateInstance<QuestItem>());
+                Set(other, "id", "cancelled-hint-item"); Set(reward, "item", other);
+                Assert.IsTrue(runner.TryRun(launch));
+                runner.Stop();
+                await UniTask.Delay(200);
+                Assert.IsFalse(inventory.Contains(other.Id), "Disabling the owner cancels pending hints.");
+            }
+            finally { Time.timeScale = originalScale; }
+        });
+
+        [UnityTest]
+        public IEnumerator HintChecksInventoryAtTimeoutAndCanStopItself() => UniTask.ToCoroutine(async () =>
+        {
+            var item = Own(ScriptableObject.CreateInstance<QuestItem>());
+            Set(item, "id", "remote-before-timeout");
+            var hint = HintTestGraph(out var reward);
+            Set(reward, "kind", ReactionKind.CustomReaction);
+            var condition = Own(hint.AddNode<ReactionConditionNode>());
+            Set(condition, "item", item);
+            var stop = Own(hint.AddNode<ReactionNode>());
+            Set(stop, "kind", ReactionKind.StopHints); Set(stop, "hintId", "remote");
+            var entry = hint.nodes.Find(node => node is ReactionStartNode);
+            var exit = hint.nodes.Find(node => node is ReactionEndNode);
+            entry.GetOutputPort("next").ClearConnections(); Connect(entry, condition);
+            condition.GetOutputPort("ifPresent").Connect(stop.GetInputPort("previous"));
+            condition.GetOutputPort("ifAbsent").Connect(reward.GetInputPort("previous"));
+            Connect(stop, exit);
+            var launch = HintTestGraph(out var timer);
+            Set(timer, "kind", ReactionKind.StartHints); Set(timer, "hintId", "remote");
+            Set(timer, "hintGraph", hint); Set(timer, "hintTimeout", .05f);
+            var host = Own(new GameObject("Hint test"));
+            var counter = host.AddComponent<TestCustomReaction>();
+            var inventory = new QuestInventory();
+            using var runner = new ReactionRunner(null, null, host, inventory: inventory);
+            Assert.IsTrue(runner.TryRun(launch));
+            inventory.TryAdd(item);
+            await UniTask.Delay(250);
+            Assert.AreEqual(0, counter.Calls, "An item collected before the timeout must suppress the reminder.");
+        });
+
+        [Test]
+        public void HintRejectsInvalidTimeoutAndRecursiveSchedules()
+        {
+            var launch = HintTestGraph(out var timer);
+            var hint = HintTestGraph(out var action);
+            Set(action, "kind", ReactionKind.StopHints); Set(action, "hintId", "test");
+            Set(timer, "kind", ReactionKind.StartHints); Set(timer, "hintId", "test");
+            Set(timer, "hintGraph", hint);
+            Assert.IsTrue(launch.TryGetSequence(out _, out var error), error);
+            Set(timer, "hintTimeout", float.NaN);
+            Assert.IsFalse(launch.TryGetSequence(out _, out _));
+            Set(timer, "hintTimeout", 180f); Set(action, "kind", ReactionKind.StartHints);
+            Set(action, "hintGraph", launch);
+            Assert.IsFalse(launch.TryGetSequence(out _, out _), "Nested timer graphs must fail without recursive validation.");
+        }
     }
 }
 

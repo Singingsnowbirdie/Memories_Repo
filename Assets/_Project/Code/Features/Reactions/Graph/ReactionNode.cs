@@ -6,7 +6,7 @@ using XNode;
 
 namespace Memories.Gameplay.Reactions
 {
-    public enum ReactionKind { StoryText, Memory, ChangeLocation, CustomReaction, SetCustomVariable, ObjectActivity, AddInventoryItem }
+    public enum ReactionKind { StoryText, Memory, ChangeLocation, CustomReaction, SetCustomVariable, ObjectActivity, AddInventoryItem, StartHints, StopHints, ConsumeInventoryItem }
 
     [Node.CreateNodeMenu("Реакция"), Node.NodeWidth(320), Node.NodeTint("#284C53")]
     [MovedFrom(true, sourceNamespace: "Memories.Gameplay.Triggers", sourceAssembly: "Memories.Gameplay", sourceClassName: "TriggerActionNode")]
@@ -27,6 +27,14 @@ namespace Memories.Gameplay.Reactions
         [SerializeField] private global::Memories.Gameplay.Interaction.QuestItem item;
         public global::Memories.Gameplay.Interaction.QuestItem Item => item;
         public string ObjectKey => objectKey;
+        [SerializeField] private string hintId;
+        [SerializeField] private ReactionGraph hintGraph;
+        [SerializeField, Min(0.01f)] private float hintTimeout = 180f;
+        [SerializeField] private bool repeatHint = true;
+        public string HintId => hintId;
+        public ReactionGraph HintGraph => hintGraph;
+        public float HintTimeout => hintTimeout;
+        public bool RepeatHint => repeatHint;
         public bool Active => active;
         public CustomVariableBank VariableBank => variableBank;
         public string VariableId => variableId;
@@ -42,7 +50,20 @@ namespace Memories.Gameplay.Reactions
         public bool Validate(out string error)
         {
             error = null;
-            if (kind == ReactionKind.AddInventoryItem)
+            if (kind == ReactionKind.StartHints || kind == ReactionKind.StopHints)
+            {
+                if (string.IsNullOrWhiteSpace(hintId))
+                { error = "Задайте ID подсказки."; return false; }
+                if (kind == ReactionKind.StopHints) return true;
+                if (hintGraph == null || hintGraph == graph || hintTimeout <= 0 ||
+                    float.IsNaN(hintTimeout) || float.IsInfinity(hintTimeout))
+                { error = "Назначьте отдельный граф подсказки и положительный таймаут в секундах."; return false; }
+                foreach (var node in hintGraph.nodes)
+                    if (node is ReactionNode action && (action.Kind == ReactionKind.StartHints || action.Kind == ReactionKind.ChangeLocation))
+                    { error = "Граф подсказки не должен запускать таймеры или менять локацию."; return false; }
+                return hintGraph.TryGetSequence(out _, out error);
+            }
+            if (kind == ReactionKind.AddInventoryItem || kind == ReactionKind.ConsumeInventoryItem)
             {
                 if (item != null && item.IsValid) return true;
                 error = "Назначьте предмет для добавления в инвентарь.";

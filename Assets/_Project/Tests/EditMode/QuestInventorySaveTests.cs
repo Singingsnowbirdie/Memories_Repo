@@ -37,6 +37,31 @@ namespace Memories.Tests.EditMode
         }
 
         [Test]
+        public void ConsumedItemsStayRemovedAndCannotBePickedUpAgainAfterReload()
+        {
+            var inventory = new QuestInventory();
+            using (var save = new QuestInventorySave(inventory, new[] { item }, key))
+            {
+                inventory.TryAdd(item);
+                Assert.IsTrue(inventory.TryConsume(item));
+                Assert.IsFalse(inventory.Contains(item.Id));
+                Assert.IsTrue(inventory.WasCollected(item.Id));
+                Assert.IsFalse(inventory.TryConsume(item));
+            }
+            var restored = new QuestInventory();
+            using (var save = new QuestInventorySave(restored, new[] { restoredItem }, key))
+            {
+                Assert.IsEmpty(restored.Items);
+                Assert.IsTrue(restored.IsConsumed(item.Id));
+                Assert.IsFalse(restored.TryAdd(restoredItem));
+            }
+            QuestInventorySave.Clear(key);
+            var restarted = new QuestInventory();
+            using (var save = new QuestInventorySave(restarted, new[] { item }, key))
+                Assert.IsTrue(restarted.TryAdd(item));
+        }
+
+        [Test]
         public void TemporarySessionIgnoresAndPreservesExistingSave()
         {
             var savedInventory = new QuestInventory();

@@ -47,8 +47,6 @@ namespace Memories.Bootstrap
                 return window.AddComponent<StoryTextView>();
             }, Lifetime.Singleton);
             builder.Register<StoryTextPresenter>(Lifetime.Singleton).AsSelf().AsImplementedInterfaces();
-            if (gameObject.scene.path == TestLocationLauncher.HighwayPath)
-                builder.RegisterEntryPoint<HighwayIntroEntryPoint>();
             builder.Register<IPauseView>(container =>
             {
                 var menu = new GameObject("Pause menu", typeof(RectTransform));
