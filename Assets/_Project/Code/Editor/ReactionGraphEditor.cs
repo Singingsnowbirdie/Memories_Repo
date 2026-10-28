@@ -68,7 +68,7 @@ namespace Memories.Editor
             NodeEditorGUILayout.PortField(new GUIContent("Далее"), target.GetOutputPort("next"));
             var kind = serializedObject.FindProperty("kind");
             EditorGUILayout.LabelField("Действие");
-            kind.enumValueIndex = EditorGUILayout.Popup(kind.enumValueIndex, new[] { "Показать текст", "Показать воспоминание", "Перейти в локацию", "Запустить реакцию объекта", "Установить кастомную переменную", "Активность объекта" });
+            kind.enumValueIndex = EditorGUILayout.Popup(kind.enumValueIndex, new[] { "Показать текст", "Показать воспоминание", "Перейти в локацию", "Запустить реакцию объекта", "Установить кастомную переменную", "Активность объекта", "Добавить предмет в инвентарь" });
             EditorGUILayout.Space(8);
             if (kind.enumValueIndex == 0)
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("textGraph"), new GUIContent("Граф текста"));
@@ -136,6 +136,11 @@ namespace Memories.Editor
                 EditorGUILayout.LabelField("Активность");
                 var active = serializedObject.FindProperty("active");
                 active.boolValue = EditorGUILayout.Popup(active.boolValue ? 0 : 1, new[] { "Включить", "Выключить" }) == 0;
+            }
+            else if (kind.enumValueIndex == 6)
+            {
+                EditorGUILayout.LabelField("Предмет");
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("item"), GUIContent.none);
             }
             else EditorGUILayout.HelpBox("Запускает включённый компонент CustomReaction на том же объекте, который запустил граф. Нужен ровно один такой компонент. Следующая реакция запускается сразу.", MessageType.Info);
             serializedObject.ApplyModifiedProperties();

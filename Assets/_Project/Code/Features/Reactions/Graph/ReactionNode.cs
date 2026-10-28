@@ -6,7 +6,7 @@ using XNode;
 
 namespace Memories.Gameplay.Reactions
 {
-    public enum ReactionKind { StoryText, Memory, ChangeLocation, CustomReaction, SetCustomVariable, ObjectActivity }
+    public enum ReactionKind { StoryText, Memory, ChangeLocation, CustomReaction, SetCustomVariable, ObjectActivity, AddInventoryItem }
 
     [Node.CreateNodeMenu("Реакция"), Node.NodeWidth(320), Node.NodeTint("#284C53")]
     [MovedFrom(true, sourceNamespace: "Memories.Gameplay.Triggers", sourceAssembly: "Memories.Gameplay", sourceClassName: "TriggerActionNode")]
@@ -24,6 +24,8 @@ namespace Memories.Gameplay.Reactions
         [SerializeField] private bool variableValue = true;
         [SerializeField] private string objectKey;
         [SerializeField] private bool active = true;
+        [SerializeField] private global::Memories.Gameplay.Interaction.QuestItem item;
+        public global::Memories.Gameplay.Interaction.QuestItem Item => item;
         public string ObjectKey => objectKey;
         public bool Active => active;
         public CustomVariableBank VariableBank => variableBank;
@@ -40,6 +42,12 @@ namespace Memories.Gameplay.Reactions
         public bool Validate(out string error)
         {
             error = null;
+            if (kind == ReactionKind.AddInventoryItem)
+            {
+                if (item != null && item.IsValid) return true;
+                error = "Назначьте предмет для добавления в инвентарь.";
+                return false;
+            }
             if (kind == ReactionKind.ObjectActivity)
             {
                 if (graph is ReactionGraph reaction && reaction.HasObjectKey(objectKey)) return true;

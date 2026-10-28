@@ -42,10 +42,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 3591465502250364558}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3fd7c326fec4683a2594b95e1bff20e, type: 3}
+  m_Script: {fileID: 11500000, guid: 1ba68190f9594ee8b2fc0603419ed015, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Interaction.QuestItemPickup
-  item: {fileID: 11400000, guid: 732741c616e0478caec9fc80aca35dad, type: 2}
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Interaction.ReactionInteractable
+  graph: {fileID: 11400000, guid: 4278c219c656411084c71c7e755fc9de, type: 2}
+  prompt: "Взять: Батарейка"
+  objectBindings:
+  - key: Предмет
+    target: {fileID: 3591465502250364558}
 --- !u!1001 &312671666608331888
 PrefabInstance:
   m_ObjectHideFlags: 0

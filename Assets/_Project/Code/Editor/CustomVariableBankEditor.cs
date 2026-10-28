@@ -20,7 +20,8 @@ namespace Memories.Editor
                 EditorGUILayout.Space(4);
                 EditorGUILayout.PropertyField(variable.FindPropertyRelative("name"), new GUIContent("Имя"));
                 EditorGUILayout.Space(4);
-                EditorGUILayout.PropertyField(variable.FindPropertyRelative("initialValue"), new GUIContent("Начальное значение"));
+                var initialValue = variable.FindPropertyRelative("initialValue");
+                initialValue.boolValue = EditorGUILayout.Popup("Начальное значение", initialValue.boolValue ? 0 : 1, new[] { "Да", "Нет" }) == 0;
                 EditorGUILayout.Space(8);
                 bool remove = GUILayout.Button("Удалить переменную");
                 EditorGUILayout.Space(4);

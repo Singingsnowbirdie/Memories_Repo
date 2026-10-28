@@ -51,15 +51,7 @@ namespace Memories.Tests.EditMode
                     Assert.AreEqual(1, restored.Items.Count);
                     Assert.AreSame(restoredItem, restored.Items[0]);
                     Assert.IsFalse(restored.TryAdd(restoredItem));
-                    var root = new GameObject("Restored pickup");
-                    try
-                    {
-                        var pickup = root.AddComponent<QuestItemPickup>();
-                        typeof(QuestItemPickup).GetField("item", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(pickup, restoredItem);
-                        pickup.Initialize(restored);
-                        Assert.IsFalse(root.activeSelf);
-                    }
-                    finally { Object.DestroyImmediate(root); }
+
                 }
             }
         }

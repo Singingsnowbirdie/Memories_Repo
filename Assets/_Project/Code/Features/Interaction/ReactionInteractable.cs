@@ -28,11 +28,32 @@ namespace Memories.Gameplay.Interaction
         {
             runner?.Dispose();
             runner = new ReactionRunner(texts, memories, this, locations, inventory, variables, objectBindings);
+            RestorePickupState(inventory);
+        }
+        private void RestorePickupState(QuestInventory inventory)
+        {
+            if (inventory == null || graph == null || !graph.TryGetSequence(out var actions, out _)) return;
+            // Restore only a pickup that explicitly hides itself after granting the item.
+            // Other item rewards must not hide the object that grants them.
+            foreach (var action in actions)
+            {
+                if (action.Kind != ReactionKind.AddInventoryItem || !inventory.Contains(action.Item.Id)) continue;
+                if (!(ReactionGraph.Next(action) is ReactionNode hide) ||
+                    hide.Kind != ReactionKind.ObjectActivity || hide.Active) continue;
+                if (ReactionObjectBinding.TryResolve(objectBindings, hide.ObjectKey, out var target) && target == gameObject)
+                {
+                    gameObject.SetActive(false);
+                    return;
+                }
+            }
         }
         public override void Interact()
         {
             if (CanInteract) runner.TryRun(graph);
         }
-        private void OnDisable() => runner?.Stop();
+        private void OnDisable()
+        {
+            runner?.Stop();
+        }
     }
 }

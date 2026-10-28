@@ -27,19 +27,21 @@ namespace Memories.Gameplay.Reactions
             ILocationTransition locations = null, QuestInventory inventory = null, CustomVariableStore variables = null, ReactionObjectBinding[] objectBindings = null)
         { this.texts = texts; this.memories = memories; this.owner = owner; this.locations = locations; this.inventory = inventory; this.variables = variables; this.objectBindings = objectBindings; }
         public bool CanRun(ReactionGraph graph) => graph != null && !IsRunning &&
-            !(graph.RunOnce && fired) && texts != null && memories != null && memories.CanStartPlayback;
+            !(graph.RunOnce && fired) && (memories == null || memories.CanStartPlayback);
         public bool TryRun(ReactionGraph graph)
         {
             if (!CanRun(graph)) return false;
             if (!graph.TryGetSequence(out var actions, out var error))
             { Debug.LogWarning("Цепочка реакций не запущена: " + error, owner); return false; }
-            if (inventory == null && graph.nodes.OfType<ReactionConditionNode>().Any(condition => condition.RequiresInventory))
+            if (inventory == null && (graph.nodes.OfType<ReactionConditionNode>().Any(condition => condition.RequiresInventory) || actions.Any(action => action.Kind == ReactionKind.AddInventoryItem)))
             { Debug.LogWarning("Для проверки предмета нужен инвентарь игрока.", owner); return false; }
             if (variables == null && (graph.nodes.OfType<ReactionConditionNode>().Any(condition => condition.Kind == ReactionConditionKind.CustomVariable) ||
                 actions.Any(action => action.Kind == ReactionKind.SetCustomVariable)))
             { Debug.LogWarning("Хранилище кастомных переменных не подключено.", owner); return false; }
             foreach (var action in actions)
             {
+                if (action.Kind == ReactionKind.StoryText && texts == null) return false;
+                if (action.Kind == ReactionKind.Memory && memories == null) return false;
                 if (action.Kind == ReactionKind.CustomReaction && !CustomReaction.TryFind(owner, out _))
                 { Debug.LogWarning("На объекте нужен ровно один включённый компонент CustomReaction.", owner); return false; }
                 if (action.Kind == ReactionKind.ChangeLocation &&
@@ -84,6 +86,8 @@ namespace Memories.Gameplay.Reactions
                             throw new InvalidOperationException("Компонент CustomReaction недоступен на объекте.");
                         customReaction.Execute();
                     }
+                    else if (action.Kind == ReactionKind.AddInventoryItem)
+                        inventory.TryAdd(action.Item);
                     else if (action.Kind == ReactionKind.SetCustomVariable)
                         variables.Set(action.VariableBank, action.VariableId, action.VariableValue);
                     else if (action.Kind == ReactionKind.StoryText)

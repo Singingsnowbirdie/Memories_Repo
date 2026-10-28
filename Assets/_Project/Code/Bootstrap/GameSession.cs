@@ -260,9 +260,6 @@ namespace Memories.Bootstrap
                     photo.Initialize(scope.Container.Resolve<Memories.Gameplay.UI.StoryTextPresenter>(),
                         scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>(), scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<CustomVariableStore>());
             foreach (var root in scene.GetRootGameObjects())
-                foreach (var pickup in root.GetComponentsInChildren<QuestItemPickup>(true))
-                    pickup.Initialize(scope.Container.Resolve<QuestInventory>());
-            foreach (var root in scene.GetRootGameObjects())
                 foreach (var door in root.GetComponentsInChildren<CourtyardDoor>(true))
                     door.Initialize(scope.Container.Resolve<PlayerMotor>(),
                         path => LoadConnectedSceneAsync(path, scene), EnterConnectedSceneAsync);
