@@ -32,6 +32,13 @@ namespace Memories.Bootstrap
             }, Lifetime.Singleton);
             builder.Register<InteractionPresenter>(Lifetime.Singleton);
             builder.RegisterEntryPoint<InteractionEntryPoint>();
+            builder.RegisterBuildCallback(container =>
+            {
+                var hud = new GameObject("Inventory HUD", typeof(RectTransform));
+                hud.transform.SetParent(transform, false);
+                hud.AddComponent<InventoryHud>().Initialize(container.Resolve<QuestInventory>(),
+                    container.Resolve<GameplayModeState>());
+            });
             builder.Register<IStoryTextView>(container =>
             {
                 var window = new GameObject("Story text", typeof(RectTransform));
@@ -50,7 +57,8 @@ namespace Memories.Bootstrap
             builder.Register<PausePresenter>(container => new PausePresenter(
                 container.Resolve<IPauseInput>(), container.Resolve<IPauseView>(),
                 container.Resolve<GameplayModeState>(), container.Resolve<AudioVolumeSettings>(),
-                container.Resolve<GameSession>().ReturnToLocationStart), Lifetime.Singleton).AsSelf().AsImplementedInterfaces();
+                container.Resolve<GameSession>().ReturnToLocationStart,
+                container.Resolve<GameSession>().RestartGame), Lifetime.Singleton).AsSelf().AsImplementedInterfaces();
             builder.RegisterBuildCallback(container => container.Resolve<PausePresenter>());
             builder.Register<IMemoryView>(container =>
             {

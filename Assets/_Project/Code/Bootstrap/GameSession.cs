@@ -21,10 +21,63 @@ namespace Memories.Bootstrap
         private readonly List<Scene> additionalScenes = new List<Scene>();
         private bool busy;
         private bool disposed;
+        private readonly LocationProgressStore progress = new LocationProgressStore();
+        private bool trackHouseCheckpoint;
+        private Transform houseEntrance;
+        private Vector3 previousEntrancePosition;
+
+        public UniTask StartSavedGameAsync(string scenePath, CancellationToken cancellationToken = default)
+        {
+            bool useProgress = applicationScope.TestLauncher == null && scenePath == TestLocationLauncher.HighwayPath;
+#if UNITY_EDITOR
+            useProgress &= !applicationScope.UseOpenLocationForEditorPlay;
+#endif
+            bool resumeHouse = useProgress && progress.HasReachedHouse;
+            trackHouseCheckpoint = useProgress && !resumeHouse;
+            return StartAsync(resumeHouse ? TestLocationLauncher.HousePath : scenePath, cancellationToken,
+                resumeHouse);
+        }
+
+        public void UpdateHouseCheckpoint()
+        {
+            if (!trackHouseCheckpoint || busy || disposed || !IsRunning) return;
+            var house = SceneManager.GetSceneByPath(TestLocationLauncher.HousePath);
+            if (!house.isLoaded) return;
+            var player = LocationScope.Container.Resolve<PlayerMotor>();
+            if (houseEntrance == null)
+            {
+                foreach (var root in house.GetRootGameObjects())
+                    if (root.name == "Дом — два этажа") houseEntrance = root.transform;
+                if (houseEntrance == null) return;
+                previousEntrancePosition = houseEntrance.InverseTransformPoint(player.transform.position);
+                return;
+            }
+            var current = houseEntrance.InverseTransformPoint(player.transform.position);
+            if (HouseCheckpointEntryPoint.CrossedEntrance(previousEntrancePosition, current))
+            {
+                progress.SaveHouse();
+                trackHouseCheckpoint = false;
+            }
+            previousEntrancePosition = current;
+        }
 
         public SessionLifetimeScope SessionScope { get; private set; }
         public LocationLifetimeScope LocationScope { get; private set; }
         public bool IsRunning => LocationScope != null;
+
+        public bool RestartGame()
+        {
+            const string bootstrap = "Assets/_Project/Scenes/Bootstrap.unity";
+            if (disposed || busy || !IsRunning || !Application.CanStreamedLevelBeLoaded(bootstrap)) return false;
+            var loading = SceneManager.LoadSceneAsync(bootstrap, LoadSceneMode.Single);
+            if (loading == null) return false;
+            trackHouseCheckpoint = false;
+            busy = true;
+            progress.Reset();
+            SessionScope.Container.Resolve<QuestInventorySave>().Dispose();
+            QuestInventorySave.Clear();
+            return true;
+        }
 
         public bool ReturnToLocationStart()
         {
@@ -51,7 +104,8 @@ namespace Memories.Bootstrap
             this.application = application;
         }
 
-        public async UniTask StartAsync(string scenePath, CancellationToken cancellationToken = default)
+        public async UniTask StartAsync(string scenePath, CancellationToken cancellationToken = default,
+            bool resumeHouse = false)
         {
             if (disposed) throw new ObjectDisposedException(nameof(GameSession));
             if (busy || SessionScope != null) throw new InvalidOperationException("A session is already running or transitioning.");
@@ -76,7 +130,7 @@ namespace Memories.Bootstrap
                 locationScene = SceneManager.GetSceneByPath(scenePath);
                 cancellation.Token.ThrowIfCancellationRequested();
 
-                foreach (var additionalPath in applicationScope.AdditionalLocationScenes)
+                foreach (var additionalPath in resumeHouse ? Array.Empty<string>() : applicationScope.AdditionalLocationScenes)
                 {
                     if (string.IsNullOrWhiteSpace(additionalPath) || !Application.CanStreamedLevelBeLoaded(additionalPath))
                         throw new ArgumentException("Additional scene must be enabled in Build Settings: " + additionalPath);
@@ -88,6 +142,7 @@ namespace Memories.Bootstrap
                 }
 
                 applicationScope.TestLauncher?.Prepare(locationScene);
+                if (resumeHouse) PrepareHouseStart(locationScene);
                 var root = new GameObject("LocationLifetimeScope");
                 root.SetActive(false);
                 SceneManager.MoveGameObjectToScene(root, locationScene);
@@ -109,6 +164,28 @@ namespace Memories.Bootstrap
         public bool CanChangeLocation(string scenePath) => !disposed && !busy && IsRunning &&
             !string.IsNullOrWhiteSpace(scenePath) && Application.CanStreamedLevelBeLoaded(scenePath) &&
             !SceneManager.GetSceneByPath(scenePath).isLoaded;
+
+        private static void PrepareHouseStart(Scene scene)
+        {
+            var spawn = new GameObject("PlayerSpawn");
+            SceneManager.MoveGameObjectToScene(spawn, scene);
+            spawn.transform.position = new Vector3(0, .05f, 305);
+            var view = new GameObject("House start camera");
+            SceneManager.MoveGameObjectToScene(view, scene);
+            view.tag = "MainCamera";
+            view.transform.position = spawn.transform.position + Vector3.up * 1.65f;
+            var camera = view.AddComponent<Camera>();
+            camera.clearFlags = CameraClearFlags.SolidColor;
+            camera.backgroundColor = Color.black;
+            camera.nearClipPlane = .1f;
+            camera.farClipPlane = 1000;
+            view.AddComponent<AudioListener>();
+            // The highway is not loaded when continuing from the house checkpoint.
+            var boundary = new GameObject("House start boundary");
+            SceneManager.MoveGameObjectToScene(boundary, scene);
+            boundary.transform.position = new Vector3(0, 2.5f, 299.5f);
+            boundary.AddComponent<BoxCollider>().size = new Vector3(10, 5, 1);
+        }
 
         public async UniTask ChangeLocationAsync(string scenePath)
         {
@@ -170,6 +247,9 @@ namespace Memories.Bootstrap
 
         private void BindDoors(Scene scene, LocationLifetimeScope scope)
         {
+            foreach (var root in scene.GetRootGameObjects())
+                foreach (var pickup in root.GetComponentsInChildren<QuestItemPickup>(true))
+                    pickup.Initialize(scope.Container.Resolve<QuestInventory>());
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var door in root.GetComponentsInChildren<CourtyardDoor>(true))
                     door.Initialize(scope.Container.Resolve<PlayerMotor>(),

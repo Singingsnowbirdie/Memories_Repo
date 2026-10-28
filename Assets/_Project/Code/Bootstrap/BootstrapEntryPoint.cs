@@ -17,6 +17,6 @@ namespace Memories.Bootstrap
             this.locationPath = locationPath;
         }
 
-        public void Start() => session.StartAsync(locationPath, application.Token).Forget(Debug.LogException);
+        public void Start() => session.StartSavedGameAsync(locationPath, application.Token).Forget(Debug.LogException);
     }
 }
