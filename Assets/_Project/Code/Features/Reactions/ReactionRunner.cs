@@ -19,12 +19,13 @@ namespace Memories.Gameplay.Reactions
         private readonly ILocationTransition locations;
         private readonly QuestInventory inventory;
         private readonly CustomVariableStore variables;
+        private readonly ReactionObjectBinding[] objectBindings;
         private CancellationTokenSource playback;
         private bool fired;
         public bool IsRunning => playback != null;
         public ReactionRunner(StoryTextPresenter texts, MemoryPresenter memories, UnityEngine.Object owner,
-            ILocationTransition locations = null, QuestInventory inventory = null, CustomVariableStore variables = null)
-        { this.texts = texts; this.memories = memories; this.owner = owner; this.locations = locations; this.inventory = inventory; this.variables = variables; }
+            ILocationTransition locations = null, QuestInventory inventory = null, CustomVariableStore variables = null, ReactionObjectBinding[] objectBindings = null)
+        { this.texts = texts; this.memories = memories; this.owner = owner; this.locations = locations; this.inventory = inventory; this.variables = variables; this.objectBindings = objectBindings; }
         public bool CanRun(ReactionGraph graph) => graph != null && !IsRunning &&
             !(graph.RunOnce && fired) && texts != null && memories != null && memories.CanStartPlayback;
         public bool TryRun(ReactionGraph graph)
@@ -34,14 +35,19 @@ namespace Memories.Gameplay.Reactions
             { Debug.LogWarning("Цепочка реакций не запущена: " + error, owner); return false; }
             if (inventory == null && graph.nodes.OfType<ReactionConditionNode>().Any(condition => condition.RequiresInventory))
             { Debug.LogWarning("Для проверки предмета нужен инвентарь игрока.", owner); return false; }
-            if (variables == null && graph.nodes.OfType<ReactionConditionNode>().Any(condition => condition.Kind == ReactionConditionKind.CustomVariable))
+            if (variables == null && (graph.nodes.OfType<ReactionConditionNode>().Any(condition => condition.Kind == ReactionConditionKind.CustomVariable) ||
+                actions.Any(action => action.Kind == ReactionKind.SetCustomVariable)))
             { Debug.LogWarning("Хранилище кастомных переменных не подключено.", owner); return false; }
             foreach (var action in actions)
             {
-                if (action.Kind == ReactionKind.RevealPhoto && !(owner is PhotoMemory)) return false;
+                if (action.Kind == ReactionKind.CustomReaction && !CustomReaction.TryFind(owner, out _))
+                { Debug.LogWarning("На объекте нужен ровно один включённый компонент CustomReaction.", owner); return false; }
                 if (action.Kind == ReactionKind.ChangeLocation &&
                     (locations == null || !locations.CanChangeLocation(action.LocationScenePath))) return false;
             }
+            foreach (var activity in actions.Where(action => action.Kind == ReactionKind.ObjectActivity))
+                if (!ReactionObjectBinding.TryResolve(objectBindings, activity.ObjectKey, out _))
+                { Debug.LogWarning("Не назначен объект графа или имя повторяется: " + activity.ObjectKey, owner); return false; }
             fired = true;
             playback = new CancellationTokenSource();
             RunAsync(graph, playback).Forget();
@@ -64,8 +70,22 @@ namespace Memories.Gameplay.Reactions
                         continue;
                     }
                     var action = (ReactionNode)node;
-                    if (action.Kind == ReactionKind.RevealPhoto)
-                        ((global::Memories.Gameplay.Interaction.PhotoMemory)owner).Remember();
+                    if (action.Kind == ReactionKind.ObjectActivity)
+                    {
+                        if (!ReactionObjectBinding.TryResolve(objectBindings, action.ObjectKey, out var target))
+                            throw new InvalidOperationException("Объект графа недоступен: " + action.ObjectKey);
+                        target.SetActive(action.Active);
+                        node = ReactionGraph.Next(node);
+                        continue;
+                    }
+                    if (action.Kind == ReactionKind.CustomReaction)
+                    {
+                        if (!CustomReaction.TryFind(owner, out var customReaction))
+                            throw new InvalidOperationException("Компонент CustomReaction недоступен на объекте.");
+                        customReaction.Execute();
+                    }
+                    else if (action.Kind == ReactionKind.SetCustomVariable)
+                        variables.Set(action.VariableBank, action.VariableId, action.VariableValue);
                     else if (action.Kind == ReactionKind.StoryText)
                         await texts.ShowAsync(action.TextGraph, source.Token);
                     else if (action.Kind == ReactionKind.ChangeLocation)

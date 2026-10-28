@@ -34,7 +34,10 @@ MonoBehaviour:
     - _fieldName: ifPresent
       _node: {fileID: -5747186566811881828}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections: []
+      connections:
+      - fieldName: previous
+        node: {fileID: -601569816509505848}
+        reroutePoints: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -136,6 +139,11 @@ MonoBehaviour:
   memoryGraph: {fileID: 0}
   memoryId: 
   locationScenePath: 
+  variableBank: {fileID: 0}
+  variableId: 
+  variableValue: 1
+  objectKey: 
+  active: 1
 --- !u!114 &-601569816509505848
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,6 +166,9 @@ MonoBehaviour:
       _node: {fileID: -601569816509505848}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
+      - fieldName: ifPresent
+        node: {fileID: -5747186566811881828}
+        reroutePoints: []
       - fieldName: next
         node: {fileID: -2126413813324113773}
         reroutePoints: []
@@ -183,3 +194,4 @@ MonoBehaviour:
   - {fileID: -2126413813324113773}
   - {fileID: -601569816509505848}
   - {fileID: -5747186566811881828}
+  objectKeys: []

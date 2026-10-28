@@ -67,7 +67,9 @@ namespace Memories.Editor
             NodeEditorGUILayout.PortField(new GUIContent("Вход"), target.GetInputPort("previous"));
             NodeEditorGUILayout.PortField(new GUIContent("Далее"), target.GetOutputPort("next"));
             var kind = serializedObject.FindProperty("kind");
-            kind.enumValueIndex = EditorGUILayout.Popup("Действие", kind.enumValueIndex, new[] { "Показать текст", "Показать воспоминание", "Перейти в локацию", "Вспомнить фотографию" });
+            EditorGUILayout.LabelField("Действие");
+            kind.enumValueIndex = EditorGUILayout.Popup(kind.enumValueIndex, new[] { "Показать текст", "Показать воспоминание", "Перейти в локацию", "Запустить реакцию объекта", "Установить кастомную переменную", "Активность объекта" });
+            EditorGUILayout.Space(8);
             if (kind.enumValueIndex == 0)
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("textGraph"), new GUIContent("Граф текста"));
             else if (kind.enumValueIndex == 1)
@@ -84,7 +86,58 @@ namespace Memories.Editor
                 if (EditorGUI.EndChangeCheck()) path.stringValue = scene == null ? "" : AssetDatabase.GetAssetPath(scene);
                 EditorGUILayout.HelpBox("Переход завершает цепочку. Сцена должна быть включена в Build Settings.", MessageType.Info);
             }
-            else EditorGUILayout.HelpBox("Для PhotoMemory: сохраняет воспоминание, проявляет фотографию и включает связанного персонажа. Следующая реакция запускается сразу.", MessageType.Info);
+            else if (kind.enumValueIndex == 4)
+            {
+                var bankProperty = serializedObject.FindProperty("variableBank");
+                EditorGUILayout.LabelField("Банк переменных");
+                EditorGUILayout.PropertyField(bankProperty, GUIContent.none);
+                EditorGUILayout.Space(6);
+                var bank = bankProperty.objectReferenceValue as CustomVariableBank;
+                if (bank != null)
+                {
+                    var id = serializedObject.FindProperty("variableId");
+                    var names = new string[bank.Variables.Count + 1];
+                    names[0] = string.IsNullOrEmpty(id.stringValue) ? "Выберите переменную" : "Переменная не найдена";
+                    int selected = 0;
+                    for (int i = 0; i < bank.Variables.Count; i++)
+                    {
+                        var variable = bank.Variables[i];
+                        names[i + 1] = (i + 1) + ". " + variable.Name;
+                        if (variable.Id == id.stringValue) selected = i + 1;
+                    }
+                    EditorGUILayout.LabelField("Переменная");
+                    EditorGUI.BeginChangeCheck();
+                    int chosen = EditorGUILayout.Popup(selected, names);
+                    if (EditorGUI.EndChangeCheck()) id.stringValue = chosen == 0 ? "" : bank.Variables[chosen - 1].Id;
+                    EditorGUILayout.Space(4);
+                    if (GUILayout.Button("Редактировать банк")) Selection.activeObject = bank;
+                }
+                else EditorGUILayout.HelpBox("Создайте банк через Assets → Create → Memories → Custom Variable Bank или назначьте готовый.", MessageType.Info);
+                EditorGUILayout.Space(8);
+                EditorGUILayout.LabelField("Значение");
+                var value = serializedObject.FindProperty("variableValue");
+                value.boolValue = EditorGUILayout.Popup(value.boolValue ? 1 : 0, new[] { "Нет", "Да" }) == 1;
+            }
+            else if (kind.enumValueIndex == 5)
+            {
+                var graph = (ReactionGraph)target.graph;
+                var key = serializedObject.FindProperty("objectKey");
+                var names = new string[graph.ObjectKeys.Count + 1];
+                names[0] = string.IsNullOrEmpty(key.stringValue) ? "Выберите объект" : "Не найден: " + key.stringValue;
+                int selected = 0;
+                for (int i = 0; i < graph.ObjectKeys.Count; i++)
+                { names[i + 1] = graph.ObjectKeys[i]; if (names[i + 1] == key.stringValue) selected = i + 1; }
+                EditorGUILayout.LabelField("Объект");
+                EditorGUI.BeginChangeCheck();
+                int chosen = EditorGUILayout.Popup(selected, names);
+                if (EditorGUI.EndChangeCheck()) key.stringValue = chosen == 0 ? "" : names[chosen];
+                if (GUILayout.Button("Настроить имена объектов")) Selection.activeObject = graph;
+                EditorGUILayout.Space(8);
+                EditorGUILayout.LabelField("Активность");
+                var active = serializedObject.FindProperty("active");
+                active.boolValue = EditorGUILayout.Popup(active.boolValue ? 0 : 1, new[] { "Включить", "Выключить" }) == 0;
+            }
+            else EditorGUILayout.HelpBox("Запускает включённый компонент CustomReaction на том же объекте, который запустил граф. Нужен ровно один такой компонент. Следующая реакция запускается сразу.", MessageType.Info);
             serializedObject.ApplyModifiedProperties();
             if (!((ReactionNode)target).Validate(out var error)) EditorGUILayout.HelpBox(error, MessageType.Warning);
         }
@@ -160,6 +213,10 @@ namespace Memories.Editor
         public override void OnInspectorGUI()
         {
             var graph = (ReactionGraph)target;
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("objectKeys"), new GUIContent("Имена объектов"), true);
+            EditorGUILayout.HelpBox("Задайте уникальные имена. Ссылки на объекты сцены назначаются в разделе «Объекты графа» на запускающем компоненте. При переименовании обновите ноды и привязки.", MessageType.Info);
+            serializedObject.ApplyModifiedProperties();
             if (GUILayout.Button("Открыть граф реакций")) NodeEditorWindow.Open(graph);
             EditorGUILayout.HelpBox("Настройте повторяемость в ноде «Начало». Реакции выполняются последовательно; каждая ждёт завершения предыдущей.", MessageType.Info);
             if (graph.TryGetSequence(out var actions, out var error))
@@ -177,6 +234,7 @@ namespace Memories.Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("prompt"), new GUIContent("Подсказка"));
             var graph = serializedObject.FindProperty("graph");
             EditorGUILayout.PropertyField(graph, new GUIContent("Граф реакций"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("objectBindings"), new GUIContent("Объекты графа"), true);
             serializedObject.ApplyModifiedProperties();
             if (graph.objectReferenceValue is ReactionGraph asset)
             {
@@ -195,6 +253,7 @@ namespace Memories.Editor
             serializedObject.Update();
             var graph = serializedObject.FindProperty("graph");
             EditorGUILayout.PropertyField(graph, new GUIContent("Граф реакций"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("objectBindings"), new GUIContent("Объекты графа"), true);
             serializedObject.ApplyModifiedProperties();
             if (graph.objectReferenceValue is ReactionGraph asset)
             {

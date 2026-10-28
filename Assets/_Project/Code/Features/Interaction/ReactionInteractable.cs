@@ -12,6 +12,7 @@ namespace Memories.Gameplay.Interaction
     {
         [SerializeField] private ReactionGraph graph;
         [SerializeField] private string prompt = "Взаимодействовать";
+        [SerializeField, InspectorName("Объекты графа")] private ReactionObjectBinding[] objectBindings = new ReactionObjectBinding[0];
         private ReactionRunner runner;
         public override string Prompt => prompt;
         public override bool CanInteract => base.CanInteract && runner != null && runner.CanRun(graph);
@@ -26,7 +27,7 @@ namespace Memories.Gameplay.Interaction
         public void Initialize(StoryTextPresenter texts, MemoryPresenter memories, ILocationTransition locations = null, QuestInventory inventory = null, CustomVariableStore variables = null)
         {
             runner?.Dispose();
-            runner = new ReactionRunner(texts, memories, this, locations, inventory, variables);
+            runner = new ReactionRunner(texts, memories, this, locations, inventory, variables, objectBindings);
         }
         public override void Interact()
         {

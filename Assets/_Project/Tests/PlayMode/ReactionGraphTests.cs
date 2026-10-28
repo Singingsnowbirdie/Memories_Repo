@@ -164,6 +164,68 @@ namespace Memories.Tests.PlayMode
                 await UniTask.WaitUntil(() => session.IsRunning);
                 var texts = session.LocationScope.Container.Resolve<StoryTextPresenter>();
                 var memories = session.LocationScope.Container.Resolve<MemoryPresenter>();
+                var variableGraph = Own(ScriptableObject.CreateInstance<ReactionGraph>());
+                var variableStart = Own(variableGraph.AddNode<ReactionStartNode>());
+                Set(variableStart, "runOnce", false);
+                var assignment = Own(variableGraph.AddNode<ReactionNode>());
+                var variableEnd = Own(variableGraph.AddNode<ReactionEndNode>());
+                Connect(variableStart, assignment); Connect(assignment, variableEnd);
+                var activity = Own(variableGraph.AddNode<ReactionNode>());
+                Set(activity, "kind", ReactionKind.ObjectActivity);
+                Set(variableGraph, "objectKeys", new List<string> { "Target" });
+                Set(activity, "objectKey", "Target");
+                assignment.GetOutputPort("next").ClearConnections();
+                Connect(assignment, activity); Connect(activity, variableEnd);
+                var activityTarget = Own(new GameObject("Activity target"));
+                var customOwner = Own(new GameObject("Custom reaction owner"));
+                var custom = customOwner.AddComponent<TestCustomReaction>();
+                var child = Own(new GameObject("Child reaction"));
+                child.transform.SetParent(customOwner.transform);
+                var childReaction = child.AddComponent<TestCustomReaction>();
+                Assert.IsTrue(CustomReaction.TryFind(customOwner.transform, out var found));
+                Assert.AreSame(custom, found, "Only the invoking object's components are eligible.");
+                var customNode = Own(variableGraph.AddNode<ReactionNode>());
+                Set(customNode, "kind", ReactionKind.CustomReaction);
+                activity.GetOutputPort("next").ClearConnections();
+                Connect(activity, customNode); Connect(customNode, variableEnd);
+                activityTarget.SetActive(false);
+                var bindings = new[] { new ReactionObjectBinding("Target", activityTarget) };
+                Assert.IsTrue(ReactionObjectBinding.TryResolve(bindings, "Target", out var resolved));
+                Assert.AreSame(activityTarget, resolved);
+                Assert.IsFalse(ReactionObjectBinding.TryResolve(new[] { bindings[0], bindings[0] }, "Target", out _));
+                var bank = Own(ScriptableObject.CreateInstance<CustomVariableBank>());
+                Set(bank, "bankId", "assignment-test");
+                var variable = new CustomVariableBank.Variable("Test flag");
+                Set(bank, "variables", new List<CustomVariableBank.Variable> { variable });
+                Set(assignment, "kind", ReactionKind.SetCustomVariable);
+                Set(assignment, "variableBank", bank);
+                Set(assignment, "variableId", variable.Id);
+                string saveKey = "Memories.Tests.Assignment." + System.Guid.NewGuid().ToString("N");
+                try
+                {
+                    var store = new CustomVariableStore(saveKey);
+                    using var runner = new ReactionRunner(texts, memories, customOwner.transform, variables: store, objectBindings: bindings);
+                    Assert.IsTrue(runner.TryRun(variableGraph));
+                    Assert.IsTrue(new CustomVariableStore(saveKey).Get(bank, variable.Id));
+                    Assert.IsTrue(activityTarget.activeSelf, "Inactive objects must be enabled through their binding.");
+                    Assert.AreEqual(1, custom.Calls);
+                    Assert.AreEqual(0, childReaction.Calls);
+                    Set(activity, "active", false);
+                    Set(assignment, "variableValue", false);
+                    Assert.IsTrue(runner.TryRun(variableGraph));
+                    Assert.IsFalse(new CustomVariableStore(saveKey).Get(bank, variable.Id));
+                    Assert.IsFalse(activityTarget.activeSelf);
+                    Assert.AreEqual(2, custom.Calls);
+                    custom.enabled = false;
+                    Assert.IsFalse(CustomReaction.TryFind(customOwner.transform, out _));
+                    custom.enabled = true;
+                    var duplicate = customOwner.AddComponent<TestCustomReaction>();
+                    Assert.IsFalse(CustomReaction.TryFind(customOwner.transform, out _));
+                    Object.DestroyImmediate(duplicate);
+                    Set(assignment, "variableId", "missing");
+                    Assert.IsFalse(variableGraph.TryGetSequence(out _, out _));
+                }
+                finally { CustomVariableStore.Clear(saveKey); }
                 var trigger = CreateTrigger(texts, memories);
                 Assert.IsTrue(trigger.TryActivate());
                 Assert.IsFalse(trigger.TryActivate(), "No overlapping activation.");
@@ -266,5 +328,14 @@ namespace Memories.Tests.PlayMode
             for (int i = owned.Count - 1; i >= 0; i--) if (owned[i] != null) Object.DestroyImmediate(owned[i]);
             owned.Clear();
         }
+    }
+}
+
+namespace Memories.Tests.PlayMode
+{
+    public sealed class TestCustomReaction : Memories.Gameplay.Reactions.CustomReaction
+    {
+        public int Calls { get; private set; }
+        public override void Execute() => Calls++;
     }
 }

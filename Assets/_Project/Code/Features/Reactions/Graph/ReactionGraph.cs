@@ -8,6 +8,9 @@ namespace Memories.Gameplay.Reactions
     [MovedFrom(true, sourceNamespace: "Memories.Gameplay.Triggers", sourceAssembly: "Memories.Gameplay", sourceClassName: "TriggerGraph")]
     public sealed class ReactionGraph : NodeGraph
     {
+        [UnityEngine.SerializeField] private List<string> objectKeys = new List<string>();
+        public IReadOnlyList<string> ObjectKeys => objectKeys;
+        public bool HasObjectKey(string key) => !string.IsNullOrWhiteSpace(key) && objectKeys.Count(value => value == key) == 1;
         public bool RunOnce => nodes.OfType<ReactionStartNode>().FirstOrDefault()?.RunOnce ?? true;
 
         public bool TryGetSequence(out List<ReactionNode> actions, out string error)

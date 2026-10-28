@@ -402,17 +402,7 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 720100002}
   m_SourcePrefab: {fileID: 100100000, guid: c395dbad9d580e140b88d9d5bee1d525, type: 3}
---- !u!4 &897885692239229432 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3788188743316085010, guid: c395dbad9d580e140b88d9d5bee1d525, type: 3}
-  m_PrefabInstance: {fileID: 4100448093041731818}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &6057819719780733850 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7851468638506531696, guid: c395dbad9d580e140b88d9d5bee1d525, type: 3}
-  m_PrefabInstance: {fileID: 4100448093041731818}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &720100000 stripped
+--- !u!1 &521923786872941378 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4600859385022727080, guid: c395dbad9d580e140b88d9d5bee1d525, type: 3}
   m_PrefabInstance: {fileID: 4100448093041731818}
@@ -423,21 +413,32 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 720100000}
+  m_GameObject: {fileID: 521923786872941378}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1ba68190f9594ee8b2fc0603419ed015, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Interaction.ReactionInteractable
   graph: {fileID: 11400000, guid: 443d1ba74a264ec788fd699a2a814371, type: 2}
-  prompt: Коснуться
+  prompt: "\u041A\u043E\u0441\u043D\u0443\u0442\u044C\u0441\u044F"
+  objectBindings: []
+--- !u!4 &897885692239229432 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3788188743316085010, guid: c395dbad9d580e140b88d9d5bee1d525, type: 3}
+  m_PrefabInstance: {fileID: 4100448093041731818}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6057819719780733850 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7851468638506531696, guid: c395dbad9d580e140b88d9d5bee1d525, type: 3}
+  m_PrefabInstance: {fileID: 4100448093041731818}
+  m_PrefabAsset: {fileID: 0}
 --- !u!65 &720100002
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 720100000}
+  m_GameObject: {fileID: 521923786872941378}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2

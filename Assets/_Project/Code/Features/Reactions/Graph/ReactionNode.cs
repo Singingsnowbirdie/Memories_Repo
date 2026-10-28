@@ -6,7 +6,7 @@ using XNode;
 
 namespace Memories.Gameplay.Reactions
 {
-    public enum ReactionKind { StoryText, Memory, ChangeLocation, RevealPhoto }
+    public enum ReactionKind { StoryText, Memory, ChangeLocation, CustomReaction, SetCustomVariable, ObjectActivity }
 
     [Node.CreateNodeMenu("Реакция"), Node.NodeWidth(320), Node.NodeTint("#284C53")]
     [MovedFrom(true, sourceNamespace: "Memories.Gameplay.Triggers", sourceAssembly: "Memories.Gameplay", sourceClassName: "TriggerActionNode")]
@@ -19,6 +19,16 @@ namespace Memories.Gameplay.Reactions
         [SerializeField] private MemoryGraph memoryGraph;
         [SerializeField] private string memoryId;
         [SerializeField] private string locationScenePath;
+        [SerializeField] private CustomVariableBank variableBank;
+        [SerializeField] private string variableId;
+        [SerializeField] private bool variableValue = true;
+        [SerializeField] private string objectKey;
+        [SerializeField] private bool active = true;
+        public string ObjectKey => objectKey;
+        public bool Active => active;
+        public CustomVariableBank VariableBank => variableBank;
+        public string VariableId => variableId;
+        public bool VariableValue => variableValue;
         public ReactionKind Kind => kind;
         public StoryTextGraph TextGraph => textGraph;
         public MemoryGraph MemoryGraph => memoryGraph;
@@ -30,7 +40,19 @@ namespace Memories.Gameplay.Reactions
         public bool Validate(out string error)
         {
             error = null;
-            if (kind == ReactionKind.RevealPhoto) return true;
+            if (kind == ReactionKind.ObjectActivity)
+            {
+                if (graph is ReactionGraph reaction && reaction.HasObjectKey(objectKey)) return true;
+                error = "Выберите объект из списка объектов графа.";
+                return false;
+            }
+            if (kind == ReactionKind.SetCustomVariable)
+            {
+                if (variableBank != null && variableBank.Find(variableId) != null) return true;
+                error = "Выберите существующую переменную из банка.";
+                return false;
+            }
+            if (kind == ReactionKind.CustomReaction) return true;
             if (kind == ReactionKind.ChangeLocation)
             {
                 if (string.IsNullOrWhiteSpace(locationScenePath) || !locationScenePath.EndsWith(".unity"))

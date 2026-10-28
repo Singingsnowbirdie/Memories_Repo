@@ -63,6 +63,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4691146438004842716, guid: 042a531d5c131394abb1419b9823cb73, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7887096858770726069}
+    - targetCorrespondingSourceObject: {fileID: 4691146438004842716, guid: 042a531d5c131394abb1419b9823cb73, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7887096858770726070}
+    - targetCorrespondingSourceObject: {fileID: 4691146438004842716, guid: 042a531d5c131394abb1419b9823cb73, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5403512807112765024}
   m_SourcePrefab: {fileID: 100100000, guid: 042a531d5c131394abb1419b9823cb73, type: 3}
 --- !u!1 &2938097339736585005 stripped
 GameObject:
@@ -81,13 +87,49 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7714574537d6a7649a7ce9a0cc199f19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Interaction.PhotoMemory
-  photoRenderer: {fileID: 3730893120060740344}
-  materialIndex: 1
-  revealShader: {fileID: 4800000, guid: 01aa63326b3c951498296f626c87fee1, type: 3}
   rememberedWoman: {fileID: 0}
   interactionGraph: {fileID: 11400000, guid: e34827ddea705464fa76ad9dfc12df2e, type: 2}
   variableBank: {fileID: 11400000, guid: 1e3cd4cc4f3341b080b5d2fd69506a3f, type: 2}
   revealedVariableId: a658183a452d4c2b9ef92252e09264ec
+  objectBindings:
+  - key: "\u0414\u0435\u0432\u0443\u0448\u043A\u0430"
+    target: {fileID: 0}
+--- !u!114 &7887096858770726070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2938097339736585005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93e78b4f09c544699f88e3f4e3311c6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.RevealPhotoReaction
+  photoRenderer: {fileID: 3730893120060740344}
+  materialIndex: 1
+  revealShader: {fileID: 4800000, guid: 01aa63326b3c951498296f626c87fee1, type: 3}
+--- !u!65 &5403512807112765024
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2938097339736585005}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.29756746, y: 0.41129932, z: 0.0367092}
+  m_Center: {x: 0.0000000372529, y: 0.0010275096, z: 0.007871509}
 --- !u!23 &3730893120060740344 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 6492696033715388681, guid: 042a531d5c131394abb1419b9823cb73, type: 3}
