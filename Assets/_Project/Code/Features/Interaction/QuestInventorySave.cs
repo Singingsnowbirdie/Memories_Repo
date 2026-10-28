@@ -18,10 +18,11 @@ namespace Memories.Gameplay.Interaction
         private readonly string key;
         private readonly List<string> unresolved = new List<string>();
 
-        public QuestInventorySave(QuestInventory inventory, IEnumerable<QuestItem> catalog, string key = DefaultKey)
+        public QuestInventorySave(QuestInventory inventory, IEnumerable<QuestItem> catalog, string key = DefaultKey, bool persistProgress = true)
         {
             this.inventory = inventory;
             this.key = key;
+            if (!persistProgress) return;
             var itemsById = new Dictionary<string, QuestItem>(StringComparer.Ordinal);
             foreach (var item in catalog)
                 if (item != null && item.IsValid) itemsById[item.Id] = item;

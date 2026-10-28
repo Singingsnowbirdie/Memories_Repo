@@ -21,6 +21,17 @@ namespace Memories.Bootstrap
 #endif
 
         public bool StartAutomatically { get => startAutomatically; set => startAutomatically = value; }
+        public bool PersistProgress
+        {
+            get
+            {
+#if UNITY_EDITOR
+                return !UseOpenLocationForEditorPlay;
+#else
+                return true;
+#endif
+            }
+        }
         internal TestLocationLauncher TestLauncher => GetComponent<TestLocationLauncher>();
         public System.Collections.Generic.IReadOnlyList<string> AdditionalLocationScenes =>
             TestLauncher != null ? System.Array.Empty<string>() : additionalLocationScenes;

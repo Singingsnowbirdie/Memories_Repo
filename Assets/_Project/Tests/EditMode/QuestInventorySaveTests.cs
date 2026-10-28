@@ -37,6 +37,23 @@ namespace Memories.Tests.EditMode
         }
 
         [Test]
+        public void TemporarySessionIgnoresAndPreservesExistingSave()
+        {
+            var savedInventory = new QuestInventory();
+            using (var save = new QuestInventorySave(savedInventory, new[] { item }, key))
+                savedInventory.TryAdd(item);
+            string before = PlayerPrefs.GetString(key);
+            var temporary = new QuestInventory();
+            using (var save = new QuestInventorySave(temporary, new[] { item }, key, persistProgress: false))
+            {
+                Assert.IsEmpty(temporary.Items);
+                Assert.IsTrue(temporary.TryAdd(item));
+                Assert.IsTrue(temporary.Contains(item.Id));
+            }
+            Assert.AreEqual(before, PlayerPrefs.GetString(key));
+        }
+
+        [Test]
         public void PickupIsSavedImmediatelyAndRestoredFromCurrentCatalog()
         {
             var inventory = new QuestInventory();

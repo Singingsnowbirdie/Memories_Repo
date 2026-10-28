@@ -11,10 +11,13 @@ namespace Memories.Gameplay.Reactions
         [Serializable] private sealed class SaveData { public List<Entry> entries = new List<Entry>(); }
         private readonly Dictionary<string, bool> values = new Dictionary<string, bool>();
         private readonly string saveKey;
+        public bool PersistProgress { get; }
 
-        public CustomVariableStore(string saveKey = DefaultKey)
+        public CustomVariableStore(string saveKey = DefaultKey, bool persistProgress = true)
         {
             this.saveKey = saveKey;
+            PersistProgress = persistProgress;
+            if (!persistProgress) return;
             if (!PlayerPrefs.HasKey(saveKey)) return;
             try
             {
@@ -42,6 +45,7 @@ namespace Memories.Gameplay.Reactions
         {
             RequireVariable(bank, id);
             values[bank.Id + ":" + id] = value;
+            if (!PersistProgress) return;
             var data = new SaveData();
             foreach (var pair in values) data.entries.Add(new Entry { id = pair.Key, value = pair.Value });
             PlayerPrefs.SetString(saveKey, JsonUtility.ToJson(data));

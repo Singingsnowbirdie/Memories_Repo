@@ -33,7 +33,7 @@ namespace Memories.Gameplay.Interaction
         {
             texts = presenter;
             this.variables = variables ?? new CustomVariableStore();
-            if (PlayerPrefs.HasKey(SaveKey))
+            if (this.variables.PersistProgress && PlayerPrefs.HasKey(SaveKey))
             {
                 if (!this.variables.HasSavedValue(variableBank, revealedVariableId))
                     this.variables.Set(variableBank, revealedVariableId, PlayerPrefs.GetInt(SaveKey, 0) == 1);
@@ -41,18 +41,7 @@ namespace Memories.Gameplay.Interaction
             }
             runner?.Dispose();
             runner = new ReactionRunner(presenter, memories, this, inventory: inventory, variables: this.variables, objectBindings: objectBindings);
-        }
-
-        private void Awake()
-        {
-            variables ??= new CustomVariableStore();
-            // Migrate existing photo progress once; subsequent state lives in the variable bank.
-            if (PlayerPrefs.HasKey(SaveKey))
-            {
-                if (!variables.HasSavedValue(variableBank, revealedVariableId))
-                    variables.Set(variableBank, revealedVariableId, PlayerPrefs.GetInt(SaveKey, 0) == 1);
-            }
-            revealed = variables.Get(variableBank, revealedVariableId);
+            revealed = this.variables.Get(variableBank, revealedVariableId);
             UpdateWomanVisibility();
             GetComponent<RevealPhotoReaction>()?.Initialize(revealed);
         }

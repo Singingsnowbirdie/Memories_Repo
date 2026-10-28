@@ -13,12 +13,13 @@ namespace Memories.Bootstrap
     {
         protected override void Configure(IContainerBuilder builder)
         {
+            bool persistProgress = ((AppLifetimeScope)parentReference.Object).PersistProgress;
             builder.Register<SessionContext>(Lifetime.Singleton);
             builder.Register<MemoryCollection>(Lifetime.Singleton);
             builder.Register<QuestInventory>(Lifetime.Singleton);
-            builder.Register<CustomVariableStore>(_ => new CustomVariableStore(), Lifetime.Singleton);
+            builder.Register<CustomVariableStore>(_ => new CustomVariableStore(persistProgress: persistProgress), Lifetime.Singleton);
             builder.Register<QuestInventorySave>(container => new QuestInventorySave(
-                container.Resolve<QuestInventory>(), QuestItemCatalog.LoadItems()), Lifetime.Singleton)
+                container.Resolve<QuestInventory>(), QuestItemCatalog.LoadItems(), persistProgress: persistProgress), Lifetime.Singleton)
                 .AsSelf().AsImplementedInterfaces();
             builder.RegisterBuildCallback(container =>
             {

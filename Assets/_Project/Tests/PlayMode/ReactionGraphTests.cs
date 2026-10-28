@@ -112,6 +112,29 @@ namespace Memories.Tests.PlayMode
         }
 
         [Test]
+        public void TemporaryVariablesIgnoreAndPreserveSavedProgress()
+        {
+            string key = "Memories.Tests.Variables." + System.Guid.NewGuid().ToString("N");
+            try
+            {
+                var bank = Own(ScriptableObject.CreateInstance<CustomVariableBank>());
+                Set(bank, "bankId", "temporary-test");
+                var variable = new CustomVariableBank.Variable("Flag");
+                Set(bank, "variables", new List<CustomVariableBank.Variable> { variable });
+                new CustomVariableStore(key).Set(bank, variable.Id, true);
+                string before = PlayerPrefs.GetString(key);
+                var temporary = new CustomVariableStore(key, persistProgress: false);
+                Assert.IsFalse(temporary.Get(bank, variable.Id));
+                temporary.Set(bank, variable.Id, true);
+                Assert.IsTrue(temporary.Get(bank, variable.Id));
+                temporary.Set(bank, variable.Id, false);
+                Assert.AreEqual(before, PlayerPrefs.GetString(key));
+                Assert.IsTrue(new CustomVariableStore(key).Get(bank, variable.Id));
+            }
+            finally { CustomVariableStore.Clear(key); }
+        }
+
+        [Test]
         public void CustomVariableConditionPersistsValuesAndSurvivesRename()
         {
             string key = "Memories.Tests.Variables." + System.Guid.NewGuid().ToString("N");

@@ -74,11 +74,14 @@ namespace Memories.Bootstrap
             if (loading == null) return false;
             trackHouseCheckpoint = false;
             busy = true;
-            progress.Reset();
             SessionScope.Container.Resolve<QuestInventorySave>().Dispose();
-            QuestInventorySave.Clear();
-            CustomVariableStore.Clear();
-            PhotoMemory.ResetProgress();
+            if (applicationScope.PersistProgress)
+            {
+                progress.Reset();
+                QuestInventorySave.Clear();
+                CustomVariableStore.Clear();
+                PhotoMemory.ResetProgress();
+            }
             return true;
         }
 
