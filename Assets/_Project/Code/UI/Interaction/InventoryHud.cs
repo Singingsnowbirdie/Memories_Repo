@@ -12,6 +12,8 @@ namespace Memories.Gameplay.UI
         private Canvas canvas;
         private RectTransform panel;
         private Font font;
+        private const float SlideDuration = .8f;
+        private float slideProgress;
         private readonly List<GameObject> rows = new List<GameObject>();
 
         public void Initialize(QuestInventory inventory, GameplayModeState mode)
@@ -29,7 +31,7 @@ namespace Memories.Gameplay.UI
             panel = Rect(transform, "Inventory panel", new Vector2(260, 90));
             panel.anchorMin = panel.anchorMax = new Vector2(0, .5f);
             panel.pivot = new Vector2(0, .5f);
-            panel.anchoredPosition = new Vector2(24, 0);
+            panel.anchoredPosition = new Vector2(-panel.sizeDelta.x, 0);
             var background = panel.gameObject.AddComponent<Image>();
             background.color = new Color(0, 0, 0, .5f);
             background.raycastTarget = false;
@@ -39,21 +41,28 @@ namespace Memories.Gameplay.UI
 
         private void LateUpdate()
         {
-            if (canvas != null) canvas.enabled = mode.Mode == GameplayMode.Playing;
+            if (canvas == null) return;
+            canvas.enabled = inventory.Items.Count > 0 && mode.Mode == GameplayMode.Playing;
+            if (!canvas.enabled) return;
+            slideProgress = Mathf.Min(1, slideProgress + Time.deltaTime / SlideDuration);
+            panel.anchoredPosition = new Vector2(
+                Mathf.Lerp(-panel.sizeDelta.x, 24, Mathf.SmoothStep(0, 1, slideProgress)), 0);
         }
 
         private void Refresh()
         {
             foreach (var row in rows) { row.SetActive(false); Destroy(row); }
             rows.Clear();
+            canvas.enabled = inventory.Items.Count > 0 && mode.Mode == GameplayMode.Playing;
+            if (inventory.Items.Count == 0)
+            {
+                slideProgress = 0;
+                panel.anchoredPosition = new Vector2(-panel.sizeDelta.x, 0);
+                return;
+            }
             float rowHeight = Mathf.Min(56, 560f / Mathf.Max(1, inventory.Items.Count));
             panel.sizeDelta = new Vector2(260, 44 + Mathf.Max(1, inventory.Items.Count) * rowHeight);
             Label(panel, "Инвентарь", new Vector2(12, -8), new Vector2(236, 30), 22);
-            if (inventory.Items.Count == 0)
-            {
-                Label(panel, "Пока пусто", new Vector2(12, -44), new Vector2(236, rowHeight), 18);
-                return;
-            }
             for (int i = 0; i < inventory.Items.Count; i++)
             {
                 var item = inventory.Items[i];

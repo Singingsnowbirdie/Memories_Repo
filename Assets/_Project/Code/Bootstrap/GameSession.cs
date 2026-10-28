@@ -74,6 +74,8 @@ namespace Memories.Bootstrap
             trackHouseCheckpoint = false;
             busy = true;
             progress.Reset();
+            SessionScope.Container.Resolve<QuestInventorySave>().Dispose();
+            QuestInventorySave.Clear();
             return true;
         }
 
