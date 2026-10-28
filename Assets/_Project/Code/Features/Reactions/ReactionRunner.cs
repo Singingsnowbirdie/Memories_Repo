@@ -30,6 +30,9 @@ namespace Memories.Gameplay.Reactions
             if (!graph.TryGetSequence(out var actions, out var error))
             { Debug.LogWarning("Цепочка реакций не запущена: " + error, owner); return false; }
             foreach (var action in actions)
+                if (action.Kind == ReactionKind.RevealPhoto && !(owner is global::Memories.Gameplay.Interaction.PhotoMemory))
+                    return false;
+            foreach (var action in actions)
                 if (action.Kind == ReactionKind.ChangeLocation &&
                     (locations == null || !locations.CanChangeLocation(action.LocationScenePath))) return false;
             fired = true;
@@ -47,7 +50,9 @@ namespace Memories.Gameplay.Reactions
                 foreach (var action in actions)
                 {
                     source.Token.ThrowIfCancellationRequested();
-                    if (action.Kind == ReactionKind.StoryText)
+                    if (action.Kind == ReactionKind.RevealPhoto)
+                        ((global::Memories.Gameplay.Interaction.PhotoMemory)owner).Remember();
+                    else if (action.Kind == ReactionKind.StoryText)
                         await texts.ShowAsync(action.TextGraph, source.Token);
                     else if (action.Kind == ReactionKind.ChangeLocation)
                     {

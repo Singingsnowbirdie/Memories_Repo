@@ -66,7 +66,7 @@ namespace Memories.Editor
             NodeEditorGUILayout.PortField(new GUIContent("Вход"), target.GetInputPort("previous"));
             NodeEditorGUILayout.PortField(new GUIContent("Далее"), target.GetOutputPort("next"));
             var kind = serializedObject.FindProperty("kind");
-            kind.enumValueIndex = EditorGUILayout.Popup("Действие", kind.enumValueIndex, new[] { "Показать текст", "Показать воспоминание", "Перейти в локацию" });
+            kind.enumValueIndex = EditorGUILayout.Popup("Действие", kind.enumValueIndex, new[] { "Показать текст", "Показать воспоминание", "Перейти в локацию", "Вспомнить фотографию" });
             if (kind.enumValueIndex == 0)
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("textGraph"), new GUIContent("Граф текста"));
             else if (kind.enumValueIndex == 1)
@@ -74,7 +74,7 @@ namespace Memories.Editor
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("memoryGraph"), new GUIContent("Граф воспоминания"));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("memoryId"), new GUIContent("ID воспоминания"));
             }
-            else
+            else if (kind.enumValueIndex == 2)
             {
                 var path = serializedObject.FindProperty("locationScenePath");
                 var current = AssetDatabase.LoadAssetAtPath<SceneAsset>(path.stringValue);
@@ -83,6 +83,7 @@ namespace Memories.Editor
                 if (EditorGUI.EndChangeCheck()) path.stringValue = scene == null ? "" : AssetDatabase.GetAssetPath(scene);
                 EditorGUILayout.HelpBox("Переход завершает цепочку. Сцена должна быть включена в Build Settings.", MessageType.Info);
             }
+            else EditorGUILayout.HelpBox("Для PhotoMemory: сохраняет воспоминание, проявляет фотографию и включает связанного персонажа. Следующая реакция запускается сразу.", MessageType.Info);
             serializedObject.ApplyModifiedProperties();
             if (!((ReactionNode)target).Validate(out var error)) EditorGUILayout.HelpBox(error, MessageType.Warning);
         }

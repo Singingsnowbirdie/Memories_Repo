@@ -6,7 +6,7 @@ using XNode;
 
 namespace Memories.Gameplay.Reactions
 {
-    public enum ReactionKind { StoryText, Memory, ChangeLocation }
+    public enum ReactionKind { StoryText, Memory, ChangeLocation, RevealPhoto }
 
     [Node.CreateNodeMenu("Реакция"), Node.NodeWidth(320)]
     [MovedFrom(true, sourceNamespace: "Memories.Gameplay.Triggers", sourceAssembly: "Memories.Gameplay", sourceClassName: "TriggerActionNode")]
@@ -30,6 +30,7 @@ namespace Memories.Gameplay.Reactions
         public bool Validate(out string error)
         {
             error = null;
+            if (kind == ReactionKind.RevealPhoto) return true;
             if (kind == ReactionKind.ChangeLocation)
             {
                 if (string.IsNullOrWhiteSpace(locationScenePath) || !locationScenePath.EndsWith(".unity"))
