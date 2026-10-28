@@ -4,6 +4,7 @@ using UnityEngine.InputSystem.UI;
 using VContainer;
 using VContainer.Unity;
 using Memories.Gameplay.Memories;
+using Memories.Gameplay.Interaction;
 
 namespace Memories.Bootstrap
 {
@@ -13,6 +14,7 @@ namespace Memories.Bootstrap
         {
             builder.Register<SessionContext>(Lifetime.Singleton);
             builder.Register<MemoryCollection>(Lifetime.Singleton);
+            builder.Register<QuestInventory>(Lifetime.Singleton);
             builder.RegisterBuildCallback(container =>
             {
                 container.Resolve<SessionContext>();

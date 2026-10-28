@@ -246,6 +246,9 @@ namespace Memories.Bootstrap
         private void BindDoors(Scene scene, LocationLifetimeScope scope)
         {
             foreach (var root in scene.GetRootGameObjects())
+                foreach (var pickup in root.GetComponentsInChildren<QuestItemPickup>(true))
+                    pickup.Initialize(scope.Container.Resolve<QuestInventory>());
+            foreach (var root in scene.GetRootGameObjects())
                 foreach (var door in root.GetComponentsInChildren<CourtyardDoor>(true))
                     door.Initialize(scope.Container.Resolve<PlayerMotor>(),
                         path => LoadConnectedSceneAsync(path, scene), EnterConnectedSceneAsync);

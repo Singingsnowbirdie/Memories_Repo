@@ -32,6 +32,13 @@ namespace Memories.Bootstrap
             }, Lifetime.Singleton);
             builder.Register<InteractionPresenter>(Lifetime.Singleton);
             builder.RegisterEntryPoint<InteractionEntryPoint>();
+            builder.RegisterBuildCallback(container =>
+            {
+                var hud = new GameObject("Inventory HUD", typeof(RectTransform));
+                hud.transform.SetParent(transform, false);
+                hud.AddComponent<InventoryHud>().Initialize(container.Resolve<QuestInventory>(),
+                    container.Resolve<GameplayModeState>());
+            });
             builder.Register<IStoryTextView>(container =>
             {
                 var window = new GameObject("Story text", typeof(RectTransform));
