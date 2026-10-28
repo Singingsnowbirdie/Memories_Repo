@@ -18,12 +18,13 @@ namespace Memories.Gameplay.Reactions
         private readonly UnityEngine.Object owner;
         private readonly ILocationTransition locations;
         private readonly QuestInventory inventory;
+        private readonly CustomVariableStore variables;
         private CancellationTokenSource playback;
         private bool fired;
         public bool IsRunning => playback != null;
         public ReactionRunner(StoryTextPresenter texts, MemoryPresenter memories, UnityEngine.Object owner,
-            ILocationTransition locations = null, QuestInventory inventory = null)
-        { this.texts = texts; this.memories = memories; this.owner = owner; this.locations = locations; this.inventory = inventory; }
+            ILocationTransition locations = null, QuestInventory inventory = null, CustomVariableStore variables = null)
+        { this.texts = texts; this.memories = memories; this.owner = owner; this.locations = locations; this.inventory = inventory; this.variables = variables; }
         public bool CanRun(ReactionGraph graph) => graph != null && !IsRunning &&
             !(graph.RunOnce && fired) && texts != null && memories != null && memories.CanStartPlayback;
         public bool TryRun(ReactionGraph graph)
@@ -33,6 +34,8 @@ namespace Memories.Gameplay.Reactions
             { Debug.LogWarning("Цепочка реакций не запущена: " + error, owner); return false; }
             if (inventory == null && graph.nodes.OfType<ReactionConditionNode>().Any(condition => condition.RequiresInventory))
             { Debug.LogWarning("Для проверки предмета нужен инвентарь игрока.", owner); return false; }
+            if (variables == null && graph.nodes.OfType<ReactionConditionNode>().Any(condition => condition.Kind == ReactionConditionKind.CustomVariable))
+            { Debug.LogWarning("Хранилище кастомных переменных не подключено.", owner); return false; }
             foreach (var action in actions)
             {
                 if (action.Kind == ReactionKind.RevealPhoto && !(owner is PhotoMemory)) return false;
@@ -57,7 +60,7 @@ namespace Memories.Gameplay.Reactions
                     source.Token.ThrowIfCancellationRequested();
                     if (node is ReactionConditionNode condition)
                     {
-                        node = ReactionGraph.Next(condition, condition.SelectOutput(inventory));
+                        node = ReactionGraph.Next(condition, condition.SelectOutput(inventory, variables));
                         continue;
                     }
                     var action = (ReactionNode)node;

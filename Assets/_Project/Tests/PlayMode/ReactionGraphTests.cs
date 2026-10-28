@@ -111,6 +111,44 @@ namespace Memories.Tests.PlayMode
             Assert.IsFalse(graph.TryGetSequence(out _, out _), "A missing item must be rejected.");
         }
 
+        [Test]
+        public void CustomVariableConditionPersistsValuesAndSurvivesRename()
+        {
+            string key = "Memories.Tests.Variables." + System.Guid.NewGuid().ToString("N");
+            try
+            {
+                var bank = Own(ScriptableObject.CreateInstance<CustomVariableBank>());
+                Set(bank, "bankId", "test-bank");
+                var variable = new CustomVariableBank.Variable("Door opened");
+                var variables = new List<CustomVariableBank.Variable> { variable };
+                Set(bank, "variables", variables);
+                var condition = Own(graph.AddNode<ReactionConditionNode>());
+                Set(condition, "kind", ReactionConditionKind.CustomVariable);
+                Set(condition, "variableBank", bank);
+                Set(condition, "variableId", variable.Id);
+                Assert.IsTrue(condition.Validate(out var error), error);
+                var store = new CustomVariableStore(key);
+                Assert.AreEqual("ifAbsent", condition.SelectOutput(null, variables: store));
+                store.Set(bank, variable.Id, true);
+                Set(variable, "name", "Renamed variable");
+                var restored = new CustomVariableStore(key);
+                Assert.AreEqual("ifPresent", condition.SelectOutput(null, variables: restored));
+                restored.Set(bank, variable.Id, false);
+                Assert.AreEqual("ifAbsent", condition.SelectOutput(null, variables: restored));
+                var otherBank = Own(ScriptableObject.CreateInstance<CustomVariableBank>());
+                Set(otherBank, "bankId", "other-bank");
+                Set(otherBank, "variables", variables);
+                Assert.IsFalse(restored.Get(otherBank, variable.Id), "Banks must have independent values.");
+                variables.Clear();
+                Assert.IsFalse(condition.Validate(out _), "Deleted variables must invalidate the condition.");
+                Assert.Throws<System.ArgumentException>(() => restored.Get(bank, variable.Id));
+                variables.Add(variable);
+                CustomVariableStore.Clear(key);
+                Assert.IsFalse(new CustomVariableStore(key).Get(bank, variable.Id));
+            }
+            finally { CustomVariableStore.Clear(key); }
+        }
+
         [UnityTest]
         public IEnumerator RunsInOrderRepeatsAndKeepsStatePerTrigger() => UniTask.ToCoroutine(async () =>
         {

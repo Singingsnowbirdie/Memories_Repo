@@ -21,10 +21,10 @@ namespace Memories.Gameplay.Triggers
         private bool fired;
         private ReactionRunner runner;
         public bool IsRunning => runner != null && runner.IsRunning;
-        public void Initialize(StoryTextPresenter texts, MemoryPresenter memories, ILocationTransition locations = null, QuestInventory inventory = null)
+        public void Initialize(StoryTextPresenter texts, MemoryPresenter memories, ILocationTransition locations = null, QuestInventory inventory = null, CustomVariableStore variables = null)
         {
             runner?.Dispose();
-            runner = new ReactionRunner(texts, memories, this, locations, inventory);
+            runner = new ReactionRunner(texts, memories, this, locations, inventory, variables);
         }
         public bool TryActivate()
         {

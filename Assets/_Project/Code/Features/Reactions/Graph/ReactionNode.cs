@@ -8,7 +8,7 @@ namespace Memories.Gameplay.Reactions
 {
     public enum ReactionKind { StoryText, Memory, ChangeLocation, RevealPhoto }
 
-    [Node.CreateNodeMenu("Реакция"), Node.NodeWidth(320)]
+    [Node.CreateNodeMenu("Реакция"), Node.NodeWidth(320), Node.NodeTint("#284C53")]
     [MovedFrom(true, sourceNamespace: "Memories.Gameplay.Triggers", sourceAssembly: "Memories.Gameplay", sourceClassName: "TriggerActionNode")]
     public sealed class ReactionNode : Node
     {

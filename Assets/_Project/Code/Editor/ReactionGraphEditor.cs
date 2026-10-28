@@ -99,15 +99,51 @@ namespace Memories.Editor
             serializedObject.Update();
             NodeEditorGUILayout.PortField(new GUIContent("Вход"), target.GetInputPort("previous"));
             var kind = serializedObject.FindProperty("kind");
-            kind.enumValueIndex = EditorGUILayout.Popup("Тип проверки", kind.enumValueIndex,
-                new[] { "Предмет в инвентаре" });
+            EditorGUILayout.Space(8);
+            EditorGUILayout.LabelField("Тип проверки");
+            kind.enumValueIndex = EditorGUILayout.Popup(kind.enumValueIndex,
+                new[] { "Предмет в инвентаре", "Значение кастомной переменной" });
+            EditorGUILayout.Space(8);
             if (kind.intValue == (int)ReactionConditionKind.InventoryItem)
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("item"), new GUIContent("Предмет"));
+            else if (kind.intValue == (int)ReactionConditionKind.CustomVariable)
+            {
+                var bankProperty = serializedObject.FindProperty("variableBank");
+                EditorGUILayout.LabelField("Банк переменных");
+                EditorGUILayout.PropertyField(bankProperty, GUIContent.none);
+                EditorGUILayout.Space(6);
+                var bank = bankProperty.objectReferenceValue as CustomVariableBank;
+                if (bank != null)
+                {
+                    var id = serializedObject.FindProperty("variableId");
+                    var names = new string[bank.Variables.Count + 1];
+                    names[0] = string.IsNullOrEmpty(id.stringValue) ? "Выберите переменную" : "Переменная не найдена";
+                    int selected = 0;
+                    for (int i = 0; i < bank.Variables.Count; i++)
+                    {
+                        var variable = bank.Variables[i];
+                        names[i + 1] = (i + 1) + ". " + variable.Name;
+                        if (variable.Id == id.stringValue) selected = i + 1;
+                    }
+                    EditorGUILayout.LabelField("Переменная");
+                    EditorGUI.BeginChangeCheck();
+                    int chosen = EditorGUILayout.Popup(selected, names);
+                    if (EditorGUI.EndChangeCheck()) id.stringValue = chosen == 0 ? "" : bank.Variables[chosen - 1].Id;
+                    EditorGUILayout.Space(4);
+                    if (GUILayout.Button("Редактировать банк")) Selection.activeObject = bank;
+                }
+                else EditorGUILayout.HelpBox("Создайте банк через Assets → Create → Memories → Custom Variable Bank или назначьте готовый.", MessageType.Info);
+            }
+            EditorGUILayout.Space(10);
             NodeEditorGUILayout.PortField(new GUIContent("Если да"), target.GetOutputPort("ifPresent"));
             NodeEditorGUILayout.PortField(new GUIContent("Если нет"), target.GetOutputPort("ifAbsent"));
             serializedObject.ApplyModifiedProperties();
             if (!((ReactionConditionNode)target).Validate(out var error))
+            {
+                EditorGUILayout.Space(8);
                 EditorGUILayout.HelpBox(error, MessageType.Warning);
+            }
+            EditorGUILayout.Space(4);
         }
     }
 

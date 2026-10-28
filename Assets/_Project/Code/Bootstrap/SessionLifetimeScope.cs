@@ -1,3 +1,4 @@
+using Memories.Gameplay.Reactions;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
@@ -15,6 +16,7 @@ namespace Memories.Bootstrap
             builder.Register<SessionContext>(Lifetime.Singleton);
             builder.Register<MemoryCollection>(Lifetime.Singleton);
             builder.Register<QuestInventory>(Lifetime.Singleton);
+            builder.Register<CustomVariableStore>(_ => new CustomVariableStore(), Lifetime.Singleton);
             builder.Register<QuestInventorySave>(container => new QuestInventorySave(
                 container.Resolve<QuestInventory>(), QuestItemCatalog.LoadItems()), Lifetime.Singleton)
                 .AsSelf().AsImplementedInterfaces();

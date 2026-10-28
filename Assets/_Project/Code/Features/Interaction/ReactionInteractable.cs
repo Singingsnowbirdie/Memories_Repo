@@ -23,10 +23,10 @@ namespace Memories.Gameplay.Interaction
             prompt = interactionPrompt;
         }
 
-        public void Initialize(StoryTextPresenter texts, MemoryPresenter memories, ILocationTransition locations = null, QuestInventory inventory = null)
+        public void Initialize(StoryTextPresenter texts, MemoryPresenter memories, ILocationTransition locations = null, QuestInventory inventory = null, CustomVariableStore variables = null)
         {
             runner?.Dispose();
-            runner = new ReactionRunner(texts, memories, this, locations, inventory);
+            runner = new ReactionRunner(texts, memories, this, locations, inventory, variables);
         }
         public override void Interact()
         {

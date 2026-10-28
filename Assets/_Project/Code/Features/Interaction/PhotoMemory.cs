@@ -13,8 +13,11 @@ namespace Memories.Gameplay.Interaction
         [SerializeField] private int materialIndex = 1;
         [SerializeField] private Shader revealShader;
         [SerializeField] private GameObject rememberedWoman;
-        [SerializeField] private ReactionGraph firstInteraction;
-        [SerializeField] private ReactionGraph repeatedInteraction;
+        [UnityEngine.Serialization.FormerlySerializedAs("firstInteraction")]
+        [SerializeField] private ReactionGraph interactionGraph;
+        [SerializeField] private CustomVariableBank variableBank;
+        [SerializeField] private string revealedVariableId;
+        private CustomVariableStore variables;
         private ReactionRunner runner;
         private StoryTextPresenter texts;
         private Material photoMaterial, blendMaterial;
@@ -23,9 +26,9 @@ namespace Memories.Gameplay.Interaction
         private Texture photo;
         private bool revealed;
         public override string Prompt => "Рассмотреть фотографию";
-        private ReactionGraph CurrentGraph => revealed ? repeatedInteraction : firstInteraction;
+        public bool IsRevealed => revealed;
         public override bool CanInteract => base.CanInteract && texts != null && !texts.IsPlaying &&
-            runner != null && runner.CanRun(CurrentGraph);
+            runner != null && runner.CanRun(interactionGraph);
 
         public static void ResetProgress()
         {
@@ -33,11 +36,18 @@ namespace Memories.Gameplay.Interaction
             PlayerPrefs.Save();
         }
 
-        public void Initialize(StoryTextPresenter presenter, MemoryPresenter memories, QuestInventory inventory = null)
+        public void Initialize(StoryTextPresenter presenter, MemoryPresenter memories, QuestInventory inventory = null, CustomVariableStore variables = null)
         {
             texts = presenter;
+            this.variables = variables ?? new CustomVariableStore();
+            if (PlayerPrefs.HasKey(SaveKey))
+            {
+                if (!this.variables.HasSavedValue(variableBank, revealedVariableId))
+                    this.variables.Set(variableBank, revealedVariableId, PlayerPrefs.GetInt(SaveKey, 0) == 1);
+                ResetProgress();
+            }
             runner?.Dispose();
-            runner = new ReactionRunner(presenter, memories, this, inventory: inventory);
+            runner = new ReactionRunner(presenter, memories, this, inventory: inventory, variables: this.variables);
         }
 
         private void Awake()
@@ -46,7 +56,14 @@ namespace Memories.Gameplay.Interaction
             original = materials[materialIndex];
             photoMaterial = new Material(original);
             photo = original.mainTexture;
-            revealed = PlayerPrefs.GetInt(SaveKey, 0) == 1;
+            variables ??= new CustomVariableStore();
+            // Migrate existing photo progress once; subsequent state lives in the variable bank.
+            if (PlayerPrefs.HasKey(SaveKey))
+            {
+                if (!variables.HasSavedValue(variableBank, revealedVariableId))
+                    variables.Set(variableBank, revealedVariableId, PlayerPrefs.GetInt(SaveKey, 0) == 1);
+            }
+            revealed = variables.Get(variableBank, revealedVariableId);
             UpdateWomanVisibility();
             materials[materialIndex] = photoMaterial;
             photoRenderer.sharedMaterials = materials;
@@ -63,15 +80,14 @@ namespace Memories.Gameplay.Interaction
 
         public override void Interact()
         {
-            if (CanInteract) runner.TryRun(CurrentGraph);
+            if (CanInteract) runner.TryRun(interactionGraph);
         }
 
         public void Remember()
         {
             if (revealed) return;
             revealed = true;
-            PlayerPrefs.SetInt(SaveKey, 1);
-            PlayerPrefs.Save();
+            variables.Set(variableBank, revealedVariableId, true);
             UpdateWomanVisibility();
             StartCoroutine(Reveal());
         }
