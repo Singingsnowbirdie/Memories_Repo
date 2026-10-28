@@ -15,7 +15,7 @@ namespace Memories.Editor
         {
             if (type == typeof(ReactionStartNode)) return "Начало";
             if (type == typeof(ReactionNode)) return "Реакция";
-            if (type == typeof(InventoryConditionNode)) return "Предмет в инвентаре";
+            if (type == typeof(ReactionConditionNode)) return "Условие";
             if (type == typeof(ReactionEndNode)) return "Конец";
             return null;
         }
@@ -90,21 +90,24 @@ namespace Memories.Editor
         }
     }
 
-    [CustomNodeEditor(typeof(InventoryConditionNode))]
-    public sealed class InventoryConditionNodeEditor : NodeEditor
+    [CustomNodeEditor(typeof(ReactionConditionNode))]
+    public sealed class ReactionConditionNodeEditor : NodeEditor
     {
-        public override void OnHeaderGUI() => GUILayout.Label("Предмет в инвентаре", NodeEditorResources.styles.nodeHeader, GUILayout.Height(30));
+        public override void OnHeaderGUI() => GUILayout.Label("Условие", NodeEditorResources.styles.nodeHeader, GUILayout.Height(30));
         public override void OnBodyGUI()
         {
             serializedObject.Update();
             NodeEditorGUILayout.PortField(new GUIContent("Вход"), target.GetInputPort("previous"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("item"), new GUIContent("Предмет"));
-            NodeEditorGUILayout.PortField(new GUIContent("если есть"), target.GetOutputPort("ifPresent"));
-            NodeEditorGUILayout.PortField(new GUIContent("если нет"), target.GetOutputPort("ifAbsent"));
+            var kind = serializedObject.FindProperty("kind");
+            kind.enumValueIndex = EditorGUILayout.Popup("Тип проверки", kind.enumValueIndex,
+                new[] { "Предмет в инвентаре" });
+            if (kind.intValue == (int)ReactionConditionKind.InventoryItem)
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("item"), new GUIContent("Предмет"));
+            NodeEditorGUILayout.PortField(new GUIContent("Если да"), target.GetOutputPort("ifPresent"));
+            NodeEditorGUILayout.PortField(new GUIContent("Если нет"), target.GetOutputPort("ifAbsent"));
             serializedObject.ApplyModifiedProperties();
-            var item = ((InventoryConditionNode)target).Item;
-            if (item == null || !item.IsValid)
-                EditorGUILayout.HelpBox("Назначьте предмет для проверки инвентаря.", MessageType.Warning);
+            if (!((ReactionConditionNode)target).Validate(out var error))
+                EditorGUILayout.HelpBox(error, MessageType.Warning);
         }
     }
 

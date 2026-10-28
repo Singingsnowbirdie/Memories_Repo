@@ -86,7 +86,7 @@ namespace Memories.Tests.PlayMode
         {
             var item = Own(ScriptableObject.CreateInstance<QuestItem>());
             Set(item, "id", "remote");
-            var condition = Own(graph.AddNode<InventoryConditionNode>());
+            var condition = Own(graph.AddNode<ReactionConditionNode>());
             Set(condition, "item", item);
             start.GetOutputPort("next").ClearConnections();
             first.GetOutputPort("next").ClearConnections();

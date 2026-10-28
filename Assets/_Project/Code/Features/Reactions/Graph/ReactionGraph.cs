@@ -20,7 +20,7 @@ namespace Memories.Gameplay.Reactions
             var visited = new HashSet<Node>();
             var active = new HashSet<Node>();
             if (!Visit(nodes.OfType<ReactionStartNode>().Single(), visited, active, actions, out error)) return false;
-            if (visited.Count != nodes.Count || (actions.Count == 0 && !nodes.OfType<InventoryConditionNode>().Any()))
+            if (visited.Count != nodes.Count || (actions.Count == 0 && !nodes.OfType<ReactionConditionNode>().Any()))
             { error = "Добавьте реакции и подключите все ноды к графу."; return false; }
             return true;
         }
@@ -42,15 +42,14 @@ namespace Memories.Gameplay.Reactions
                 if (!action.Validate(out error)) return false;
                 actions.Add(action);
             }
-            else if (node is InventoryConditionNode condition)
+            else if (node is ReactionConditionNode condition)
             {
-                if (condition.Item == null || !condition.Item.IsValid)
-                { error = "Назначьте предмет для проверки инвентаря."; return false; }
+                if (!condition.Validate(out error)) return false;
             }
             else if (!(node is ReactionStartNode))
             { error = "Неподдерживаемая нода в графе реакций."; return false; }
 
-            var outputs = node is InventoryConditionNode ? new[] { "ifPresent", "ifAbsent" } : new[] { "next" };
+            var outputs = node is ReactionConditionNode ? new[] { "ifPresent", "ifAbsent" } : new[] { "next" };
             foreach (var field in outputs)
             {
                 var output = node.GetOutputPort(field);

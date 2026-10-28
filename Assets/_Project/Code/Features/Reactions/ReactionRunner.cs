@@ -31,7 +31,7 @@ namespace Memories.Gameplay.Reactions
             if (!CanRun(graph)) return false;
             if (!graph.TryGetSequence(out var actions, out var error))
             { Debug.LogWarning("Цепочка реакций не запущена: " + error, owner); return false; }
-            if (inventory == null && graph.nodes.OfType<InventoryConditionNode>().Any())
+            if (inventory == null && graph.nodes.OfType<ReactionConditionNode>().Any(condition => condition.RequiresInventory))
             { Debug.LogWarning("Для проверки предмета нужен инвентарь игрока.", owner); return false; }
             foreach (var action in actions)
             {
@@ -55,7 +55,7 @@ namespace Memories.Gameplay.Reactions
                 while (!(node is ReactionEndNode))
                 {
                     source.Token.ThrowIfCancellationRequested();
-                    if (node is InventoryConditionNode condition)
+                    if (node is ReactionConditionNode condition)
                     {
                         node = ReactionGraph.Next(condition, condition.SelectOutput(inventory));
                         continue;
