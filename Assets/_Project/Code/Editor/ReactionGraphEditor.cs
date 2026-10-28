@@ -15,6 +15,7 @@ namespace Memories.Editor
         {
             if (type == typeof(ReactionStartNode)) return "Начало";
             if (type == typeof(ReactionNode)) return "Реакция";
+            if (type == typeof(InventoryConditionNode)) return "Предмет в инвентаре";
             if (type == typeof(ReactionEndNode)) return "Конец";
             return null;
         }
@@ -86,6 +87,24 @@ namespace Memories.Editor
             else EditorGUILayout.HelpBox("Для PhotoMemory: сохраняет воспоминание, проявляет фотографию и включает связанного персонажа. Следующая реакция запускается сразу.", MessageType.Info);
             serializedObject.ApplyModifiedProperties();
             if (!((ReactionNode)target).Validate(out var error)) EditorGUILayout.HelpBox(error, MessageType.Warning);
+        }
+    }
+
+    [CustomNodeEditor(typeof(InventoryConditionNode))]
+    public sealed class InventoryConditionNodeEditor : NodeEditor
+    {
+        public override void OnHeaderGUI() => GUILayout.Label("Предмет в инвентаре", NodeEditorResources.styles.nodeHeader, GUILayout.Height(30));
+        public override void OnBodyGUI()
+        {
+            serializedObject.Update();
+            NodeEditorGUILayout.PortField(new GUIContent("Вход"), target.GetInputPort("previous"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("item"), new GUIContent("Предмет"));
+            NodeEditorGUILayout.PortField(new GUIContent("если есть"), target.GetOutputPort("ifPresent"));
+            NodeEditorGUILayout.PortField(new GUIContent("если нет"), target.GetOutputPort("ifAbsent"));
+            serializedObject.ApplyModifiedProperties();
+            var item = ((InventoryConditionNode)target).Item;
+            if (item == null || !item.IsValid)
+                EditorGUILayout.HelpBox("Назначьте предмет для проверки инвентаря.", MessageType.Warning);
         }
     }
 

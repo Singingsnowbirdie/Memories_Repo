@@ -93,9 +93,9 @@ namespace Memories.Bootstrap
                     foreach (var triggerEvent in root.GetComponentsInChildren<TriggerEvent>(true))
                         triggerEvent.Initialize(container.Resolve<StoryTextPresenter>(), presenter);
                     foreach (var trigger in root.GetComponentsInChildren<SceneTrigger>(true))
-                        trigger.Initialize(container.Resolve<StoryTextPresenter>(), presenter, container.Resolve<ILocationTransition>());
+                        trigger.Initialize(container.Resolve<StoryTextPresenter>(), presenter, container.Resolve<ILocationTransition>(), container.Resolve<QuestInventory>());
                     foreach (var interactable in root.GetComponentsInChildren<ReactionInteractable>(true))
-                        interactable.Initialize(container.Resolve<StoryTextPresenter>(), presenter, container.Resolve<ILocationTransition>());
+                        interactable.Initialize(container.Resolve<StoryTextPresenter>(), presenter, container.Resolve<ILocationTransition>(), container.Resolve<QuestInventory>());
                 }
             });
         }

@@ -12,7 +12,7 @@ namespace Memories.Gameplay.Reactions
     [MovedFrom(true, sourceNamespace: "Memories.Gameplay.Triggers", sourceAssembly: "Memories.Gameplay", sourceClassName: "TriggerActionNode")]
     public sealed class ReactionNode : Node
     {
-        [SerializeField, Input(ShowBackingValue.Never, ConnectionType.Override)] private Node previous;
+        [SerializeField, Input(ShowBackingValue.Never, ConnectionType.Multiple)] private Node previous;
         [SerializeField, Output(ShowBackingValue.Never, ConnectionType.Override)] private Node next;
         [SerializeField] private ReactionKind kind;
         [SerializeField] private StoryTextGraph textGraph;

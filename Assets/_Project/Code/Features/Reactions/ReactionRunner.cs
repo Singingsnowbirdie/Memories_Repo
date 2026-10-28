@@ -1,5 +1,6 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
+using Memories.Gameplay.Interaction;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Memories.Contracts;
@@ -16,12 +17,13 @@ namespace Memories.Gameplay.Reactions
         private readonly MemoryPresenter memories;
         private readonly UnityEngine.Object owner;
         private readonly ILocationTransition locations;
+        private readonly QuestInventory inventory;
         private CancellationTokenSource playback;
         private bool fired;
         public bool IsRunning => playback != null;
         public ReactionRunner(StoryTextPresenter texts, MemoryPresenter memories, UnityEngine.Object owner,
-            ILocationTransition locations = null)
-        { this.texts = texts; this.memories = memories; this.owner = owner; this.locations = locations; }
+            ILocationTransition locations = null, QuestInventory inventory = null)
+        { this.texts = texts; this.memories = memories; this.owner = owner; this.locations = locations; this.inventory = inventory; }
         public bool CanRun(ReactionGraph graph) => graph != null && !IsRunning &&
             !(graph.RunOnce && fired) && texts != null && memories != null && memories.CanStartPlayback;
         public bool TryRun(ReactionGraph graph)
@@ -29,27 +31,36 @@ namespace Memories.Gameplay.Reactions
             if (!CanRun(graph)) return false;
             if (!graph.TryGetSequence(out var actions, out var error))
             { Debug.LogWarning("Цепочка реакций не запущена: " + error, owner); return false; }
+            if (inventory == null && graph.nodes.OfType<InventoryConditionNode>().Any())
+            { Debug.LogWarning("Для проверки предмета нужен инвентарь игрока.", owner); return false; }
             foreach (var action in actions)
-                if (action.Kind == ReactionKind.RevealPhoto && !(owner is global::Memories.Gameplay.Interaction.PhotoMemory))
-                    return false;
-            foreach (var action in actions)
+            {
+                if (action.Kind == ReactionKind.RevealPhoto && !(owner is PhotoMemory)) return false;
                 if (action.Kind == ReactionKind.ChangeLocation &&
                     (locations == null || !locations.CanChangeLocation(action.LocationScenePath))) return false;
+            }
             fired = true;
             playback = new CancellationTokenSource();
-            RunAsync(actions, playback).Forget();
+            RunAsync(graph, playback).Forget();
             return true;
         }
         public void Stop() => playback?.Cancel();
         public void Dispose() => Stop();
-        private async UniTask RunAsync(List<ReactionNode> actions, CancellationTokenSource source)
+        private async UniTask RunAsync(ReactionGraph graph, CancellationTokenSource source)
         {
             bool ownsMemory = false;
             try
             {
-                foreach (var action in actions)
+                var node = ReactionGraph.Next(graph.nodes.OfType<ReactionStartNode>().Single());
+                while (!(node is ReactionEndNode))
                 {
                     source.Token.ThrowIfCancellationRequested();
+                    if (node is InventoryConditionNode condition)
+                    {
+                        node = ReactionGraph.Next(condition, condition.SelectOutput(inventory));
+                        continue;
+                    }
+                    var action = (ReactionNode)node;
                     if (action.Kind == ReactionKind.RevealPhoto)
                         ((global::Memories.Gameplay.Interaction.PhotoMemory)owner).Remember();
                     else if (action.Kind == ReactionKind.StoryText)
@@ -68,6 +79,7 @@ namespace Memories.Gameplay.Reactions
                         await UniTask.WaitUntil(() => !memories.IsPlaying, cancellationToken: source.Token);
                         ownsMemory = false;
                     }
+                    node = ReactionGraph.Next(node);
                 }
             }
             catch (OperationCanceledException) { }

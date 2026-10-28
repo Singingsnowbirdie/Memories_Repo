@@ -248,10 +248,15 @@ namespace Memories.Bootstrap
 
         private void BindDoors(Scene scene, LocationLifetimeScope scope)
         {
+            if (scene != scope.gameObject.scene)
+                foreach (var root in scene.GetRootGameObjects())
+                    foreach (var interactable in root.GetComponentsInChildren<ReactionInteractable>(true))
+                        interactable.Initialize(scope.Container.Resolve<Memories.Gameplay.UI.StoryTextPresenter>(),
+                            scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>(), this, scope.Container.Resolve<QuestInventory>());
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var photo in root.GetComponentsInChildren<PhotoMemory>(true))
                     photo.Initialize(scope.Container.Resolve<Memories.Gameplay.UI.StoryTextPresenter>(),
-                        scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>());
+                        scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>(), scope.Container.Resolve<QuestInventory>());
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var pickup in root.GetComponentsInChildren<QuestItemPickup>(true))
                     pickup.Initialize(scope.Container.Resolve<QuestInventory>());

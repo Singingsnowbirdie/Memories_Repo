@@ -17,34 +17,53 @@ namespace Memories.Gameplay.Reactions
             if (nodes == null || nodes.Any(n => n == null) || nodes.OfType<ReactionStartNode>().Count() != 1 ||
                 nodes.OfType<ReactionEndNode>().Count() != 1)
             { error = "Нужны ровно одно «Начало» и один «Конец»."; return false; }
-            Node node = nodes.OfType<ReactionStartNode>().Single();
             var visited = new HashSet<Node>();
-            while (true)
+            var active = new HashSet<Node>();
+            if (!Visit(nodes.OfType<ReactionStartNode>().Single(), visited, active, actions, out error)) return false;
+            if (visited.Count != nodes.Count || (actions.Count == 0 && !nodes.OfType<InventoryConditionNode>().Any()))
+            { error = "Добавьте реакции и подключите все ноды к графу."; return false; }
+            return true;
+        }
+
+        public static Node Next(Node node, string outputName = "next") =>
+            node.GetOutputPort(outputName)?.GetConnection(0)?.node;
+
+        private bool Visit(Node node, HashSet<Node> visited, HashSet<Node> active,
+            List<ReactionNode> actions, out string error)
+        {
+            error = null;
+            if (node == null || !nodes.Contains(node) || node.graph != this || active.Contains(node))
+            { error = "В графе цикл или ссылка на чужую ноду."; return false; }
+            if (!visited.Add(node)) return true;
+            active.Add(node);
+            if (node is ReactionEndNode) { active.Remove(node); return true; }
+            if (node is ReactionNode action)
             {
-                if (!nodes.Contains(node) || node.graph != this || !visited.Add(node))
-                { error = "В графе цикл или ссылка на чужую ноду."; return false; }
-                if (node is ReactionEndNode)
-                {
-                    if (actions.Count == 0 || visited.Count != nodes.Count)
-                    { error = "Добавьте реакции и подключите все ноды к основной цепочке."; return false; }
-                    return true;
-                }
-                if (node is ReactionNode action)
-                {
-                    if (actions.Any(previous => previous.Kind == ReactionKind.ChangeLocation))
-                    { error = "Переход в локацию должен быть последней реакцией перед концом графа."; return false; }
-                    if (!action.Validate(out error)) return false;
-                    actions.Add(action);
-                }
-                else if (!(node is ReactionStartNode))
-                { error = "Неподдерживаемая нода в графе реакций."; return false; }
-                var output = node.GetOutputPort("next");
-                var input = output?.ConnectionCount == 1 ? output.GetConnection(0) : null;
-                if (input == null || input.fieldName != "previous" || !input.IsInput ||
-                    input.ConnectionCount != 1 || input.GetConnection(0) != output)
-                { error = "Соедините выход «Далее» со входом следующей ноды."; return false; }
-                node = input.node;
+                if (!action.Validate(out error)) return false;
+                actions.Add(action);
             }
+            else if (node is InventoryConditionNode condition)
+            {
+                if (condition.Item == null || !condition.Item.IsValid)
+                { error = "Назначьте предмет для проверки инвентаря."; return false; }
+            }
+            else if (!(node is ReactionStartNode))
+            { error = "Неподдерживаемая нода в графе реакций."; return false; }
+
+            var outputs = node is InventoryConditionNode ? new[] { "ifPresent", "ifAbsent" } : new[] { "next" };
+            foreach (var field in outputs)
+            {
+                var output = node.GetOutputPort(field);
+                var input = output?.ConnectionCount == 1 ? output.GetConnection(0) : null;
+                if (input == null || input.fieldName != "previous" || !input.IsInput || !input.GetConnections().Contains(output))
+                { error = "Подключите каждый выход ко входу следующей ноды."; return false; }
+                if (node is ReactionNode transition && transition.Kind == ReactionKind.ChangeLocation &&
+                    !(input.node is ReactionEndNode))
+                { error = "Переход в локацию должен быть последней реакцией перед концом графа."; return false; }
+                if (!Visit(input.node, visited, active, actions, out error)) return false;
+            }
+            active.Remove(node);
+            return true;
         }
     }
 }

@@ -81,6 +81,36 @@ namespace Memories.Tests.PlayMode
             Assert.IsFalse(graph.TryGetSequence(out _, out _), "Disconnected actions must be rejected.");
         }
 
+        [Test]
+        public void InventoryConditionSelectsBranchAndAllowsSharedContinuation()
+        {
+            var item = Own(ScriptableObject.CreateInstance<QuestItem>());
+            Set(item, "id", "remote");
+            var condition = Own(graph.AddNode<InventoryConditionNode>());
+            Set(condition, "item", item);
+            start.GetOutputPort("next").ClearConnections();
+            first.GetOutputPort("next").ClearConnections();
+            Connect(start, condition);
+            condition.GetOutputPort("ifPresent").Connect(first.GetInputPort("previous"));
+            condition.GetOutputPort("ifAbsent").Connect(memory.GetInputPort("previous"));
+            Connect(first, last);
+            Assert.IsTrue(graph.TryGetSequence(out var actions, out var error), error);
+            Assert.AreEqual(3, actions.Count, "Shared continuation must only be validated once.");
+            var inventory = new QuestInventory();
+            Assert.AreEqual("ifAbsent", condition.SelectOutput(inventory));
+            inventory.TryAdd(item);
+            Assert.AreEqual("ifPresent", condition.SelectOutput(inventory));
+            Assert.IsTrue(inventory.Contains(item.Id), "Checking must not consume the item.");
+            condition.GetOutputPort("ifAbsent").ClearConnections();
+            Assert.IsFalse(graph.TryGetSequence(out _, out _), "Both branches must be connected.");
+            condition.GetOutputPort("ifAbsent").Connect(condition.GetInputPort("previous"));
+            Assert.IsFalse(graph.TryGetSequence(out _, out _), "Branch cycles must be rejected.");
+            condition.GetOutputPort("ifAbsent").ClearConnections();
+            condition.GetOutputPort("ifAbsent").Connect(memory.GetInputPort("previous"));
+            Set(condition, "item", null);
+            Assert.IsFalse(graph.TryGetSequence(out _, out _), "A missing item must be rejected.");
+        }
+
         [UnityTest]
         public IEnumerator RunsInOrderRepeatsAndKeepsStatePerTrigger() => UniTask.ToCoroutine(async () =>
         {

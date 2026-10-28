@@ -33,11 +33,11 @@ namespace Memories.Gameplay.Interaction
             PlayerPrefs.Save();
         }
 
-        public void Initialize(StoryTextPresenter presenter, MemoryPresenter memories)
+        public void Initialize(StoryTextPresenter presenter, MemoryPresenter memories, QuestInventory inventory = null)
         {
             texts = presenter;
             runner?.Dispose();
-            runner = new ReactionRunner(presenter, memories, this);
+            runner = new ReactionRunner(presenter, memories, this, inventory: inventory);
         }
 
         private void Awake()
