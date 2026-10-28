@@ -68,10 +68,13 @@ namespace Memories.Editor
             NodeEditorGUILayout.PortField(new GUIContent("Далее"), target.GetOutputPort("next"));
             var kind = serializedObject.FindProperty("kind");
             EditorGUILayout.LabelField("Действие");
-            kind.enumValueIndex = EditorGUILayout.Popup(kind.enumValueIndex, new[] { "Показать текст", "Показать воспоминание", "Перейти в локацию", "Запустить реакцию объекта", "Установить кастомную переменную", "Активность объекта", "Добавить предмет в инвентарь" });
+            kind.enumValueIndex = EditorGUILayout.Popup(kind.enumValueIndex, new[] { "Показать текст", "Показать воспоминание", "Перейти в локацию", "Запустить реакцию объекта", "Установить кастомную переменную", "Активность объекта", "Добавить предмет в инвентарь", "Запустить подсказки", "Остановить подсказки" });
             EditorGUILayout.Space(8);
             if (kind.enumValueIndex == 0)
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("textGraph"), new GUIContent("Граф текста"));
+            {
+                EditorGUILayout.LabelField("Граф текста");
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("textGraph"), GUIContent.none);
+            }
             else if (kind.enumValueIndex == 1)
             {
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("memoryGraph"), new GUIContent("Граф воспоминания"));
@@ -136,6 +139,18 @@ namespace Memories.Editor
                 EditorGUILayout.LabelField("Активность");
                 var active = serializedObject.FindProperty("active");
                 active.boolValue = EditorGUILayout.Popup(active.boolValue ? 0 : 1, new[] { "Включить", "Выключить" }) == 0;
+            }
+            else if (kind.enumValueIndex == 7 || kind.enumValueIndex == 8)
+            {
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("hintId"), new GUIContent("ID подсказки"));
+                if (kind.enumValueIndex == 7)
+                {
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("hintGraph"), new GUIContent("Граф подсказки"));
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("hintTimeout"), new GUIContent("Таймаут, сек."));
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("repeatHint"), new GUIContent("Повторять"));
+                    EditorGUILayout.HelpBox("Первый запуск после таймаута; повтор — после завершения графа и нового таймаута. Проверки предметов задаются в графе подсказки. Пауза останавливает отсчёт. Повторный запуск того же ID не сбрасывает таймер.", MessageType.Info);
+                }
+                EditorGUILayout.HelpBox("ID действует в пределах объекта, запустившего граф. При отключении объекта или выгрузке сцены таймеры прекращаются; между запусками игры не сохраняются.", MessageType.Info);
             }
             else if (kind.enumValueIndex == 6)
             {

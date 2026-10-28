@@ -44,7 +44,12 @@ namespace Memories.Editor
     public sealed class StoryTextStartNodeEditor : NodeEditor
     {
         public override void OnHeaderGUI() => GUILayout.Label("Начало", NodeEditorResources.styles.nodeHeader, GUILayout.Height(30));
-        public override void OnBodyGUI() => NodeEditorGUILayout.PortField(new GUIContent("Далее"), target.GetOutputPort("next"));
+        public override void OnBodyGUI()
+        {
+            using (var settings = new SerializedObject(target.graph))
+                StoryTextGraphInspector.DrawPlaybackSettings(settings);
+            NodeEditorGUILayout.PortField(new GUIContent("Далее"), target.GetOutputPort("next"));
+        }
     }
 
     [CustomNodeEditor(typeof(StoryTextEndNode))]
@@ -76,9 +81,18 @@ namespace Memories.Editor
     [CustomEditor(typeof(StoryTextGraph))]
     public sealed class StoryTextGraphInspector : UnityEditor.Editor
     {
+        internal static void DrawPlaybackSettings(SerializedObject settings)
+        {
+            settings.Update();
+            EditorGUILayout.LabelField("Пауза между фразами, сек.");
+            EditorGUILayout.PropertyField(settings.FindProperty("pauseBetweenFragments"), GUIContent.none);
+            settings.ApplyModifiedProperties();
+        }
+
         public override void OnInspectorGUI()
         {
             var graph = (StoryTextGraph)target;
+            DrawPlaybackSettings(serializedObject);
             EditorGUILayout.HelpBox("Соедините ноды: Начало → Текст → … → Конец. Тексты автоматически сменяются через фейд в нижней плашке.", MessageType.Info);
             if (GUILayout.Button("Открыть граф текста")) NodeEditorWindow.Open(graph);
             if (graph.TryGetSequence(out var fragments, out var error))

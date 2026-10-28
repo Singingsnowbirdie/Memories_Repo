@@ -22,7 +22,7 @@ namespace Memories.Gameplay.UI
             if (graph == null) throw new ArgumentNullException(nameof(graph));
             if (!graph.TryGetSequence(out var fragments, out var error))
                 throw new ArgumentException(error, nameof(graph));
-            return ShowAsync(fragments, token);
+            return ShowAsync(fragments, token, graph.PauseBetweenFragments);
         }
 
         public UniTask ShowAsync(string text, float duration = 3f, CancellationToken token = default)
@@ -30,7 +30,7 @@ namespace Memories.Gameplay.UI
 
         // A new request replaces the active sequence. Invalid requests leave it untouched.
         public async UniTask ShowAsync(IReadOnlyList<StoryTextFragment> fragments, CancellationToken token = default,
-            float pauseBetweenFragments = 0, bool keepVisible = false)
+            float pauseBetweenFragments = 0)
         {
             if (disposed) throw new ObjectDisposedException(nameof(StoryTextPresenter));
             if (float.IsNaN(pauseBetweenFragments) || float.IsInfinity(pauseBetweenFragments) || pauseBetweenFragments < 0)
@@ -49,7 +49,6 @@ namespace Memories.Gameplay.UI
             Stop();
             using var playback = CancellationTokenSource.CreateLinkedTokenSource(token, view.LifetimeToken);
             current = playback;
-            bool completed = false;
             try
             {
                 await view.ShowAsync(snapshot[0].Text, playback.Token);
@@ -67,9 +66,7 @@ namespace Memories.Gameplay.UI
                     // Read time starts after the text is fully visible and freezes with the game.
                     await UniTask.Delay(TimeSpan.FromSeconds(snapshot[i].Duration), cancellationToken: playback.Token);
                 }
-                if (keepVisible) await view.ChangeTextAsync(string.Empty, playback.Token);
-                else await view.HideAsync(playback.Token);
-                completed = true;
+                await view.HideAsync(playback.Token);
             }
             finally
             {
@@ -77,7 +74,7 @@ namespace Memories.Gameplay.UI
                 if (ReferenceEquals(current, playback))
                 {
                     current = null;
-                    if (!completed || !keepVisible) view.HideImmediately();
+                    view.HideImmediately();
                 }
             }
         }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Memories.Gameplay.Interaction;
 using System.Threading;
@@ -22,10 +23,13 @@ namespace Memories.Gameplay.Reactions
         private readonly ReactionObjectBinding[] objectBindings;
         private CancellationTokenSource playback;
         private bool fired;
+        private ReactionRunner hintOwner;
+        private readonly Dictionary<string, CancellationTokenSource> hintTimers = new Dictionary<string, CancellationTokenSource>();
         public bool IsRunning => playback != null;
+        public bool IsHidingOwner { get; private set; }
         public ReactionRunner(StoryTextPresenter texts, MemoryPresenter memories, UnityEngine.Object owner,
             ILocationTransition locations = null, QuestInventory inventory = null, CustomVariableStore variables = null, ReactionObjectBinding[] objectBindings = null)
-        { this.texts = texts; this.memories = memories; this.owner = owner; this.locations = locations; this.inventory = inventory; this.variables = variables; this.objectBindings = objectBindings; }
+        { this.texts = texts; this.memories = memories; this.owner = owner; this.locations = locations; this.inventory = inventory; this.variables = variables; this.objectBindings = objectBindings; hintOwner = this; }
         public bool CanRun(ReactionGraph graph) => graph != null && !IsRunning &&
             !(graph.RunOnce && fired) && (memories == null || memories.CanStartPlayback);
         public bool TryRun(ReactionGraph graph)
@@ -55,8 +59,63 @@ namespace Memories.Gameplay.Reactions
             RunAsync(graph, playback).Forget();
             return true;
         }
-        public void Stop() => playback?.Cancel();
+        public void Stop()
+        {
+            playback?.Cancel();
+            if (hintOwner != this) return;
+            var timers = hintTimers.Values.ToArray();
+            hintTimers.Clear();
+            foreach (var timer in timers) timer.Cancel();
+        }
         public void Dispose() => Stop();
+
+        private void StopHint(string id)
+        {
+            if (!hintTimers.TryGetValue(id, out var timer)) return;
+            hintTimers.Remove(id);
+            timer.Cancel();
+        }
+
+        private void StartHint(ReactionNode action)
+        {
+            if (hintTimers.ContainsKey(action.HintId)) return;
+            var timer = new CancellationTokenSource();
+            hintTimers.Add(action.HintId, timer);
+            RunHintAsync(action.HintId, action.HintGraph, action.HintTimeout, action.RepeatHint, timer).Forget();
+        }
+
+        private async UniTask RunHintAsync(string id, ReactionGraph graph, float timeout, bool repeat,
+            CancellationTokenSource timer)
+        {
+            ReactionRunner child = null;
+            try
+            {
+                do
+                {
+                    // Scaled time freezes in pause and memory views.
+                    await UniTask.Delay(TimeSpan.FromSeconds(timeout), cancellationToken: timer.Token);
+                    await UniTask.WaitUntil(() => !IsRunning && (texts == null || !texts.IsPlaying) &&
+                        (memories == null || memories.CanStartPlayback) && Time.timeScale > 0,
+                        cancellationToken: timer.Token);
+                    timer.Token.ThrowIfCancellationRequested();
+                    child = new ReactionRunner(texts, memories, owner, locations, inventory, variables, objectBindings);
+                    child.hintOwner = this;
+                    // Each traversal evaluates graph conditions against the current inventory.
+                    if (!child.TryRun(graph)) return;
+                    await UniTask.WaitUntil(() => !child.IsRunning, cancellationToken: timer.Token);
+                    child.Dispose();
+                    child = null;
+                } while (repeat);
+            }
+            catch (OperationCanceledException) { }
+            catch (Exception exception) { Debug.LogException(exception, owner); }
+            finally
+            {
+                child?.Dispose();
+                if (hintTimers.TryGetValue(id, out var current) && current == timer) hintTimers.Remove(id);
+                timer.Dispose();
+            }
+        }
         private async UniTask RunAsync(ReactionGraph graph, CancellationTokenSource source)
         {
             bool ownsMemory = false;
@@ -76,11 +135,17 @@ namespace Memories.Gameplay.Reactions
                     {
                         if (!ReactionObjectBinding.TryResolve(objectBindings, action.ObjectKey, out var target))
                             throw new InvalidOperationException("Объект графа недоступен: " + action.ObjectKey);
-                        target.SetActive(action.Active);
+                        IsHidingOwner = !action.Active && owner is Component component && target == component.gameObject;
+                        try { target.SetActive(action.Active); }
+                        finally { IsHidingOwner = false; }
                         node = ReactionGraph.Next(node);
                         continue;
                     }
-                    if (action.Kind == ReactionKind.CustomReaction)
+                    if (action.Kind == ReactionKind.StartHints)
+                        hintOwner.StartHint(action);
+                    else if (action.Kind == ReactionKind.StopHints)
+                        hintOwner.StopHint(action.HintId);
+                    else if (action.Kind == ReactionKind.CustomReaction)
                     {
                         if (!CustomReaction.TryFind(owner, out var customReaction))
                             throw new InvalidOperationException("Компонент CustomReaction недоступен на объекте.");

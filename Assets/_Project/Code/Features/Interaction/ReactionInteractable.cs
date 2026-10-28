@@ -53,7 +53,9 @@ namespace Memories.Gameplay.Interaction
         }
         private void OnDisable()
         {
-            runner?.Stop();
+            // A pickup may hide itself before finishing its story-text branch.
+            if (runner != null && !runner.IsHidingOwner) runner.Stop();
         }
+        private void OnDestroy() => runner?.Dispose();
     }
 }
