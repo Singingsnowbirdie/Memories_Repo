@@ -30169,6 +30169,8 @@ GameObject:
   - component: {fileID: 880001203}
   - component: {fileID: 880001204}
   - component: {fileID: 880001205}
+  - component: {fileID: 880001206}
+  - component: {fileID: 880001207}
   m_Layer: 0
   m_Name: TV Baseball Screen
   m_TagString: Untagged
@@ -30260,6 +30262,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 953c4f7e00a04856af2dd233ebca9686, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &880001206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 880001201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ba68190f9594ee8b2fc0603419ed015, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  graph: {fileID: 11400000, guid: 6783fed415984dd5aa85c6ae185a8a30, type: 2}
+  initializationGraph: {fileID: 0}
+  prompt: "Вспомнить"
+  objectBindings: []
+--- !u!65 &880001207
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 880001201}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 0.04}
+  m_Center: {x: 0, y: 0, z: 0.04}
 --- !u!4 &880001300 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5388560363890655783, guid: 20e380c8b39465b4391b29c8c88cae38, type: 3}
