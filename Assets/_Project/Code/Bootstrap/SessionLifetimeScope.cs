@@ -15,7 +15,7 @@ namespace Memories.Bootstrap
         {
             bool persistProgress = ((AppLifetimeScope)parentReference.Object).PersistProgress;
             builder.Register<SessionContext>(Lifetime.Singleton);
-            builder.Register<MemoryCollection>(Lifetime.Singleton);
+            builder.Register<MemoryCollection>(_ => new MemoryCollection(MemoryCatalog.LoadEntries(), persistProgress), Lifetime.Singleton);
             builder.Register<QuestInventory>(Lifetime.Singleton);
             builder.Register<CustomVariableStore>(_ => new CustomVariableStore(persistProgress: persistProgress), Lifetime.Singleton);
             builder.Register<QuestInventorySave>(container => new QuestInventorySave(

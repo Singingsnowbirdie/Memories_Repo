@@ -25,6 +25,13 @@ namespace Memories.Gameplay.UI
             return true;
         }
 
+        public bool TrySwitch(GameplayMode from, GameplayMode to)
+        {
+            if (Mode != from || from == GameplayMode.Playing || to == GameplayMode.Playing) return false;
+            Mode = to;
+            return true;
+        }
+
         public void Exit(GameplayMode mode, bool restoreControl = true)
         {
             if (Mode != mode || mode == GameplayMode.Playing) return;

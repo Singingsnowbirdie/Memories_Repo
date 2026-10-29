@@ -9,6 +9,9 @@ namespace Memories.Gameplay.Memories
     [NodeGraph.RequireNode(typeof(MemoryStartNode))]
     public sealed class MemoryGraph : NodeGraph
     {
+        [SerializeField, InspectorName("Название в копилке")] private string displayTitle;
+        public string DisplayTitle => string.IsNullOrWhiteSpace(displayTitle) ? name : displayTitle;
+
         public bool TryGetSequence(out List<Node> frames, out string error)
         {
             frames = new List<Node>();

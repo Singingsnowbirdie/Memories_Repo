@@ -19,6 +19,9 @@ namespace Memories.Gameplay.Memories
         private readonly IMemorySound sounds;
         private CancellationTokenSource playback;
         private string currentId;
+        private MemoryGraph currentGraph;
+        private bool returnToPause;
+        public event Action Closed;
         private bool disposed;
         public bool IsPlaying => playback != null;
         public bool CanStartPlayback => !disposed && state.Mode == GameplayMode.Playing;
@@ -41,11 +44,26 @@ namespace Memories.Gameplay.Memories
         public bool Open(string id, MemoryGraph graph, bool allowReplay = false)
         {
             if (!CanOpen(id, allowReplay)) return false;
+            return StartPlayback(id, graph, false);
+        }
+
+        public bool ReplayFromCollection(string id)
+        {
+            if (disposed || IsPlaying || state.Mode != GameplayMode.Paused) return false;
+            foreach (var memory in collection.Memories)
+                if (memory.Id == id) return StartPlayback(id, memory.Graph, true);
+            return false;
+        }
+
+        private bool StartPlayback(string id, MemoryGraph graph, bool fromPause)
+        {
             if (graph == null) { Debug.LogWarning("Осколку не назначен граф воспоминания."); return false; }
             if (!graph.TryGetSequence(out var frames, out var error))
             { Debug.LogWarning("Воспоминание не запущено: " + error, graph); return false; }
-            if (!state.TryEnter(GameplayMode.Reading)) return false;
+            if (fromPause ? !state.TrySwitch(GameplayMode.Paused, GameplayMode.Reading) : !state.TryEnter(GameplayMode.Reading)) return false;
             currentId = id;
+            currentGraph = graph;
+            returnToPause = fromPause;
             playback = new CancellationTokenSource();
             PlayAsync(frames, playback).Forget();
             return true;
@@ -85,12 +103,14 @@ namespace Memories.Gameplay.Memories
                 if (playback == source)
                 {
                     playback = null;
-                    if (completed) collection.Collect(currentId);
+                    if (completed && !returnToPause) collection.Collect(currentId, currentGraph);
                     currentId = null;
+                    currentGraph = null;
                     music.StopImmediately();
                     sounds.StopAll();
                     view.Hide();
-                    state.Exit(GameplayMode.Reading);
+                    RestoreMode(true);
+                    Closed?.Invoke();
                 }
                 source.Dispose();
             }
@@ -105,11 +125,20 @@ namespace Memories.Gameplay.Memories
             var source = playback;
             playback = null;
             currentId = null;
+            currentGraph = null;
             source.Cancel();
             music.StopImmediately();
             sounds.StopAll();
             view.Hide();
-            state.Exit(GameplayMode.Reading, restoreControl);
+            RestoreMode(restoreControl);
+            if (!disposed) Closed?.Invoke();
+        }
+
+        private void RestoreMode(bool restoreControl)
+        {
+            if (returnToPause && !disposed) state.TrySwitch(GameplayMode.Reading, GameplayMode.Paused);
+            else state.Exit(GameplayMode.Reading, restoreControl);
+            returnToPause = false;
         }
 
         public void Dispose()

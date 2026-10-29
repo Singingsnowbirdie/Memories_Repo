@@ -1,5 +1,6 @@
 using System;
 using Memories.Contracts;
+using Memories.Gameplay.Memories;
 using UnityEngine;
 
 namespace Memories.Gameplay.UI
@@ -13,6 +14,10 @@ namespace Memories.Gameplay.UI
         private bool settingsOpen;
         private bool creditsOpen;
         private bool restartConfirmationOpen;
+        private bool memoriesOpen;
+        private bool replaying;
+        private MemoryCollection collection;
+        private MemoryPresenter memories;
         private readonly AudioVolumeSettings audio;
         private readonly Func<bool> returnToStart;
         private readonly Func<bool> restart;
@@ -33,6 +38,8 @@ namespace Memories.Gameplay.UI
             view.ReturnToStartRequested += ReturnToStart;
             view.SettingsRequested += OpenSettings;
             view.CreditsRequested += OpenCredits;
+            view.MemoriesRequested += OpenMemories;
+            view.MemoryRequested += ReplayMemory;
             view.BackRequested += Back;
             view.MasterChanged += audio.SetMaster;
             view.MusicChanged += audio.SetMusic;
@@ -46,7 +53,7 @@ namespace Memories.Gameplay.UI
         public void Toggle()
         {
             if (disposed) return;
-            if (IsPaused) { if (restartConfirmationOpen) CancelRestart(); else if (settingsOpen || creditsOpen) Back(); else Resume(); return; }
+            if (IsPaused) { if (restartConfirmationOpen) CancelRestart(); else if (settingsOpen || creditsOpen || memoriesOpen) Back(); else Resume(); return; }
             if (!state.TryEnter(GameplayMode.Paused)) return;
             view.Show(true);
         }
@@ -57,6 +64,7 @@ namespace Memories.Gameplay.UI
             settingsOpen = false;
             creditsOpen = false;
             restartConfirmationOpen = false;
+            memoriesOpen = false;
             audio.Save();
             state.Exit(GameplayMode.Paused);
             view.Show(false);
@@ -105,6 +113,12 @@ namespace Memories.Gameplay.UI
         private void Back()
         {
             if (disposed) return;
+            if (memoriesOpen)
+            {
+                memoriesOpen = false;
+                view.ShowMemories(false, collection.Memories);
+                return;
+            }
             if (creditsOpen)
             {
                 creditsOpen = false;
@@ -115,6 +129,38 @@ namespace Memories.Gameplay.UI
             settingsOpen = false;
             audio.Save();
             view.ShowSettings(false, audio.Master, audio.Music, audio.Sounds);
+        }
+
+        // Connect after both presenters have been constructed so Escape reaches pause before reading.
+        public void ConnectMemories(MemoryCollection collection, MemoryPresenter memories)
+        {
+            if (this.memories != null) this.memories.Closed -= OnMemoryClosed;
+            this.collection = collection;
+            this.memories = memories;
+            memories.Closed += OnMemoryClosed;
+        }
+
+        private void OpenMemories()
+        {
+            if (disposed || !IsPaused || settingsOpen || creditsOpen || restartConfirmationOpen || collection == null) return;
+            memoriesOpen = true;
+            view.ShowMemories(true, collection.Memories);
+        }
+
+        private void ReplayMemory(string id)
+        {
+            if (disposed || !IsPaused || !memoriesOpen || replaying || memories == null) return;
+            replaying = true;
+            view.Show(false);
+            if (!memories.ReplayFromCollection(id)) OnMemoryClosed();
+        }
+
+        private void OnMemoryClosed()
+        {
+            if (disposed || !replaying) return;
+            replaying = false;
+            view.Show(true);
+            view.ShowMemories(true, collection.Memories);
         }
 
         private void Quit()
@@ -141,6 +187,9 @@ namespace Memories.Gameplay.UI
             view.QuitRequested -= Quit;
             view.SettingsRequested -= OpenSettings;
             view.CreditsRequested -= OpenCredits;
+            view.MemoriesRequested -= OpenMemories;
+            view.MemoryRequested -= ReplayMemory;
+            if (memories != null) memories.Closed -= OnMemoryClosed;
             view.BackRequested -= Back;
             view.MasterChanged -= audio.SetMaster;
             view.MusicChanged -= audio.SetMusic;

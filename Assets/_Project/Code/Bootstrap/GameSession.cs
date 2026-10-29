@@ -81,6 +81,7 @@ namespace Memories.Bootstrap
                 QuestInventorySave.Clear();
                 CustomVariableStore.Clear();
                 PhotoMemory.ResetProgress();
+                Memories.Gameplay.Memories.MemoryCollection.Clear();
             }
             return true;
         }

@@ -32,6 +32,9 @@ namespace Memories.Tests.EditMode
             public event Action QuitRequested { add { } remove { } }
             public event Action SettingsRequested;
             public event Action CreditsRequested;
+            public event Action MemoriesRequested { add { } remove { } }
+            public event Action<string> MemoryRequested { add { } remove { } }
+            public void ShowMemories(bool visible, System.Collections.Generic.IReadOnlyList<Memories.Gameplay.Memories.MemoryCollection.FoundMemory> memories) { }
             public void Credits() => CreditsRequested?.Invoke();
             public bool CreditsVisible;
             public void ShowCredits(bool visible) => CreditsVisible = visible;

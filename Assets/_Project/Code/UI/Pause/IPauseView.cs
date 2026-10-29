@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Memories.Gameplay.Memories;
 
 namespace Memories.Gameplay.UI
 {
@@ -12,6 +14,8 @@ namespace Memories.Gameplay.UI
         event Action QuitRequested;
         event Action SettingsRequested;
         event Action CreditsRequested;
+        event Action MemoriesRequested;
+        event Action<string> MemoryRequested;
         event Action BackRequested;
         event Action<float> MasterChanged;
         event Action<float> MusicChanged;
@@ -19,6 +23,7 @@ namespace Memories.Gameplay.UI
         void Show(bool visible);
         void ShowRestartConfirmation(bool visible);
         void ShowCredits(bool visible);
+        void ShowMemories(bool visible, IReadOnlyList<MemoryCollection.FoundMemory> memories);
         void ShowSettings(bool visible, float master, float music, float sounds);
     }
 }
