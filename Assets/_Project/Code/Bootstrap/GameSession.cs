@@ -266,7 +266,8 @@ namespace Memories.Bootstrap
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var door in root.GetComponentsInChildren<CourtyardDoor>(true))
                     door.Initialize(scope.Container.Resolve<PlayerMotor>(),
-                        path => LoadConnectedSceneAsync(path, scene), EnterConnectedSceneAsync);
+                        path => LoadConnectedSceneAsync(path, scene), EnterConnectedSceneAsync,
+                        scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
         }
 
         private async UniTask<Scene> LoadConnectedSceneAsync(string path, Scene doorwayScene)

@@ -4,6 +4,7 @@ using System.Linq;
 using Cysharp.Threading.Tasks;
 using Memories.Bootstrap;
 using Memories.Gameplay.Interaction;
+using Memories.Gameplay.Memories;
 using Memories.Gameplay.Player;
 using NUnit.Framework;
 using UnityEngine;
@@ -17,9 +18,15 @@ namespace Memories.Tests.PlayMode
     {
         [UnityTest] public IEnumerator StandaloneHouseOpensOntoVisibleCourtyard() => Check(false);
         [UnityTest] public IEnumerator MainBootstrapHouseOpensOntoVisibleCourtyard() => Check(true);
+        [UnityTest] public IEnumerator PreviouslyFoundTVMemoryOpensHouseDoorOnLoad() => Check(false, true);
 
-        private static IEnumerator Check(bool main) => UniTask.ToCoroutine(async () =>
+        private static IEnumerator Check(bool main, bool previouslyFound = false) => UniTask.ToCoroutine(async () =>
         {
+            bool hadSave = PlayerPrefs.HasKey(MemoryCollection.DefaultKey);
+            string savedMemories = PlayerPrefs.GetString(MemoryCollection.DefaultKey);
+            PlayerPrefs.DeleteKey(MemoryCollection.DefaultKey);
+            if (previouslyFound)
+                new MemoryCollection(persistProgress: true).Collect("house-tv-baseball");
             GameObject root = null;
             Scene bootstrap = default;
             GameSession session = null;
@@ -48,12 +55,24 @@ namespace Memories.Tests.PlayMode
                 motor.SetLook(0, 0); Physics.SyncTransforms();
                 var door = Object.FindFirstObjectByType<CourtyardDoor>();
                 Assert.IsNotNull(door);
-                Assert.IsTrue(door.CanInteract, "The house door must be wired even when the house is an additional scene.");
-                Assert.AreSame(door, new InteractionProbe(motor.GetComponentInChildren<Camera>()).FindTarget());
-                door.Interact();
+                Assert.IsFalse(door.CanInteract, "The house exit must never require interaction.");
+                Assert.IsEmpty(door.Prompt);
+                var memories = session.SessionScope.Container.Resolve<MemoryCollection>();
+                if (!previouslyFound)
+                {
+                    Assert.IsNull(new InteractionProbe(motor.GetComponentInChildren<Camera>()).FindTarget());
+                    door.Interact();
+                    await UniTask.NextFrame();
+                    Assert.IsFalse(door.IsOpen, "Pressing E must not open the exit.");
+                    memories.Collect("unrelated-memory");
+                    await UniTask.NextFrame();
+                    Assert.IsFalse(door.IsOpen, "Other memories must not unlock this door.");
+                    memories.Collect("house-tv-baseball");
+                }
                 deadline = Time.realtimeSinceStartup + 25;
                 while (!door.IsOpen && Time.realtimeSinceStartup < deadline) await UniTask.NextFrame();
                 Assert.IsTrue(door.IsOpen);
+                Assert.IsFalse(door.CanInteract);
                 Assert.IsTrue(SceneManager.GetSceneByPath(TestLocationLauncher.CourtyardPath).isLoaded);
                 Assert.IsTrue(SceneManager.GetSceneByPath(TestLocationLauncher.HousePath).isLoaded, "House must remain in place while looking through the open door.");
                 Assert.IsFalse(SceneManager.GetSceneByPath(TestLocationLauncher.HighwayPath).isLoaded,
@@ -83,6 +102,9 @@ namespace Memories.Tests.PlayMode
             }
             finally
             {
+                if (hadSave) PlayerPrefs.SetString(MemoryCollection.DefaultKey, savedMemories);
+                else PlayerPrefs.DeleteKey(MemoryCollection.DefaultKey);
+                PlayerPrefs.Save();
                 if (session != null && session.IsRunning) await session.EndAsync();
                 if (root != null) Object.Destroy(root);
                 if (bootstrap.IsValid() && bootstrap.isLoaded) await SceneManager.UnloadSceneAsync(bootstrap);

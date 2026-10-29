@@ -1,6 +1,7 @@
 using System;
 using Cysharp.Threading.Tasks;
 using Memories.Gameplay.Player;
+using Memories.Gameplay.Memories;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,6 +15,9 @@ namespace Memories.Gameplay.Interaction
         [SerializeField] private string destination = "Assets/_Project/Locations/CourtyardIsland/CourtyardIsland.unity";
         [SerializeField] private string arrivalMarker = "Вход из дома";
         [SerializeField, Min(0f)] private float arrivalForwardOffset;
+        [SerializeField, Tooltip("When set, the door opens automatically after this memory is collected and cannot be interacted with.")]
+        private string requiredMemoryId;
+        private MemoryCollection memories;
         private Func<string, UniTask<Scene>> load;
         private Func<Scene, Vector3, Quaternion, float, UniTask> enter;
         private PlayerMotor player;
@@ -25,12 +29,28 @@ namespace Memories.Gameplay.Interaction
         private bool opening, opened, crossing;
         private float previousDistance;
         public bool IsOpen => opened;
-        public override string Prompt => "Открыть дверь";
-        public override bool CanInteract => base.CanInteract && !opening && !opened && load != null;
+        public override string Prompt => string.IsNullOrWhiteSpace(requiredMemoryId) ? "Открыть дверь" : string.Empty;
+        public override bool CanInteract => string.IsNullOrWhiteSpace(requiredMemoryId) && base.CanInteract && !opening && !opened && load != null;
 
         public void Initialize(PlayerMotor motor, Func<string, UniTask<Scene>> loader,
-            Func<Scene, Vector3, Quaternion, float, UniTask> traveller)
-        { player = motor; playerCamera = motor.GetComponentInChildren<Camera>(); load = loader; enter = traveller; }
+            Func<Scene, Vector3, Quaternion, float, UniTask> traveller, MemoryCollection collection = null)
+        {
+            if (memories != null) memories.Collected -= OnMemoryCollected;
+            player = motor; playerCamera = motor.GetComponentInChildren<Camera>(); load = loader; enter = traveller;
+            memories = collection;
+            if (memories == null || string.IsNullOrWhiteSpace(requiredMemoryId)) return;
+            memories.Collected += OnMemoryCollected;
+            if (memories.Contains(requiredMemoryId)) OnMemoryCollected(requiredMemoryId);
+        }
+
+        private void OnMemoryCollected(string id)
+        {
+            if (id == requiredMemoryId && !opening && !opened && load != null)
+            {
+                opening = true;
+                OpenAsync().Forget();
+            }
+        }
 
         public override void Interact()
         {
@@ -43,6 +63,9 @@ namespace Memories.Gameplay.Interaction
         {
             try
             {
+                // A restored memory can be bound while the session is still finishing its scene load.
+                if (!string.IsNullOrWhiteSpace(requiredMemoryId)) await UniTask.NextFrame();
+                if (this == null) return;
                 courtyard = await load(destination);
                 if (this == null) return;
                 foreach (var root in courtyard.GetRootGameObjects())
@@ -136,6 +159,7 @@ namespace Memories.Gameplay.Interaction
 
         private void OnDestroy()
         {
+            if (memories != null) memories.Collected -= OnMemoryCollected;
             if (texture != null) { texture.Release(); Destroy(texture); }
             if (material != null) Destroy(material);
         }

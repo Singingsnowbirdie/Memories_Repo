@@ -8,6 +8,7 @@ namespace Memories.Gameplay.Memories
     public sealed class MemoryCollection
     {
         public const string DefaultKey = "Memories.Progress.Comics.v1";
+        public event Action<string> Collected;
         public sealed class FoundMemory
         {
             public string Id { get; }
@@ -69,6 +70,7 @@ namespace Memories.Gameplay.Memories
                 PlayerPrefs.SetString(saveKey, JsonUtility.ToJson(saved));
                 PlayerPrefs.Save();
             }
+            if (added) Collected?.Invoke(id);
             return added;
         }
 
