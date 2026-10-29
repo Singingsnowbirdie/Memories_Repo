@@ -30,6 +30,7 @@ namespace Memories.Bootstrap
                 throw new InvalidOperationException("Location requires one PlayerSpawn and one active MainCamera.");
 
             viewCamera.enabled = true;
+            Memories.Gameplay.GhostCosmosSky.Bind(viewCamera);
             var listener = viewCamera.GetComponent<AudioListener>();
             if (listener != null) listener.enabled = true;
 

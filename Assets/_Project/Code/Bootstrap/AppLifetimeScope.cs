@@ -38,6 +38,7 @@ namespace Memories.Bootstrap
 
         protected override void Configure(IContainerBuilder builder)
         {
+            Instantiate(Resources.Load<GameObject>("SharedSky"), transform);
             builder.Register<ApplicationContext>(Lifetime.Singleton);
             builder.Register<AudioVolumeSettings>(Lifetime.Singleton);
             builder.RegisterBuildCallback(container => container.Resolve<AudioVolumeSettings>());

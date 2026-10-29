@@ -26947,7 +26947,6 @@ GameObject:
   - component: {fileID: 110040294}
   - component: {fileID: 110040293}
   - component: {fileID: 110040296}
-  - component: {fileID: 110040298}
   - component: {fileID: 110040297}
   m_Layer: 0
   m_Name: Main Camera
@@ -27083,30 +27082,6 @@ Skybox:
   m_GameObject: {fileID: 110040292}
   m_Enabled: 1
   m_CustomSkybox: {fileID: 2100000, guid: 1d06f9b7001848bd93dce65bcd218fa2, type: 2}
---- !u!114 &110040298
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 110040292}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7fdafb1db2045c0b79146d84b31d882, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skyMaterial: {fileID: 2100000, guid: 1d06f9b7001848bd93dce65bcd218fa2, type: 2}
-  shimmer: 0.025
-  starsFadeDuration: 6
-  nebulaFadeDuration: 10
-  asteroidMeshes:
-  - {fileID: -745552649630363952, guid: c05d24c6a1cdb724a918afd47347dcd1, type: 3}
-  - {fileID: -2497679977114400626, guid: 1dc2ce7af7a959b4e81997ee9f222d80, type: 3}
-  - {fileID: -3483716981447697678, guid: c607c6adafdc5854d8f75f91c0b35dcc, type: 3}
-  - {fileID: -7163008459117477625, guid: 49bb6499f133e874fa5332bc2e0310f5, type: 3}
-  - {fileID: -2218285450774669110, guid: be6cfaf08273697408f6fd884776443d, type: 3}
-  asteroidMaterial: {fileID: 2100000, guid: 772d9d9117eab56479d2738f542c054c, type: 2}
-  asteroidCount: 180
 --- !u!1001 &110827206
 PrefabInstance:
   m_ObjectHideFlags: 0
