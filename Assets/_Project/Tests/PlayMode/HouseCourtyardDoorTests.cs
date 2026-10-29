@@ -73,7 +73,7 @@ namespace Memories.Tests.PlayMode
                 while (!door.IsOpen && Time.realtimeSinceStartup < deadline) await UniTask.NextFrame();
                 Assert.IsTrue(door.IsOpen);
                 Assert.IsFalse(door.CanInteract);
-                Assert.IsTrue(SceneManager.GetSceneByPath(TestLocationLauncher.CourtyardPath).isLoaded);
+                Assert.IsTrue(SceneManager.GetSceneByPath(TestLocationLauncher.BackyardPath).isLoaded);
                 Assert.IsTrue(SceneManager.GetSceneByPath(TestLocationLauncher.HousePath).isLoaded, "House must remain in place while looking through the open door.");
                 Assert.IsFalse(SceneManager.GetSceneByPath(TestLocationLauncher.HighwayPath).isLoaded,
                     "Highway must unload when opening the door, before entering the courtyard.");
@@ -86,19 +86,23 @@ namespace Memories.Tests.PlayMode
                 Assert.IsTrue(portal.targetTexture.IsCreated());
                 Assert.AreEqual(1, Object.FindObjectsByType<Camera>(FindObjectsSortMode.None).Count(c => c.enabled));
                 if (!main) Capture(motor.GetComponentInChildren<Camera>(), "Temp/house-courtyard-open.png");
-                for (int i = 0; i < 100 && session.LocationScope.gameObject.scene.path != TestLocationLauncher.CourtyardPath; i++)
+                for (int i = 0; i < 100 && session.LocationScope.gameObject.scene.path != TestLocationLauncher.BackyardPath; i++)
                 { motor.Move(new Vector3(0, -.04f, .04f)); await UniTask.NextFrame(); }
                 deadline = Time.realtimeSinceStartup + 15;
                 while (SceneManager.GetSceneByPath(TestLocationLauncher.HousePath).isLoaded && Time.realtimeSinceStartup < deadline) await UniTask.NextFrame();
-                Assert.AreEqual(TestLocationLauncher.CourtyardPath, session.LocationScope.gameObject.scene.path);
+                Assert.AreEqual(TestLocationLauncher.BackyardPath, session.LocationScope.gameObject.scene.path);
                 Assert.IsFalse(SceneManager.GetSceneByPath(TestLocationLauncher.HousePath).isLoaded);
                 Assert.IsFalse(SceneManager.GetSceneByPath(TestLocationLauncher.HighwayPath).isLoaded);
                 motor = session.LocationScope.Container.Resolve<PlayerMotor>();
-                Assert.That(motor.transform.position.z, Is.InRange(-14.6f, -14f));
+                Assert.That(motor.transform.position.z, Is.InRange(.7f, 1.2f));
                 Assert.AreEqual(1, Object.FindObjectsByType<PlayerMotor>(FindObjectsSortMode.None).Length);
                 for (int i = 0; i < 450; i++) motor.Move(new Vector3(0, -.04f, .05f));
-                Assert.Greater(motor.transform.position.z, 7, "The eighteen-metre arch must be traversable.");
+                Assert.Greater(motor.transform.position.z, 20, "The backyard must be walkable up to the far fence.");
+                Assert.Less(motor.transform.position.z, 22, "The far fence must stop the player.");
                 Assert.That(motor.transform.position.y, Is.InRange(-.1f, .15f));
+                for (int i = 0; i < 500; i++) motor.Move(new Vector3(0, -.04f, -.05f));
+                Assert.Greater(motor.transform.position.z, .1f, "The painted door must be a solid part of the plywood facade.");
+                Assert.Less(motor.transform.position.z, 1, "The player can return to the painted door.");
             }
             finally
             {

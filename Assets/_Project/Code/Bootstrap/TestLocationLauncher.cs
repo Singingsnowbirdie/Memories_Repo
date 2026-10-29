@@ -11,6 +11,7 @@ namespace Memories.Bootstrap
         public const string HighwayPath = "Assets/_Project/Locations/Highway/Highway.unity";
         public const string HousePath = "Assets/_Project/Locations/House/House.unity";
         public const string CourtyardPath = "Assets/_Project/Locations/CourtyardIsland/CourtyardIsland.unity";
+        public const string BackyardPath = "Assets/_Project/Locations/Backyard/Backyard.unity";
 
         public const string GaragePath = "Assets/_Project/Locations/Garage/Garage.unity";
 
@@ -23,7 +24,8 @@ namespace Memories.Bootstrap
             [InspectorName("Дом")] House,
             [InspectorName("Двор-колодец")] Courtyard,
             [InspectorName("Гараж")] Garage,
-            [InspectorName("Школа")] School
+            [InspectorName("Школа")] School,
+            [InspectorName("Задний двор")] Backyard
         }
 
         [SerializeField] private Location location;
@@ -35,6 +37,7 @@ namespace Memories.Bootstrap
             Location.Courtyard => CourtyardPath,
             Location.Garage => GaragePath,
             Location.School => SchoolPath,
+            Location.Backyard => BackyardPath,
             _ => AppLifetimeScope.DefaultLocationPath
         };
 
