@@ -54,7 +54,7 @@ namespace Memories.Tests.PlayMode
                 var cc = motor.GetComponent<CharacterController>();
                 cc.enabled = false; motor.transform.position = new Vector3(0, .05f, 325.5f); cc.enabled = true;
                 motor.SetLook(0, 0); Physics.SyncTransforms();
-                var door = Object.FindFirstObjectByType<CourtyardDoor>();
+                var door = Object.FindFirstObjectByType<OpenCourtyardDoorReaction>();
                 Assert.IsNotNull(door);
                 Assert.IsNull(door.GetComponent<Interactable>(), "The house exit must not be an interactive object.");
                 var memories = session.SessionScope.Container.Resolve<MemoryCollection>();
@@ -71,12 +71,22 @@ namespace Memories.Tests.PlayMode
                     Assert.IsEmpty(door.GetComponentsInChildren<Camera>(), "Opening must not start from the memory event.");
                     var reaction = Object.FindFirstObjectByType<OpenCourtyardDoorReaction>(FindObjectsInactive.Include);
                     Assert.IsNotNull(reaction);
+                    var closeEntrance = Object.FindFirstObjectByType<CloseEntranceDoorsReaction>(FindObjectsInactive.Include);
+                    Assert.IsNotNull(closeEntrance);
+                    closeEntrance.Execute();
+                    closeEntrance.Execute();
                     reaction.Execute();
                     reaction.Execute(); // Repeated playback must not start a second opening.
                 }
                 deadline = Time.realtimeSinceStartup + 25;
                 while (!door.IsOpen && Time.realtimeSinceStartup < deadline) await UniTask.NextFrame();
                 Assert.IsTrue(door.IsOpen);
+                var entrance = Object.FindFirstObjectByType<CloseEntranceDoorsReaction>(FindObjectsInactive.Include);
+                Assert.IsNotNull(entrance);
+                Assert.IsTrue(Physics.Raycast(entrance.transform.TransformPoint(new Vector3(0.5f, 1, 1)),
+                    -entrance.transform.forward, out var entranceHit, 2f), "Closed entrance must block the player.");
+                Assert.IsTrue(entranceHit.collider.transform.IsChildOf(entrance.transform));
+                Assert.IsNull(entrance.GetComponent<Interactable>(), "The player must not be able to reopen the entrance.");
                 Assert.IsNull(door.GetComponent<Interactable>());
                 Assert.IsTrue(SceneManager.GetSceneByPath(TestLocationLauncher.BackyardPath).isLoaded);
                 Assert.IsTrue(SceneManager.GetSceneByPath(TestLocationLauncher.HousePath).isLoaded, "House must remain in place while looking through the open door.");

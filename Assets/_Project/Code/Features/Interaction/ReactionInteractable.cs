@@ -15,6 +15,7 @@ namespace Memories.Gameplay.Interaction
         private WomanTelevisionState televisionState;
         [SerializeField] private string prompt = "Взаимодействовать";
         [SerializeField, InspectorName("Объекты графа")] private ReactionObjectBinding[] objectBindings = new ReactionObjectBinding[0];
+        [SerializeField, InspectorName("Кастомные реакции")] private CustomReactionBinding[] customReactions = new CustomReactionBinding[0];
         private ReactionRunner runner;
         private ReactionRunner initializationRunner;
         public override string Prompt => prompt;
@@ -34,11 +35,11 @@ namespace Memories.Gameplay.Interaction
             SetInteractionEnabled(televisionState == null || !televisionState.IsTelevisionOn);
             runner?.Dispose();
             initializationRunner?.Dispose();
-            runner = new ReactionRunner(texts, memories, this, locations, inventory, variables, objectBindings);
+            runner = new ReactionRunner(texts, memories, this, locations, inventory, variables, objectBindings, customReactions);
             RestorePickupState(inventory);
             if (initializationGraph != null)
             {
-                initializationRunner = new ReactionRunner(texts, memories, this, locations, inventory, variables, objectBindings);
+                initializationRunner = new ReactionRunner(texts, memories, this, locations, inventory, variables, objectBindings, customReactions);
                 initializationRunner.TryRun(initializationGraph);
             }
         }

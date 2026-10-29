@@ -461,7 +461,10 @@ MonoBehaviour:
     - _fieldName: ifPresent
       _node: {fileID: -2077324114546759911}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections: []
+      connections:
+      - fieldName: previous
+        node: {fileID: -601569816509505848}
+        reroutePoints: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -497,7 +500,7 @@ MonoBehaviour:
   m_Name: "\u041A\u043E\u043D\u0435\u0446"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionEndNode
   graph: {fileID: 11400000}
-  position: {x: 1144, y: 360}
+  position: {x: 1144, y: 120}
   ports:
     keys:
     - previous
@@ -508,6 +511,9 @@ MonoBehaviour:
       connections:
       - fieldName: next
         node: {fileID: 7681256706186506893}
+        reroutePoints: []
+      - fieldName: ifPresent
+        node: {fileID: -2077324114546759911}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -626,7 +632,7 @@ MonoBehaviour:
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
-  objectKey: TV static
+  objectKey: "\u041F\u043E\u043C\u0435\u0445\u0438 \u043D\u0430 \u0442\u0435\u043B\u0435\u0432\u0438\u0437\u043E\u0440\u0435"
   active: 0
   interactionEnabled: 0
   item: {fileID: 0}
@@ -686,7 +692,8 @@ MonoBehaviour:
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
-  objectKey: TV baseball
+  objectKey: "\u0411\u0435\u0439\u0441\u0431\u043E\u043B\u044C\u043D\u044B\u0439
+    \u043C\u0430\u0442\u0447 \u043F\u043E \u0442\u0435\u043B\u0435\u0432\u0438\u0437\u043E\u0440\u0443"
   active: 1
   interactionEnabled: 0
   item: {fileID: 0}
@@ -926,7 +933,8 @@ MonoBehaviour:
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
-  objectKey: Hand remote
+  objectKey: "\u041F\u0443\u043B\u044C\u0442 \u043E\u0442 \u0442\u0435\u043B\u0435\u0432\u0438\u0437\u043E\u0440\u0430
+    \u0432 \u0440\u0443\u043A\u0435 \u0434\u0435\u0432\u0443\u0448\u043A\u0438"
   active: 1
   interactionEnabled: 0
   item: {fileID: 0}
@@ -971,9 +979,11 @@ MonoBehaviour:
   - {fileID: -9014340901178519667}
   - {fileID: -3432567442139321332}
   objectKeys:
-  - TV static
-  - TV baseball
-  - Hand remote
+  - "\u041F\u043E\u043C\u0435\u0445\u0438 \u043D\u0430 \u0442\u0435\u043B\u0435\u0432\u0438\u0437\u043E\u0440\u0435"
+  - "\u0411\u0435\u0439\u0441\u0431\u043E\u043B\u044C\u043D\u044B\u0439 \u043C\u0430\u0442\u0447
+    \u043F\u043E \u0442\u0435\u043B\u0435\u0432\u0438\u0437\u043E\u0440\u0443"
+  - "\u041F\u0443\u043B\u044C\u0442 \u043E\u0442 \u0442\u0435\u043B\u0435\u0432\u0438\u0437\u043E\u0440\u0430
+    \u0432 \u0440\u0443\u043A\u0435 \u0434\u0435\u0432\u0443\u0448\u043A\u0438"
 --- !u!114 &880000002
 MonoBehaviour:
   m_ObjectHideFlags: 0

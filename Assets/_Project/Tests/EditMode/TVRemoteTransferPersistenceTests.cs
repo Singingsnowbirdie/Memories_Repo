@@ -24,6 +24,26 @@ namespace Memories.Tests.EditMode
         private static GameObject Named(Scene scene, string name) => All<Transform>(scene)
             .Single(value => value.name == name).gameObject;
 
+        [TestCase(false)]
+        [TestCase(true)]
+        public void PhotoProgressRestoresWomanVisibilityWithoutGraph(bool revealed)
+        {
+            var scene = EditorSceneManager.OpenPreviewScene(House);
+            try
+            {
+                var visibility = All<SavedObjectVisibility>(scene).Single();
+                var variables = new CustomVariableStore(persistProgress: false);
+                variables.Set(Field<CustomVariableBank>(visibility, "variableBank"),
+                    Field<string>(visibility, "variableId"), revealed);
+                visibility.gameObject.SetActive(!revealed);
+                visibility.Restore(variables);
+                Assert.AreEqual(revealed, visibility.gameObject.activeSelf);
+                var photo = All<RevealPhotoReaction>(scene).Single();
+                Assert.IsNull(Field<ReactionGraph>(photo.GetComponent<ReactionInteractable>(), "initializationGraph"));
+            }
+            finally { EditorSceneManager.ClosePreviewScene(scene); }
+        }
+
         [Test]
         public void TransferThenReloadRestoresHandAndMatchWithoutRespawningItems()
         {
@@ -79,12 +99,13 @@ namespace Memories.Tests.EditMode
                 Assert.IsNotNull(prefab, name);
                 PrefabUtility.InstantiatePrefab(prefab, scene);
             }
-            // Mirror the startup order: initialize even inactive interactables, then restore the remembered woman.
+            var photo = All<RevealPhotoReaction>(scene).Single();
+            variables.Set(Field<CustomVariableBank>(photo, "variableBank"), Field<string>(photo, "revealedVariableId"), true);
+            photo.Restore(variables);
+            foreach (var visibility in All<SavedObjectVisibility>(scene))
+                visibility.Restore(variables);
             foreach (var interactable in All<ReactionInteractable>(scene))
                 interactable.Initialize(texts, null, inventory: inventory, variables: variables);
-            var photo = All<PhotoMemory>(scene).Single();
-            variables.Set(Field<CustomVariableBank>(photo, "variableBank"), Field<string>(photo, "revealedVariableId"), true);
-            photo.Initialize(texts, null, inventory, variables);
         }
 
         private static void AssertTransferred(Scene scene, QuestInventory inventory, QuestItem[] items)

@@ -27,7 +27,7 @@ namespace Memories.Editor
                 launcher.SelectedLocation = path == TestLocationLauncher.HousePath ? TestLocationLauncher.Location.House :
                     path == TestLocationLauncher.HighwayPath ? TestLocationLauncher.Location.Highway :
                     path == TestLocationLauncher.CourtyardPath ? TestLocationLauncher.Location.Courtyard :
-                    TestLocationLauncher.Location.TestRoom;
+                    TestLocationLauncher.Location.Highway;
             }
             var app = root.AddComponent<AppLifetimeScope>();
             var settings = new SerializedObject(app);

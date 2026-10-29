@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6224281947064484558}
+  - component: {fileID: 1729083441942523170}
   m_Layer: 0
   m_Name: BatteryAA_Pickup
   m_TagString: Untagged
@@ -32,6 +33,25 @@ Transform:
   - {fileID: 5612239379168195689}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1729083441942523170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3591465502250364558}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ba68190f9594ee8b2fc0603419ed015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Interaction.ReactionInteractable
+  graph: {fileID: 11400000, guid: 4261ad1f956b46e1aa158971d39df99b, type: 2}
+  initializationGraph: {fileID: 0}
+  prompt: "\u0412\u0437\u044F\u0442\u044C: \u0411\u0430\u0442\u0430\u0440\u0435\u0439\u043A\u0430"
+  objectBindings:
+  - key: "\u041F\u0440\u0435\u0434\u043C\u0435\u0442"
+    target: {fileID: 3591465502250364558}
+  customReactions: []
 --- !u!1001 &312671666608331888
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -103,9 +123,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4827762520342393507, guid: ed338126b14090f43a671b4ce8089579, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3894887530317364984}
-    - targetCorrespondingSourceObject: {fileID: 4827762520342393507, guid: ed338126b14090f43a671b4ce8089579, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 39111439873585023}
   m_SourcePrefab: {fileID: 100100000, guid: ed338126b14090f43a671b4ce8089579, type: 3}
 --- !u!1 &5091738663775579859 stripped
 GameObject:
@@ -131,26 +148,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.080583245, y: 0.2334261, z: 0.08238257}
+  m_Size: {x: 0.15, y: 0.35, z: 0.15}
   m_Center: {x: 0, y: 0.11240693, z: 0}
---- !u!114 &39111439873585023
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5091738663775579859}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ba68190f9594ee8b2fc0603419ed015, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Interaction.ReactionInteractable
-  graph: {fileID: 11400000, guid: 4261ad1f956b46e1aa158971d39df99b, type: 2}
-  initializationGraph: {fileID: 0}
-  prompt: "\u0412\u0437\u044F\u0442\u044C: \u0411\u0430\u0442\u0430\u0440\u0435\u0439\u043A\u0430"
-  objectBindings:
-  - key: "\u041F\u0440\u0435\u0434\u043C\u0435\u0442"
-    target: {fileID: 3591465502250364558}
 --- !u!4 &5612239379168195689 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5311002642145847321, guid: ed338126b14090f43a671b4ce8089579, type: 3}

@@ -21,6 +21,7 @@ namespace Memories.Gameplay.Reactions
         private readonly QuestInventory inventory;
         private readonly CustomVariableStore variables;
         private readonly ReactionObjectBinding[] objectBindings;
+        private readonly CustomReactionBinding[] customReactions;
         private CancellationTokenSource playback;
         private bool fired;
         private ReactionRunner hintOwner;
@@ -28,8 +29,8 @@ namespace Memories.Gameplay.Reactions
         public bool IsRunning => playback != null;
         public bool IsHidingOwner { get; private set; }
         public ReactionRunner(StoryTextPresenter texts, MemoryPresenter memories, UnityEngine.Object owner,
-            ILocationTransition locations = null, QuestInventory inventory = null, CustomVariableStore variables = null, ReactionObjectBinding[] objectBindings = null)
-        { this.texts = texts; this.memories = memories; this.owner = owner; this.locations = locations; this.inventory = inventory; this.variables = variables; this.objectBindings = objectBindings; hintOwner = this; }
+            ILocationTransition locations = null, QuestInventory inventory = null, CustomVariableStore variables = null, ReactionObjectBinding[] objectBindings = null, CustomReactionBinding[] customReactions = null)
+        { this.texts = texts; this.memories = memories; this.owner = owner; this.locations = locations; this.inventory = inventory; this.variables = variables; this.objectBindings = objectBindings; this.customReactions = customReactions; hintOwner = this; }
         public bool CanRun(ReactionGraph graph) => graph != null && !IsRunning &&
             !(graph.RunOnce && fired) && (memories == null || memories.CanStartPlayback);
         public bool TryRun(ReactionGraph graph)
@@ -49,8 +50,8 @@ namespace Memories.Gameplay.Reactions
                 if (action.Kind == ReactionKind.StoryText && texts == null) return false;
                 if (action.Kind == ReactionKind.Memory && memories == null) return false;
                 if (action.Kind == ReactionKind.Memory && action.FirstCompletionText != null && texts == null) return false;
-                if (action.Kind == ReactionKind.CustomReaction && !CustomReaction.TryFind(owner, out _))
-                { Debug.LogWarning("На объекте нужен ровно один включённый компонент CustomReaction.", owner); return false; }
+                if (action.Kind == ReactionKind.CustomReaction && !TryGetCustomReaction(action, out _))
+                { Debug.LogWarning("Назначьте включённый компонент CustomReaction в привязках реакций: " + action.ObjectKey, owner); return false; }
                 if (action.Kind == ReactionKind.ChangeLocation &&
                     (locations == null || !locations.CanChangeLocation(action.LocationScenePath))) return false;
             }
@@ -62,6 +63,11 @@ namespace Memories.Gameplay.Reactions
             RunAsync(graph, playback).Forget();
             return true;
         }
+        private bool TryGetCustomReaction(ReactionNode action, out CustomReaction reaction)
+        {
+            return CustomReactionBinding.TryResolve(customReactions, action.ObjectKey, out reaction);
+        }
+
         private bool TryGetInteractable(ReactionNode action, out Interactable interactable)
         {
             interactable = null;
@@ -111,7 +117,7 @@ namespace Memories.Gameplay.Reactions
                         (memories == null || memories.CanStartPlayback) && Time.timeScale > 0,
                         cancellationToken: timer.Token);
                     timer.Token.ThrowIfCancellationRequested();
-                    child = new ReactionRunner(texts, memories, owner, locations, inventory, variables, objectBindings);
+                    child = new ReactionRunner(texts, memories, owner, locations, inventory, variables, objectBindings, customReactions);
                     child.hintOwner = this;
                     // Each traversal evaluates graph conditions against the current inventory.
                     if (!child.TryRun(graph)) return;
@@ -166,7 +172,7 @@ namespace Memories.Gameplay.Reactions
                         hintOwner.StopHint(action.HintId);
                     else if (action.Kind == ReactionKind.CustomReaction)
                     {
-                        if (!CustomReaction.TryFind(owner, out var customReaction))
+                        if (!TryGetCustomReaction(action, out var customReaction))
                             throw new InvalidOperationException("Компонент CustomReaction недоступен на объекте.");
                         customReaction.Execute();
                     }

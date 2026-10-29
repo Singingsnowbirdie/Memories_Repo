@@ -18602,6 +18602,32 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2, y: 3, z: 0.20000003}
   m_Center: {x: -0.000000059604638, y: 1.5, z: -0.00000002607703}
+--- !u!1 &411514270 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6250538336083816765, guid: 237effadf9f55f9479eb16ec1ad4be99, type: 3}
+  m_PrefabInstance: {fileID: 7791041754250782235}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &411514274
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 411514270}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.03934937, y: 1.4851837, z: 0.72408503}
+  m_Center: {x: -0.000015482457, y: 0.7399038, z: 0.3513209}
 --- !u!1 &412973987
 GameObject:
   m_ObjectHideFlags: 0
@@ -32595,6 +32621,39 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7312109660802473957, guid: bce6788f99e5fad47a51b543326e26f3, type: 3}
   m_PrefabInstance: {fileID: 1373191208}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &787424340
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 787424341}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &787424341
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 787424340}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.653, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 798187778}
+  - {fileID: 1885583382}
+  m_Father: {fileID: 1417607531}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &787866431
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -33122,7 +33181,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1656091082}
+    m_TransformParent: {fileID: 787424341}
     m_Modifications:
     - target: {fileID: 3591465502250364558, guid: f931d185516236945918fca8939a6f1a, type: 3}
       propertyPath: m_Name
@@ -33130,15 +33189,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6224281947064484558, guid: f931d185516236945918fca8939a6f1a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.711
+      value: -1.213
       objectReference: {fileID: 0}
     - target: {fileID: 6224281947064484558, guid: f931d185516236945918fca8939a6f1a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.072
+      value: 0.03699997
       objectReference: {fileID: 0}
     - target: {fileID: 6224281947064484558, guid: f931d185516236945918fca8939a6f1a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 11.39
+      value: 0.06903076
       objectReference: {fileID: 0}
     - target: {fileID: 6224281947064484558, guid: f931d185516236945918fca8939a6f1a, type: 3}
       propertyPath: m_LocalRotation.w
@@ -36489,7 +36548,6 @@ GameObject:
   - component: {fileID: 880001205}
   - component: {fileID: 880001206}
   - component: {fileID: 880001207}
-  - component: {fileID: 880001208}
   m_Layer: 0
   m_Name: TV Baseball Screen
   m_TagString: Untagged
@@ -36597,19 +36655,13 @@ MonoBehaviour:
   initializationGraph: {fileID: 0}
   prompt: "\u0412\u0441\u043F\u043E\u043C\u043D\u0438\u0442\u044C"
   objectBindings: []
---- !u!114 &880001208
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 880001201}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 47a943a6841c4ea1a16ad120d4593cd1, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.OpenCourtyardDoorReaction
-  door: {fileID: 1911400795}
+  customReactions:
+  - key: "\u041E\u0442\u043A\u0440\u044B\u0442\u044C \u0437\u0430\u0434\u043D\u044E\u044E
+      \u0434\u0432\u0435\u0440\u044C \u0434\u043E\u043C\u0430"
+    reaction: {fileID: 880001208}
+  - key: "\u0417\u0430\u043A\u0440\u044B\u0442\u044C \u0433\u043B\u0430\u0432\u043D\u0443\u044E
+      \u0434\u0432\u0435\u0440\u044C \u0434\u043E\u043C\u0430"
+    reaction: {fileID: 880003004}
 --- !u!65 &880001207
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -36631,6 +36683,25 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 0.04}
   m_Center: {x: 0, y: 0, z: 0.04}
+--- !u!114 &880001208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1911400793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47a943a6841c4ea1a16ad120d4593cd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.OpenCourtyardDoorReaction
+  hinge: {fileID: 1066434795}
+  view: {fileID: 867035191}
+  closedDoor: {fileID: 557273202}
+  destination: Assets/_Project/Locations/Backyard/Backyard.unity
+  arrivalMarker: "\u0412\u0445\u043E\u0434 \u0438\u0437 \u0434\u043E\u043C\u0430"
+  arrivalForwardOffset: 1.2
+  requiredMemoryId: house-tv-baseball
 --- !u!4 &880001300 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5388560363890655783, guid: 20e380c8b39465b4391b29c8c88cae38, type: 3}
@@ -36662,13 +36733,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 880001301}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0.95126355, y: -0.233118, z: 0.19607401, w: 0.04804992}
+  m_LocalPosition: {x: -0.021, y: -0.037, z: 0.059}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 880001300}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 10.535, y: 159.106, z: 205.591}
 --- !u!33 &880001303
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -36726,6 +36797,31 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &880003004 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 880003001, guid: b7d651134251215439006063f8efd54e, type: 3}
+  m_PrefabInstance: {fileID: 1993246558}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a8fdc57100b463db19cd12b975f1a63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.CloseEntranceDoorsReaction
+--- !u!114 &880004001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1804949525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72fa2e38b599425cbb1eceaf9d667a91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.SavedObjectVisibility
+  variableBank: {fileID: 11400000, guid: 1e3cd4cc4f3341b080b5d2fd69506a3f, type: 2}
+  variableId: a658183a452d4c2b9ef92252e09264ec
 --- !u!1001 &881157724
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -45712,16 +45808,16 @@ PrefabInstance:
       value: PhotoFrame_Couple
       objectReference: {fileID: 0}
     - target: {fileID: 7887096858770726069, guid: 966773fb361d0244bb4dc4b3fee00b57, type: 3}
-      propertyPath: rememberedWoman
-      value: 
-      objectReference: {fileID: 1804949525}
-    - target: {fileID: 7887096858770726069, guid: 966773fb361d0244bb4dc4b3fee00b57, type: 3}
       propertyPath: objectBindings.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7887096858770726069, guid: 966773fb361d0244bb4dc4b3fee00b57, type: 3}
       propertyPath: objectBindings.Array.data[0].key
-      value: "\u0414\u0435\u0432\u0443\u0448\u043A\u0430"
+      value: "\u0414\u0435\u0432\u0443\u0448\u043A\u0430 \u043D\u0430 \u0434\u0438\u0432\u0430\u043D\u0435"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7887096858770726069, guid: 966773fb361d0244bb4dc4b3fee00b57, type: 3}
+      propertyPath: customReactions.Array.data[0].key
+      value: "\u041F\u043E\u044F\u0432\u043B\u0435\u043D\u0438\u0435 \u0444\u043E\u0442\u043E\u0433\u0440\u0430\u0444\u0438\u0438"
       objectReference: {fileID: 0}
     - target: {fileID: 7887096858770726069, guid: 966773fb361d0244bb4dc4b3fee00b57, type: 3}
       propertyPath: objectBindings.Array.data[0].target
@@ -57316,9 +57412,8 @@ PrefabInstance:
       value: Cozy_Bathroom_Vanity_02_Set
       objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: 9010432576537185205, guid: 067bd64e586c4ff41bbc5d8a250fa3f6, type: 3}
-    - {fileID: 8619635002247668449, guid: 067bd64e586c4ff41bbc5d8a250fa3f6, type: 3}
-    - {fileID: 6918949578950691596, guid: 067bd64e586c4ff41bbc5d8a250fa3f6, type: 3}
+    - {fileID: 0}
+    - {fileID: 0}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -58271,7 +58366,7 @@ Transform:
   - {fileID: 1790444706}
   - {fileID: 1815236888}
   - {fileID: 2075495802}
-  - {fileID: 1885583382}
+  - {fileID: 787424341}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1417692264
@@ -67705,7 +67800,6 @@ Transform:
   - {fileID: 1142031367}
   - {fileID: 819750140}
   - {fileID: 1778528614}
-  - {fileID: 798187778}
   - {fileID: 1519744511823836615}
   - {fileID: 739324313}
   - {fileID: 1920438485}
@@ -74909,15 +75003,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 720100001, guid: 20e380c8b39465b4391b29c8c88cae38, type: 3}
       propertyPath: objectBindings.Array.data[0].key
-      value: TV static
+      value: "\u041F\u043E\u043C\u0435\u0445\u0438 \u043D\u0430 \u0442\u0435\u043B\u0435\u0432\u0438\u0437\u043E\u0440\u0435"
       objectReference: {fileID: 0}
     - target: {fileID: 720100001, guid: 20e380c8b39465b4391b29c8c88cae38, type: 3}
       propertyPath: objectBindings.Array.data[1].key
-      value: TV baseball
+      value: "\u0411\u0435\u0439\u0441\u0431\u043E\u043B\u044C\u043D\u044B\u0439
+        \u043C\u0430\u0442\u0447 \u043F\u043E \u0442\u0435\u043B\u0435\u0432\u0438\u0437\u043E\u0440\u0443"
       objectReference: {fileID: 0}
     - target: {fileID: 720100001, guid: 20e380c8b39465b4391b29c8c88cae38, type: 3}
       propertyPath: objectBindings.Array.data[2].key
-      value: Hand remote
+      value: "\u041F\u0443\u043B\u044C\u0442 \u043E\u0442 \u0442\u0435\u043B\u0435\u0432\u0438\u0437\u043E\u0440\u0430
+        \u0432 \u0440\u0443\u043A\u0435 \u0434\u0435\u0432\u0443\u0448\u043A\u0438"
       objectReference: {fileID: 0}
     - target: {fileID: 720100001, guid: 20e380c8b39465b4391b29c8c88cae38, type: 3}
       propertyPath: objectBindings.Array.data[0].target
@@ -74931,6 +75027,26 @@ PrefabInstance:
       propertyPath: objectBindings.Array.data[2].target
       value: 
       objectReference: {fileID: 880001301}
+    - target: {fileID: 720100002, guid: 20e380c8b39465b4391b29c8c88cae38, type: 3}
+      propertyPath: m_Size.y
+      value: 1.5003589
+      objectReference: {fileID: 0}
+    - target: {fileID: 720100002, guid: 20e380c8b39465b4391b29c8c88cae38, type: 3}
+      propertyPath: m_Size.z
+      value: 0.75177336
+      objectReference: {fileID: 0}
+    - target: {fileID: 720100002, guid: 20e380c8b39465b4391b29c8c88cae38, type: 3}
+      propertyPath: m_Center.x
+      value: -0.00000014508898
+      objectReference: {fileID: 0}
+    - target: {fileID: 720100002, guid: 20e380c8b39465b4391b29c8c88cae38, type: 3}
+      propertyPath: m_Center.y
+      value: 0.59482056
+      objectReference: {fileID: 0}
+    - target: {fileID: 720100002, guid: 20e380c8b39465b4391b29c8c88cae38, type: 3}
+      propertyPath: m_Center.z
+      value: 0.21588665
+      objectReference: {fileID: 0}
     - target: {fileID: 521923786872941378, guid: 20e380c8b39465b4391b29c8c88cae38, type: 3}
       propertyPath: m_Name
       value: casual_Female_K_Gray_Seated
@@ -75250,7 +75366,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5388560363890655783, guid: 20e380c8b39465b4391b29c8c88cae38, type: 3}
       insertIndex: -1
       addedObject: {fileID: 880001302}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 521923786872941378, guid: 20e380c8b39465b4391b29c8c88cae38, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 880004001}
   m_SourcePrefab: {fileID: 100100000, guid: 20e380c8b39465b4391b29c8c88cae38, type: 3}
 --- !u!1 &1804949525 stripped
 GameObject:
@@ -79063,7 +79182,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1417607531}
+    m_TransformParent: {fileID: 787424341}
     m_Modifications:
     - target: {fileID: 38880730377714195, guid: 76a00c86ade17a84f906e15376fcd200, type: 3}
       propertyPath: m_LocalScale.x
@@ -79071,7 +79190,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 38880730377714195, guid: 76a00c86ade17a84f906e15376fcd200, type: 3}
       propertyPath: m_LocalScale.y
-      value: 2.2551003
+      value: 2.2551005
       objectReference: {fileID: 0}
     - target: {fileID: 38880730377714195, guid: 76a00c86ade17a84f906e15376fcd200, type: 3}
       propertyPath: m_LocalScale.z
@@ -80262,7 +80381,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1911400794}
-  - component: {fileID: 1911400795}
+  - component: {fileID: 880001208}
   m_Layer: 0
   m_Name: "\u0414\u0432\u0435\u0440\u044C \u0432 \u0430\u0440\u043A\u0443 \u0434\u0432\u043E\u0440\u0430"
   m_TagString: Untagged
@@ -80290,25 +80409,6 @@ Transform:
   - {fileID: 867035190}
   m_Father: {fileID: 1383401882}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1911400795
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1911400793}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d360eb9eabd8fc4db87d36fba930a7e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Interaction.CourtyardDoor
-  hinge: {fileID: 1066434795}
-  view: {fileID: 867035191}
-  closedDoor: {fileID: 557273202}
-  destination: Assets/_Project/Locations/Backyard/Backyard.unity
-  arrivalMarker: "\u0412\u0445\u043E\u0434 \u0438\u0437 \u0434\u043E\u043C\u0430"
-  arrivalForwardOffset: 1.2
-  requiredMemoryId: house-tv-baseball
 --- !u!1001 &1913936855
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -95651,7 +95751,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6250538336083816765, guid: 237effadf9f55f9479eb16ec1ad4be99, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 411514274}
   m_SourcePrefab: {fileID: 100100000, guid: 237effadf9f55f9479eb16ec1ad4be99, type: 3}
 --- !u!1 &7843896885710381984
 GameObject:
@@ -96039,6 +96142,7 @@ MonoBehaviour:
   objectBindings:
   - key: "\u041F\u0440\u0435\u0434\u043C\u0435\u0442"
     target: {fileID: 8516035423531171488}
+  customReactions: []
 --- !u!4 &8516035423531171490 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8884498055708056954, guid: 784e980c1cf96344d9d04f01e2618d6b, type: 3}

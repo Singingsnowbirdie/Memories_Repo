@@ -75,12 +75,13 @@ namespace Memories.Bootstrap
             trackHouseCheckpoint = false;
             busy = true;
             SessionScope.Container.Resolve<QuestInventorySave>().Dispose();
+            SessionScope.Container.Resolve<ObjectStateStore>().Reset();
             if (applicationScope.PersistProgress)
             {
                 progress.Reset();
                 QuestInventorySave.Clear();
                 CustomVariableStore.Clear();
-                PhotoMemory.ResetProgress();
+                RevealPhotoReaction.ResetProgress();
                 Memories.Gameplay.Memories.MemoryCollection.Clear();
             }
             return true;
@@ -225,6 +226,7 @@ namespace Memories.Bootstrap
                 locationScene = nextScene;
                 LocationScope = nextScope;
                 committed = true;
+                SessionScope.Container.Resolve<ObjectStateStore>().UnloadScene(previousScene);
                 foreach (var previousRoot in previousScene.GetRootGameObjects()) previousRoot.SetActive(false);
                 previousScope.Dispose();
                 await SceneManager.UnloadSceneAsync(previousScene);
@@ -255,20 +257,26 @@ namespace Memories.Bootstrap
 
         private void BindDoors(Scene scene, LocationLifetimeScope scope)
         {
+            foreach (var root in scene.GetRootGameObjects())
+                foreach (var photo in root.GetComponentsInChildren<RevealPhotoReaction>(true))
+                    photo.Restore(scope.Container.Resolve<CustomVariableStore>());
+            foreach (var root in scene.GetRootGameObjects())
+                foreach (var reaction in root.GetComponentsInChildren<CloseEntranceDoorsReaction>(true))
+                    reaction.Restore(scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
             if (scene != scope.gameObject.scene)
                 foreach (var root in scene.GetRootGameObjects())
                     foreach (var interactable in root.GetComponentsInChildren<ReactionInteractable>(true))
                         interactable.Initialize(scope.Container.Resolve<Memories.Gameplay.UI.StoryTextPresenter>(),
                             scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>(), this, scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<CustomVariableStore>());
             foreach (var root in scene.GetRootGameObjects())
-                foreach (var photo in root.GetComponentsInChildren<PhotoMemory>(true))
-                    photo.Initialize(scope.Container.Resolve<Memories.Gameplay.UI.StoryTextPresenter>(),
-                        scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>(), scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<CustomVariableStore>());
-            foreach (var root in scene.GetRootGameObjects())
-                foreach (var door in root.GetComponentsInChildren<CourtyardDoor>(true))
+                foreach (var door in root.GetComponentsInChildren<OpenCourtyardDoorReaction>(true))
                     door.Initialize(scope.Container.Resolve<PlayerMotor>(),
                         path => LoadConnectedSceneAsync(path, scene), EnterConnectedSceneAsync,
                         scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
+            scope.Container.Resolve<ObjectStateStore>().RestoreScene(scene);
+            foreach (var root in scene.GetRootGameObjects())
+                foreach (var visibility in root.GetComponentsInChildren<SavedObjectVisibility>(true))
+                    visibility.Restore(scope.Container.Resolve<CustomVariableStore>());
         }
 
         private async UniTask<Scene> LoadConnectedSceneAsync(string path, Scene doorwayScene)
@@ -312,6 +320,7 @@ namespace Memories.Bootstrap
                         SceneManager.SetActiveScene(doorwayScene);
                     }
                     additionalScenes.Remove(highway);
+                    SessionScope.Container.Resolve<ObjectStateStore>().UnloadScene(highway);
                     await SceneManager.UnloadSceneAsync(highway);
                     if (disposed)
                     {
@@ -348,6 +357,7 @@ namespace Memories.Bootstrap
                 additionalScenes.Remove(scene);
                 SceneManager.SetActiveScene(scene);
                 BindDoors(scene, scope);
+                SessionScope.Container.Resolve<ObjectStateStore>().UnloadScene(previous);
                 foreach (var root in previous.GetRootGameObjects()) root.SetActive(false);
                 previousScope.Dispose();
                 await SceneManager.UnloadSceneAsync(previous);
@@ -370,12 +380,17 @@ namespace Memories.Bootstrap
         private async UniTask UnloadAdditionalScenesAsync()
         {
             foreach (var scene in additionalScenes)
-                if (scene.IsValid() && scene.isLoaded) await SceneManager.UnloadSceneAsync(scene);
+                if (scene.IsValid() && scene.isLoaded)
+                {
+                    if (SessionScope != null) SessionScope.Container.Resolve<ObjectStateStore>().UnloadScene(scene);
+                    await SceneManager.UnloadSceneAsync(scene);
+                }
             additionalScenes.Clear();
         }
 
         private void ReleaseScopes()
         {
+            if (SessionScope != null) SessionScope.Container.Resolve<ObjectStateStore>().Flush();
             if (LocationScope != null) LocationScope.Dispose();
             LocationScope = null;
             if (SessionScope != null) SessionScope.Dispose();

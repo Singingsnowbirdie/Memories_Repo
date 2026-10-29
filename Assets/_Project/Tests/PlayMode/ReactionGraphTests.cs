@@ -312,7 +312,8 @@ namespace Memories.Tests.PlayMode
                 try
                 {
                     var store = new CustomVariableStore(saveKey);
-                    using var runner = new ReactionRunner(texts, memories, customOwner.transform, variables: store, objectBindings: bindings);
+                    using var runner = new ReactionRunner(texts, memories, customOwner.transform, variables: store, objectBindings: bindings,
+                        customReactions: new[] { new CustomReactionBinding("", custom) });
                     Assert.IsTrue(runner.TryRun(variableGraph));
                     Assert.IsTrue(new CustomVariableStore(saveKey).Get(bank, variable.Id));
                     Assert.IsTrue(activityTarget.activeSelf, "Inactive objects must be enabled through their binding.");
@@ -329,6 +330,9 @@ namespace Memories.Tests.PlayMode
                     custom.enabled = true;
                     var duplicate = customOwner.AddComponent<TestCustomReaction>();
                     Assert.IsFalse(CustomReaction.TryFind(customOwner.transform, out _));
+                    Assert.IsTrue(runner.TryRun(variableGraph), "An explicitly assigned component must work even with another reaction on the same object.");
+                    Assert.AreEqual(3, custom.Calls);
+                    Assert.AreEqual(0, duplicate.Calls);
                     Object.DestroyImmediate(duplicate);
                     Set(assignment, "variableId", "missing");
                     Assert.IsFalse(variableGraph.TryGetSequence(out _, out _));
@@ -533,7 +537,8 @@ namespace Memories.Tests.PlayMode
             var host = Own(new GameObject("Hint test"));
             var counter = host.AddComponent<TestCustomReaction>();
             var inventory = new QuestInventory();
-            using var runner = new ReactionRunner(null, null, host, inventory: inventory);
+            using var runner = new ReactionRunner(null, null, host, inventory: inventory,
+                customReactions: new[] { new CustomReactionBinding("", counter) });
             Assert.IsTrue(runner.TryRun(launch));
             inventory.TryAdd(item);
             await UniTask.Delay(250);

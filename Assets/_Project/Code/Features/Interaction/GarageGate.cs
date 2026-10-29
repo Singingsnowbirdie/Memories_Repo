@@ -3,6 +3,8 @@
 namespace Memories.Gameplay.Interaction
 {
     // The entire panel follows a tilt-up trajectory into the ceiling rails.
+    // test
+
     public sealed class GarageGate : Interactable
     {
         [SerializeField] private Transform panel;

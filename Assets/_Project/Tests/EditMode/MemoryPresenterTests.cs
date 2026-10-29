@@ -14,9 +14,11 @@ namespace Memories.Tests.EditMode
 {
     public sealed class MemoryPresenterTests
     {
-        private sealed class Input : IPauseInput
+        private sealed class Input : IPauseInput, IAdvanceInput
         {
             public event Action PauseRequested;
+            public event Action AdvanceRequested;
+            public void Advance() => AdvanceRequested?.Invoke();
             public bool Blocked;
             public void SetPaused(bool paused) => Blocked = paused;
             public void Escape() => PauseRequested?.Invoke();
@@ -34,6 +36,58 @@ namespace Memories.Tests.EditMode
             public int Executed, Stopped;
             public void Execute(MemoryMusicNode node) => Executed++;
             public void StopImmediately() => Stopped++;
+        }
+
+        private sealed class AdvancingView : IMemoryView
+        {
+            public int Frames;
+            public void Show() { }
+            public void Hide() { }
+            public UniTask ShowFrameAsync(MemoryFrameNode frame, CancellationToken token)
+            { Frames++; return UniTask.CompletedTask; }
+        }
+
+        [UnityTest]
+        public System.Collections.IEnumerator AdvanceMovesOneFrameAndCompletesLastFrame()
+        {
+            var graph = ScriptableObject.CreateInstance<MemoryGraph>();
+            var start = graph.AddNode<MemoryStartNode>();
+            var first = graph.AddNode<MemoryFrameNode>();
+            var second = graph.AddNode<MemoryFrameNode>();
+            var end = graph.AddNode<MemoryEndNode>();
+            foreach (var frame in new[] { first, second })
+            {
+                var data = new SerializedObject(frame);
+                data.FindProperty("image").objectReferenceValue = Texture2D.whiteTexture;
+                data.FindProperty("displayDuration").floatValue = 60;
+                data.ApplyModifiedPropertiesWithoutUndo();
+            }
+            start.GetOutputPort("next").Connect(first.GetInputPort("previous"));
+            first.GetOutputPort("next").Connect(second.GetInputPort("previous"));
+            second.GetOutputPort("next").Connect(end.GetInputPort("previous"));
+            var input = new Input();
+            var view = new AdvancingView();
+            var collection = new MemoryCollection(persistProgress: false);
+            var presenter = new MemoryPresenter(collection, new GameplayModeState(input), view, input, new Music(), new Sounds());
+            try
+            {
+                Assert.IsTrue(presenter.Open("advance-test", graph));
+                Assert.AreEqual(1, view.Frames);
+                input.Advance();
+                yield return null;
+                yield return null;
+                Assert.AreEqual(2, view.Frames);
+                Assert.IsTrue(presenter.IsPlaying);
+                yield return null;
+                Assert.IsTrue(presenter.IsPlaying);
+                input.Advance();
+                yield return null;
+                yield return null;
+                Assert.IsFalse(presenter.IsPlaying);
+                Assert.IsTrue(collection.Contains("advance-test"));
+                Assert.IsFalse(input.Blocked);
+            }
+            finally { presenter.Dispose(); DestroyGraph(graph); }
         }
 
         private sealed class Sounds : IMemorySound

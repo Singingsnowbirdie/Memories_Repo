@@ -84,15 +84,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 2938097339736585005}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7714574537d6a7649a7ce9a0cc199f19, type: 3}
+  m_Script: {fileID: 11500000, guid: 1ba68190f9594ee8b2fc0603419ed015, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Interaction.PhotoMemory
-  rememberedWoman: {fileID: 0}
-  interactionGraph: {fileID: 11400000, guid: e34827ddea705464fa76ad9dfc12df2e, type: 2}
-  variableBank: {fileID: 11400000, guid: 1e3cd4cc4f3341b080b5d2fd69506a3f, type: 2}
-  revealedVariableId: a658183a452d4c2b9ef92252e09264ec
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Interaction.ReactionInteractable
+  graph: {fileID: 11400000, guid: e34827ddea705464fa76ad9dfc12df2e, type: 2}
+  initializationGraph: {fileID: 0}
+  prompt: Рассмотреть фотографию
+  customReactions:
+  - key: Появление фотографии
+    reaction: {fileID: 7887096858770726070}
   objectBindings:
-  - key: "\u0414\u0435\u0432\u0443\u0448\u043A\u0430"
+  - key: "\u0414\u0435\u0432\u0443\u0448\u043A\u0430 \u043D\u0430 \u0434\u0438\u0432\u0430\u043D\u0435"
     target: {fileID: 0}
 --- !u!114 &7887096858770726070
 MonoBehaviour:
@@ -106,6 +108,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93e78b4f09c544699f88e3f4e3311c6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.RevealPhotoReaction
+  variableBank: {fileID: 11400000, guid: 1e3cd4cc4f3341b080b5d2fd69506a3f, type: 2}
+  revealedVariableId: a658183a452d4c2b9ef92252e09264ec
   photoRenderer: {fileID: 3730893120060740344}
   materialIndex: 1
   revealShader: {fileID: 4800000, guid: 01aa63326b3c951498296f626c87fee1, type: 3}

@@ -20,12 +20,13 @@ namespace Memories.Gameplay.Triggers
         private readonly HashSet<Collider> occupants = new HashSet<Collider>();
         private bool fired;
         [SerializeField, InspectorName("Объекты графа")] private ReactionObjectBinding[] objectBindings = new ReactionObjectBinding[0];
+        [SerializeField, InspectorName("Кастомные реакции")] private CustomReactionBinding[] customReactions = new CustomReactionBinding[0];
         private ReactionRunner runner;
         public bool IsRunning => runner != null && runner.IsRunning;
         public void Initialize(StoryTextPresenter texts, MemoryPresenter memories, ILocationTransition locations = null, QuestInventory inventory = null, CustomVariableStore variables = null)
         {
             runner?.Dispose();
-            runner = new ReactionRunner(texts, memories, this, locations, inventory, variables, objectBindings);
+            runner = new ReactionRunner(texts, memories, this, locations, inventory, variables, objectBindings, customReactions);
         }
         public bool TryActivate()
         {

@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace Memories.Gameplay.Interaction
 {
+    // test
     public sealed class ClassroomDoor : Interactable
     {
         [SerializeField] private Transform hinge;

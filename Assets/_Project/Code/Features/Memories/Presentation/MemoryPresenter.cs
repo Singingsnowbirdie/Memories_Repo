@@ -23,6 +23,7 @@ namespace Memories.Gameplay.Memories
         private bool returnToPause;
         public event Action Closed;
         private bool disposed;
+        private bool showingFrame, advanceRequested;
         public bool IsPlaying => playback != null;
         public bool HasCollected(string id) => collection.Contains(id);
         public bool CanStartPlayback => !disposed && state.Mode == GameplayMode.Playing;
@@ -36,6 +37,7 @@ namespace Memories.Gameplay.Memories
             this.music = music;
             this.sounds = sounds;
             input.PauseRequested += OnEscape;
+            if (input is IAdvanceInput advanceInput) advanceInput.AdvanceRequested += AdvanceFrame;
             view.Hide();
         }
 
@@ -92,8 +94,16 @@ namespace Memories.Gameplay.Memories
                         continue;
                     }
                     var frame = (MemoryFrameNode)step;
+                    advanceRequested = false;
+                    showingFrame = true;
                     await view.ShowFrameAsync(frame, source.Token);
-                    await UniTask.Delay(TimeSpan.FromSeconds(frame.DisplayDuration), ignoreTimeScale: true, cancellationToken: source.Token);
+                    float elapsed = 0;
+                    while (!advanceRequested && elapsed < frame.DisplayDuration)
+                    {
+                        await UniTask.NextFrame(cancellationToken: source.Token);
+                        elapsed += Time.unscaledDeltaTime;
+                    }
+                    showingFrame = false;
                 }
                 completed = true;
             }
@@ -101,6 +111,7 @@ namespace Memories.Gameplay.Memories
             catch (Exception exception) { Debug.LogException(exception); }
             finally
             {
+                showingFrame = false;
                 if (playback == source)
                 {
                     playback = null;
@@ -120,6 +131,11 @@ namespace Memories.Gameplay.Memories
         private void OnEscape()
         {
             if (IsPlaying && collection.Contains(currentId)) Close();
+        }
+
+        private void AdvanceFrame()
+        {
+            if (IsPlaying && showingFrame) advanceRequested = true;
         }
 
         // Programmatic cancellation remains available for teardown and reaction cancellation.
@@ -152,6 +168,7 @@ namespace Memories.Gameplay.Memories
             if (disposed) return;
             disposed = true;
             input.PauseRequested -= OnEscape;
+            if (input is IAdvanceInput advanceInput) advanceInput.AdvanceRequested -= AdvanceFrame;
             Cancel(false);
         }
     }

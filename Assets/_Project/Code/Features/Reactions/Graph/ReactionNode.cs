@@ -54,7 +54,7 @@ namespace Memories.Gameplay.Reactions
         public bool Validate(out string error)
         {
             error = null;
-            if (kind == ReactionKind.ObjectInteractivity && string.IsNullOrEmpty(objectKey)) return true;
+            if ((kind == ReactionKind.ObjectInteractivity || kind == ReactionKind.CustomReaction) && string.IsNullOrEmpty(objectKey)) return true;
             if (kind == ReactionKind.StartHints || kind == ReactionKind.StopHints)
             {
                 if (string.IsNullOrWhiteSpace(hintId))
@@ -74,7 +74,7 @@ namespace Memories.Gameplay.Reactions
                 error = "Назначьте предмет для добавления в инвентарь.";
                 return false;
             }
-            if (kind == ReactionKind.ObjectActivity || kind == ReactionKind.ObjectInteractivity)
+            if (kind == ReactionKind.ObjectActivity || kind == ReactionKind.ObjectInteractivity || kind == ReactionKind.CustomReaction)
             {
                 if (graph is ReactionGraph reaction && reaction.HasObjectKey(objectKey)) return true;
                 error = "Выберите объект из списка объектов графа.";
@@ -86,7 +86,6 @@ namespace Memories.Gameplay.Reactions
                 error = "Выберите существующую переменную из банка.";
                 return false;
             }
-            if (kind == ReactionKind.CustomReaction) return true;
             if (kind == ReactionKind.ChangeLocation)
             {
                 if (string.IsNullOrWhiteSpace(locationScenePath) || !locationScenePath.EndsWith(".unity"))

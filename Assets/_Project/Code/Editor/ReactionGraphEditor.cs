@@ -60,6 +60,63 @@ namespace Memories.Editor
     [CustomNodeEditor(typeof(ReactionNode))]
     public sealed class ReactionNodeEditor : NodeEditor
     {
+        private void DrawCustomReaction(ReactionGraph graph, SerializedProperty key)
+        {
+            var names = new System.Collections.Generic.List<string>();
+            var prefabNames = new System.Collections.Generic.List<string>();
+            void Collect(Component owner)
+            {
+                using (var settings = new SerializedObject(owner))
+                {
+                    var graphProperty = settings.FindProperty("graph") ?? settings.FindProperty("interactionGraph");
+                    var initialization = settings.FindProperty("initializationGraph");
+                    if (graphProperty?.objectReferenceValue != graph && initialization?.objectReferenceValue != graph) return;
+                    var bindings = settings.FindProperty("customReactions");
+                    if (bindings == null) return;
+                    var result = EditorUtility.IsPersistent(owner) ? prefabNames : names;
+                    for (int i = 0; i < bindings.arraySize; i++)
+                    {
+                        var binding = bindings.GetArrayElementAtIndex(i);
+                        if (binding.FindPropertyRelative("reaction").objectReferenceValue == null) continue;
+                        string name = binding.FindPropertyRelative("key").stringValue;
+                        if (!result.Contains(name)) result.Add(name);
+                    }
+                }
+            }
+            foreach (var owner in Resources.FindObjectsOfTypeAll<ReactionInteractable>()) Collect(owner);
+            foreach (var owner in Resources.FindObjectsOfTypeAll<SceneTrigger>()) Collect(owner);
+            if (names.Count == 0) names = prefabNames;
+
+            EditorGUILayout.LabelField("Кастомная реакция");
+            string selected = key.stringValue;
+            bool found = names.Contains(selected);
+            string label = found ? (string.IsNullOrEmpty(selected) ? "Основная реакция" : selected) : "Выберите реакцию";
+            using (new EditorGUI.DisabledScope(names.Count == 0))
+                if (EditorGUILayout.DropdownButton(new GUIContent(label), FocusType.Keyboard))
+                {
+                    var menu = new GenericMenu();
+                    foreach (string name in names)
+                    {
+                        string chosen = name;
+                        menu.AddItem(new GUIContent(string.IsNullOrEmpty(name) ? "Основная реакция" : name), name == selected, () =>
+                        {
+                            if (target == null) return;
+                            using (var settings = new SerializedObject(target))
+                            {
+                                settings.FindProperty("objectKey").stringValue = chosen;
+                                settings.ApplyModifiedProperties();
+                            }
+                            NodeEditorWindow.RepaintAll();
+                        });
+                    }
+                    menu.ShowAsContext();
+                }
+            if (!found)
+                EditorGUILayout.HelpBox(names.Count == 0
+                    ? "Назначьте CustomReaction в инспекторе объекта с этим графом."
+                    : "Прежняя привязка отсутствует. Выберите назначенную реакцию.", MessageType.Warning);
+        }
+
         public override void OnHeaderGUI() => GUILayout.Label("Реакция", NodeEditorResources.styles.nodeHeader, GUILayout.Height(30));
         public override void OnBodyGUI()
         {
@@ -133,21 +190,29 @@ namespace Memories.Editor
                 var value = serializedObject.FindProperty("variableValue");
                 value.boolValue = EditorGUILayout.Popup(value.boolValue ? 1 : 0, new[] { "Нет", "Да" }) == 1;
             }
+            else if (kind.enumValueIndex == 3)
+            {
+                DrawCustomReaction((ReactionGraph)target.graph, serializedObject.FindProperty("objectKey"));
+            }
             else if (kind.enumValueIndex == 5 || kind.enumValueIndex == 10)
             {
                 bool interactivity = kind.enumValueIndex == 10;
                 var graph = (ReactionGraph)target.graph;
                 var key = serializedObject.FindProperty("objectKey");
-                var names = new string[graph.ObjectKeys.Count + 1];
-                names[0] = string.IsNullOrEmpty(key.stringValue) ? "Выберите объект" : "Не найден: " + key.stringValue;
-                if (interactivity && string.IsNullOrEmpty(key.stringValue)) names[0] = "Объект, запустивший граф";
-                int selected = 0;
+                int offset = interactivity ? 1 : 0;
+                var names = new string[graph.ObjectKeys.Count + offset];
+                if (interactivity) names[0] = "Объект, запустивший граф";
+                int selected = interactivity && string.IsNullOrEmpty(key.stringValue) ? 0 : -1;
                 for (int i = 0; i < graph.ObjectKeys.Count; i++)
-                { names[i + 1] = graph.ObjectKeys[i]; if (names[i + 1] == key.stringValue) selected = i + 1; }
+                { names[i + offset] = graph.ObjectKeys[i]; if (names[i + offset] == key.stringValue) selected = i + offset; }
                 EditorGUILayout.LabelField("Объект");
-                EditorGUI.BeginChangeCheck();
-                int chosen = EditorGUILayout.Popup(selected, names);
-                if (EditorGUI.EndChangeCheck()) key.stringValue = chosen == 0 ? "" : names[chosen];
+                using (new EditorGUI.DisabledScope(names.Length == 0))
+                {
+                    EditorGUI.BeginChangeCheck();
+                    int chosen = EditorGUILayout.Popup(selected, names);
+                    if (EditorGUI.EndChangeCheck() && chosen >= 0)
+                        key.stringValue = interactivity && chosen == 0 ? "" : names[chosen];
+                }
                 EditorGUILayout.Space(8);
                 EditorGUILayout.LabelField(interactivity ? "Интерактивность" : "Активность");
                 var active = serializedObject.FindProperty(interactivity ? "interactionEnabled" : "active");
@@ -277,6 +342,7 @@ namespace Memories.Editor
             var graph = serializedObject.FindProperty("graph");
             EditorGUILayout.PropertyField(graph, new GUIContent("Граф реакций"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("objectBindings"), new GUIContent("Объекты графа"), true);
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("customReactions"), new GUIContent("Кастомные реакции"), true);
             serializedObject.ApplyModifiedProperties();
             if (graph.objectReferenceValue is ReactionGraph asset)
             {
@@ -296,6 +362,7 @@ namespace Memories.Editor
             var graph = serializedObject.FindProperty("graph");
             EditorGUILayout.PropertyField(graph, new GUIContent("Граф реакций"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("objectBindings"), new GUIContent("Объекты графа"), true);
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("customReactions"), new GUIContent("Кастомные реакции"), true);
             serializedObject.ApplyModifiedProperties();
             if (graph.objectReferenceValue is ReactionGraph asset)
             {

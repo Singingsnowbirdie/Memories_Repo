@@ -46,10 +46,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Interaction.ReactionInteractable
   graph: {fileID: 11400000, guid: 4278c219c656411084c71c7e755fc9de, type: 2}
-  prompt: "Взять: Батарейка"
+  initializationGraph: {fileID: 0}
+  prompt: "\u0412\u0437\u044F\u0442\u044C: \u0411\u0430\u0442\u0430\u0440\u0435\u0439\u043A\u0430"
   objectBindings:
-  - key: Предмет
+  - key: "\u041F\u0440\u0435\u0434\u043C\u0435\u0442"
     target: {fileID: 3591465502250364558}
+  customReactions: []
 --- !u!1001 &312671666608331888
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -146,7 +148,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.054493427, y: 0.22661313, z: 0.054493427}
+  m_Size: {x: 0.15, y: 0.28, z: 0.15}
   m_Center: {x: 0, y: 0.11330657, z: 0}
 --- !u!4 &5612239379168195689 stripped
 Transform:

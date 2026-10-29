@@ -7,6 +7,9 @@ namespace Memories.Gameplay.Reactions
     [AddComponentMenu("Memories/Reactions/Reveal Photo Reaction")]
     public sealed class RevealPhotoReaction : CustomReaction
     {
+        private const string SaveKey = "Memories.Progress.CouplePhoto.v1";
+        [SerializeField] private CustomVariableBank variableBank;
+        [SerializeField] private string revealedVariableId;
         [SerializeField] private Renderer photoRenderer;
         [SerializeField] private int materialIndex = 1;
         [SerializeField] private Shader revealShader;
@@ -14,6 +17,23 @@ namespace Memories.Gameplay.Reactions
         private RenderTexture revealedTexture;
         private Texture photo;
         private bool initialized, revealed;
+
+        public static void ResetProgress()
+        {
+            PlayerPrefs.DeleteKey(SaveKey);
+            PlayerPrefs.Save();
+        }
+
+        public void Restore(CustomVariableStore variables)
+        {
+            if (variables.PersistProgress && PlayerPrefs.HasKey(SaveKey))
+            {
+                if (!variables.HasSavedValue(variableBank, revealedVariableId))
+                    variables.Set(variableBank, revealedVariableId, PlayerPrefs.GetInt(SaveKey, 0) == 1);
+                ResetProgress();
+            }
+            Initialize(variables.Get(variableBank, revealedVariableId));
+        }
 
         public void Initialize(bool alreadyRevealed)
         {

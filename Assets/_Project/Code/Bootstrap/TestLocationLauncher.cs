@@ -19,8 +19,7 @@ namespace Memories.Bootstrap
 
         public enum Location
         {
-            [InspectorName("Тестовая комната")] TestRoom,
-            [InspectorName("Шоссе")] Highway,
+            [InspectorName("Шоссе")] Highway = 1,
             [InspectorName("Дом")] House,
             [InspectorName("Двор-колодец")] Courtyard,
             [InspectorName("Гараж")] Garage,
@@ -28,7 +27,7 @@ namespace Memories.Bootstrap
             [InspectorName("Задний двор")] Backyard
         }
 
-        [SerializeField] private Location location;
+        [SerializeField] private Location location = Location.Highway;
         public Location SelectedLocation { get => location; set => location = value; }
         public string ScenePath => location switch
         {

@@ -10,7 +10,7 @@ namespace Memories.Bootstrap
 {
     public sealed class AppLifetimeScope : LifetimeScope
     {
-        public const string DefaultLocationPath = "Assets/Scenes/FirstPersonTest/FirstPersonTest.unity";
+        public const string DefaultLocationPath = "Assets/_Project/Locations/Highway/Highway.unity";
         [SerializeField] private string initialLocationPath = DefaultLocationPath;
         [SerializeField] private string[] additionalLocationScenes = System.Array.Empty<string>();
         [SerializeField] private bool startAutomatically = true;

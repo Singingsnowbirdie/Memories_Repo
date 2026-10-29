@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 namespace Memories.Infrastructure.Input
 {
-    public sealed class PlayerInputService : IPlayerInput, IInteractionInput, IPauseInput, IDisposable
+    public sealed class PlayerInputService : IPlayerInput, IInteractionInput, IPauseInput, IAdvanceInput, IDisposable
     {
         private readonly InputAction move = new InputAction("Move", InputActionType.Value);
         private readonly InputAction sprint = new InputAction("Sprint", InputActionType.Button, "<Keyboard>/leftShift");
@@ -13,6 +13,8 @@ namespace Memories.Infrastructure.Input
         private readonly InputAction release = new InputAction("ReleaseCursor", InputActionType.Button, "<Keyboard>/escape");
         private readonly InputAction capture = new InputAction("CaptureCursor", InputActionType.Button, "<Mouse>/leftButton");
         private readonly InputAction interact = new InputAction("Interact", InputActionType.Button, "<Keyboard>/e");
+        private readonly InputAction advance = new InputAction("Advance", InputActionType.Button, "<Keyboard>/enter");
+        public event Action AdvanceRequested;
         public bool InteractionEnabled => active && captured && Application.isFocused && Cursor.lockState == CursorLockMode.Locked;
         public bool InteractPressed => InteractionEnabled && Time.frameCount > captureFrame && interact.WasPressedThisFrame();
         private bool active;
@@ -29,6 +31,8 @@ namespace Memories.Infrastructure.Input
 
         public PlayerInputService()
         {
+            advance.AddBinding("<Keyboard>/numpadEnter");
+            advance.AddBinding("<Keyboard>/space");
             sprint.AddBinding("<Keyboard>/rightShift");
             move.AddCompositeBinding("2DVector")
                 .With("Up", "<Keyboard>/w").With("Down", "<Keyboard>/s")
@@ -44,6 +48,7 @@ namespace Memories.Infrastructure.Input
             active = true;
             release.Enable();
             capture.Enable();
+            advance.Enable();
             SetCaptured(Application.isFocused);
         }
 
@@ -60,6 +65,7 @@ namespace Memories.Infrastructure.Input
                 PauseRequested?.Invoke();
                 return;
             }
+            if (advance.WasPressedThisFrame()) AdvanceRequested?.Invoke();
             if (paused) return;
             if (captured && Cursor.lockState != CursorLockMode.Locked) SetCaptured(false);
             if (!captured && capture.WasPressedThisFrame()) SetCaptured(true);
@@ -104,6 +110,7 @@ namespace Memories.Infrastructure.Input
             SetCaptured(false);
             release.Disable();
             capture.Disable();
+            advance.Disable();
             active = false;
             paused = false;
             Cursor.lockState = previousLock;
@@ -120,6 +127,7 @@ namespace Memories.Infrastructure.Input
             release.Dispose();
             capture.Dispose();
             interact.Dispose();
+            advance.Dispose();
         }
     }
 }

@@ -7,12 +7,17 @@ using UnityEngine.TestTools;
 
 namespace Memories.Tests.PlayMode
 {
+    public sealed class InteractionTargetStub : Interactable
+    {
+        public bool Activated { get; private set; }
+        public override string Prompt => Activated ? "Деактивировать" : "Активировать";
+        public override void Interact() { if (CanInteract) Activated = !Activated; }
+    }
     public sealed class InteractionTests
     {
         private GameObject root;
         private Camera camera;
-        private TestLightSwitch target;
-        private Light lamp;
+        private InteractionTargetStub target;
         private InteractionProbe probe;
         private sealed class Input : IInteractionInput
         {
@@ -38,10 +43,7 @@ namespace Memories.Tests.PlayMode
             var item = GameObject.CreatePrimitive(PrimitiveType.Cube);
             item.transform.SetParent(root.transform, false);
             item.transform.localPosition = Vector3.forward * 2;
-            target = item.AddComponent<TestLightSwitch>();
-            lamp = root.AddComponent<Light>();
-            lamp.enabled = false;
-            target.Initialize(lamp);
+            target = item.AddComponent<InteractionTargetStub>();
             probe = new InteractionProbe(camera);
             Physics.SyncTransforms();
         }
@@ -81,29 +83,29 @@ namespace Memories.Tests.PlayMode
         }
 
         [Test]
-        public void PressTogglesLightAndRefreshesPromptButReleasedCursorBlocksAction()
+        public void PressInvokesTargetAndRefreshesPromptButReleasedCursorBlocksAction()
         {
             var input = new Input();
             var view = new View();
             var presenter = new InteractionPresenter(input, probe, view);
             presenter.Tick();
             Assert.IsTrue(view.Available);
-            Assert.AreEqual("[E] Включить свет", view.Prompt);
+            Assert.AreEqual("[E] Активировать", view.Prompt);
             input.InteractPressed = true;
             presenter.Tick();
-            Assert.IsTrue(lamp.enabled);
-            Assert.AreEqual("[E] Выключить свет", view.Prompt);
+            Assert.IsTrue(target.Activated);
+            Assert.AreEqual("[E] Деактивировать", view.Prompt);
             input.InteractPressed = false;
             presenter.Tick();
-            Assert.IsTrue(lamp.enabled);
+            Assert.IsTrue(target.Activated);
             input.InteractionEnabled = false;
             input.InteractPressed = true;
             presenter.Tick();
             Assert.IsFalse(view.Visible);
-            Assert.IsTrue(lamp.enabled);
+            Assert.IsTrue(target.Activated);
             input.InteractionEnabled = true;
             presenter.Tick();
-            Assert.IsFalse(lamp.enabled);
+            Assert.IsFalse(target.Activated);
             Object.DestroyImmediate(target.gameObject);
             presenter.Tick();
             Assert.IsFalse(view.Available);

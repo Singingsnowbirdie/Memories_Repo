@@ -89,6 +89,9 @@ namespace Memories.Bootstrap
                 var presenter = container.Resolve<MemoryPresenter>();
                 container.Resolve<PausePresenter>().ConnectMemories(container.Resolve<MemoryCollection>(), presenter);
                 foreach (var root in gameObject.scene.GetRootGameObjects())
+                    foreach (var photo in root.GetComponentsInChildren<RevealPhotoReaction>(true))
+                        photo.Restore(container.Resolve<CustomVariableStore>());
+                foreach (var root in gameObject.scene.GetRootGameObjects())
                 {
                     foreach (var triggerEvent in root.GetComponentsInChildren<TriggerEvent>(true))
                         triggerEvent.Initialize(container.Resolve<StoryTextPresenter>(), presenter);
