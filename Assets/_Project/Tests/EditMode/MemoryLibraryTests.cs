@@ -60,6 +60,7 @@ namespace Memories.Tests.EditMode
             public void ShowRestartConfirmation(bool visible) { }
             public void ShowCredits(bool visible) { }
             public void ShowSettings(bool visible, float master, float music, float sounds) { }
+            public void SetMemoriesAvailable(bool available) { }
             public void ShowMemories(bool visible, IReadOnlyList<MemoryCollection.FoundMemory> memories) => LibraryVisible = visible;
             public void OpenLibrary() => MemoriesRequested?.Invoke();
             public void Replay(string id) => MemoryRequested?.Invoke(id);

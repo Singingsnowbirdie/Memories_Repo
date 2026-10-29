@@ -211,6 +211,11 @@ namespace Memories.Gameplay.UI
                 EventSystem.current.SetSelectedGameObject(visible ? cancelRestart.gameObject : resume.gameObject);
         }
 
+        public void SetMemoriesAvailable(bool available)
+        {
+            memoriesButton.gameObject.SetActive(available);
+        }
+
         public void Show(bool visible)
         {
             if (visible && !panel.activeSelf)

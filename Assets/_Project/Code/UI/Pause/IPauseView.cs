@@ -21,6 +21,7 @@ namespace Memories.Gameplay.UI
         event Action<float> MusicChanged;
         event Action<float> SoundsChanged;
         void Show(bool visible);
+        void SetMemoriesAvailable(bool available);
         void ShowRestartConfirmation(bool visible);
         void ShowCredits(bool visible);
         void ShowMemories(bool visible, IReadOnlyList<MemoryCollection.FoundMemory> memories);

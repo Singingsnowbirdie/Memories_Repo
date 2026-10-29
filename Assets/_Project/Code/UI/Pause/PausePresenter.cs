@@ -47,6 +47,7 @@ namespace Memories.Gameplay.UI
             input.PauseRequested += Toggle;
             view.ResumeRequested += Resume;
             view.QuitRequested += Quit;
+            view.SetMemoriesAvailable(false);
             view.Show(false);
         }
 
@@ -55,6 +56,7 @@ namespace Memories.Gameplay.UI
             if (disposed) return;
             if (IsPaused) { if (restartConfirmationOpen) CancelRestart(); else if (settingsOpen || creditsOpen || memoriesOpen) Back(); else Resume(); return; }
             if (!state.TryEnter(GameplayMode.Paused)) return;
+            view.SetMemoriesAvailable(collection != null && collection.Memories.Count > 0);
             view.Show(true);
         }
 
