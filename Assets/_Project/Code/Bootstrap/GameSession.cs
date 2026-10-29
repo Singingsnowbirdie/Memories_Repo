@@ -130,6 +130,7 @@ namespace Memories.Bootstrap
             using var cancellation = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, application.Token, shutdown.Token);
             try
             {
+                Memories.Gameplay.UI.StoryTextView.BeginSession(useOpenScene);
                 SessionScope = applicationScope.CreateChild<SessionLifetimeScope>(childScopeName: "SessionLifetimeScope");
                 // Unity scene loading cannot be interrupted safely. Finish the operation,
                 // then honour cancellation and unload the scene we own.

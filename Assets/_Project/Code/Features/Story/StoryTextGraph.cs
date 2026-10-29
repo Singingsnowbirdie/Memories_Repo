@@ -9,6 +9,8 @@ namespace Memories.Gameplay.Story
     {
         [UnityEngine.SerializeField, UnityEngine.Min(0)] private float pauseBetweenFragments;
         public float PauseBetweenFragments => pauseBetweenFragments;
+        [UnityEngine.SerializeField] private bool blockInteractionsForWholeSequence;
+        public bool BlockInteractionsForWholeSequence => blockInteractionsForWholeSequence;
 
         public bool TryGetSequence(out List<StoryTextFragment> fragments, out string error)
         {

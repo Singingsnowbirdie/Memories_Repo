@@ -20,6 +20,23 @@ namespace Memories.Gameplay.UI
         private CanvasGroup textGroup;
         private CancellationTokenSource enabledLifetime;
         private int animationVersion;
+        private static bool shownThisSession;
+        private bool hasAppeared;
+        private static bool immediateReticle;
+        public static bool ReticleUnlocked => shownThisSession || immediateReticle;
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        public static void ResetSession()
+        {
+            shownThisSession = false;
+            immediateReticle = false;
+        }
+
+        public static void BeginSession(bool directLocationStart)
+        {
+            ResetSession();
+            immediateReticle = directLocationStart;
+        }
 
         public CancellationToken LifetimeToken => enabledLifetime?.Token ?? new CancellationToken(true);
 
@@ -62,6 +79,7 @@ namespace Memories.Gameplay.UI
             caption.verticalOverflow = VerticalWrapMode.Overflow;
             caption.supportRichText = false;
             caption.raycastTarget = false;
+            hasAppeared = shownThisSession;
             HideImmediately();
         }
 
@@ -80,6 +98,12 @@ namespace Memories.Gameplay.UI
             using var linked = CancellationTokenSource.CreateLinkedTokenSource(token, LifetimeToken);
             token = linked.Token;
             token.ThrowIfCancellationRequested();
+            if (hasAppeared)
+            {
+                await ChangeTextAsync(text, token);
+                return;
+            }
+            hasAppeared = shownThisSession = true;
             int version = ++animationVersion;
             canvas.enabled = true;
             SetText(text);
@@ -105,17 +129,7 @@ namespace Memories.Gameplay.UI
                 await Animate(textFadeDuration, t => textGroup.alpha = t, version, token);
         }
 
-        public async UniTask HideAsync(CancellationToken token)
-        {
-            using var linked = CancellationTokenSource.CreateLinkedTokenSource(token, LifetimeToken);
-            token = linked.Token;
-            token.ThrowIfCancellationRequested();
-            int version = ++animationVersion;
-            float from = panel.anchoredPosition.y;
-            float hidden = -panel.rect.height - 16;
-            await Animate(slideDuration, t => panel.anchoredPosition = new Vector2(0, Mathf.Lerp(from, hidden, t)), version, token);
-            HideImmediately();
-        }
+        public UniTask HideAsync(CancellationToken token) => ChangeTextAsync(string.Empty, token);
 
         private void SetText(string text)
         {
@@ -144,10 +158,10 @@ namespace Memories.Gameplay.UI
         {
             animationVersion++;
             if (canvas == null) return;
-            canvas.enabled = false;
+            canvas.enabled = hasAppeared;
             caption.text = string.Empty;
             textGroup.alpha = 0;
-            panel.anchoredPosition = new Vector2(0, -panel.rect.height - 16);
+            panel.anchoredPosition = new Vector2(0, hasAppeared ? BottomMargin : -panel.rect.height - 16);
         }
     }
 }

@@ -86,6 +86,8 @@ namespace Memories.Editor
             settings.Update();
             EditorGUILayout.LabelField("Пауза между фразами, сек.");
             EditorGUILayout.PropertyField(settings.FindProperty("pauseBetweenFragments"), GUIContent.none);
+            EditorGUILayout.PropertyField(settings.FindProperty("blockInteractionsForWholeSequence"),
+                new GUIContent("Непрерываемая история", "Включено: взаимодействия запрещены до конца цепочки. Выключено: взаимодействия разрешены всегда; после минимум двух секунд чтения текущая фраза может смениться текстом интеракции на той же плашке. Таймер паузы исходной цепочки приостанавливается."));
             settings.ApplyModifiedProperties();
         }
 

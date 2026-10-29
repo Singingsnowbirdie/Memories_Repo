@@ -47,9 +47,9 @@ namespace Memories.Gameplay.UI
         public void Show(bool visible, bool available, string prompt)
         {
             canvas.enabled = visible;
-            reticle.enabled = false;
-            reticle.text = available ? "+" : "•";
-            reticle.color = available ? new Color(1, .85f, .35f) : Color.white;
+            reticle.enabled = StoryTextView.ReticleUnlocked;
+            reticle.text = "•";
+            reticle.color = Color.white;
             hint.text = prompt;
         }
     }

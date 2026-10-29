@@ -176,10 +176,13 @@ namespace Memories.Editor
             EditorGUILayout.Space(8);
             EditorGUILayout.LabelField("Тип проверки");
             kind.enumValueIndex = EditorGUILayout.Popup(kind.enumValueIndex,
-                new[] { "Предмет в инвентаре", "Значение кастомной переменной", "Предмет уже подобран", "Предмет использован" });
+                new[] { "Предмет в инвентаре", "Значение кастомной переменной" });
             EditorGUILayout.Space(8);
             if (kind.intValue != (int)ReactionConditionKind.CustomVariable)
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("item"), new GUIContent("Предмет"));
+            {
+                EditorGUILayout.LabelField("Предмет");
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("item"), GUIContent.none);
+            }
             else if (kind.intValue == (int)ReactionConditionKind.CustomVariable)
             {
                 var bankProperty = serializedObject.FindProperty("variableBank");

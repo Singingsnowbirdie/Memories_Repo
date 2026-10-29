@@ -16,6 +16,40 @@ namespace Memories.Tests.PlayMode
 {
     public sealed class StoryTextTests
     {
+        [SetUp]
+        public void ResetSession() => StoryTextView.ResetSession();
+
+        [UnityTest]
+        public IEnumerator PanelPersistsBetweenMessagesAndLocationsUntilNewSession() => UniTask.ToCoroutine(async () =>
+        {
+            var root = new GameObject("Persistent story panel", typeof(RectTransform));
+            var nextRoot = new GameObject("Next location panel", typeof(RectTransform));
+            var newRoot = new GameObject("New session panel", typeof(RectTransform));
+            try
+            {
+                var view = root.AddComponent<StoryTextView>();
+                Assert.IsFalse(root.GetComponent<Canvas>().enabled);
+                Timing(view, .1f, 0);
+                await view.ShowAsync("first", CancellationToken.None);
+                await view.HideAsync(CancellationToken.None);
+                var panel = (RectTransform)root.transform.GetChild(0);
+                Assert.IsTrue(root.GetComponent<Canvas>().enabled);
+                Assert.AreEqual(0, panel.anchoredPosition.y);
+                var next = view.ShowAsync("second", CancellationToken.None);
+                Assert.AreEqual(0, panel.anchoredPosition.y);
+                Assert.AreEqual(UniTaskStatus.Succeeded, next.Status);
+                await next;
+                view.HideImmediately();
+                nextRoot.AddComponent<StoryTextView>();
+                Assert.IsTrue(nextRoot.GetComponent<Canvas>().enabled);
+                Assert.IsEmpty(nextRoot.GetComponentInChildren<Text>().text);
+                StoryTextView.ResetSession();
+                newRoot.AddComponent<StoryTextView>();
+                Assert.IsFalse(newRoot.GetComponent<Canvas>().enabled);
+            }
+            finally { UnityEngine.Object.Destroy(root); UnityEngine.Object.Destroy(nextRoot); UnityEngine.Object.Destroy(newRoot); }
+        });
+
         private static void Timing(StoryTextView view, float slide, float fade)
         {
             typeof(StoryTextView).GetField("slideDuration", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(view, slide);
@@ -52,7 +86,8 @@ namespace Memories.Tests.PlayMode
                 Assert.AreEqual("Но не помню, с кем сюда приходила.", text.text);
                 Assert.AreEqual(1, group.alpha);
                 await view.HideAsync(CancellationToken.None);
-                Assert.IsFalse(root.GetComponent<Canvas>().enabled);
+                Assert.IsTrue(root.GetComponent<Canvas>().enabled);
+                Assert.IsEmpty(root.GetComponentInChildren<Text>().text);
             }
             finally { UnityEngine.Object.Destroy(root); }
         });
@@ -79,13 +114,14 @@ namespace Memories.Tests.PlayMode
                 Assert.IsTrue(root.GetComponent<Canvas>().enabled);
                 await playback;
                 Assert.IsFalse(presenter.IsPlaying);
-                Assert.IsFalse(root.GetComponent<Canvas>().enabled);
+                Assert.IsTrue(root.GetComponent<Canvas>().enabled);
+                Assert.IsEmpty(root.GetComponentInChildren<Text>().text);
             }
             finally { Time.timeScale = time; presenter.Dispose(); UnityEngine.Object.Destroy(root); }
         });
 
         [UnityTest]
-        public IEnumerator ReplacementCancellationAndDisableCannotLeaveStaleText() => UniTask.ToCoroutine(async () =>
+        public IEnumerator QueuedCancellationAndDisableCannotLeaveStaleText() => UniTask.ToCoroutine(async () =>
         {
             var root = new GameObject("Story cancellation test", typeof(RectTransform));
             var view = root.AddComponent<StoryTextView>();
@@ -93,16 +129,17 @@ namespace Memories.Tests.PlayMode
             using var presenter = new StoryTextPresenter(view);
             try
             {
-                var old = presenter.ShowAsync("Старый текст", 30);
+                var old = presenter.ShowAsync("Старый текст", .1f);
                 using var cancellation = new CancellationTokenSource();
                 var next = presenter.ShowAsync("Новый текст", 30, cancellation.Token);
-                Assert.IsTrue(await old.SuppressCancellationThrow());
+                Assert.IsFalse(await old.SuppressCancellationThrow());
                 await UniTask.Delay(60);
                 Assert.AreEqual("Новый текст", root.GetComponentInChildren<Text>().text);
                 Assert.IsTrue(root.GetComponent<Canvas>().enabled);
                 cancellation.Cancel();
                 Assert.IsTrue(await next.SuppressCancellationThrow());
-                Assert.IsFalse(root.GetComponent<Canvas>().enabled);
+                Assert.IsTrue(root.GetComponent<Canvas>().enabled);
+                Assert.IsEmpty(root.GetComponentInChildren<Text>().text);
                 var disabled = presenter.ShowAsync("Отключение", 30);
                 await UniTask.Delay(60);
                 view.enabled = false;
@@ -110,7 +147,8 @@ namespace Memories.Tests.PlayMode
                 Assert.IsFalse(presenter.IsPlaying);
                 view.enabled = true;
                 await presenter.ShowAsync("Повторный показ", .02f);
-                Assert.IsFalse(root.GetComponent<Canvas>().enabled);
+                Assert.IsTrue(root.GetComponent<Canvas>().enabled);
+                Assert.IsEmpty(root.GetComponentInChildren<Text>().text);
                 var live = presenter.ShowAsync("Продолжение", 30);
                 bool invalid = false;
                 try { await presenter.ShowAsync("", 1); }
@@ -119,7 +157,8 @@ namespace Memories.Tests.PlayMode
                 Assert.IsTrue(presenter.IsPlaying);
                 presenter.Dispose();
                 Assert.IsTrue(await live.SuppressCancellationThrow());
-                Assert.IsFalse(root.GetComponent<Canvas>().enabled);
+                Assert.IsTrue(root.GetComponent<Canvas>().enabled);
+                Assert.IsEmpty(root.GetComponentInChildren<Text>().text);
             }
             finally { presenter.Dispose(); UnityEngine.Object.Destroy(root); }
         });

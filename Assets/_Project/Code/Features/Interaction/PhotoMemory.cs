@@ -20,7 +20,7 @@ namespace Memories.Gameplay.Interaction
         private bool revealed;
         public override string Prompt => "Рассмотреть фотографию";
         public bool IsRevealed => revealed;
-        public override bool CanInteract => base.CanInteract && texts != null && !texts.IsPlaying &&
+        public override bool CanInteract => base.CanInteract && texts != null && !texts.BlocksInteractions &&
             runner != null && runner.CanRun(interactionGraph);
 
         public static void ResetProgress()

@@ -4,7 +4,7 @@ using XNode;
 
 namespace Memories.Gameplay.Reactions
 {
-    public enum ReactionConditionKind { InventoryItem = 0, CustomVariable = 2, CollectedItem = 3, ConsumedItem = 4 }
+    public enum ReactionConditionKind { InventoryItem = 0, CustomVariable = 2 }
 
     [Node.CreateNodeMenu("Условие"), Node.NodeWidth(280), Node.NodeTint("#493D60")]
     [UnityEngine.Scripting.APIUpdating.MovedFrom(true, sourceNamespace: "Memories.Gameplay.Reactions", sourceAssembly: "Memories.Gameplay", sourceClassName: "InventoryConditionNode")]
@@ -32,8 +32,6 @@ namespace Memories.Gameplay.Reactions
                     error = "Выберите существующую переменную из банка.";
                     return false;
                 case ReactionConditionKind.InventoryItem:
-                case ReactionConditionKind.CollectedItem:
-                case ReactionConditionKind.ConsumedItem:
                     if (item != null && item.IsValid) return true;
                     error = "Назначьте предмет для проверки инвентаря.";
                     return false;
@@ -54,12 +52,6 @@ namespace Memories.Gameplay.Reactions
                     break;
                 case ReactionConditionKind.InventoryItem:
                     result = inventory.Contains(item.Id);
-                    break;
-                case ReactionConditionKind.CollectedItem:
-                    result = inventory.WasCollected(item.Id);
-                    break;
-                case ReactionConditionKind.ConsumedItem:
-                    result = inventory.IsConsumed(item.Id);
                     break;
                 default:
                     throw new System.InvalidOperationException("Неизвестный тип проверки.");

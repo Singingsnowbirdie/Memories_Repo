@@ -109,7 +109,8 @@ namespace Memories.Tests.PlayMode
                 Assert.IsTrue(root.GetComponent<Canvas>().enabled);
                 await playback;
                 Assert.IsFalse(presenter.IsPlaying);
-                Assert.IsFalse(root.GetComponent<Canvas>().enabled);
+                Assert.IsTrue(root.GetComponent<Canvas>().enabled);
+                Assert.IsEmpty(root.GetComponentInChildren<Text>().text);
             }
             finally { presenter.Dispose(); UnityEngine.Object.Destroy(root); }
         });

@@ -12,12 +12,14 @@ namespace Memories.Gameplay.Interaction
     {
         [SerializeField] private ReactionGraph graph;
         [SerializeField] private ReactionGraph initializationGraph;
+        private WomanTelevisionState televisionState;
         [SerializeField] private string prompt = "Взаимодействовать";
         [SerializeField, InspectorName("Объекты графа")] private ReactionObjectBinding[] objectBindings = new ReactionObjectBinding[0];
         private ReactionRunner runner;
         private ReactionRunner initializationRunner;
         public override string Prompt => prompt;
-        public override bool CanInteract => base.CanInteract && runner != null && runner.CanRun(graph);
+        public override bool CanInteract => base.CanInteract && runner != null &&
+            (televisionState == null || !televisionState.IsTelevisionOn) && runner.CanRun(graph);
         public bool IsRunning => runner != null && runner.IsRunning;
 
         public void Configure(ReactionGraph reactionGraph, string interactionPrompt)
@@ -28,6 +30,8 @@ namespace Memories.Gameplay.Interaction
 
         public void Initialize(StoryTextPresenter texts, MemoryPresenter memories, ILocationTransition locations = null, QuestInventory inventory = null, CustomVariableStore variables = null)
         {
+            televisionState = GetComponent<WomanTelevisionState>();
+            if (televisionState != null) televisionState.Initialize(variables, objectBindings);
             runner?.Dispose();
             initializationRunner?.Dispose();
             runner = new ReactionRunner(texts, memories, this, locations, inventory, variables, objectBindings);
