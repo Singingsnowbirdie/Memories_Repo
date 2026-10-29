@@ -85,6 +85,7 @@ MonoBehaviour:
   variableValue: 1
   objectKey: 
   active: 1
+  interactionEnabled: 0
   item: {fileID: 11400000, guid: 732741c616e0478caec9fc80aca35dad, type: 2}
   hintId: 
   hintGraph: {fileID: 0}
@@ -144,6 +145,7 @@ MonoBehaviour:
   variableValue: 1
   objectKey: "\u041F\u0440\u0435\u0434\u043C\u0435\u0442"
   active: 0
+  interactionEnabled: 0
   item: {fileID: 0}
   hintId: 
   hintGraph: {fileID: 0}
@@ -162,7 +164,7 @@ MonoBehaviour:
   m_Name: "\u041A\u043E\u043D\u0435\u0446"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionEndNode
   graph: {fileID: 11400000}
-  position: {x: 2240, y: 0}
+  position: {x: 2104, y: 248}
   ports:
     keys:
     - previous
@@ -258,7 +260,7 @@ MonoBehaviour:
   m_Name: "\u0423\u0441\u043B\u043E\u0432\u0438\u0435"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionConditionNode
   graph: {fileID: 11400000}
-  position: {x: 1500, y: 0}
+  position: {x: 1480, y: -120}
   ports:
     keys:
     - previous
@@ -318,7 +320,7 @@ MonoBehaviour:
   m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
   graph: {fileID: 11400000}
-  position: {x: 1860, y: 180}
+  position: {x: 1896, y: -152}
   ports:
     keys:
     - previous
@@ -359,6 +361,7 @@ MonoBehaviour:
   variableValue: 1
   objectKey: 
   active: 1
+  interactionEnabled: 0
   item: {fileID: 0}
   hintId: 
   hintGraph: {fileID: 0}

@@ -44,6 +44,8 @@ namespace Memories.Gameplay.Reactions
             { Debug.LogWarning("Хранилище кастомных переменных не подключено.", owner); return false; }
             foreach (var action in actions)
             {
+                if (action.Kind == ReactionKind.ObjectInteractivity && !TryGetInteractable(action, out _))
+                { Debug.LogWarning("На выбранном объекте нужен компонент Interactable: " + action.ObjectKey, owner); return false; }
                 if (action.Kind == ReactionKind.StoryText && texts == null) return false;
                 if (action.Kind == ReactionKind.Memory && memories == null) return false;
                 if (action.Kind == ReactionKind.Memory && action.FirstCompletionText != null && texts == null) return false;
@@ -60,6 +62,16 @@ namespace Memories.Gameplay.Reactions
             RunAsync(graph, playback).Forget();
             return true;
         }
+        private bool TryGetInteractable(ReactionNode action, out Interactable interactable)
+        {
+            interactable = null;
+            if (string.IsNullOrEmpty(action.ObjectKey))
+                interactable = owner as Interactable;
+            else if (ReactionObjectBinding.TryResolve(objectBindings, action.ObjectKey, out var target))
+                interactable = target.GetComponent<Interactable>();
+            return interactable != null;
+        }
+
         public void Stop()
         {
             playback?.Cancel();
@@ -142,7 +154,13 @@ namespace Memories.Gameplay.Reactions
                         node = ReactionGraph.Next(node);
                         continue;
                     }
-                    if (action.Kind == ReactionKind.StartHints)
+                    if (action.Kind == ReactionKind.ObjectInteractivity)
+                    {
+                        if (!TryGetInteractable(action, out var interactable))
+                            throw new InvalidOperationException("Интерактивный объект недоступен: " + action.ObjectKey);
+                        interactable.SetInteractionEnabled(action.InteractionEnabled);
+                    }
+                    else if (action.Kind == ReactionKind.StartHints)
                         hintOwner.StartHint(action);
                     else if (action.Kind == ReactionKind.StopHints)
                         hintOwner.StopHint(action.HintId);

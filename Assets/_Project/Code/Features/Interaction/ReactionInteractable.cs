@@ -18,8 +18,7 @@ namespace Memories.Gameplay.Interaction
         private ReactionRunner runner;
         private ReactionRunner initializationRunner;
         public override string Prompt => prompt;
-        public override bool CanInteract => base.CanInteract && runner != null &&
-            (televisionState == null || !televisionState.IsTelevisionOn) && runner.CanRun(graph);
+        public override bool CanInteract => base.CanInteract && runner != null && runner.CanRun(graph);
         public bool IsRunning => runner != null && runner.IsRunning;
 
         public void Configure(ReactionGraph reactionGraph, string interactionPrompt)
@@ -32,6 +31,7 @@ namespace Memories.Gameplay.Interaction
         {
             televisionState = GetComponent<WomanTelevisionState>();
             if (televisionState != null) televisionState.Initialize(variables, objectBindings);
+            SetInteractionEnabled(televisionState == null || !televisionState.IsTelevisionOn);
             runner?.Dispose();
             initializationRunner?.Dispose();
             runner = new ReactionRunner(texts, memories, this, locations, inventory, variables, objectBindings);

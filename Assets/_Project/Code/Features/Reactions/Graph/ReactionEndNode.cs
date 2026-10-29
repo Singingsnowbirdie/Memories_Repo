@@ -4,7 +4,7 @@ using XNode;
 
 namespace Memories.Gameplay.Reactions
 {
-    [Node.CreateNodeMenu("Конец"), Node.DisallowMultipleNodes, Node.NodeWidth(140)]
+    [Node.CreateNodeMenu("Конец"), Node.NodeWidth(140)]
     [MovedFrom(true, sourceNamespace: "Memories.Gameplay.Triggers", sourceAssembly: "Memories.Gameplay", sourceClassName: "TriggerEndNode")]
     public sealed class ReactionEndNode : Node
     {

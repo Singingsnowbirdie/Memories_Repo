@@ -18,8 +18,8 @@ namespace Memories.Gameplay.Reactions
             actions = new List<ReactionNode>();
             error = null;
             if (nodes == null || nodes.Any(n => n == null) || nodes.OfType<ReactionStartNode>().Count() != 1 ||
-                nodes.OfType<ReactionEndNode>().Count() != 1)
-            { error = "Нужны ровно одно «Начало» и один «Конец»."; return false; }
+                !nodes.OfType<ReactionEndNode>().Any())
+            { error = "Нужны ровно одно «Начало» и хотя бы один «Конец»."; return false; }
             var visited = new HashSet<Node>();
             var active = new HashSet<Node>();
             if (!Visit(nodes.OfType<ReactionStartNode>().Single(), visited, active, actions, out error)) return false;

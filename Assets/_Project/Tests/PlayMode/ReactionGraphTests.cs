@@ -64,6 +64,91 @@ namespace Memories.Tests.PlayMode
         }
 
         [Test]
+        public void InteractivityCanBeDisabledAndEnabledWithoutHidingOwner()
+        {
+            var owner = Own(new GameObject("Interaction owner"));
+            var interactable = owner.AddComponent<ReactionInteractable>();
+            Set(start, "runOnce", false);
+            Set(first, "kind", ReactionKind.ObjectInteractivity);
+            Set(memory, "kind", ReactionKind.ObjectInteractivity);
+            Set(last, "kind", ReactionKind.ObjectInteractivity);
+            interactable.Configure(graph, "Interact");
+            interactable.Initialize(null, null);
+
+            Assert.IsTrue(interactable.CanInteract);
+            interactable.Interact();
+
+            Assert.IsFalse(interactable.CanInteract);
+            Assert.IsTrue(owner.activeSelf);
+            Assert.IsTrue(interactable.enabled);
+            Assert.IsFalse(interactable.IsRunning, "Disabling interaction must let the graph reach its end.");
+            Set(last, "interactionEnabled", true);
+            using (var runner = new ReactionRunner(null, null, interactable))
+                Assert.IsTrue(runner.TryRun(graph));
+            Assert.IsTrue(interactable.CanInteract);
+        }
+
+        [Test]
+        public void InteractivityChangesOnlyTheSelectedObject()
+        {
+            var owner = Own(new GameObject("Graph owner")).AddComponent<ReactionInteractable>();
+            var target = Own(new GameObject("Selected object")).AddComponent<ReactionInteractable>();
+            Set(start, "runOnce", false);
+            Set(graph, "objectKeys", new List<string> { "Target" });
+            foreach (var action in new[] { first, memory, last })
+            {
+                Set(action, "kind", ReactionKind.ObjectInteractivity);
+                Set(action, "objectKey", "Target");
+            }
+            owner.Configure(graph, "Interact");
+            target.Configure(graph, "Interact");
+            owner.Initialize(null, null);
+            target.Initialize(null, null);
+            using (var runner = new ReactionRunner(null, null, owner,
+                objectBindings: new[] { new ReactionObjectBinding("Target", target.gameObject) }))
+            {
+                Assert.IsTrue(runner.TryRun(graph));
+                Assert.IsTrue(owner.CanInteract);
+                Assert.IsFalse(target.CanInteract);
+                Set(last, "interactionEnabled", true);
+                Assert.IsTrue(runner.TryRun(graph));
+                Assert.IsTrue(target.CanInteract);
+                Assert.IsTrue(target.gameObject.activeSelf);
+            }
+        }
+
+        [Test]
+        public void SeparateBranchEndsAreValidButDisconnectedEndsAreRejected()
+        {
+            var branchGraph = Own(ScriptableObject.CreateInstance<ReactionGraph>());
+            var entry = Own(branchGraph.AddNode<ReactionStartNode>());
+            var condition = Own(branchGraph.AddNode<ReactionConditionNode>());
+            var presentEnd = Own(branchGraph.AddNode<ReactionEndNode>());
+            var absentEnd = Own(branchGraph.AddNode<ReactionEndNode>());
+            var item = Own(ScriptableObject.CreateInstance<QuestItem>());
+            Set(item, "id", "multiple-ends-test");
+            Set(condition, "item", item);
+            Set(entry, "runOnce", false);
+            Connect(entry, condition);
+            condition.GetOutputPort("ifPresent").Connect(presentEnd.GetInputPort("previous"));
+            condition.GetOutputPort("ifAbsent").Connect(absentEnd.GetInputPort("previous"));
+
+            Assert.IsTrue(branchGraph.TryGetSequence(out _, out var error), error);
+            var inventory = new QuestInventory();
+            using (var runner = new ReactionRunner(null, null, null, inventory: inventory))
+            {
+                Assert.IsTrue(runner.TryRun(branchGraph));
+                Assert.IsFalse(runner.IsRunning);
+                inventory.TryAdd(item);
+                Assert.IsTrue(runner.TryRun(branchGraph));
+                Assert.IsFalse(runner.IsRunning);
+            }
+
+            Own(branchGraph.AddNode<ReactionEndNode>());
+            Assert.IsFalse(branchGraph.TryGetSequence(out _, out _));
+        }
+
+        [Test]
         public void ValidatesWholeChainAndReferencedGraphs()
         {
             Assert.IsTrue(graph.TryGetSequence(out var steps, out var error), error);

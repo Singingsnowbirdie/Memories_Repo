@@ -6,7 +6,7 @@ using XNode;
 
 namespace Memories.Gameplay.Reactions
 {
-    public enum ReactionKind { StoryText, Memory, ChangeLocation, CustomReaction, SetCustomVariable, ObjectActivity, AddInventoryItem, StartHints, StopHints, ConsumeInventoryItem }
+    public enum ReactionKind { StoryText, Memory, ChangeLocation, CustomReaction, SetCustomVariable, ObjectActivity, AddInventoryItem, StartHints, StopHints, ConsumeInventoryItem, ObjectInteractivity }
 
     [Node.CreateNodeMenu("Реакция"), Node.NodeWidth(320), Node.NodeTint("#284C53")]
     [MovedFrom(true, sourceNamespace: "Memories.Gameplay.Triggers", sourceAssembly: "Memories.Gameplay", sourceClassName: "TriggerActionNode")]
@@ -26,6 +26,8 @@ namespace Memories.Gameplay.Reactions
         [SerializeField] private bool variableValue = true;
         [SerializeField] private string objectKey;
         [SerializeField] private bool active = true;
+        [SerializeField] private bool interactionEnabled;
+        public bool InteractionEnabled => interactionEnabled;
         [SerializeField] private global::Memories.Gameplay.Interaction.QuestItem item;
         public global::Memories.Gameplay.Interaction.QuestItem Item => item;
         public string ObjectKey => objectKey;
@@ -52,6 +54,7 @@ namespace Memories.Gameplay.Reactions
         public bool Validate(out string error)
         {
             error = null;
+            if (kind == ReactionKind.ObjectInteractivity && string.IsNullOrEmpty(objectKey)) return true;
             if (kind == ReactionKind.StartHints || kind == ReactionKind.StopHints)
             {
                 if (string.IsNullOrWhiteSpace(hintId))
@@ -71,7 +74,7 @@ namespace Memories.Gameplay.Reactions
                 error = "Назначьте предмет для добавления в инвентарь.";
                 return false;
             }
-            if (kind == ReactionKind.ObjectActivity)
+            if (kind == ReactionKind.ObjectActivity || kind == ReactionKind.ObjectInteractivity)
             {
                 if (graph is ReactionGraph reaction && reaction.HasObjectKey(objectKey)) return true;
                 error = "Выберите объект из списка объектов графа.";
