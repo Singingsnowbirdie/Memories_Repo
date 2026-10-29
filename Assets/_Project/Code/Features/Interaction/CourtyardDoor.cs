@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 namespace Memories.Gameplay.Interaction
 {
-    public sealed class CourtyardDoor : Interactable
+    public sealed class CourtyardDoor : MonoBehaviour
     {
         [SerializeField] private Transform hinge;
         [SerializeField] private Renderer view;
@@ -15,9 +15,8 @@ namespace Memories.Gameplay.Interaction
         [SerializeField] private string destination = "Assets/_Project/Locations/CourtyardIsland/CourtyardIsland.unity";
         [SerializeField] private string arrivalMarker = "Вход из дома";
         [SerializeField, Min(0f)] private float arrivalForwardOffset;
-        [SerializeField, Tooltip("When set, the door opens automatically after this memory is collected and cannot be interacted with.")]
+        [SerializeField, Tooltip("Restores an open door on load when this memory was collected. During play, opening is triggered by a custom reaction.")]
         private string requiredMemoryId;
-        private MemoryCollection memories;
         private Func<string, UniTask<Scene>> load;
         private Func<Scene, Vector3, Quaternion, float, UniTask> enter;
         private PlayerMotor player;
@@ -29,34 +28,22 @@ namespace Memories.Gameplay.Interaction
         private bool opening, opened, crossing;
         private float previousDistance;
         public bool IsOpen => opened;
-        public override string Prompt => string.IsNullOrWhiteSpace(requiredMemoryId) ? "Открыть дверь" : string.Empty;
-        public override bool CanInteract => string.IsNullOrWhiteSpace(requiredMemoryId) && base.CanInteract && !opening && !opened && load != null;
 
         public void Initialize(PlayerMotor motor, Func<string, UniTask<Scene>> loader,
             Func<Scene, Vector3, Quaternion, float, UniTask> traveller, MemoryCollection collection = null)
         {
-            if (memories != null) memories.Collected -= OnMemoryCollected;
             player = motor; playerCamera = motor.GetComponentInChildren<Camera>(); load = loader; enter = traveller;
-            memories = collection;
-            if (memories == null || string.IsNullOrWhiteSpace(requiredMemoryId)) return;
-            memories.Collected += OnMemoryCollected;
-            if (memories.Contains(requiredMemoryId)) OnMemoryCollected(requiredMemoryId);
+            if (collection != null && !string.IsNullOrWhiteSpace(requiredMemoryId) && collection.Contains(requiredMemoryId))
+                Open();
         }
 
-        private void OnMemoryCollected(string id)
+        public void Open()
         {
-            if (id == requiredMemoryId && !opening && !opened && load != null)
+            if (!opening && !opened && load != null)
             {
                 opening = true;
                 OpenAsync().Forget();
             }
-        }
-
-        public override void Interact()
-        {
-            if (!CanInteract) return;
-            opening = true;
-            OpenAsync().Forget();
         }
 
         private async UniTask OpenAsync()
@@ -94,15 +81,7 @@ namespace Memories.Gameplay.Interaction
                 view.sharedMaterial = material;
                 view.enabled = true;
                 UpdateView();
-                // The destination is rendered before the leaf starts moving.
-                Quaternion start = hinge.localRotation;
-                for (float elapsed = 0; elapsed < .85f; elapsed += Time.deltaTime)
-                {
-                    if (this == null) return;
-                    hinge.localRotation = start * Quaternion.Euler(0, -100 * Mathf.SmoothStep(0, 1, elapsed / .85f), 0);
-                    await UniTask.Yield();
-                }
-                hinge.localRotation = start * Quaternion.Euler(0, -100, 0);
+                hinge.localRotation *= Quaternion.Euler(0, -100, 0);
                 closedDoor.enabled = false;
                 previousDistance = transform.InverseTransformPoint(player.transform.position).z;
                 opened = true;
@@ -159,7 +138,6 @@ namespace Memories.Gameplay.Interaction
 
         private void OnDestroy()
         {
-            if (memories != null) memories.Collected -= OnMemoryCollected;
             if (texture != null) { texture.Release(); Destroy(texture); }
             if (material != null) Destroy(material);
         }

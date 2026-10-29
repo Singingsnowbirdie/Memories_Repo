@@ -1,5 +1,6 @@
 using System;
 using Memories.Gameplay.Story;
+using Memories.Gameplay.Reactions;
 using UnityEditor;
 using UnityEngine;
 using XNodeEditor;
@@ -9,6 +10,57 @@ namespace Memories.Editor
     [CustomNodeGraphEditor(typeof(StoryTextGraph))]
     public sealed class StoryTextGraphEditor : NodeGraphEditor
     {
+        private static string NavigationKey(NodeEditorWindow editorWindow) =>
+            "Memories.TextGraphBack." + editorWindow.GetInstanceID();
+
+        [UnityEditor.Callbacks.OnOpenAsset(-1)]
+        private static bool OpenTextAsset(int instanceId, int line)
+        {
+            if (!(EditorUtility.InstanceIDToObject(instanceId) is StoryTextGraph graph)) return false;
+            OpenGraph(graph);
+            return true;
+        }
+
+        internal static void OpenGraph(StoryTextGraph graph)
+        {
+            var editorWindow = EditorWindow.GetWindow<NodeEditorWindow>();
+            string key = NavigationKey(editorWindow);
+            if (editorWindow.graph is ReactionGraph reaction)
+            {
+                SessionState.SetInt(key + ".parent", reaction.GetInstanceID());
+                SessionState.SetInt(key + ".text", graph.GetInstanceID());
+                SessionState.SetVector3(key + ".pan", editorWindow.panOffset);
+                SessionState.SetFloat(key + ".zoom", editorWindow.zoom);
+            }
+            else if (editorWindow.graph != graph)
+            {
+                SessionState.EraseInt(key + ".parent");
+                SessionState.EraseInt(key + ".text");
+            }
+            NodeEditorWindow.Open(graph);
+        }
+
+        public override void OnGUI()
+        {
+            string key = NavigationKey(window);
+            if (SessionState.GetInt(key + ".text", 0) != target.GetInstanceID()) return;
+            var parent = EditorUtility.InstanceIDToObject(SessionState.GetInt(key + ".parent", 0)) as ReactionGraph;
+            if (parent == null) return;
+            if (GUI.Button(new Rect(10, 10, 90, 24), new GUIContent("← Назад", parent.name)))
+            {
+                Vector2 pan = SessionState.GetVector3(key + ".pan", Vector3.zero);
+                float zoom = SessionState.GetFloat(key + ".zoom", 1f);
+                EditorApplication.delayCall += () =>
+                {
+                    if (parent == null) return;
+                    var editorWindow = NodeEditorWindow.Open(parent);
+                    editorWindow.panOffset = pan;
+                    editorWindow.zoom = zoom;
+                    Selection.activeObject = parent;
+                };
+            }
+        }
+
         public override string GetNodeMenuName(Type type)
         {
             if (type == typeof(StoryTextStartNode)) return "Начало";
@@ -96,7 +148,7 @@ namespace Memories.Editor
             var graph = (StoryTextGraph)target;
             DrawPlaybackSettings(serializedObject);
             EditorGUILayout.HelpBox("Соедините ноды: Начало → Текст → … → Конец. Тексты автоматически сменяются через фейд в нижней плашке.", MessageType.Info);
-            if (GUILayout.Button("Открыть граф текста")) NodeEditorWindow.Open(graph);
+            if (GUILayout.Button("Открыть граф текста")) StoryTextGraphEditor.OpenGraph(graph);
             if (graph.TryGetSequence(out var fragments, out var error))
                 EditorGUILayout.HelpBox("Граф готов. Фрагментов: " + fragments.Count, MessageType.Info);
             else EditorGUILayout.HelpBox(error, MessageType.Warning);

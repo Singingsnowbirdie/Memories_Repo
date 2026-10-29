@@ -36489,6 +36489,7 @@ GameObject:
   - component: {fileID: 880001205}
   - component: {fileID: 880001206}
   - component: {fileID: 880001207}
+  - component: {fileID: 880001208}
   m_Layer: 0
   m_Name: TV Baseball Screen
   m_TagString: Untagged
@@ -36596,6 +36597,19 @@ MonoBehaviour:
   initializationGraph: {fileID: 0}
   prompt: "\u0412\u0441\u043F\u043E\u043C\u043D\u0438\u0442\u044C"
   objectBindings: []
+--- !u!114 &880001208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 880001201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47a943a6841c4ea1a16ad120d4593cd1, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.OpenCourtyardDoorReaction
+  door: {fileID: 1911400795}
 --- !u!65 &880001207
 BoxCollider:
   m_ObjectHideFlags: 0

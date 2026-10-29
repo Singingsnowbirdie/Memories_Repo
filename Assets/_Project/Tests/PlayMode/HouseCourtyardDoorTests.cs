@@ -6,6 +6,7 @@ using Memories.Bootstrap;
 using Memories.Gameplay.Interaction;
 using Memories.Gameplay.Memories;
 using Memories.Gameplay.Player;
+using Memories.Gameplay.Reactions;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -55,24 +56,28 @@ namespace Memories.Tests.PlayMode
                 motor.SetLook(0, 0); Physics.SyncTransforms();
                 var door = Object.FindFirstObjectByType<CourtyardDoor>();
                 Assert.IsNotNull(door);
-                Assert.IsFalse(door.CanInteract, "The house exit must never require interaction.");
-                Assert.IsEmpty(door.Prompt);
+                Assert.IsNull(door.GetComponent<Interactable>(), "The house exit must not be an interactive object.");
                 var memories = session.SessionScope.Container.Resolve<MemoryCollection>();
                 if (!previouslyFound)
                 {
                     Assert.IsNull(new InteractionProbe(motor.GetComponentInChildren<Camera>()).FindTarget());
-                    door.Interact();
-                    await UniTask.NextFrame();
-                    Assert.IsFalse(door.IsOpen, "Pressing E must not open the exit.");
+                    Assert.IsFalse(door.IsOpen, "The exit must stay closed until the custom reaction.");
                     memories.Collect("unrelated-memory");
                     await UniTask.NextFrame();
                     Assert.IsFalse(door.IsOpen, "Other memories must not unlock this door.");
                     memories.Collect("house-tv-baseball");
+                    await UniTask.Delay(1000);
+                    Assert.IsFalse(door.IsOpen, "Collecting the TV memory must not open the door before the graph reaction.");
+                    Assert.IsEmpty(door.GetComponentsInChildren<Camera>(), "Opening must not start from the memory event.");
+                    var reaction = Object.FindFirstObjectByType<OpenCourtyardDoorReaction>(FindObjectsInactive.Include);
+                    Assert.IsNotNull(reaction);
+                    reaction.Execute();
+                    reaction.Execute(); // Repeated playback must not start a second opening.
                 }
                 deadline = Time.realtimeSinceStartup + 25;
                 while (!door.IsOpen && Time.realtimeSinceStartup < deadline) await UniTask.NextFrame();
                 Assert.IsTrue(door.IsOpen);
-                Assert.IsFalse(door.CanInteract);
+                Assert.IsNull(door.GetComponent<Interactable>());
                 Assert.IsTrue(SceneManager.GetSceneByPath(TestLocationLauncher.BackyardPath).isLoaded);
                 Assert.IsTrue(SceneManager.GetSceneByPath(TestLocationLauncher.HousePath).isLoaded, "House must remain in place while looking through the open door.");
                 Assert.IsFalse(SceneManager.GetSceneByPath(TestLocationLauncher.HighwayPath).isLoaded,

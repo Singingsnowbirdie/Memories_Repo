@@ -73,7 +73,7 @@ namespace Memories.Editor
                 ? (int)ReactionKind.AddInventoryItem : kind.intValue;
             EditorGUI.BeginChangeCheck();
             int chosenKind = EditorGUILayout.IntPopup(displayedKind,
-                new[] { "Показать текст", "Показать воспоминание", "Перейти в локацию", "Запустить реакцию объекта", "Установить кастомную переменную", "Активность объекта", "Предмет в инвентаре", "Запустить подсказки", "Остановить подсказки", "Интерактивность предмета" },
+                new[] { "Показать текст", "Показать воспоминание", "Перейти в локацию", "Запустить реакцию объекта", "Установить кастомную переменную", "Активность объекта", "Инвентарный предмет", "Запустить подсказки", "Остановить подсказки", "Интерактивность предмета" },
                 new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 10 });
             if (EditorGUI.EndChangeCheck()) kind.intValue = chosenKind;
             EditorGUILayout.Space(8);
@@ -84,9 +84,15 @@ namespace Memories.Editor
             }
             else if (kind.enumValueIndex == 1)
             {
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("memoryGraph"), new GUIContent("Граф воспоминания"));
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("memoryId"), new GUIContent("ID воспоминания"));
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("firstCompletionText"), new GUIContent("Текст после первого просмотра"));
+                EditorGUILayout.LabelField("Граф воспоминания");
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("memoryGraph"), GUIContent.none);
+                EditorGUILayout.Space(8);
+                EditorGUILayout.LabelField("ID воспоминания");
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("memoryId"), GUIContent.none);
+                EditorGUILayout.Space(8);
+                EditorGUILayout.LabelField("Текст после первого просмотра");
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("firstCompletionText"), GUIContent.none);
+                EditorGUILayout.Space(8);
             }
             else if (kind.enumValueIndex == 2)
             {
