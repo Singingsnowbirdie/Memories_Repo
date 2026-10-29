@@ -79,6 +79,7 @@ namespace Memories.Editor
             {
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("memoryGraph"), new GUIContent("Граф воспоминания"));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("memoryId"), new GUIContent("ID воспоминания"));
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("firstCompletionText"), new GUIContent("Текст после первого просмотра"));
             }
             else if (kind.enumValueIndex == 2)
             {

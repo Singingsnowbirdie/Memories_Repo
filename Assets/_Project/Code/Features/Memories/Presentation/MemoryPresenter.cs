@@ -24,6 +24,7 @@ namespace Memories.Gameplay.Memories
         public event Action Closed;
         private bool disposed;
         public bool IsPlaying => playback != null;
+        public bool HasCollected(string id) => collection.Contains(id);
         public bool CanStartPlayback => !disposed && state.Mode == GameplayMode.Playing;
 
         public MemoryPresenter(MemoryCollection collection, GameplayModeState state, IMemoryView view, IPauseInput input, IMemoryMusic music, IMemorySound sounds)
@@ -34,7 +35,7 @@ namespace Memories.Gameplay.Memories
             this.input = input;
             this.music = music;
             this.sounds = sounds;
-            input.PauseRequested += Close;
+            input.PauseRequested += OnEscape;
             view.Hide();
         }
 
@@ -116,7 +117,12 @@ namespace Memories.Gameplay.Memories
             }
         }
 
-        // Escape interrupts the viewing; only reaching End collects the memory.
+        private void OnEscape()
+        {
+            if (IsPlaying && collection.Contains(currentId)) Close();
+        }
+
+        // Programmatic cancellation remains available for teardown and reaction cancellation.
         public void Close() => Cancel(true);
 
         private void Cancel(bool restoreControl)
@@ -145,7 +151,7 @@ namespace Memories.Gameplay.Memories
         {
             if (disposed) return;
             disposed = true;
-            input.PauseRequested -= Close;
+            input.PauseRequested -= OnEscape;
             Cancel(false);
         }
     }

@@ -46,6 +46,7 @@ namespace Memories.Gameplay.Reactions
             {
                 if (action.Kind == ReactionKind.StoryText && texts == null) return false;
                 if (action.Kind == ReactionKind.Memory && memories == null) return false;
+                if (action.Kind == ReactionKind.Memory && action.FirstCompletionText != null && texts == null) return false;
                 if (action.Kind == ReactionKind.CustomReaction && !CustomReaction.TryFind(owner, out _))
                 { Debug.LogWarning("На объекте нужен ровно один включённый компонент CustomReaction.", owner); return false; }
                 if (action.Kind == ReactionKind.ChangeLocation &&
@@ -168,10 +169,13 @@ namespace Memories.Gameplay.Reactions
                     {
                         // Other triggers may already be showing a memory; keep sequence order.
                         await UniTask.WaitUntil(() => memories.CanOpen(action.MemoryId, true), cancellationToken: source.Token);
+                        bool alreadyCollected = memories.HasCollected(action.MemoryId);
                         if (!memories.Open(action.MemoryId, action.MemoryGraph, true)) return;
                         ownsMemory = true;
                         await UniTask.WaitUntil(() => !memories.IsPlaying, cancellationToken: source.Token);
                         ownsMemory = false;
+                        if (!alreadyCollected && memories.HasCollected(action.MemoryId) && action.FirstCompletionText != null)
+                            await texts.ShowAsync(action.FirstCompletionText, source.Token);
                     }
                     node = ReactionGraph.Next(node);
                 }

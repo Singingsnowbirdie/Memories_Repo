@@ -18,6 +18,8 @@ namespace Memories.Gameplay.Reactions
         [SerializeField] private StoryTextGraph textGraph;
         [SerializeField] private MemoryGraph memoryGraph;
         [SerializeField] private string memoryId;
+        [SerializeField] private StoryTextGraph firstCompletionText;
+        public StoryTextGraph FirstCompletionText => firstCompletionText;
         [SerializeField] private string locationScenePath;
         [SerializeField] private CustomVariableBank variableBank;
         [SerializeField] private string variableId;
@@ -97,7 +99,8 @@ namespace Memories.Gameplay.Reactions
             {
                 if (memoryGraph == null || string.IsNullOrWhiteSpace(memoryId))
                 { error = "Назначьте граф воспоминания и его ID."; return false; }
-                return memoryGraph.TryGetSequence(out _, out error);
+                return memoryGraph.TryGetSequence(out _, out error) &&
+                    (firstCompletionText == null || firstCompletionText.TryGetSequence(out _, out error));
             }
             error = "Неизвестный тип реакции.";
             return false;

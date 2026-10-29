@@ -70,13 +70,23 @@ namespace Memories.Tests.EditMode
         }
 
         [Test]
-        public void InvalidGraphDoesNotBlockInputAndEscapeDoesNotCollect()
+        public void FirstViewingIgnoresEscapeButCollectedReplayCanClose()
         {
             var input = new Input();
             var state = new GameplayModeState(input);
             var collection = new MemoryCollection();
             var view = new View();
-            var graph = AssetDatabase.LoadAssetAtPath<MemoryGraph>("Assets/_Project/Configs/Memories/FirstMemoryGraph.asset");
+            var graph = ScriptableObject.CreateInstance<MemoryGraph>();
+            var start = graph.AddNode<MemoryStartNode>();
+            var musicNode = graph.AddNode<MemoryMusicNode>();
+            var frame = graph.AddNode<MemoryFrameNode>();
+            var frameData = new SerializedObject(frame);
+            frameData.FindProperty("image").objectReferenceValue = Texture2D.whiteTexture;
+            frameData.ApplyModifiedPropertiesWithoutUndo();
+            var end = graph.AddNode<MemoryEndNode>();
+            start.GetOutputPort("next").Connect(musicNode.GetInputPort("previous"));
+            musicNode.GetOutputPort("next").Connect(frame.GetInputPort("previous"));
+            frame.GetOutputPort("next").Connect(end.GetInputPort("previous"));
             var invalid = ScriptableObject.CreateInstance<MemoryGraph>();
             float time = Time.timeScale;
             bool audio = AudioListener.pause;
@@ -93,13 +103,24 @@ namespace Memories.Tests.EditMode
                 Assert.AreEqual(0, Time.timeScale);
                 Assert.IsFalse(presenter.Open("second", graph));
                 input.Escape();
+                Assert.AreEqual(0, music.Stopped);
+                Assert.IsTrue(presenter.IsPlaying && view.Visible && input.Blocked);
+                Assert.AreEqual(GameplayMode.Reading, state.Mode);
+                Assert.AreEqual(0, Time.timeScale);
+                Assert.IsFalse(collection.Contains("first"));
+                presenter.Close();
                 Assert.AreEqual(1, music.Stopped);
                 Assert.IsFalse(presenter.IsPlaying || view.Visible || input.Blocked);
                 Assert.IsFalse(collection.Contains("first"));
                 Assert.AreEqual(time, Time.timeScale);
+                collection.Collect("replay", graph);
+                Assert.IsTrue(presenter.Open("replay", graph, true));
+                input.Escape();
+                Assert.IsFalse(presenter.IsPlaying || view.Visible || input.Blocked);
+                Assert.AreEqual(2, music.Stopped);
                 Assert.IsTrue(presenter.Open("first", graph));
                 presenter.Dispose();
-                Assert.AreEqual(2, music.Stopped);
+                Assert.AreEqual(3, music.Stopped);
                 Assert.AreEqual(time, Time.timeScale);
                 Assert.AreEqual(audio, AudioListener.pause);
                 Assert.IsFalse(collection.Contains("first"));
@@ -108,6 +129,7 @@ namespace Memories.Tests.EditMode
             {
                 presenter.Dispose();
                 UnityEngine.Object.DestroyImmediate(invalid);
+                DestroyGraph(graph);
                 Time.timeScale = time;
                 AudioListener.pause = audio;
             }
