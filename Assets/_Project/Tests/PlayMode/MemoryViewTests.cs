@@ -21,7 +21,7 @@ namespace Memories.Tests.PlayMode
             var root = new GameObject("Memory view test", typeof(RectTransform));
             var view = root.AddComponent<MemoryView>();
             var frame = ScriptableObject.CreateInstance<MemoryFrameNode>();
-            var comic = Resources.Load<MemoryComic>("Memories/FirstMemoryComic");
+            var image = new Texture2D(2, 2);
             float time = Time.timeScale;
             try
             {
@@ -29,7 +29,7 @@ namespace Memories.Tests.PlayMode
                 view.Show();
                 foreach (MemoryFrameTransition mode in Enum.GetValues(typeof(MemoryFrameTransition)))
                 {
-                    Set(frame, "image", comic.GetFrame((int)mode));
+                    Set(frame, "image", image);
                     Set(frame, "text", "Текст под кадром " + mode);
                     Set(frame, "transition", mode);
                     Set(frame, "transitionDuration", .08f);
@@ -55,6 +55,7 @@ namespace Memories.Tests.PlayMode
                 Time.timeScale = time;
                 UnityEngine.Object.Destroy(root);
                 UnityEngine.Object.Destroy(frame);
+                UnityEngine.Object.Destroy(image);
             }
             await UniTask.NextFrame();
         });

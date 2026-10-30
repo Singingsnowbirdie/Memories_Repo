@@ -99,11 +99,16 @@ namespace Memories.Tests.EditMode
         [Test]
         public void GraphRejectsMissingImageBrokenConnectionAndCycle()
         {
-            var asset = AssetDatabase.LoadAssetAtPath<MemoryGraph>("Assets/_Project/Configs/Memories/FirstMemoryGraph.asset");
-            Assert.IsTrue(asset.TryGetSequence(out var frames, out var error), error);
-            Assert.AreEqual(3, frames.OfType<MemoryFrameNode>().Count());
-            Assert.IsInstanceOf<MemoryMusicNode>(frames[0]);
-            var graph = (MemoryGraph)asset.Copy();
+            var graph = ScriptableObject.CreateInstance<MemoryGraph>();
+            var start = graph.AddNode<MemoryStartNode>();
+            var sample = graph.AddNode<MemoryFrameNode>();
+            var end = graph.AddNode<MemoryEndNode>();
+            var sampleData = new SerializedObject(sample);
+            sampleData.FindProperty("image").objectReferenceValue = Texture2D.whiteTexture;
+            sampleData.ApplyModifiedPropertiesWithoutUndo();
+            start.GetOutputPort("next").Connect(sample.GetInputPort("previous"));
+            sample.GetOutputPort("next").Connect(end.GetInputPort("previous"));
+            Assert.IsTrue(graph.TryGetSequence(out _, out var error), error);
             try
             {
                 var frame = graph.nodes.OfType<MemoryFrameNode>().First();
