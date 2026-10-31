@@ -24,8 +24,18 @@ namespace Memories.Gameplay.Reactions
         [SerializeField] private CustomVariableBank variableBank;
         [SerializeField] private string variableId;
         [SerializeField] private bool variableValue = true;
+        [SerializeField] private int variableIntValue;
+        public int VariableIntValue => variableIntValue;
+        [SerializeField] private bool addToIntValue;
+        public bool AddToIntValue => addToIntValue;
         [SerializeField] private string objectKey;
         [SerializeField] private bool active = true;
+        [SerializeField, Min(0)] private float revealDuration;
+        [SerializeField, Min(0)] private float revealDelay;
+        [SerializeField] private Shader revealShader;
+        public float RevealDuration => revealDuration;
+        public float RevealDelay => revealDelay;
+        public Shader RevealShader => revealShader;
         [SerializeField] private bool interactionEnabled;
         public bool InteractionEnabled => interactionEnabled;
         [SerializeField] private global::Memories.Gameplay.Interaction.QuestItem item;
@@ -54,6 +64,11 @@ namespace Memories.Gameplay.Reactions
         public bool Validate(out string error)
         {
             error = null;
+            if (kind == ReactionKind.ObjectActivity && active &&
+                (float.IsNaN(revealDuration) || float.IsInfinity(revealDuration) || revealDuration < 0 ||
+                 float.IsNaN(revealDelay) || float.IsInfinity(revealDelay) || revealDelay < 0 ||
+                 (revealDuration > 0 && revealShader == null)))
+            { error = "Для проявления задайте шейдер и конечные неотрицательные время и задержку."; return false; }
             if ((kind == ReactionKind.ObjectInteractivity || kind == ReactionKind.CustomReaction) && string.IsNullOrEmpty(objectKey)) return true;
             if (kind == ReactionKind.StartHints || kind == ReactionKind.StopHints)
             {

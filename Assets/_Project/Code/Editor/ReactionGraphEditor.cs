@@ -188,8 +188,18 @@ namespace Memories.Editor
                 else EditorGUILayout.HelpBox("Создайте банк через Assets → Create → Memories → Custom Variable Bank или назначьте готовый.", MessageType.Info);
                 EditorGUILayout.Space(8);
                 EditorGUILayout.LabelField("Значение");
-                var value = serializedObject.FindProperty("variableValue");
-                value.boolValue = EditorGUILayout.Popup(value.boolValue ? 1 : 0, new[] { "Нет", "Да" }) == 1;
+                if (bank?.Find(serializedObject.FindProperty("variableId").stringValue)?.Type == CustomVariableType.Integer)
+                {
+                    var add = serializedObject.FindProperty("addToIntValue");
+                    add.boolValue = EditorGUILayout.Popup("Операция", add.boolValue ? 1 : 0,
+                        new[] { "Присвоить", "Прибавить" }) == 1;
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("variableIntValue"), GUIContent.none);
+                }
+                else
+                {
+                    var value = serializedObject.FindProperty("variableValue");
+                    value.boolValue = EditorGUILayout.Popup(value.boolValue ? 1 : 0, new[] { "Нет", "Да" }) == 1;
+                }
             }
             else if (kind.enumValueIndex == 3)
             {
@@ -218,6 +228,15 @@ namespace Memories.Editor
                 EditorGUILayout.LabelField(interactivity ? "Интерактивность" : "Активность");
                 var active = serializedObject.FindProperty(interactivity ? "interactionEnabled" : "active");
                 active.boolValue = EditorGUILayout.Popup(active.boolValue ? 0 : 1, new[] { "Включить", "Выключить" }) == 0;
+                if (!interactivity && active.boolValue)
+                {
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("revealDuration"), new GUIContent("Проявление, сек. (0 — сразу)"));
+                    if (serializedObject.FindProperty("revealDuration").floatValue > 0)
+                    {
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("revealDelay"), new GUIContent("Задержка, сек."));
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("revealShader"), new GUIContent("Шейдер проявления"));
+                    }
+                }
             }
             else if (kind.enumValueIndex == 7 || kind.enumValueIndex == 8)
             {
@@ -293,6 +312,17 @@ namespace Memories.Editor
                     if (EditorGUI.EndChangeCheck()) id.stringValue = chosen == 0 ? "" : bank.Variables[chosen - 1].Id;
                 }
                 else EditorGUILayout.HelpBox("Создайте банк через Assets → Create → Memories → Custom Variable Bank или назначьте готовый.", MessageType.Info);
+            }
+            if (kind.intValue == (int)ReactionConditionKind.CustomVariable)
+            {
+                var bank = serializedObject.FindProperty("variableBank").objectReferenceValue as CustomVariableBank;
+                if (bank?.Find(serializedObject.FindProperty("variableId").stringValue)?.Type == CustomVariableType.Integer)
+                {
+                    var comparison = serializedObject.FindProperty("integerComparison");
+                    comparison.enumValueIndex = EditorGUILayout.Popup("Сравнение", comparison.enumValueIndex,
+                        new[] { "=", "≠", "<", "≤", ">", "≥" });
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("integerValue"), new GUIContent("Значение"));
+                }
             }
             EditorGUILayout.Space(10);
             NodeEditorGUILayout.PortField(new GUIContent("Если да"), target.GetOutputPort("ifPresent"));

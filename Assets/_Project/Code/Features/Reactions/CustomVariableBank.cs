@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Memories.Gameplay.Reactions
 {
+    public enum CustomVariableType { Boolean = 0, Integer = 1 }
     [CreateAssetMenu(menuName = "Memories/Custom Variable Bank", fileName = "CustomVariables")]
     public sealed class CustomVariableBank : ScriptableObject
     {
@@ -14,11 +15,17 @@ namespace Memories.Gameplay.Reactions
             [SerializeField, HideInInspector] private string id;
             [SerializeField] private string name;
             [SerializeField] private bool initialValue;
+            [SerializeField] private CustomVariableType type;
+            [SerializeField] private int initialIntValue;
+            public CustomVariableType Type => type;
+            public int InitialIntValue => initialIntValue;
             public string Id => id;
             public string Name => name;
             public bool InitialValue => initialValue;
             public Variable(string name, bool initialValue = false)
             { id = Guid.NewGuid().ToString("N"); this.name = name; this.initialValue = initialValue; }
+            public Variable(string name, int initialValue)
+            { id = Guid.NewGuid().ToString("N"); this.name = name; type = CustomVariableType.Integer; initialIntValue = initialValue; }
             internal void RenewId() => id = Guid.NewGuid().ToString("N");
         }
 

@@ -1452,6 +1452,7 @@ GameObject:
   m_Component:
   - component: {fileID: 507295294778273013}
   - component: {fileID: 3260831274657572881}
+  - component: {fileID: 2738130911393421982}
   m_Layer: 0
   m_Name: RoadBicycle90s
   m_TagString: Untagged
@@ -1559,6 +1560,23 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.82, y: 1.1, z: 0.45}
   m_Center: {x: 0, y: 0.55, z: 0}
+--- !u!114 &2738130911393421982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2779073015522754645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ba68190f9594ee8b2fc0603419ed015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Interaction.ReactionInteractable
+  graph: {fileID: 11400000, guid: ee3cf90d6960e4149a17b283d271202b, type: 2}
+  initializationGraph: {fileID: 0}
+  prompt: "\u041E\u0441\u043C\u043E\u0442\u0440\u0435\u0442\u044C"
+  objectBindings: []
+  customReactions: []
 --- !u!1 &2795006484537312388
 GameObject:
   m_ObjectHideFlags: 0

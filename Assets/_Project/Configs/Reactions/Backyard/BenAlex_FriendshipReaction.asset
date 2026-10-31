@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
   graph: {fileID: 11400000}
-  position: {x: 650, y: 180}
+  position: {x: 1048, y: 200}
   ports:
     keys:
     - previous
@@ -23,8 +23,8 @@ MonoBehaviour:
       _node: {fileID: -6478481031604306781}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
-      - fieldName: ifAbsent
-        node: {fileID: -256344876401640846}
+      - fieldName: next
+        node: {fileID: -4488260695797451939}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -35,7 +35,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: previous
-        node: {fileID: -4488260695797451939}
+        node: {fileID: -6203229425158784012}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -52,8 +52,13 @@ MonoBehaviour:
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
+  variableIntValue: 0
+  addToIntValue: 0
   objectKey: 
   active: 1
+  revealDuration: 0
+  revealDelay: 0
+  revealShader: {fileID: 0}
   interactionEnabled: 0
   item: {fileID: 0}
   hintId: 
@@ -73,7 +78,7 @@ MonoBehaviour:
   m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
   graph: {fileID: 11400000}
-  position: {x: 1450, y: 180}
+  position: {x: 1448, y: 232}
   ports:
     keys:
     - previous
@@ -84,7 +89,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: next
-        node: {fileID: -4488260695797451939}
+        node: {fileID: -6478481031604306781}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -112,8 +117,13 @@ MonoBehaviour:
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
+  variableIntValue: 0
+  addToIntValue: 0
   objectKey: ben
   active: 1
+  revealDuration: 1
+  revealDelay: 0
+  revealShader: {fileID: 4800000, guid: 0420a32a1c6f438fa03008fd3c81f551, type: 3}
   interactionEnabled: 0
   item: {fileID: 0}
   hintId: 
@@ -133,7 +143,7 @@ MonoBehaviour:
   m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
   graph: {fileID: 11400000}
-  position: {x: 1050, y: 180}
+  position: {x: 680, y: 200}
   ports:
     keys:
     - previous
@@ -143,8 +153,8 @@ MonoBehaviour:
       _node: {fileID: -4488260695797451939}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
-      - fieldName: next
-        node: {fileID: -6478481031604306781}
+      - fieldName: ifAbsent
+        node: {fileID: -256344876401640846}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -155,7 +165,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: previous
-        node: {fileID: -6203229425158784012}
+        node: {fileID: -6478481031604306781}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -172,8 +182,13 @@ MonoBehaviour:
   variableBank: {fileID: 11400000, guid: 83af6fcb806c087438f339fcbcc76145, type: 2}
   variableId: ben_alex_inscription_read
   variableValue: 1
+  variableIntValue: 0
+  addToIntValue: 0
   objectKey: 
   active: 1
+  revealDuration: 0
+  revealDelay: 0
+  revealShader: {fileID: 0}
   interactionEnabled: 0
   item: {fileID: 0}
   hintId: 
@@ -193,7 +208,7 @@ MonoBehaviour:
   m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
   graph: {fileID: 11400000}
-  position: {x: 2190, y: 180}
+  position: {x: 2232, y: 216}
   ports:
     keys:
     - previous
@@ -232,8 +247,13 @@ MonoBehaviour:
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
+  variableIntValue: 0
+  addToIntValue: 0
   objectKey: fishing_rod_2
   active: 1
+  revealDuration: 1
+  revealDelay: 0.08
+  revealShader: {fileID: 4800000, guid: 0420a32a1c6f438fa03008fd3c81f551, type: 3}
   interactionEnabled: 0
   item: {fileID: 0}
   hintId: 
@@ -253,7 +273,7 @@ MonoBehaviour:
   m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
   graph: {fileID: 11400000}
-  position: {x: 4040, y: 180}
+  position: {x: 4088, y: 216}
   ports:
     keys:
     - previous
@@ -292,8 +312,13 @@ MonoBehaviour:
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
+  variableIntValue: 0
+  addToIntValue: 0
   objectKey: water_pistol
   active: 1
+  revealDuration: 1
+  revealDelay: 0.16
+  revealShader: {fileID: 4800000, guid: 0420a32a1c6f438fa03008fd3c81f551, type: 3}
   interactionEnabled: 0
   item: {fileID: 0}
   hintId: 
@@ -352,8 +377,13 @@ MonoBehaviour:
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
+  variableIntValue: 0
+  addToIntValue: 0
   objectKey: 
   active: 1
+  revealDuration: 0
+  revealDelay: 0
+  revealShader: {fileID: 0}
   interactionEnabled: 0
   item: {fileID: 0}
   hintId: 
@@ -407,7 +437,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: previous
-        node: {fileID: -6478481031604306781}
+        node: {fileID: -4488260695797451939}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -418,6 +448,8 @@ MonoBehaviour:
   item: {fileID: 0}
   variableBank: {fileID: 11400000, guid: 83af6fcb806c087438f339fcbcc76145, type: 2}
   variableId: ben_alex_inscription_read
+  integerComparison: 0
+  integerValue: 0
   ifPresent: {fileID: 0}
   ifAbsent: {fileID: 0}
 --- !u!114 &-25299621937385149
@@ -504,7 +536,7 @@ MonoBehaviour:
   m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
   graph: {fileID: 11400000}
-  position: {x: 3670, y: 180}
+  position: {x: 3720, y: 216}
   ports:
     keys:
     - previous
@@ -543,8 +575,13 @@ MonoBehaviour:
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
+  variableIntValue: 0
+  addToIntValue: 0
   objectKey: watergun_2
   active: 1
+  revealDuration: 1
+  revealDelay: 0.24
+  revealShader: {fileID: 4800000, guid: 0420a32a1c6f438fa03008fd3c81f551, type: 3}
   interactionEnabled: 0
   item: {fileID: 0}
   hintId: 
@@ -564,7 +601,7 @@ MonoBehaviour:
   m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
   graph: {fileID: 11400000}
-  position: {x: 2930, y: 180}
+  position: {x: 2984, y: 216}
   ports:
     keys:
     - previous
@@ -603,8 +640,13 @@ MonoBehaviour:
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
+  variableIntValue: 0
+  addToIntValue: 0
   objectKey: bicycle
   active: 1
+  revealDuration: 1
+  revealDelay: 0
+  revealShader: {fileID: 4800000, guid: 0420a32a1c6f438fa03008fd3c81f551, type: 3}
   interactionEnabled: 0
   item: {fileID: 0}
   hintId: 
@@ -624,7 +666,7 @@ MonoBehaviour:
   m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
   graph: {fileID: 11400000}
-  position: {x: 4780, y: 180}
+  position: {x: 4824, y: 216}
   ports:
     keys:
     - previous
@@ -663,8 +705,13 @@ MonoBehaviour:
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
+  variableIntValue: 0
+  addToIntValue: 0
   objectKey: wheelbarrow
   active: 1
+  revealDuration: 1
+  revealDelay: 0.08
+  revealShader: {fileID: 4800000, guid: 0420a32a1c6f438fa03008fd3c81f551, type: 3}
   interactionEnabled: 0
   item: {fileID: 0}
   hintId: 
@@ -684,7 +731,7 @@ MonoBehaviour:
   m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
   graph: {fileID: 11400000}
-  position: {x: 1820, y: 180}
+  position: {x: 1864, y: 216}
   ports:
     keys:
     - previous
@@ -723,8 +770,13 @@ MonoBehaviour:
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
+  variableIntValue: 0
+  addToIntValue: 0
   objectKey: fishing_rod
   active: 1
+  revealDuration: 1
+  revealDelay: 0.16
+  revealShader: {fileID: 4800000, guid: 0420a32a1c6f438fa03008fd3c81f551, type: 3}
   interactionEnabled: 0
   item: {fileID: 0}
   hintId: 
@@ -744,7 +796,7 @@ MonoBehaviour:
   m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
   graph: {fileID: 11400000}
-  position: {x: 2560, y: 180}
+  position: {x: 2600, y: 216}
   ports:
     keys:
     - previous
@@ -783,8 +835,13 @@ MonoBehaviour:
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
+  variableIntValue: 0
+  addToIntValue: 0
   objectKey: hose
   active: 1
+  revealDuration: 1
+  revealDelay: 0.24
+  revealShader: {fileID: 4800000, guid: 0420a32a1c6f438fa03008fd3c81f551, type: 3}
   interactionEnabled: 0
   item: {fileID: 0}
   hintId: 
@@ -837,7 +894,7 @@ MonoBehaviour:
   m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
   graph: {fileID: 11400000}
-  position: {x: 4410, y: 180}
+  position: {x: 4456, y: 216}
   ports:
     keys:
     - previous
@@ -876,8 +933,13 @@ MonoBehaviour:
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
+  variableIntValue: 0
+  addToIntValue: 0
   objectKey: briefcase
   active: 1
+  revealDuration: 1
+  revealDelay: 0
+  revealShader: {fileID: 4800000, guid: 0420a32a1c6f438fa03008fd3c81f551, type: 3}
   interactionEnabled: 0
   item: {fileID: 0}
   hintId: 
@@ -897,7 +959,7 @@ MonoBehaviour:
   m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
   graph: {fileID: 11400000}
-  position: {x: 3300, y: 180}
+  position: {x: 3352, y: 216}
   ports:
     keys:
     - previous
@@ -936,8 +998,13 @@ MonoBehaviour:
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
+  variableIntValue: 0
+  addToIntValue: 0
   objectKey: watergun_1
   active: 1
+  revealDuration: 1
+  revealDelay: 0.08
+  revealShader: {fileID: 4800000, guid: 0420a32a1c6f438fa03008fd3c81f551, type: 3}
   interactionEnabled: 0
   item: {fileID: 0}
   hintId: 

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8989529067803825723}
   - component: {fileID: 5435530952517474718}
   - component: {fileID: 7821087701756620116}
+  - component: {fileID: 4357581090067756727}
   m_Layer: 0
   m_Name: Fishing_Rod
   m_TagString: Untagged
@@ -90,3 +91,20 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &4357581090067756727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8613954126185663617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ba68190f9594ee8b2fc0603419ed015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Interaction.ReactionInteractable
+  graph: {fileID: 11400000, guid: caa6f086ed74f7e4984a38193d82ea2b, type: 2}
+  initializationGraph: {fileID: 0}
+  prompt: "\u041E\u0441\u043C\u043E\u0442\u0440\u0435\u0442\u044C"
+  objectBindings: []
+  customReactions: []

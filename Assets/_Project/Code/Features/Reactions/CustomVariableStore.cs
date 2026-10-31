@@ -7,9 +7,9 @@ namespace Memories.Gameplay.Reactions
     public sealed class CustomVariableStore
     {
         public const string DefaultKey = "Memories.Progress.CustomVariables.v1";
-        [Serializable] private sealed class Entry { public string id; public bool value; }
+        [Serializable] private sealed class Entry { public string id; public bool value; public CustomVariableType type; public int intValue; }
         [Serializable] private sealed class SaveData { public List<Entry> entries = new List<Entry>(); }
-        private readonly Dictionary<string, bool> values = new Dictionary<string, bool>();
+        private readonly Dictionary<string, Entry> values = new Dictionary<string, Entry>();
         private readonly string saveKey;
         public bool PersistProgress { get; }
 
@@ -24,30 +24,54 @@ namespace Memories.Gameplay.Reactions
                 var data = JsonUtility.FromJson<SaveData>(PlayerPrefs.GetString(saveKey));
                 if (data?.entries != null)
                     foreach (var entry in data.entries)
-                        if (entry != null && !string.IsNullOrEmpty(entry.id)) values[entry.id] = entry.value;
+                        if (entry != null && !string.IsNullOrEmpty(entry.id)) values[entry.id] = entry;
             }
             catch (ArgumentException) { Debug.LogWarning("Не удалось прочитать сохранение кастомных переменных."); }
         }
 
         public bool HasSavedValue(CustomVariableBank bank, string id)
         {
-            RequireVariable(bank, id);
-            return values.ContainsKey(bank.Id + ":" + id);
+            var variable = RequireVariable(bank, id);
+            return values.TryGetValue(bank.Id + ":" + id, out var entry) && entry.type == variable.Type;
         }
 
         public bool Get(CustomVariableBank bank, string id)
         {
             var variable = RequireVariable(bank, id);
-            return values.TryGetValue(bank.Id + ":" + id, out var value) ? value : variable.InitialValue;
+            RequireType(variable, CustomVariableType.Boolean);
+            return values.TryGetValue(bank.Id + ":" + id, out var value) && value.type == variable.Type ? value.value : variable.InitialValue;
         }
 
         public void Set(CustomVariableBank bank, string id, bool value)
         {
-            RequireVariable(bank, id);
-            values[bank.Id + ":" + id] = value;
+            RequireType(RequireVariable(bank, id), CustomVariableType.Boolean);
+            Save(new Entry { id = bank.Id + ":" + id, value = value, type = CustomVariableType.Boolean });
+        }
+
+        public int GetInt(CustomVariableBank bank, string id)
+        {
+            var variable = RequireVariable(bank, id);
+            RequireType(variable, CustomVariableType.Integer);
+            return values.TryGetValue(bank.Id + ":" + id, out var entry) && entry.type == variable.Type ? entry.intValue : variable.InitialIntValue;
+        }
+
+        public void Set(CustomVariableBank bank, string id, int value)
+        {
+            RequireType(RequireVariable(bank, id), CustomVariableType.Integer);
+            Save(new Entry { id = bank.Id + ":" + id, intValue = value, type = CustomVariableType.Integer });
+        }
+
+        private static void RequireType(CustomVariableBank.Variable variable, CustomVariableType type)
+        {
+            if (variable.Type != type) throw new ArgumentException("Тип кастомной переменной не соответствует операции.");
+        }
+
+        private void Save(Entry entry)
+        {
+            values[entry.id] = entry;
             if (!PersistProgress) return;
             var data = new SaveData();
-            foreach (var pair in values) data.entries.Add(new Entry { id = pair.Key, value = pair.Value });
+            foreach (var pair in values) data.entries.Add(pair.Value);
             PlayerPrefs.SetString(saveKey, JsonUtility.ToJson(data));
             PlayerPrefs.Save();
         }

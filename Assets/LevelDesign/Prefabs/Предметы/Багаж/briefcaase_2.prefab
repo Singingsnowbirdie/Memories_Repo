@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 6602126124339937792}
   - component: {fileID: 7693091890111411456}
   - component: {fileID: 3166237811787876394}
+  - component: {fileID: 5958762266296462292}
+  - component: {fileID: 5454932844777218686}
   m_Layer: 0
   m_Name: briefcaase_2
   m_TagString: Untagged
@@ -90,3 +92,41 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &5958762266296462292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 739452338329536689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ba68190f9594ee8b2fc0603419ed015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Interaction.ReactionInteractable
+  graph: {fileID: 11400000, guid: 9befb80014d32914fbef3e477b8dfb80, type: 2}
+  initializationGraph: {fileID: 0}
+  prompt: "\u041E\u0441\u043C\u043E\u0442\u0440\u0435\u0442\u044C"
+  objectBindings: []
+  customReactions: []
+--- !u!65 &5454932844777218686
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 739452338329536689}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.6640729, y: 0.60244, z: 0.29974058}
+  m_Center: {x: 0, y: 0.27165198, z: -0.0148230195}

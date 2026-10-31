@@ -101,6 +101,7 @@ GameObject:
   - component: {fileID: 4691987367314160}
   - component: {fileID: 33545257734206954}
   - component: {fileID: 23222874398103296}
+  - component: {fileID: 4866640955273576298}
   m_Layer: 0
   m_Name: SM_Wep_Watergun_02
   m_TagString: Untagged
@@ -183,6 +184,23 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &4866640955273576298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1311246062939086}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ba68190f9594ee8b2fc0603419ed015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Interaction.ReactionInteractable
+  graph: {fileID: 11400000, guid: a177187fe9ba5844ab87232d81c878a2, type: 2}
+  initializationGraph: {fileID: 0}
+  prompt: "\u041E\u0441\u043C\u043E\u0442\u0440\u0435\u0442\u044C"
+  objectBindings: []
+  customReactions: []
 --- !u!1 &1499752135572684
 GameObject:
   m_ObjectHideFlags: 0

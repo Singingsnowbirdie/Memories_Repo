@@ -56,6 +56,33 @@ namespace Memories.Tests.PlayMode
         }
 
         [Test]
+        public void OwnControllerAndChildCollidersAreSkippedButWallStillBlocks()
+        {
+            var player = new GameObject("Player");
+            player.transform.SetParent(root.transform, false);
+            var controller = player.AddComponent<CharacterController>();
+            controller.center = Vector3.forward * .5f;
+            controller.radius = .2f;
+            camera.transform.SetParent(player.transform, false);
+            var child = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            child.transform.SetParent(player.transform, false);
+            child.transform.localPosition = Vector3.forward;
+            child.transform.localScale = Vector3.one * .1f;
+            probe = new InteractionProbe(camera);
+            Physics.SyncTransforms();
+            Assert.IsTrue(Physics.Raycast(camera.transform.position, Vector3.forward, out var hit, 3));
+            Assert.AreSame(controller, hit.collider);
+            Assert.AreSame(target, probe.FindTarget());
+
+            var wall = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            wall.transform.SetParent(root.transform, false);
+            wall.transform.localPosition = Vector3.forward * 1.3f;
+            wall.transform.localScale = Vector3.one * .1f;
+            Physics.SyncTransforms();
+            Assert.IsNull(probe.FindTarget());
+        }
+
+        [Test]
         public void NearestWallBlocksInteraction()
         {
             Assert.AreSame(target, probe.FindTarget());

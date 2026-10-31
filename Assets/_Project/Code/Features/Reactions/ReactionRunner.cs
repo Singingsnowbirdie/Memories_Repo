@@ -160,7 +160,12 @@ namespace Memories.Gameplay.Reactions
                         if (!ReactionObjectBinding.TryResolve(objectBindings, action.ObjectKey, out var target))
                             throw new InvalidOperationException("Объект графа недоступен: " + action.ObjectKey);
                         IsHidingOwner = !action.Active && owner is Component component && target == component.gameObject;
-                        try { target.SetActive(action.Active); }
+                        try
+                        {
+                            if (action.Active && !target.activeSelf && action.RevealDuration > 0 && action.RevealShader != null)
+                                ObjectReveal.Play(target, action.RevealShader, action.RevealDuration, action.RevealDelay);
+                            else target.SetActive(action.Active);
+                        }
                         finally { IsHidingOwner = false; }
                         node = ReactionGraph.Next(node);
                         continue;
@@ -186,7 +191,13 @@ namespace Memories.Gameplay.Reactions
                     else if (action.Kind == ReactionKind.ConsumeInventoryItem)
                         inventory.TryConsume(action.Item);
                     else if (action.Kind == ReactionKind.SetCustomVariable)
-                        variables.Set(action.VariableBank, action.VariableId, action.VariableValue);
+                    {
+                        if (action.VariableBank.Find(action.VariableId).Type == CustomVariableType.Integer)
+                            variables.Set(action.VariableBank, action.VariableId, action.AddToIntValue
+                                ? checked(variables.GetInt(action.VariableBank, action.VariableId) + action.VariableIntValue)
+                                : action.VariableIntValue);
+                        else variables.Set(action.VariableBank, action.VariableId, action.VariableValue);
+                    }
                     else if (action.Kind == ReactionKind.StoryText)
                         await texts.ShowAsync(action.TextGraph, source.Token);
                     else if (action.Kind == ReactionKind.ChangeLocation)

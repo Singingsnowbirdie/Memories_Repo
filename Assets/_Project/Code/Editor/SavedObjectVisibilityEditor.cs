@@ -1,4 +1,5 @@
 using Memories.Gameplay.Reactions;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -21,19 +22,20 @@ namespace Memories.Editor
                 EditorGUILayout.HelpBox(bank == null ? "Назначьте банк переменных." : "В банке нет переменных.", MessageType.Info);
             else
             {
-                var names = new string[bank.Variables.Count];
+                var variables = bank.Variables.Where(v => v.Type == CustomVariableType.Boolean).ToArray();
+                var names = new string[variables.Length];
                 int selected = -1;
                 for (int i = 0; i < names.Length; i++)
                 {
-                    names[i] = bank.Variables[i].Name;
-                    if (bank.Variables[i].Id == id.stringValue) selected = i;
+                    names[i] = variables[i].Name;
+                    if (variables[i].Id == id.stringValue) selected = i;
                 }
                 EditorGUI.BeginChangeCheck();
                 int chosen = EditorGUILayout.Popup(selected, names);
                 if (EditorGUI.EndChangeCheck() && chosen >= 0)
-                    id.stringValue = bank.Variables[chosen].Id;
+                    id.stringValue = variables[chosen].Id;
                 if (selected < 0)
-                    EditorGUILayout.HelpBox("Выберите существующую переменную из банка.", MessageType.Warning);
+                    EditorGUILayout.HelpBox("Выберите логическую переменную из банка.", MessageType.Warning);
             }
             serializedObject.ApplyModifiedProperties();
         }
