@@ -1,0 +1,955 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8260680020868029791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd260b234eb14d4cbcafbe381aa00ee1, type: 3}
+  m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
+  graph: {fileID: 11400000}
+  position: {x: 3280, y: 760}
+  ports:
+    keys:
+    - previous
+    - next
+    values:
+    - _fieldName: previous
+      _node: {fileID: -8260680020868029791}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: next
+        node: {fileID: -4751371750211635005}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: next
+      _node: {fileID: -8260680020868029791}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: -2543313504245772746}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  previous: {fileID: 0}
+  next: {fileID: 0}
+  kind: 5
+  reactionGraph: {fileID: 0}
+  textGraph: {fileID: 0}
+  memoryGraph: {fileID: 0}
+  memoryId: 
+  firstCompletionText: {fileID: 0}
+  locationScenePath: 
+  variableBank: {fileID: 0}
+  variableId: 
+  variableValue: 1
+  variableIntValue: 0
+  addToIntValue: 0
+  objectKey: ben_home
+  active: 0
+  revealDuration: 0
+  revealDelay: 0
+  revealShader: {fileID: 0}
+  interactionEnabled: 0
+  item: {fileID: 0}
+  hintId: 
+  hintGraph: {fileID: 0}
+  hintTimeout: 180
+  repeatHint: 1
+--- !u!114 &-8107708987802102520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddcb8ac0ad6e48ccb386abec87533848, type: 3}
+  m_Name: "\u041A\u043E\u043D\u0435\u0446"
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionEndNode
+  graph: {fileID: 11400000}
+  position: {x: 3650, y: 0}
+  ports:
+    keys:
+    - previous
+    values:
+    - _fieldName: previous
+      _node: {fileID: -8107708987802102520}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: next
+        node: {fileID: 8314671639027844792}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  previous: {fileID: 0}
+--- !u!114 &-4751371750211635005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd260b234eb14d4cbcafbe381aa00ee1, type: 3}
+  m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
+  graph: {fileID: 11400000}
+  position: {x: 3280, y: 380}
+  ports:
+    keys:
+    - previous
+    - next
+    values:
+    - _fieldName: previous
+      _node: {fileID: -4751371750211635005}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: next
+        node: {fileID: -184716743723654925}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: next
+      _node: {fileID: -4751371750211635005}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: -8260680020868029791}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  previous: {fileID: 0}
+  next: {fileID: 0}
+  kind: 4
+  reactionGraph: {fileID: 0}
+  textGraph: {fileID: 0}
+  memoryGraph: {fileID: 0}
+  memoryId: 
+  firstCompletionText: {fileID: 0}
+  locationScenePath: 
+  variableBank: {fileID: 11400000, guid: 83af6fcb806c087438f339fcbcc76145, type: 2}
+  variableId: ben_home_visible
+  variableValue: 0
+  variableIntValue: 0
+  addToIntValue: 0
+  objectKey: 
+  active: 1
+  revealDuration: 0
+  revealDelay: 0
+  revealShader: {fileID: 0}
+  interactionEnabled: 0
+  item: {fileID: 0}
+  hintId: 
+  hintGraph: {fileID: 0}
+  hintTimeout: 180
+  repeatHint: 1
+--- !u!114 &-2674652581124107272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d1e2d69ef5340098329eb2b742b95a5, type: 3}
+  m_Name: "\u041D\u0430\u0447\u0430\u043B\u043E"
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionStartNode
+  graph: {fileID: 11400000}
+  position: {x: -392, y: -8}
+  ports:
+    keys:
+    - next
+    values:
+    - _fieldName: next
+      _node: {fileID: -2674652581124107272}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: 910000001}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  runOnce: 0
+  next: {fileID: 0}
+--- !u!114 &-2543313504245772746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd260b234eb14d4cbcafbe381aa00ee1, type: 3}
+  m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
+  graph: {fileID: 11400000}
+  position: {x: 3280, y: 1140}
+  ports:
+    keys:
+    - previous
+    - next
+    values:
+    - _fieldName: previous
+      _node: {fileID: -2543313504245772746}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: next
+        node: {fileID: -8260680020868029791}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: next
+      _node: {fileID: -2543313504245772746}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: 741853757205466795}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  previous: {fileID: 0}
+  next: {fileID: 0}
+  kind: 5
+  reactionGraph: {fileID: 0}
+  textGraph: {fileID: 0}
+  memoryGraph: {fileID: 0}
+  memoryId: 
+  firstCompletionText: {fileID: 0}
+  locationScenePath: 
+  variableBank: {fileID: 0}
+  variableId: 
+  variableValue: 1
+  variableIntValue: 0
+  addToIntValue: 0
+  objectKey: ben_pitcher
+  active: 1
+  revealDuration: 0
+  revealDelay: 0
+  revealShader: {fileID: 0}
+  interactionEnabled: 0
+  item: {fileID: 0}
+  hintId: 
+  hintGraph: {fileID: 0}
+  hintTimeout: 180
+  repeatHint: 1
+--- !u!114 &-1829517261137185039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd260b234eb14d4cbcafbe381aa00ee1, type: 3}
+  m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
+  graph: {fileID: 11400000}
+  position: {x: 2910, y: 0}
+  ports:
+    keys:
+    - previous
+    - next
+    values:
+    - _fieldName: previous
+      _node: {fileID: -1829517261137185039}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: next
+        node: {fileID: 8733297576258220195}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: next
+      _node: {fileID: -1829517261137185039}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: -184716743723654925}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  previous: {fileID: 0}
+  next: {fileID: 0}
+  kind: 4
+  reactionGraph: {fileID: 0}
+  textGraph: {fileID: 0}
+  memoryGraph: {fileID: 0}
+  memoryId: 
+  firstCompletionText: {fileID: 0}
+  locationScenePath: 
+  variableBank: {fileID: 11400000, guid: 83af6fcb806c087438f339fcbcc76145, type: 2}
+  variableId: baseball_cap_visible
+  variableValue: 1
+  variableIntValue: 0
+  addToIntValue: 0
+  objectKey: 
+  active: 1
+  revealDuration: 0
+  revealDelay: 0
+  revealShader: {fileID: 0}
+  interactionEnabled: 0
+  item: {fileID: 0}
+  hintId: 
+  hintGraph: {fileID: 0}
+  hintTimeout: 180
+  repeatHint: 1
+--- !u!114 &-1553311943373815301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd260b234eb14d4cbcafbe381aa00ee1, type: 3}
+  m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
+  graph: {fileID: 11400000}
+  position: {x: 2170, y: 0}
+  ports:
+    keys:
+    - previous
+    - next
+    values:
+    - _fieldName: previous
+      _node: {fileID: -1553311943373815301}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: next
+        node: {fileID: 1209019670909760100}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: next
+      _node: {fileID: -1553311943373815301}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: 8733297576258220195}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  previous: {fileID: 0}
+  next: {fileID: 0}
+  kind: 4
+  reactionGraph: {fileID: 0}
+  textGraph: {fileID: 0}
+  memoryGraph: {fileID: 0}
+  memoryId: 
+  firstCompletionText: {fileID: 0}
+  locationScenePath: 
+  variableBank: {fileID: 11400000, guid: 83af6fcb806c087438f339fcbcc76145, type: 2}
+  variableId: baseball_ball_visible
+  variableValue: 1
+  variableIntValue: 0
+  addToIntValue: 0
+  objectKey: 
+  active: 1
+  revealDuration: 0
+  revealDelay: 0
+  revealShader: {fileID: 0}
+  interactionEnabled: 0
+  item: {fileID: 0}
+  hintId: 
+  hintGraph: {fileID: 0}
+  hintTimeout: 180
+  repeatHint: 1
+--- !u!114 &-1344454481713990880
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd260b234eb14d4cbcafbe381aa00ee1, type: 3}
+  m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
+  graph: {fileID: 11400000}
+  position: {x: 1060, y: 0}
+  ports:
+    keys:
+    - previous
+    - next
+    values:
+    - _fieldName: previous
+      _node: {fileID: -1344454481713990880}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: next
+        node: {fileID: 910000001}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: next
+      _node: {fileID: -1344454481713990880}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: -473625053441552419}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  previous: {fileID: 0}
+  next: {fileID: 0}
+  kind: 4
+  reactionGraph: {fileID: 0}
+  textGraph: {fileID: 0}
+  memoryGraph: {fileID: 0}
+  memoryId: 
+  firstCompletionText: {fileID: 0}
+  locationScenePath: 
+  variableBank: {fileID: 11400000, guid: 83af6fcb806c087438f339fcbcc76145, type: 2}
+  variableId: baseball_equipment_revealed
+  variableValue: 1
+  variableIntValue: 0
+  addToIntValue: 0
+  objectKey: 
+  active: 1
+  revealDuration: 0
+  revealDelay: 0
+  revealShader: {fileID: 0}
+  interactionEnabled: 0
+  item: {fileID: 0}
+  hintId: 
+  hintGraph: {fileID: 0}
+  hintTimeout: 180
+  repeatHint: 1
+--- !u!114 &-473625053441552419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd260b234eb14d4cbcafbe381aa00ee1, type: 3}
+  m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
+  graph: {fileID: 11400000}
+  position: {x: 1430, y: 0}
+  ports:
+    keys:
+    - previous
+    - next
+    values:
+    - _fieldName: previous
+      _node: {fileID: -473625053441552419}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: next
+        node: {fileID: -1344454481713990880}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: next
+      _node: {fileID: -473625053441552419}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: 1209019670909760100}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  previous: {fileID: 0}
+  next: {fileID: 0}
+  kind: 4
+  reactionGraph: {fileID: 0}
+  textGraph: {fileID: 0}
+  memoryGraph: {fileID: 0}
+  memoryId: 
+  firstCompletionText: {fileID: 0}
+  locationScenePath: 
+  variableBank: {fileID: 11400000, guid: 83af6fcb806c087438f339fcbcc76145, type: 2}
+  variableId: baseball_bat_visible
+  variableValue: 1
+  variableIntValue: 0
+  addToIntValue: 0
+  objectKey: 
+  active: 1
+  revealDuration: 0
+  revealDelay: 0
+  revealShader: {fileID: 0}
+  interactionEnabled: 0
+  item: {fileID: 0}
+  hintId: 
+  hintGraph: {fileID: 0}
+  hintTimeout: 180
+  repeatHint: 1
+--- !u!114 &-184716743723654925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd260b234eb14d4cbcafbe381aa00ee1, type: 3}
+  m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
+  graph: {fileID: 11400000}
+  position: {x: 3280, y: 0}
+  ports:
+    keys:
+    - previous
+    - next
+    values:
+    - _fieldName: previous
+      _node: {fileID: -184716743723654925}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: next
+        node: {fileID: -1829517261137185039}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: next
+      _node: {fileID: -184716743723654925}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: -4751371750211635005}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  previous: {fileID: 0}
+  next: {fileID: 0}
+  kind: 5
+  reactionGraph: {fileID: 0}
+  textGraph: {fileID: 0}
+  memoryGraph: {fileID: 0}
+  memoryId: 
+  firstCompletionText: {fileID: 0}
+  locationScenePath: 
+  variableBank: {fileID: 0}
+  variableId: 
+  variableValue: 1
+  variableIntValue: 0
+  addToIntValue: 0
+  objectKey: baseball_cap
+  active: 1
+  revealDuration: 0
+  revealDelay: 0
+  revealShader: {fileID: 4800000, guid: 0420a32a1c6f438fa03008fd3c81f551, type: 3}
+  interactionEnabled: 0
+  item: {fileID: 0}
+  hintId: 
+  hintGraph: {fileID: 0}
+  hintTimeout: 180
+  repeatHint: 1
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7d56b4c55d746e4b55417c18fee0cf0, type: 3}
+  m_Name: Baseball_MemoryAndEquipment
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionGraph
+  nodes:
+  - {fileID: 910000001}
+  - {fileID: -2674652581124107272}
+  - {fileID: 741853757205466795}
+  - {fileID: 8314671639027844792}
+  - {fileID: -1344454481713990880}
+  - {fileID: -473625053441552419}
+  - {fileID: 1209019670909760100}
+  - {fileID: -1553311943373815301}
+  - {fileID: 8733297576258220195}
+  - {fileID: -1829517261137185039}
+  - {fileID: -184716743723654925}
+  - {fileID: -8107708987802102520}
+  - {fileID: -4751371750211635005}
+  - {fileID: -8260680020868029791}
+  - {fileID: -2543313504245772746}
+  objectKeys:
+  - baseball_bat
+  - baseball_ball
+  - baseball_cap
+  - ben_home
+  - ben_pitcher
+--- !u!114 &910000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd260b234eb14d4cbcafbe381aa00ee1, type: 3}
+  m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
+  graph: {fileID: 11400000}
+  position: {x: -56, y: -8}
+  ports:
+    keys:
+    - previous
+    - next
+    values:
+    - _fieldName: previous
+      _node: {fileID: 910000001}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: next
+        node: {fileID: -2674652581124107272}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: next
+      _node: {fileID: 910000001}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: -1344454481713990880}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  previous: {fileID: 0}
+  next: {fileID: 0}
+  kind: 4
+  reactionGraph: {fileID: 0}
+  textGraph: {fileID: 0}
+  memoryGraph: {fileID: 0}
+  memoryId: 
+  firstCompletionText: {fileID: 0}
+  locationScenePath: 
+  variableBank: {fileID: 11400000, guid: 83af6fcb806c087438f339fcbcc76145, type: 2}
+  variableId: optional_interactives_memory_started
+  variableValue: 1
+  variableIntValue: 0
+  addToIntValue: 0
+  objectKey: 
+  active: 1
+  revealDuration: 0
+  revealDelay: 0
+  revealShader: {fileID: 0}
+  interactionEnabled: 0
+  item: {fileID: 0}
+  hintId: 
+  hintGraph: {fileID: 0}
+  hintTimeout: 180
+  repeatHint: 1
+--- !u!114 &741853757205466795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd260b234eb14d4cbcafbe381aa00ee1, type: 3}
+  m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
+  graph: {fileID: 11400000}
+  position: {x: 320, y: 0}
+  ports:
+    keys:
+    - previous
+    - next
+    values:
+    - _fieldName: previous
+      _node: {fileID: 741853757205466795}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: next
+        node: {fileID: -2543313504245772746}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: next
+      _node: {fileID: 741853757205466795}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: 8314671639027844792}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  previous: {fileID: 0}
+  next: {fileID: 0}
+  kind: 1
+  reactionGraph: {fileID: 0}
+  textGraph: {fileID: 0}
+  memoryGraph: {fileID: 11400000, guid: d8e437b1a51edc546a514a9caf69a8e5, type: 2}
+  memoryId: backyard_optional_memory
+  firstCompletionText: {fileID: 0}
+  locationScenePath: 
+  variableBank: {fileID: 0}
+  variableId: 
+  variableValue: 1
+  variableIntValue: 0
+  addToIntValue: 0
+  objectKey: 
+  active: 1
+  revealDuration: 0
+  revealDelay: 0
+  revealShader: {fileID: 0}
+  interactionEnabled: 0
+  item: {fileID: 0}
+  hintId: 
+  hintGraph: {fileID: 0}
+  hintTimeout: 180
+  repeatHint: 1
+--- !u!114 &1209019670909760100
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd260b234eb14d4cbcafbe381aa00ee1, type: 3}
+  m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
+  graph: {fileID: 11400000}
+  position: {x: 1800, y: 0}
+  ports:
+    keys:
+    - previous
+    - next
+    values:
+    - _fieldName: previous
+      _node: {fileID: 1209019670909760100}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: next
+        node: {fileID: -473625053441552419}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: next
+      _node: {fileID: 1209019670909760100}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: -1553311943373815301}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  previous: {fileID: 0}
+  next: {fileID: 0}
+  kind: 5
+  reactionGraph: {fileID: 0}
+  textGraph: {fileID: 0}
+  memoryGraph: {fileID: 0}
+  memoryId: 
+  firstCompletionText: {fileID: 0}
+  locationScenePath: 
+  variableBank: {fileID: 0}
+  variableId: 
+  variableValue: 1
+  variableIntValue: 0
+  addToIntValue: 0
+  objectKey: baseball_bat
+  active: 1
+  revealDuration: 0
+  revealDelay: 0
+  revealShader: {fileID: 4800000, guid: 0420a32a1c6f438fa03008fd3c81f551, type: 3}
+  interactionEnabled: 0
+  item: {fileID: 0}
+  hintId: 
+  hintGraph: {fileID: 0}
+  hintTimeout: 180
+  repeatHint: 1
+--- !u!114 &8314671639027844792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd260b234eb14d4cbcafbe381aa00ee1, type: 3}
+  m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
+  graph: {fileID: 11400000}
+  position: {x: 690, y: 0}
+  ports:
+    keys:
+    - previous
+    - next
+    values:
+    - _fieldName: previous
+      _node: {fileID: 8314671639027844792}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: next
+        node: {fileID: 741853757205466795}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: next
+      _node: {fileID: 8314671639027844792}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: -8107708987802102520}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  previous: {fileID: 0}
+  next: {fileID: 0}
+  kind: 0
+  reactionGraph: {fileID: 0}
+  textGraph: {fileID: 11400000, guid: ecfe5ef7619f45142b0d967ba42ac0c4, type: 2}
+  memoryGraph: {fileID: 0}
+  memoryId: 
+  firstCompletionText: {fileID: 0}
+  locationScenePath: 
+  variableBank: {fileID: 0}
+  variableId: 
+  variableValue: 1
+  variableIntValue: 0
+  addToIntValue: 0
+  objectKey: 
+  active: 1
+  revealDuration: 0
+  revealDelay: 0
+  revealShader: {fileID: 0}
+  interactionEnabled: 0
+  item: {fileID: 0}
+  hintId: 
+  hintGraph: {fileID: 0}
+  hintTimeout: 180
+  repeatHint: 1
+--- !u!114 &8733297576258220195
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd260b234eb14d4cbcafbe381aa00ee1, type: 3}
+  m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
+  graph: {fileID: 11400000}
+  position: {x: 2540, y: 0}
+  ports:
+    keys:
+    - previous
+    - next
+    values:
+    - _fieldName: previous
+      _node: {fileID: 8733297576258220195}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: next
+        node: {fileID: -1553311943373815301}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: next
+      _node: {fileID: 8733297576258220195}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: -1829517261137185039}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  previous: {fileID: 0}
+  next: {fileID: 0}
+  kind: 5
+  reactionGraph: {fileID: 0}
+  textGraph: {fileID: 0}
+  memoryGraph: {fileID: 0}
+  memoryId: 
+  firstCompletionText: {fileID: 0}
+  locationScenePath: 
+  variableBank: {fileID: 0}
+  variableId: 
+  variableValue: 1
+  variableIntValue: 0
+  addToIntValue: 0
+  objectKey: baseball_ball
+  active: 1
+  revealDuration: 0
+  revealDelay: 0
+  revealShader: {fileID: 4800000, guid: 0420a32a1c6f438fa03008fd3c81f551, type: 3}
+  interactionEnabled: 0
+  item: {fileID: 0}
+  hintId: 
+  hintGraph: {fileID: 0}
+  hintTimeout: 180
+  repeatHint: 1

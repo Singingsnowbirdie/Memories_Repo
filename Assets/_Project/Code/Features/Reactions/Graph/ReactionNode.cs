@@ -6,7 +6,7 @@ using XNode;
 
 namespace Memories.Gameplay.Reactions
 {
-    public enum ReactionKind { StoryText, Memory, ChangeLocation, CustomReaction, SetCustomVariable, ObjectActivity, AddInventoryItem, StartHints, StopHints, ConsumeInventoryItem, ObjectInteractivity }
+    public enum ReactionKind { StoryText, Memory, ChangeLocation, CustomReaction, SetCustomVariable, ObjectActivity, AddInventoryItem, StartHints, StopHints, ConsumeInventoryItem, ObjectInteractivity, RunGraph }
 
     [Node.CreateNodeMenu("Реакция"), Node.NodeWidth(320), Node.NodeTint("#284C53")]
     [MovedFrom(true, sourceNamespace: "Memories.Gameplay.Triggers", sourceAssembly: "Memories.Gameplay", sourceClassName: "TriggerActionNode")]
@@ -15,6 +15,8 @@ namespace Memories.Gameplay.Reactions
         [SerializeField, Input(ShowBackingValue.Never, ConnectionType.Multiple)] private Node previous;
         [SerializeField, Output(ShowBackingValue.Never, ConnectionType.Override)] private Node next;
         [SerializeField] private ReactionKind kind;
+        [SerializeField] private ReactionGraph reactionGraph;
+        public ReactionGraph ReactionGraph => reactionGraph;
         [SerializeField] private StoryTextGraph textGraph;
         [SerializeField] private MemoryGraph memoryGraph;
         [SerializeField] private string memoryId;
@@ -64,6 +66,12 @@ namespace Memories.Gameplay.Reactions
         public bool Validate(out string error)
         {
             error = null;
+            if (kind == ReactionKind.RunGraph)
+            {
+                if (reactionGraph != null && reactionGraph != graph) return true;
+                error = "Назначьте другой граф реакций.";
+                return false;
+            }
             if (kind == ReactionKind.ObjectActivity && active &&
                 (float.IsNaN(revealDuration) || float.IsInfinity(revealDuration) || revealDuration < 0 ||
                  float.IsNaN(revealDelay) || float.IsInfinity(revealDelay) || revealDelay < 0 ||

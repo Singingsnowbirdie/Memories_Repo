@@ -15,6 +15,17 @@ namespace Memories.Gameplay.Reactions
 
         public bool TryGetSequence(out List<ReactionNode> actions, out string error)
         {
+            validating ??= new HashSet<ReactionGraph>();
+            if (!validating.Add(this))
+            { actions = new List<ReactionNode>(); error = "Обнаружен циклический вызов графов реакций."; return false; }
+            try { return ValidateSequence(out actions, out error); }
+            finally { validating.Remove(this); }
+        }
+
+        [System.ThreadStatic] private static HashSet<ReactionGraph> validating;
+
+        private bool ValidateSequence(out List<ReactionNode> actions, out string error)
+        {
             actions = new List<ReactionNode>();
             error = null;
             if (nodes == null || nodes.Any(n => n == null) || nodes.OfType<ReactionStartNode>().Count() != 1 ||
@@ -44,6 +55,11 @@ namespace Memories.Gameplay.Reactions
             {
                 if (!action.Validate(out error)) return false;
                 actions.Add(action);
+                if (action.Kind == ReactionKind.RunGraph)
+                {
+                    if (!action.ReactionGraph.TryGetSequence(out var nested, out error)) return false;
+                    actions.AddRange(nested);
+                }
             }
             else if (node is ReactionConditionNode condition)
             {

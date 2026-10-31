@@ -38,9 +38,13 @@ namespace Memories.Gameplay.Reactions
             if (!CanRun(graph)) return false;
             if (!graph.TryGetSequence(out var actions, out var error))
             { Debug.LogWarning("Цепочка реакций не запущена: " + error, owner); return false; }
-            if (inventory == null && (graph.nodes.OfType<ReactionConditionNode>().Any(condition => condition.RequiresInventory) || actions.Any(action => action.Kind == ReactionKind.AddInventoryItem || action.Kind == ReactionKind.ConsumeInventoryItem)))
+            var conditions = actions.Select(action => action.graph)
+                .Concat(actions.Where(action => action.Kind == ReactionKind.RunGraph).Select(action => action.ReactionGraph))
+                .Append(graph).Distinct()
+                .SelectMany(value => value.nodes).OfType<ReactionConditionNode>().ToArray();
+            if (inventory == null && (conditions.Any(condition => condition.RequiresInventory) || actions.Any(action => action.Kind == ReactionKind.AddInventoryItem || action.Kind == ReactionKind.ConsumeInventoryItem)))
             { Debug.LogWarning("Для проверки предмета нужен инвентарь игрока.", owner); return false; }
-            if (variables == null && (graph.nodes.OfType<ReactionConditionNode>().Any(condition => condition.Kind == ReactionConditionKind.CustomVariable) ||
+            if (variables == null && (conditions.Any(condition => condition.Kind == ReactionConditionKind.CustomVariable) ||
                 actions.Any(action => action.Kind == ReactionKind.SetCustomVariable)))
             { Debug.LogWarning("Хранилище кастомных переменных не подключено.", owner); return false; }
             foreach (var action in actions)
@@ -141,9 +145,16 @@ namespace Memories.Gameplay.Reactions
             try
             {
                 var node = ReactionGraph.Next(graph.nodes.OfType<ReactionStartNode>().Single());
-                while (!(node is ReactionEndNode))
+                var returns = new Stack<XNode.Node>();
+                while (true)
                 {
                     source.Token.ThrowIfCancellationRequested();
+                    if (node is ReactionEndNode)
+                    {
+                        if (returns.Count == 0) break;
+                        node = returns.Pop();
+                        continue;
+                    }
                     if (node is ReactionRandomNode random)
                     {
                         node = ReactionGraph.Next(random, random.SelectOutput(UnityEngine.Random.value));
@@ -155,6 +166,13 @@ namespace Memories.Gameplay.Reactions
                         continue;
                     }
                     var action = (ReactionNode)node;
+                    if (action.Kind == ReactionKind.RunGraph)
+                    {
+                        // Inline execution shares bindings, cancellation and the owner's lifetime.
+                        returns.Push(ReactionGraph.Next(node));
+                        node = ReactionGraph.Next(action.ReactionGraph.nodes.OfType<ReactionStartNode>().Single());
+                        continue;
+                    }
                     if (action.Kind == ReactionKind.ObjectActivity)
                     {
                         if (!ReactionObjectBinding.TryResolve(objectBindings, action.ObjectKey, out var target))

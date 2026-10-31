@@ -131,11 +131,18 @@ namespace Memories.Editor
                 ? (int)ReactionKind.AddInventoryItem : kind.intValue;
             EditorGUI.BeginChangeCheck();
             int chosenKind = EditorGUILayout.IntPopup(displayedKind,
-                new[] { "Показать текст", "Показать воспоминание", "Перейти в локацию", "Запустить реакцию объекта", "Установить кастомную переменную", "Активность объекта", "Инвентарный предмет", "Запустить подсказки", "Остановить подсказки", "Интерактивность предмета" },
-                new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 10 });
+                new[] { "Показать текст", "Показать воспоминание", "Перейти в локацию", "Запустить реакцию объекта", "Установить кастомную переменную", "Активность объекта", "Инвентарный предмет", "Запустить подсказки", "Остановить подсказки", "Интерактивность предмета", "Запустить граф реакций" },
+                new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11 });
             if (EditorGUI.EndChangeCheck()) kind.intValue = chosenKind;
             EditorGUILayout.Space(8);
-            if (kind.enumValueIndex == 0)
+            if (kind.intValue == (int)ReactionKind.RunGraph)
+            {
+                EditorGUILayout.LabelField("Граф реакций");
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("reactionGraph"), GUIContent.none);
+                EditorGUILayout.Space(8);
+                EditorGUILayout.HelpBox("Выполняется до конца, затем продолжается текущая цепочка. Объекты передаются по именам из привязок вызывающего объекта.", MessageType.Info);
+            }
+            else if (kind.enumValueIndex == 0)
             {
                 EditorGUILayout.LabelField("Граф текста");
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("textGraph"), GUIContent.none);
@@ -230,11 +237,17 @@ namespace Memories.Editor
                 active.boolValue = EditorGUILayout.Popup(active.boolValue ? 0 : 1, new[] { "Включить", "Выключить" }) == 0;
                 if (!interactivity && active.boolValue)
                 {
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("revealDuration"), new GUIContent("Проявление, сек. (0 — сразу)"));
+                    EditorGUILayout.Space(8);
+                    EditorGUILayout.LabelField("Проявление, сек. (0 — сразу)");
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("revealDuration"), GUIContent.none);
                     if (serializedObject.FindProperty("revealDuration").floatValue > 0)
                     {
-                        EditorGUILayout.PropertyField(serializedObject.FindProperty("revealDelay"), new GUIContent("Задержка, сек."));
-                        EditorGUILayout.PropertyField(serializedObject.FindProperty("revealShader"), new GUIContent("Шейдер проявления"));
+                        EditorGUILayout.Space(8);
+                        EditorGUILayout.LabelField("Задержка, сек.");
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("revealDelay"), GUIContent.none);
+                        EditorGUILayout.Space(8);
+                        EditorGUILayout.LabelField("Шейдер проявления");
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("revealShader"), GUIContent.none);
                     }
                 }
             }
