@@ -144,6 +144,11 @@ namespace Memories.Gameplay.Reactions
                 while (!(node is ReactionEndNode))
                 {
                     source.Token.ThrowIfCancellationRequested();
+                    if (node is ReactionRandomNode random)
+                    {
+                        node = ReactionGraph.Next(random, random.SelectOutput(UnityEngine.Random.value));
+                        continue;
+                    }
                     if (node is ReactionConditionNode condition)
                     {
                         node = ReactionGraph.Next(condition, condition.SelectOutput(inventory, variables));

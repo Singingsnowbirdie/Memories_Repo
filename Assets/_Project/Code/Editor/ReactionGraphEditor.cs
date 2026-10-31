@@ -16,6 +16,7 @@ namespace Memories.Editor
             if (type == typeof(ReactionStartNode)) return "Начало";
             if (type == typeof(ReactionNode)) return "Реакция";
             if (type == typeof(ReactionConditionNode)) return "Условие";
+            if (type == typeof(ReactionRandomNode)) return "Случайный выбор";
             if (type == typeof(ReactionEndNode)) return "Конец";
             return null;
         }

@@ -49,10 +49,16 @@ namespace Memories.Gameplay.Reactions
             {
                 if (!condition.Validate(out error)) return false;
             }
+            else if (node is ReactionRandomNode random)
+            {
+                if (!random.Validate(out error)) return false;
+            }
             else if (!(node is ReactionStartNode))
             { error = "Неподдерживаемая нода в графе реакций."; return false; }
 
-            var outputs = node is ReactionConditionNode ? new[] { "ifPresent", "ifAbsent" } : new[] { "next" };
+            var outputs = node is ReactionRandomNode randomNode
+                ? randomNode.Choices.Select(choice => choice.PortName).ToArray()
+                : node is ReactionConditionNode ? new[] { "ifPresent", "ifAbsent" } : new[] { "next" };
             foreach (var field in outputs)
             {
                 var output = node.GetOutputPort(field);
