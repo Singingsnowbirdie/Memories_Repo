@@ -73,7 +73,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2842093590183551075}
-  - component: {fileID: 7650993714131688899}
   m_Layer: 0
   m_Name: CR_Plant_01
   m_TagString: Untagged
@@ -98,34 +97,6 @@ Transform:
   - {fileID: 7178508989167181018}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7650993714131688899
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8826953453413406953}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 251645a523a93e34b9fd1b4f009ca682, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  plantSlot: {fileID: 4309646805684669584}
-  potSlot: {fileID: 7178508989167181018}
-  plantStages:
-  - {fileID: 854611646060113096, guid: 9526c73e98b39cb4990a79295fb5fb9a, type: 3}
-  - {fileID: 1255037734463862404, guid: b7cc5f8de5e966242ad1789dc2de8107, type: 3}
-  - {fileID: 1402646404898183036, guid: 9b799f18f6485a9469a8932aecc0cf1e, type: 3}
-  currentStage: 2
-  potVariants:
-  - {fileID: 8980384836222686259, guid: 617bf927bd526ca47a863add0dd7941f, type: 3}
-  - {fileID: 703125990236994623, guid: 9389626750fe3374b862120a13a25feb, type: 3}
-  - {fileID: 7865270025588370913, guid: 4214604d245923a4a8a94cfb360d4d82, type: 3}
-  - {fileID: 235734679593559398, guid: e5d7d831aecb6044ab50fb88f6d8d1e8, type: 3}
-  currentPot: 0
-  plantYWithPot: 0.351
-  plantYWithoutPot: 0
-  resetSpawnedLocalTransform: 1
 --- !u!1001 &2699012562091051808
 PrefabInstance:
   m_ObjectHideFlags: 0

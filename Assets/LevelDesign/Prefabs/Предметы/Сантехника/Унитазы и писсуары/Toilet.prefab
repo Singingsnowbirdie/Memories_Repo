@@ -376,7 +376,6 @@ GameObject:
   - component: {fileID: 404914469534174189}
   - component: {fileID: 3272192869390277357}
   - component: {fileID: 627363328146844297}
-  - component: {fileID: 8667153702231101324}
   m_Layer: 0
   m_Name: Toilet
   m_TagString: Untagged
@@ -525,29 +524,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &8667153702231101324
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5461189818476011828}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 071c04664a4a916bf957efdd3bb4deb8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EZPZGames.FunctionalBathroom.ToiletController
-  flushStateName: Flush
-  flushSpeed: 1
-  audioSource: {fileID: 627363328146844297}
-  flushClip: {fileID: 8300000, guid: 8d8ae863be330f9bb9d37c8143b51776, type: 3}
-  syncAudioPitch: 1
-  OnFlushStarted:
-    m_PersistentCalls:
-      m_Calls: []
-  OnFlushCompleted:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &5753875869195278087
 GameObject:
   m_ObjectHideFlags: 0

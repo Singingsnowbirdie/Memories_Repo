@@ -1011,6 +1011,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Male 4 Gray
       objectReference: {fileID: 0}
+    - target: {fileID: 3305581529017948312, guid: 97f7e19c1d174162aae3882511328c05, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3305581529017948314, guid: 97f7e19c1d174162aae3882511328c05, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -1018,8 +1022,30 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3305581529017948312, guid: 97f7e19c1d174162aae3882511328c05, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 59154258}
   m_SourcePrefab: {fileID: 100100000, guid: 97f7e19c1d174162aae3882511328c05, type: 3}
+--- !u!1 &59154257 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3305581529017948312, guid: 97f7e19c1d174162aae3882511328c05, type: 3}
+  m_PrefabInstance: {fileID: 59154256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &59154258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 59154257}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72fa2e38b599425cbb1eceaf9d667a91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.SavedObjectVisibility
+  variableBank: {fileID: 11400000, guid: 83af6fcb806c087438f339fcbcc76145, type: 2}
+  variableId: ben_alex_inscription_read
 --- !u!1001 &59330280
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3319,6 +3345,20 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.24413675, y: 0.10000007, z: 2.5394125}
   m_Center: {x: 0.09675604, y: 0.005249968, z: 0.18676054}
+--- !u!114 &174242524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 174242518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72fa2e38b599425cbb1eceaf9d667a91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.SavedObjectVisibility
+  variableBank: {fileID: 11400000, guid: 83af6fcb806c087438f339fcbcc76145, type: 2}
+  variableId: ben_alex_inscription_read
 --- !u!1001 &174475326
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4991,6 +5031,20 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.24413675, y: 0.10000005, z: 2.5394113}
   m_Center: {x: 0.09675615, y: 0.005249498, z: 0.18676044}
+--- !u!114 &255719931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 255719925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72fa2e38b599425cbb1eceaf9d667a91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.SavedObjectVisibility
+  variableBank: {fileID: 11400000, guid: 83af6fcb806c087438f339fcbcc76145, type: 2}
+  variableId: ben_alex_inscription_read
 --- !u!1001 &257142822
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8534,6 +8588,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Prop_Wheelbarrow
       objectReference: {fileID: 0}
+    - target: {fileID: 1189198572637911586, guid: 72c3880aa9165ab4da9cb0656012807f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2002748754189066392, guid: 72c3880aa9165ab4da9cb0656012807f, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.43193159
@@ -8593,6 +8651,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1189198572637911586, guid: 72c3880aa9165ab4da9cb0656012807f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 446926717}
+    - targetCorrespondingSourceObject: {fileID: 1189198572637911586, guid: 72c3880aa9165ab4da9cb0656012807f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 446926718}
   m_SourcePrefab: {fileID: 100100000, guid: 72c3880aa9165ab4da9cb0656012807f, type: 3}
 --- !u!4 &446926715 stripped
 Transform:
@@ -8625,6 +8686,20 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3.1770818, y: 1.5330641, z: 1.4040008}
   m_Center: {x: -0.5452123, y: 0.76705873, z: -0.000000105655545}
+--- !u!114 &446926718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 446926716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72fa2e38b599425cbb1eceaf9d667a91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.SavedObjectVisibility
+  variableBank: {fileID: 11400000, guid: 83af6fcb806c087438f339fcbcc76145, type: 2}
+  variableId: ben_alex_inscription_read
 --- !u!1001 &449409964
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12218,7 +12293,27 @@ MonoBehaviour:
   graph: {fileID: 11400000, guid: bca00ed3f59a05141af46002ea832a3d, type: 2}
   initializationGraph: {fileID: 0}
   prompt: "\u041F\u0440\u043E\u0447\u0438\u0442\u0430\u0442\u044C"
-  objectBindings: []
+  objectBindings:
+  - key: ben
+    target: {fileID: 59154257}
+  - key: fishing_rod
+    target: {fileID: 255719925}
+  - key: fishing_rod_2
+    target: {fileID: 174242518}
+  - key: hose
+    target: {fileID: 1156147179}
+  - key: bicycle
+    target: {fileID: 1515662856}
+  - key: watergun_1
+    target: {fileID: 2722140591818603991}
+  - key: watergun_2
+    target: {fileID: 2346968320440341700}
+  - key: water_pistol
+    target: {fileID: 978543465}
+  - key: briefcase
+    target: {fileID: 1745913492145905551}
+  - key: wheelbarrow
+    target: {fileID: 446926716}
   customReactions: []
 --- !u!1001 &642013800
 PrefabInstance:
@@ -14207,6 +14302,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Wep_WaterPistol_01
       objectReference: {fileID: 0}
+    - target: {fileID: 1121525155587680, guid: c6865c562fd3f2841a92dc0cbbd6b4b4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4764624344734074, guid: c6865c562fd3f2841a92dc0cbbd6b4b4, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.7467275
@@ -14266,6 +14365,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1121525155587680, guid: c6865c562fd3f2841a92dc0cbbd6b4b4, type: 3}
       insertIndex: -1
       addedObject: {fileID: 978543469}
+    - targetCorrespondingSourceObject: {fileID: 1121525155587680, guid: c6865c562fd3f2841a92dc0cbbd6b4b4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 978543470}
   m_SourcePrefab: {fileID: 100100000, guid: c6865c562fd3f2841a92dc0cbbd6b4b4, type: 3}
 --- !u!4 &727628663 stripped
 Transform:
@@ -16283,6 +16385,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fishing_Rod
       objectReference: {fileID: 0}
+    - target: {fileID: 8613954126185663617, guid: f2cfc7cd690e6fe4f9678427228e5322, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8989529067803825723, guid: f2cfc7cd690e6fe4f9678427228e5322, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.81637996
@@ -16334,6 +16440,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8613954126185663617, guid: f2cfc7cd690e6fe4f9678427228e5322, type: 3}
       insertIndex: -1
       addedObject: {fileID: 255719930}
+    - targetCorrespondingSourceObject: {fileID: 8613954126185663617, guid: f2cfc7cd690e6fe4f9678427228e5322, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 255719931}
   m_SourcePrefab: {fileID: 100100000, guid: f2cfc7cd690e6fe4f9678427228e5322, type: 3}
 --- !u!1001 &847227701
 PrefabInstance:
@@ -18610,6 +18719,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fishing_Rod_Variant_2
       objectReference: {fileID: 0}
+    - target: {fileID: 3527919270657827498, guid: 23f31d065789fef46939174133491b96, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4305018267088517136, guid: 23f31d065789fef46939174133491b96, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.312
@@ -18657,6 +18770,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3527919270657827498, guid: 23f31d065789fef46939174133491b96, type: 3}
       insertIndex: -1
       addedObject: {fileID: 174242523}
+    - targetCorrespondingSourceObject: {fileID: 3527919270657827498, guid: 23f31d065789fef46939174133491b96, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 174242524}
   m_SourcePrefab: {fileID: 100100000, guid: 23f31d065789fef46939174133491b96, type: 3}
 --- !u!1001 &957488962
 PrefabInstance:
@@ -19194,6 +19310,20 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.039801057, y: 0.17423533, z: 0.26135746}
   m_Center: {x: -0.00000016221173, y: -0.0008434249, z: 0.06855758}
+--- !u!114 &978543470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 978543465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72fa2e38b599425cbb1eceaf9d667a91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.SavedObjectVisibility
+  variableBank: {fileID: 11400000, guid: 83af6fcb806c087438f339fcbcc76145, type: 2}
+  variableId: ben_alex_inscription_read
 --- !u!4 &983768871 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7734629909419328613, guid: cd4966c00b4b5cd4bb9c05716d12cac7, type: 3}
@@ -23034,6 +23164,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Hose
       objectReference: {fileID: 0}
+    - target: {fileID: 9172754988475064542, guid: 44aa9d7738e2750459b0b10bad9c6e30, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -23041,6 +23175,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 9172754988475064542, guid: 44aa9d7738e2750459b0b10bad9c6e30, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1156147180}
+    - targetCorrespondingSourceObject: {fileID: 9172754988475064542, guid: 44aa9d7738e2750459b0b10bad9c6e30, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1156147181}
   m_SourcePrefab: {fileID: 100100000, guid: 44aa9d7738e2750459b0b10bad9c6e30, type: 3}
 --- !u!4 &1156147178 stripped
 Transform:
@@ -23073,6 +23210,20 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.19210722, y: 0.9681173, z: 0.9424987}
   m_Center: {x: -0.008059591, y: -0.100061506, z: 0.09343371}
+--- !u!114 &1156147181
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1156147179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72fa2e38b599425cbb1eceaf9d667a91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.SavedObjectVisibility
+  variableBank: {fileID: 11400000, guid: 83af6fcb806c087438f339fcbcc76145, type: 2}
+  variableId: ben_alex_inscription_read
 --- !u!1 &1161784469
 GameObject:
   m_ObjectHideFlags: 0
@@ -31207,11 +31358,37 @@ PrefabInstance:
       propertyPath: m_Name
       value: "\u0412\u0435\u043B\u043E\u0441\u0438\u043F\u0435\u0434 \u0443 \u0437\u0430\u0431\u043E\u0440\u0430"
       objectReference: {fileID: 0}
+    - target: {fileID: 2779073015522754645, guid: bd12404ca3be7ad4f917ded3f0542c97, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2779073015522754645, guid: bd12404ca3be7ad4f917ded3f0542c97, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1515662857}
   m_SourcePrefab: {fileID: 100100000, guid: bd12404ca3be7ad4f917ded3f0542c97, type: 3}
+--- !u!1 &1515662856 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2779073015522754645, guid: bd12404ca3be7ad4f917ded3f0542c97, type: 3}
+  m_PrefabInstance: {fileID: 1515662855}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1515662857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1515662856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72fa2e38b599425cbb1eceaf9d667a91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.SavedObjectVisibility
+  variableBank: {fileID: 11400000, guid: 83af6fcb806c087438f339fcbcc76145, type: 2}
+  variableId: ben_alex_inscription_read
 --- !u!1001 &1532987159
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -42781,6 +42958,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: briefcaase_2
       objectReference: {fileID: 0}
+    - target: {fileID: 739452338329536689, guid: 63c1b9ab01cefc749a66f9e709dcd39f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6602126124339937792, guid: 63c1b9ab01cefc749a66f9e709dcd39f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5.633
@@ -42824,8 +43005,30 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 739452338329536689, guid: 63c1b9ab01cefc749a66f9e709dcd39f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1745913492145905552}
   m_SourcePrefab: {fileID: 100100000, guid: 63c1b9ab01cefc749a66f9e709dcd39f, type: 3}
+--- !u!1 &1745913492145905551 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 739452338329536689, guid: 63c1b9ab01cefc749a66f9e709dcd39f, type: 3}
+  m_PrefabInstance: {fileID: 1745913492145905550}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1745913492145905552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1745913492145905551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72fa2e38b599425cbb1eceaf9d667a91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.SavedObjectVisibility
+  variableBank: {fileID: 11400000, guid: 83af6fcb806c087438f339fcbcc76145, type: 2}
+  variableId: ben_alex_inscription_read
 --- !u!1001 &2346968320440341699
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -42837,6 +43040,10 @@ PrefabInstance:
     - target: {fileID: 1311246062939086, guid: 787a31f2409a3f64c987faeb2a72ab86, type: 3}
       propertyPath: m_Name
       value: SM_Wep_Watergun_02
+      objectReference: {fileID: 0}
+    - target: {fileID: 1311246062939086, guid: 787a31f2409a3f64c987faeb2a72ab86, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4691987367314160, guid: 787a31f2409a3f64c987faeb2a72ab86, type: 3}
       propertyPath: m_LocalPosition.x
@@ -42885,6 +43092,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1311246062939086, guid: 787a31f2409a3f64c987faeb2a72ab86, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2346968320440341701}
+    - targetCorrespondingSourceObject: {fileID: 1311246062939086, guid: 787a31f2409a3f64c987faeb2a72ab86, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2346968320440341705}
   m_SourcePrefab: {fileID: 100100000, guid: 787a31f2409a3f64c987faeb2a72ab86, type: 3}
 --- !u!1 &2346968320440341700 stripped
 GameObject:
@@ -42917,6 +43127,20 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4691987367314160, guid: 787a31f2409a3f64c987faeb2a72ab86, type: 3}
   m_PrefabInstance: {fileID: 2346968320440341699}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2346968320440341705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2346968320440341700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72fa2e38b599425cbb1eceaf9d667a91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.SavedObjectVisibility
+  variableBank: {fileID: 11400000, guid: 83af6fcb806c087438f339fcbcc76145, type: 2}
+  variableId: ben_alex_inscription_read
 --- !u!1001 &2407513063954859915
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -42998,6 +43222,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Wep_Watergun_01
       objectReference: {fileID: 0}
+    - target: {fileID: 1607291360844622, guid: f528363d2aaa5d748ab9fcd16b601236, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4550259107800822, guid: f528363d2aaa5d748ab9fcd16b601236, type: 3}
       propertyPath: m_LocalPosition.x
       value: -7.338
@@ -43045,6 +43273,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1607291360844622, guid: f528363d2aaa5d748ab9fcd16b601236, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2722140591818603992}
+    - targetCorrespondingSourceObject: {fileID: 1607291360844622, guid: f528363d2aaa5d748ab9fcd16b601236, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2722140591818603996}
   m_SourcePrefab: {fileID: 100100000, guid: f528363d2aaa5d748ab9fcd16b601236, type: 3}
 --- !u!1 &2722140591818603991 stripped
 GameObject:
@@ -43077,6 +43308,20 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4550259107800822, guid: f528363d2aaa5d748ab9fcd16b601236, type: 3}
   m_PrefabInstance: {fileID: 2722140591818603990}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2722140591818603996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2722140591818603991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72fa2e38b599425cbb1eceaf9d667a91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.SavedObjectVisibility
+  variableBank: {fileID: 11400000, guid: 83af6fcb806c087438f339fcbcc76145, type: 2}
+  variableId: ben_alex_inscription_read
 --- !u!1001 &3187086116820991508
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -69,8 +69,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 401926}
   - 111: {fileID: 11136660}
-  - 114: {fileID: 11430402}
-  - 114: {fileID: 11402610}
   - 65: {fileID: 6560168}
   m_Layer: 0
   m_Name: Fence Type2 Door
@@ -233,32 +231,6 @@ Animation:
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 0
---- !u!114 &11402610
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 179570}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6a88a59113dd8940a03ac435b0f5a5e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &11430402
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 179570}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4bb6081b4a37bbe4dbe02dfbf915c25f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  InitialState: 1
-  AnimationSpeed: 1
-  openAnimation: {fileID: 7400004, guid: 919734941a900d24090f2925025373f2, type: 3}
-  closeAnimation: {fileID: 7400002, guid: 919734941a900d24090f2925025373f2, type: 3}
 --- !u!137 &13793648
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
