@@ -35,7 +35,7 @@ namespace Memories.Tests.PlayMode
                 float deadline = Time.realtimeSinceStartup + 20;
                 while (!session.IsRunning && Time.realtimeSinceStartup < deadline) await UniTask.NextFrame();
                 Assert.IsTrue(session.IsRunning);
-                Assert.AreEqual(path, session.LocationScope.gameObject.scene.path);
+                Assert.AreEqual(path, session.CurrentLocationScene.path);
                 Assert.IsFalse(SceneManager.GetSceneByPath(excluded).isLoaded);
                 Assert.IsFalse(SceneManager.GetSceneByPath(AppLifetimeScope.DefaultLocationPath).isLoaded);
                 Assert.IsEmpty(app.AdditionalLocationScenes);

@@ -26,6 +26,24 @@ namespace Memories.Bootstrap
         private bool trackHouseCheckpoint;
         private Transform houseEntrance;
         private Vector3 previousEntrancePosition;
+        private readonly Dictionary<int, ConnectionCover> connectionCovers = new Dictionary<int, ConnectionCover>();
+
+        private sealed class ConnectionCover
+        {
+            public readonly List<Renderer> Renderers = new List<Renderer>();
+            public readonly List<Collider> Colliders = new List<Collider>();
+            public void Restore()
+            {
+                foreach (var renderer in Renderers) if (renderer != null) renderer.enabled = true;
+                foreach (var collider in Colliders) if (collider != null) collider.enabled = true;
+            }
+        }
+
+        private void RestoreConnectionCovers()
+        {
+            foreach (var cover in connectionCovers.Values) cover.Restore();
+            connectionCovers.Clear();
+        }
 
         public UniTask StartSavedGameAsync(string scenePath, CancellationToken cancellationToken = default)
         {
@@ -64,7 +82,9 @@ namespace Memories.Bootstrap
 
         public SessionLifetimeScope SessionScope { get; private set; }
         public LocationLifetimeScope LocationScope { get; private set; }
+        public Scene CurrentLocationScene => locationScene;
         public bool IsRunning => LocationScope != null;
+        public bool IsTransitioning => busy;
 
         public bool RestartGame()
         {
@@ -91,8 +111,9 @@ namespace Memories.Bootstrap
         {
             if (disposed || busy || !IsRunning) return false;
             var player = LocationScope.Container.Resolve<PlayerMotor>();
-            var position = player.InitialPosition;
-            float yaw = player.InitialYaw;
+            var spawn = FindMarker(locationScene, "PlayerSpawn");
+            var position = spawn != null ? spawn.position : player.InitialPosition;
+            float yaw = spawn != null ? spawn.eulerAngles.y : player.InitialYaw;
             // The house and highway share a player until the next doorway transition.
             var house = SceneManager.GetSceneByPath(TestLocationLauncher.HousePath);
             if (house.isLoaded && (locationScene == house ||
@@ -152,10 +173,11 @@ namespace Memories.Bootstrap
 
                 applicationScope.TestLauncher?.Prepare(locationScene);
                 if (resumeHouse) PrepareHouseStart(locationScene);
-                var root = new GameObject("LocationLifetimeScope");
+                var root = new GameObject("Persistent gameplay");
                 root.SetActive(false);
-                SceneManager.MoveGameObjectToScene(root, locationScene);
+                root.transform.SetParent(SessionScope.transform, false);
                 LocationScope = root.AddComponent<LocationLifetimeScope>();
+                LocationScope.InitialScene = locationScene;
                 LocationScope.parentReference.Object = SessionScope;
                 root.SetActive(true);
                 BindDoors(locationScene, LocationScope);
@@ -200,47 +222,35 @@ namespace Memories.Bootstrap
         {
             if (!CanChangeLocation(scenePath))
                 throw new InvalidOperationException("Cannot transition to location: " + scenePath);
-
             busy = true;
-            var previousScene = locationScene;
-            var previousScope = LocationScope;
             Scene nextScene = default;
-            LocationLifetimeScope nextScope = null;
             bool committed = false;
-            // The transition outlives the trigger in the scene being unloaded.
             using var cancellation = CancellationTokenSource.CreateLinkedTokenSource(application.Token, shutdown.Token);
             try
             {
                 await SceneManager.LoadSceneAsync(scenePath, LoadSceneMode.Additive);
                 nextScene = SceneManager.GetSceneByPath(scenePath);
                 cancellation.Token.ThrowIfCancellationRequested();
-                var root = new GameObject("LocationLifetimeScope");
-                root.SetActive(false);
-                SceneManager.MoveGameObjectToScene(root, nextScene);
-                nextScope = root.AddComponent<LocationLifetimeScope>();
-                nextScope.parentReference.Object = SessionScope;
-                root.SetActive(true);
-                BindDoors(nextScene, nextScope);
-
-                SceneManager.SetActiveScene(nextScene);
+                var spawn = FindMarker(nextScene, "PlayerSpawn");
+                if (spawn == null) throw new InvalidOperationException("Missing PlayerSpawn: " + scenePath);
+                var player = LocationScope.Container.Resolve<PlayerMotor>();
+                AlignScene(nextScene, spawn, player.transform.position, player.transform.rotation);
+                DisableLocationCameras(nextScene);
+                BindDoors(nextScene, LocationScope);
+                var previous = locationScene;
                 locationScene = nextScene;
-                LocationScope = nextScope;
+                SceneManager.SetActiveScene(nextScene);
                 committed = true;
-                SessionScope.Container.Resolve<ObjectStateStore>().UnloadScene(previousScene);
-                foreach (var previousRoot in previousScene.GetRootGameObjects()) previousRoot.SetActive(false);
-                previousScope.Dispose();
-                await SceneManager.UnloadSceneAsync(previousScene);
+                SessionScope.Container.Resolve<ObjectStateStore>().UnloadScene(previous);
+                await SceneManager.UnloadSceneAsync(previous);
                 await UnloadAdditionalScenesAsync();
                 if (disposed) await CleanupAsync();
             }
             catch
             {
-                if (!committed)
-                {
-                    nextScope?.Dispose();
-                    if (nextScene.IsValid() && nextScene.isLoaded) await SceneManager.UnloadSceneAsync(nextScene);
-                    if (disposed) await CleanupAsync();
-                }
+                if (!committed && nextScene.IsValid() && nextScene.isLoaded)
+                    await SceneManager.UnloadSceneAsync(nextScene);
+                if (disposed) await CleanupAsync();
                 throw;
             }
             finally { busy = false; }
@@ -263,15 +273,23 @@ namespace Memories.Bootstrap
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var reaction in root.GetComponentsInChildren<CloseEntranceDoorsReaction>(true))
                     reaction.Restore(scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
-            if (scene != scope.gameObject.scene)
-                foreach (var root in scene.GetRootGameObjects())
-                    foreach (var interactable in root.GetComponentsInChildren<ReactionInteractable>(true))
-                        interactable.Initialize(scope.Container.Resolve<Memories.Gameplay.UI.StoryTextPresenter>(),
-                            scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>(), this, scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<CustomVariableStore>());
+            foreach (var root in scene.GetRootGameObjects())
+            {
+                foreach (var trigger in root.GetComponentsInChildren<Memories.Gameplay.Triggers.TriggerEvent>(true))
+                    trigger.Initialize(scope.Container.Resolve<Memories.Gameplay.UI.StoryTextPresenter>(),
+                        scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>());
+                foreach (var trigger in root.GetComponentsInChildren<Memories.Gameplay.Triggers.SceneTrigger>(true))
+                    trigger.Initialize(scope.Container.Resolve<Memories.Gameplay.UI.StoryTextPresenter>(),
+                        scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>(), this,
+                        scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<CustomVariableStore>());
+                foreach (var interactable in root.GetComponentsInChildren<ReactionInteractable>(true))
+                    interactable.Initialize(scope.Container.Resolve<Memories.Gameplay.UI.StoryTextPresenter>(),
+                        scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>(), this, scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<CustomVariableStore>());
+            }
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var door in root.GetComponentsInChildren<OpenCourtyardDoorReaction>(true))
                     door.Initialize(scope.Container.Resolve<PlayerMotor>(),
-                        path => LoadConnectedSceneAsync(path, scene), EnterConnectedSceneAsync,
+                        path => LoadConnectedSceneAsync(path, door), EnterConnectedSceneAsync,
                         scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
             scope.Container.Resolve<ObjectStateStore>().RestoreScene(scene);
             foreach (var root in scene.GetRootGameObjects())
@@ -279,89 +297,115 @@ namespace Memories.Bootstrap
                     visibility.Restore(scope.Container.Resolve<CustomVariableStore>());
         }
 
-        private async UniTask<Scene> LoadConnectedSceneAsync(string path, Scene doorwayScene)
+        private static Transform FindMarker(Scene scene, string name)
+        {
+            foreach (var root in scene.GetRootGameObjects())
+                foreach (var candidate in root.GetComponentsInChildren<Transform>(true))
+                    if (candidate.name == name) return candidate;
+            return null;
+        }
+
+        public static void AlignScene(Scene scene, Transform marker, Vector3 position, Quaternion rotation)
+        {
+            var origin = marker.position;
+            var delta = rotation * Quaternion.Inverse(marker.rotation);
+            foreach (var root in scene.GetRootGameObjects())
+                root.transform.SetPositionAndRotation(position + delta * (root.transform.position - origin),
+                    delta * root.transform.rotation);
+            Physics.SyncTransforms();
+        }
+
+        private static void DisableLocationCameras(Scene scene)
+        {
+            foreach (var root in scene.GetRootGameObjects())
+            {
+                foreach (var camera in root.GetComponentsInChildren<Camera>(true)) camera.enabled = false;
+                foreach (var listener in root.GetComponentsInChildren<AudioListener>(true)) listener.enabled = false;
+            }
+        }
+
+        private async UniTask<Scene> LoadConnectedSceneAsync(string path, OpenCourtyardDoorReaction door)
         {
             var existing = SceneManager.GetSceneByPath(path);
             if (existing.isLoaded) return existing;
             if (disposed || busy || !Application.CanStreamedLevelBeLoaded(path))
                 throw new InvalidOperationException("Cannot open connected scene: " + path);
             busy = true;
+            Scene scene = default;
+            using var cancellation = CancellationTokenSource.CreateLinkedTokenSource(application.Token, shutdown.Token);
             try
             {
                 await SceneManager.LoadSceneAsync(path, LoadSceneMode.Additive);
-                var scene = SceneManager.GetSceneByPath(path);
+                scene = SceneManager.GetSceneByPath(path);
+                cancellation.Token.ThrowIfCancellationRequested();
+                var arrival = FindMarker(scene, door.ArrivalMarker);
+                if (arrival == null) throw new InvalidOperationException("Missing entrance marker: " + door.ArrivalMarker);
+                AlignScene(scene, arrival, door.transform.position, door.transform.rotation);
+                DisableLocationCameras(scene);
+                BindDoors(scene, LocationScope);
                 additionalScenes.Add(scene);
-                if (disposed)
-                {
-                    await CleanupAsync();
-                    throw new OperationCanceledException("Session closed while opening the courtyard.");
-                }
-                // Keep successive connected locations outside the current camera range.
-                float destinationOffset = LocationScope.Container.Resolve<PlayerMotor>().transform.position.x + 2000f;
-                foreach (var root in scene.GetRootGameObjects())
-                {
-                    root.transform.position += Vector3.right * destinationOffset;
-                    foreach (var t in root.GetComponentsInChildren<Transform>(true)) t.gameObject.layer = 30;
-                    foreach (var camera in root.GetComponentsInChildren<Camera>(true)) camera.enabled = false;
-                    foreach (var listener in root.GetComponentsInChildren<AudioListener>(true)) listener.enabled = false;
-                    foreach (var light in root.GetComponentsInChildren<Light>(true)) light.cullingMask = 1 << 30;
-                }
-                // Keep the live player, camera and UI with the house before unloading
-                // the highway that originally owned their lifetime scope.
-                var highway = SceneManager.GetSceneByPath(TestLocationLauncher.HighwayPath);
-                if (highway.isLoaded && highway != doorwayScene &&
-                    (highway == locationScene || additionalScenes.Contains(highway)))
-                {
-                    if (highway == locationScene)
-                    {
-                        SceneManager.MoveGameObjectToScene(LocationScope.gameObject, doorwayScene);
-                        additionalScenes.Remove(doorwayScene);
-                        locationScene = doorwayScene;
-                        SceneManager.SetActiveScene(doorwayScene);
-                    }
-                    additionalScenes.Remove(highway);
-                    SessionScope.Container.Resolve<ObjectStateStore>().UnloadScene(highway);
-                    await SceneManager.UnloadSceneAsync(highway);
-                    if (disposed)
-                    {
-                        await CleanupAsync();
-                        throw new OperationCanceledException("Session closed while unloading the highway.");
-                    }
-                }
+                var controller = LocationScope.Container.Resolve<PlayerMotor>().GetComponent<CharacterController>();
+                float clearance = controller.radius + controller.skinWidth + .05f;
+                var cover = new ConnectionCover();
+                if (path == TestLocationLauncher.BackyardPath)
+                    foreach (var root in scene.GetRootGameObjects())
+                        foreach (var t in root.GetComponentsInChildren<Transform>(true))
+                            if (t.name.StartsWith("Фанерный дом", StringComparison.Ordinal))
+                            {
+                                foreach (var collider in t.GetComponentsInChildren<Collider>())
+                                {
+                                    if (!collider.enabled) continue;
+                                    var bounds = collider.bounds;
+                                    var forward = door.transform.forward;
+                                    float extent = Vector3.Dot(bounds.extents,
+                                        new Vector3(Mathf.Abs(forward.x), Mathf.Abs(forward.y), Mathf.Abs(forward.z)));
+                                    if (bounds.max.y > door.transform.position.y + controller.radius &&
+                                        bounds.min.y < door.transform.position.y + controller.height - controller.radius)
+                                        clearance = Mathf.Max(clearance,
+                                            Vector3.Dot(bounds.center - door.transform.position, forward) + extent +
+                                            controller.radius + controller.skinWidth + .05f);
+                                    cover.Colliders.Add(collider);
+                                    collider.enabled = false;
+                                }
+                                foreach (var renderer in t.GetComponentsInChildren<Renderer>())
+                                    if (renderer.enabled) { cover.Renderers.Add(renderer); renderer.enabled = false; }
+                            }
+                connectionCovers[scene.handle] = cover;
+                door.ExitClearance = clearance;
                 return scene;
+            }
+            catch
+            {
+                additionalScenes.Remove(scene);
+                if (scene.IsValid() && scene.isLoaded) await SceneManager.UnloadSceneAsync(scene);
+                if (disposed) await CleanupAsync();
+                throw;
             }
             finally { busy = false; }
         }
 
-        private async UniTask EnterConnectedSceneAsync(Scene scene, Vector3 position, Quaternion rotation, float pitch)
+        private async UniTask EnterConnectedSceneAsync(Scene scene)
         {
             if (disposed || busy || !additionalScenes.Contains(scene)) return;
             busy = true;
-            var previous = locationScene;
-            var previousScope = LocationScope;
             try
             {
-                foreach (var root in scene.GetRootGameObjects())
-                    foreach (var t in root.GetComponentsInChildren<Transform>(true))
-                        if (t.name == "PlayerSpawn") t.SetPositionAndRotation(position, rotation);
-                var scopeRoot = new GameObject("LocationLifetimeScope");
-                scopeRoot.SetActive(false);
-                SceneManager.MoveGameObjectToScene(scopeRoot, scene);
-                var scope = scopeRoot.AddComponent<LocationLifetimeScope>();
-                scope.parentReference.Object = SessionScope;
-                scopeRoot.SetActive(true);
-                scope.Container.Resolve<PlayerMovementModel>().SetInitialPitch(pitch);
-                scope.Container.Resolve<PlayerMotor>().SetLook(rotation.eulerAngles.y, pitch);
-                locationScene = scene;
-                LocationScope = scope;
+                // The capsule has cleared the cover before it becomes solid again.
+                if (connectionCovers.TryGetValue(scene.handle, out var cover))
+                {
+                    cover.Restore();
+                    connectionCovers.Remove(scene.handle);
+                }
+                Physics.SyncTransforms();
+                var previous = locationScene;
                 additionalScenes.Remove(scene);
+                locationScene = scene;
                 SceneManager.SetActiveScene(scene);
-                BindDoors(scene, scope);
                 SessionScope.Container.Resolve<ObjectStateStore>().UnloadScene(previous);
                 foreach (var root in previous.GetRootGameObjects()) root.SetActive(false);
-                previousScope.Dispose();
                 await SceneManager.UnloadSceneAsync(previous);
                 await UnloadAdditionalScenesAsync();
+                if (disposed) await CleanupAsync();
             }
             finally { busy = false; }
         }
@@ -390,6 +434,7 @@ namespace Memories.Bootstrap
 
         private void ReleaseScopes()
         {
+            RestoreConnectionCovers();
             if (SessionScope != null) SessionScope.Container.Resolve<ObjectStateStore>().Flush();
             if (LocationScope != null) LocationScope.Dispose();
             LocationScope = null;

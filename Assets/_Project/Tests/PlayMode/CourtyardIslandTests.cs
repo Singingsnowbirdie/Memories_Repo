@@ -27,7 +27,7 @@ namespace Memories.Tests.PlayMode
                 float deadline = Time.realtimeSinceStartup + 20;
                 while (!session.IsRunning && Time.realtimeSinceStartup < deadline) await UniTask.NextFrame();
                 Assert.IsTrue(session.IsRunning);
-                Assert.AreEqual(TestLocationLauncher.CourtyardPath, session.LocationScope.gameObject.scene.path);
+                Assert.AreEqual(TestLocationLauncher.CourtyardPath, session.CurrentLocationScene.path);
                 var motor = session.LocationScope.Container.Resolve<PlayerMotor>();
                 Physics.SyncTransforms();
                 void Walk(float x, float z)
@@ -47,7 +47,7 @@ namespace Memories.Tests.PlayMode
                 Walk(8, 29);
                 Walk(-8, 29);
                 Walk(-8, 34); // View of the broken ground-floor window.
-                var scene = session.LocationScope.gameObject.scene;
+                var scene = session.CurrentLocationScene;
                 var curtains = scene.GetRootGameObjects().SelectMany(g => g.GetComponentsInChildren<CurtainWind>()).ToArray();
                 Assert.AreEqual(2, curtains.Length);
                 var mesh = curtains[0].GetComponent<MeshFilter>().mesh;

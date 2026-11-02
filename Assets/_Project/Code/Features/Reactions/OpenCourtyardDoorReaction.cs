@@ -16,26 +16,22 @@ namespace Memories.Gameplay.Reactions
         [SerializeField] private Collider closedDoor;
         [SerializeField] private string destination = "Assets/_Project/Locations/CourtyardIsland/CourtyardIsland.unity";
         [SerializeField] private string arrivalMarker = "Вход из дома";
-        [SerializeField, Min(0f)] private float arrivalForwardOffset;
         [SerializeField, Tooltip("Restores an open door on load when this memory was collected. During play, opening is triggered by a custom reaction.")]
 
         private string requiredMemoryId;
         private Func<string, UniTask<Scene>> load;
-        private Func<Scene, Vector3, Quaternion, float, UniTask> enter;
+        private Func<Scene, UniTask> enter;
         private PlayerMotor player;
-        private Camera playerCamera, portalCamera;
-        private RenderTexture texture;
-        private Material material;
-        private Transform arrival;
         private Scene courtyard;
-        private bool opening, opened, crossing;
-        private float previousDistance;
+        private bool opening, opened, crossing, passedDoorway;
         public bool IsOpen => opened;
+        public string ArrivalMarker => arrivalMarker;
+        public float ExitClearance { get; set; } = .6f;
 
         public void Initialize(PlayerMotor motor, Func<string, UniTask<Scene>> loader,
-            Func<Scene, Vector3, Quaternion, float, UniTask> traveller, MemoryCollection collection = null)
+            Func<Scene, UniTask> traveller, MemoryCollection collection = null)
         {
-            player = motor; playerCamera = motor.GetComponentInChildren<Camera>(); load = loader; enter = traveller;
+            player = motor; load = loader; enter = traveller;
             if (collection != null && !string.IsNullOrWhiteSpace(requiredMemoryId) && collection.Contains(requiredMemoryId))
                 Execute();
         }
@@ -58,30 +54,9 @@ namespace Memories.Gameplay.Reactions
                 if (this == null) return;
                 courtyard = await load(destination);
                 if (this == null) return;
-                foreach (var root in courtyard.GetRootGameObjects())
-                    foreach (var t in root.GetComponentsInChildren<Transform>(true))
-                        if (t.name == arrivalMarker) arrival = t;
-                if (arrival == null) throw new InvalidOperationException("Destination entrance marker is missing: " + arrivalMarker);
-                var go = new GameObject("Вид двора через дверь");
-                go.transform.SetParent(transform, false);
-                portalCamera = go.AddComponent<Camera>();
-                portalCamera.CopyFrom(playerCamera);
-                portalCamera.enabled = false;
-                portalCamera.cullingMask = 1 << 30;
-                portalCamera.clearFlags = CameraClearFlags.SolidColor;
-                portalCamera.backgroundColor = Color.black;
-                GhostCosmosSky.Bind(portalCamera);
-                texture = new RenderTexture(Mathf.Max(640, Screen.width), Mathf.Max(360, Screen.height), 24);
-                texture.Create();
-                portalCamera.targetTexture = texture;
-                material = new Material(Shader.Find("Memories/PortalView"));
-                material.SetTexture("_MainTex", texture);
-                view.sharedMaterial = material;
-                view.enabled = true;
-                UpdateView();
+                if (view != null) view.enabled = false;
                 hinge.localRotation *= Quaternion.Euler(0, -100, 0);
                 closedDoor.enabled = false;
-                previousDistance = transform.InverseTransformPoint(player.transform.position).z;
                 opened = true;
             }
             catch (Exception exception)
@@ -93,51 +68,16 @@ namespace Memories.Gameplay.Reactions
 
         private void LateUpdate()
         {
-            if (portalCamera == null || playerCamera == null || arrival == null) return;
-            UpdateView();
-            if (!opened || crossing) return;
+            if (!opened || crossing || player == null) return;
             Vector3 local = transform.InverseTransformPoint(player.transform.position);
-            if (Mathf.Abs(local.x) < .65f && local.z >= -.42f && previousDistance < -.42f)
+            float distance = Vector3.Dot(player.transform.position - transform.position, transform.forward);
+            if (distance < 0) passedDoorway = false;
+            else if (Mathf.Abs(local.x) < .65f) passedDoorway = true;
+            if (passedDoorway && distance >= ExitClearance)
             {
                 crossing = true;
-                // Keep the visual portal aligned, but place the capsule clear of the destination door.
-                Vector3 position = arrival.TransformPoint(local + Vector3.forward * arrivalForwardOffset);
-                Quaternion rotation = arrival.rotation * Quaternion.Inverse(transform.rotation) * player.transform.rotation;
-                float pitch = Mathf.DeltaAngle(0, playerCamera.transform.localEulerAngles.x);
-                enter(courtyard, position, rotation, pitch).Forget();
+                enter(courtyard).Forget();
             }
-            previousDistance = local.z;
-        }
-
-        private void UpdateView()
-        {
-            portalCamera.transform.SetPositionAndRotation(
-                arrival.TransformPoint(transform.InverseTransformPoint(playerCamera.transform.position)),
-                arrival.rotation * Quaternion.Inverse(transform.rotation) * playerCamera.transform.rotation);
-            portalCamera.fieldOfView = playerCamera.fieldOfView;
-            portalCamera.aspect = playerCamera.aspect;
-            portalCamera.projectionMatrix = playerCamera.projectionMatrix;
-            // Clip the destination wall/closed side door between the remote camera and the entrance.
-            Vector3 clipPoint = portalCamera.worldToCameraMatrix.MultiplyPoint(arrival.position);
-            Vector3 clipNormal = portalCamera.worldToCameraMatrix.MultiplyVector(arrival.forward).normalized;
-            var clipPlane = new Vector4(clipNormal.x, clipNormal.y, clipNormal.z, -Vector3.Dot(clipPoint, clipNormal));
-            portalCamera.projectionMatrix = portalCamera.CalculateObliqueMatrix(clipPlane);
-            var previous = SceneManager.GetActiveScene();
-            try
-            {
-                SceneManager.SetActiveScene(courtyard);
-                portalCamera.Render();
-            }
-            finally
-            {
-                if (previous.IsValid() && previous.isLoaded) SceneManager.SetActiveScene(previous);
-            }
-        }
-
-        private void OnDestroy()
-        {
-            if (texture != null) { texture.Release(); Destroy(texture); }
-            if (material != null) Destroy(material);
         }
     }
 }

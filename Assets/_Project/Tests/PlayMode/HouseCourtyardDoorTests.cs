@@ -90,41 +90,84 @@ namespace Memories.Tests.PlayMode
                 Assert.IsNull(door.GetComponent<Interactable>());
                 Assert.IsTrue(SceneManager.GetSceneByPath(TestLocationLauncher.BackyardPath).isLoaded);
                 Assert.IsTrue(SceneManager.GetSceneByPath(TestLocationLauncher.HousePath).isLoaded, "House must remain in place while looking through the open door.");
-                Assert.IsFalse(SceneManager.GetSceneByPath(TestLocationLauncher.HighwayPath).isLoaded,
-                    "Highway must unload when opening the door, before entering the courtyard.");
-                Assert.AreSame(motor, session.LocationScope.Container.Resolve<PlayerMotor>(),
-                    "Opening the door must preserve the live player and camera.");
-                Assert.AreEqual(TestLocationLauncher.HousePath, session.LocationScope.gameObject.scene.path);
-                Assert.IsNull(GameObject.Find("Переход через дверь"), "No fade overlay is allowed.");
-                var portal = door.GetComponentsInChildren<Camera>().Single();
-                Assert.IsNotNull(portal.targetTexture);
-                Assert.IsTrue(portal.targetTexture.IsCreated());
+                var playerScene = motor.gameObject.scene;
+                Assert.AreEqual(app.gameObject.scene, playerScene);
+                var camera = motor.GetComponentInChildren<Camera>();
+                var movement = session.LocationScope.Container.Resolve<PlayerMovementModel>();
+                var gameplayScope = session.LocationScope;
+                Assert.IsEmpty(door.GetComponentsInChildren<Camera>(), "No portal camera is allowed.");
                 Assert.AreEqual(1, Object.FindObjectsByType<Camera>(FindObjectsSortMode.None).Count(c => c.enabled));
-                if (!main) Capture(motor.GetComponentInChildren<Camera>(), "Temp/house-courtyard-open.png");
-                for (int i = 0; i < 100 && session.LocationScope.gameObject.scene.path != TestLocationLauncher.BackyardPath; i++)
-                { motor.Move(new Vector3(0, -.04f, .04f)); await UniTask.NextFrame(); }
+                var yard = SceneManager.GetSceneByPath(TestLocationLauncher.BackyardPath);
+                var facade = yard.GetRootGameObjects().SelectMany(r => r.GetComponentsInChildren<Transform>(true))
+                    .First(t => t.name.StartsWith("Фанерный дом"));
+                Assert.IsFalse(facade.GetComponent<Renderer>().enabled, "The facade must not obstruct the passage.");
+                Assert.IsFalse(facade.GetComponent<Collider>().enabled);
+                var arrival = yard.GetRootGameObjects().SelectMany(r => r.GetComponentsInChildren<Transform>(true))
+                    .First(t => t.name == door.ArrivalMarker);
+                Assert.Less(Vector3.Distance(arrival.position, door.transform.position), .001f);
+                Assert.Less(Quaternion.Angle(arrival.rotation, door.transform.rotation), .001f);
+                var forward = door.transform.forward;
+                var origin = door.transform.position;
+                motor.Teleport(origin - forward * 1.2f + Vector3.up * .05f, door.transform.eulerAngles.y);
+                movement.ResetMotion(door.transform.eulerAngles.y);
+                movement.SetInitialPitch(17);
+                motor.SetLook(movement.Yaw, movement.Pitch);
+                if (!main) Capture(camera, "Temp/streaming-door-open.png");
+                var presenter = session.LocationScope.Container.Resolve<PlayerPresenter>();
+                presenter.ControlsEnabled = false;
+                int steps = 0;
+                while (session.CurrentLocationScene != yard && steps++ < 150)
+                {
+                    var before = motor.transform.position;
+                    motor.Move(forward * .04f + Vector3.down * .01f);
+                    await UniTask.NextFrame();
+                    Assert.Less(Vector3.Distance(before, motor.transform.position), .12f, "Transition moved the player.");
+                    Assert.AreSame(motor, session.LocationScope.Container.Resolve<PlayerMotor>());
+                    Assert.AreEqual(playerScene, motor.gameObject.scene);
+                    Assert.AreSame(camera, motor.GetComponentInChildren<Camera>());
+                }
+                if (session.CurrentLocationScene != yard)
+                {
+                    var nearby = Physics.OverlapSphere(motor.transform.position + Vector3.up, 2f);
+                    File.WriteAllText("Temp/streaming-blockers.txt", "Player=" + motor.transform.position +
+                        " origin=" + origin + " forward=" + forward + " clearance=" + door.ExitClearance + "\n" +
+                        string.Join("\n", nearby.Select(c => c.name + " " + c.GetType().Name + " " + c.bounds)));
+                    Capture(camera, "Temp/streaming-blocked.png");
+                }
+                Assert.AreEqual(yard, session.CurrentLocationScene,
+                    "Could not walk through the joined doorway. Player=" + motor.transform.position + " clearance=" + door.ExitClearance);
+                Assert.AreSame(gameplayScope, session.LocationScope);
+                Assert.AreSame(movement, session.LocationScope.Container.Resolve<PlayerMovementModel>());
+                Assert.AreEqual(17, movement.Pitch);
+                Assert.IsTrue(facade.GetComponent<Renderer>().enabled);
+                Assert.IsTrue(facade.GetComponent<Collider>().enabled);
+                if (!main) Capture(camera, "Temp/streaming-yard-entered.png");
                 deadline = Time.realtimeSinceStartup + 15;
-                while (SceneManager.GetSceneByPath(TestLocationLauncher.HousePath).isLoaded && Time.realtimeSinceStartup < deadline) await UniTask.NextFrame();
-                Assert.AreEqual(TestLocationLauncher.BackyardPath, session.LocationScope.gameObject.scene.path);
+                while ((SceneManager.GetSceneByPath(TestLocationLauncher.HousePath).isLoaded ||
+                    SceneManager.GetSceneByPath(TestLocationLauncher.HighwayPath).isLoaded) && Time.realtimeSinceStartup < deadline)
+                    await UniTask.NextFrame();
                 Assert.IsFalse(SceneManager.GetSceneByPath(TestLocationLauncher.HousePath).isLoaded);
                 Assert.IsFalse(SceneManager.GetSceneByPath(TestLocationLauncher.HighwayPath).isLoaded);
-                motor = session.LocationScope.Container.Resolve<PlayerMotor>();
-                Assert.That(motor.transform.position.z, Is.InRange(.7f, 1.2f));
+                await UniTask.WaitUntil(() => !session.IsTransitioning);
                 Assert.AreEqual(1, Object.FindObjectsByType<PlayerMotor>(FindObjectsSortMode.None).Length);
-                for (int i = 0; i < 450; i++) motor.Move(new Vector3(0, -.04f, .05f));
-                Assert.Greater(motor.transform.position.z, 20, "The backyard must be walkable up to the far fence.");
-                Assert.Less(motor.transform.position.z, 22, "The far fence must stop the player.");
-                Assert.That(motor.transform.position.y, Is.InRange(-.1f, .15f));
-                for (int i = 0; i < 500; i++) motor.Move(new Vector3(0, -.04f, -.05f));
-                Assert.Greater(motor.transform.position.z, .1f, "The painted door must be a solid part of the plywood facade.");
-                Assert.Less(motor.transform.position.z, 1, "The player can return to the painted door.");
+                Assert.AreEqual(playerScene, camera.gameObject.scene);
+                for (int i = 0; i < 450; i++) motor.Move(forward * .05f + Vector3.down * .04f);
+                float distance = Vector3.Dot(motor.transform.position - origin, forward);
+                Assert.That(distance, Is.InRange(20, 22), "The far fence must be reachable and solid.");
+                for (int i = 0; i < 500; i++) motor.Move(-forward * .05f + Vector3.down * .04f);
+                distance = Vector3.Dot(motor.transform.position - origin, forward);
+                Assert.That(distance, Is.InRange(.1f, 1f), "The restored facade must block returning to the unloaded house.");
             }
             finally
             {
                 if (hadSave) PlayerPrefs.SetString(MemoryCollection.DefaultKey, savedMemories);
                 else PlayerPrefs.DeleteKey(MemoryCollection.DefaultKey);
                 PlayerPrefs.Save();
-                if (session != null && session.IsRunning) await session.EndAsync();
+                if (session != null && session.IsRunning)
+                {
+                    await UniTask.WaitUntil(() => !session.IsTransitioning);
+                    await session.EndAsync();
+                }
                 if (root != null) Object.Destroy(root);
                 if (bootstrap.IsValid() && bootstrap.isLoaded) await SceneManager.UnloadSceneAsync(bootstrap);
                 await UniTask.NextFrame();

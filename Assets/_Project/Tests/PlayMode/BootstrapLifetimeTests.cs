@@ -46,7 +46,7 @@ namespace Memories.Tests.PlayMode
             Assert.AreSame(session.SessionScope, session.LocationScope.Parent);
             Assert.AreSame(application, session.LocationScope.Container.Resolve<ApplicationContext>());
             Assert.AreSame(firstSession, session.LocationScope.Container.Resolve<SessionContext>());
-            Assert.AreEqual(AppLifetimeScope.DefaultLocationPath, session.LocationScope.gameObject.scene.path);
+            Assert.AreEqual(AppLifetimeScope.DefaultLocationPath, session.CurrentLocationScene.path);
 
             await session.EndAsync();
             Assert.IsTrue(firstLocation.Token.IsCancellationRequested);

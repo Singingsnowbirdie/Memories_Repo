@@ -27,7 +27,7 @@ namespace Memories.Tests.PlayMode
                 await session.StartAsync(TestLocationLauncher.HousePath, resumeHouse: true);
                 await UniTask.NextFrame();
                 Assert.IsTrue(session.IsRunning);
-                Assert.AreEqual(TestLocationLauncher.HousePath, session.LocationScope.gameObject.scene.path);
+                Assert.AreEqual(TestLocationLauncher.HousePath, session.CurrentLocationScene.path);
                 Assert.IsFalse(SceneManager.GetSceneByPath(TestLocationLauncher.HighwayPath).isLoaded);
                 var player = session.LocationScope.Container.Resolve<PlayerMotor>();
                 Assert.That(player.transform.position.z, Is.EqualTo(305).Within(.1f));

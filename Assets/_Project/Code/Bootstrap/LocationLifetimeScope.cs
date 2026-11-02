@@ -6,6 +6,7 @@ using Memories.Gameplay.Player;
 using Memories.Gameplay.Interaction;
 using Memories.Gameplay.UI;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Memories.Gameplay.Memories;
 using Memories.Gameplay.Triggers;
 
@@ -13,6 +14,8 @@ namespace Memories.Bootstrap
 {
     public sealed class LocationLifetimeScope : LifetimeScope
     {
+        // Session-long gameplay services live in Bootstrap, independently of streamed scenery.
+        public Scene InitialScene { get; set; }
         protected override void Configure(IContainerBuilder builder)
         {
             builder.Register<LocationContext>(Lifetime.Singleton);
@@ -88,18 +91,6 @@ namespace Memories.Bootstrap
                 container.Resolve<PausePresenter>();
                 var presenter = container.Resolve<MemoryPresenter>();
                 container.Resolve<PausePresenter>().ConnectMemories(container.Resolve<MemoryCollection>(), presenter);
-                foreach (var root in gameObject.scene.GetRootGameObjects())
-                    foreach (var photo in root.GetComponentsInChildren<RevealPhotoReaction>(true))
-                        photo.Restore(container.Resolve<CustomVariableStore>());
-                foreach (var root in gameObject.scene.GetRootGameObjects())
-                {
-                    foreach (var triggerEvent in root.GetComponentsInChildren<TriggerEvent>(true))
-                        triggerEvent.Initialize(container.Resolve<StoryTextPresenter>(), presenter);
-                    foreach (var trigger in root.GetComponentsInChildren<SceneTrigger>(true))
-                        trigger.Initialize(container.Resolve<StoryTextPresenter>(), presenter, container.Resolve<ILocationTransition>(), container.Resolve<QuestInventory>(), container.Resolve<CustomVariableStore>());
-                    foreach (var interactable in root.GetComponentsInChildren<ReactionInteractable>(true))
-                        interactable.Initialize(container.Resolve<StoryTextPresenter>(), presenter, container.Resolve<ILocationTransition>(), container.Resolve<QuestInventory>(), container.Resolve<CustomVariableStore>());
-                }
             });
         }
     }

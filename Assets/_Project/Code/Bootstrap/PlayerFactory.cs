@@ -11,7 +11,7 @@ namespace Memories.Bootstrap
             settings.Validate();
             Transform spawn = null;
             Camera viewCamera = null;
-            foreach (var root in scope.gameObject.scene.GetRootGameObjects())
+            foreach (var root in scope.InitialScene.GetRootGameObjects())
             {
                 foreach (var candidate in root.GetComponentsInChildren<Transform>(true))
                     if (candidate.name == "PlayerSpawn")
@@ -29,6 +29,14 @@ namespace Memories.Bootstrap
             if (spawn == null || viewCamera == null)
                 throw new InvalidOperationException("Location requires one PlayerSpawn and one active MainCamera.");
 
+            // The location camera is only an authoring template. Create the live camera
+            // directly under the Bootstrap scope; never transfer it out of a location.
+            var template = viewCamera;
+            template.enabled = false;
+            var templateListener = template.GetComponent<AudioListener>();
+            if (templateListener != null) templateListener.enabled = false;
+            viewCamera = UnityEngine.Object.Instantiate(template, scope.transform);
+            viewCamera.name = "Player camera";
             viewCamera.enabled = true;
             Memories.Gameplay.GhostCosmosSky.Bind(viewCamera);
             var listener = viewCamera.GetComponent<AudioListener>();
