@@ -269,7 +269,11 @@ namespace Memories.Bootstrap
         {
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var photo in root.GetComponentsInChildren<RevealPhotoReaction>(true))
-                    photo.Restore(scope.Container.Resolve<CustomVariableStore>());
+                    photo.Restore(scope.Container.Resolve<CustomVariableStore>(), scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>(),
+                        scope.Container.Resolve<PlayerMotor>());
+            foreach (var root in scene.GetRootGameObjects())
+                foreach (var focus in root.GetComponentsInChildren<FocusCameraReaction>(true))
+                    focus.Initialize(scope.Container.Resolve<PlayerMotor>(), scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>());
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var reaction in root.GetComponentsInChildren<CloseEntranceDoorsReaction>(true))
                     reaction.Restore(scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
@@ -353,6 +357,14 @@ namespace Memories.Bootstrap
                 if (path == TestLocationLauncher.BackyardPath)
                     foreach (var root in scene.GetRootGameObjects())
                         foreach (var t in root.GetComponentsInChildren<Transform>(true))
+                            if (t.name == "Остров_6")
+                            {
+                                foreach (var collider in t.GetComponentsInChildren<Collider>())
+                                    if (collider.enabled) { cover.Colliders.Add(collider); collider.enabled = false; }
+                                foreach (var renderer in t.GetComponentsInChildren<Renderer>())
+                                    if (renderer.enabled) { cover.Renderers.Add(renderer); renderer.enabled = false; }
+                            }
+                            else
                             if (t.name.StartsWith("Фанерный дом", StringComparison.Ordinal))
                             {
                                 foreach (var collider in t.GetComponentsInChildren<Collider>())
@@ -393,13 +405,6 @@ namespace Memories.Bootstrap
             busy = true;
             try
             {
-                // The capsule has cleared the cover before it becomes solid again.
-                if (connectionCovers.TryGetValue(scene.handle, out var cover))
-                {
-                    cover.Restore();
-                    connectionCovers.Remove(scene.handle);
-                }
-                Physics.SyncTransforms();
                 var previous = locationScene;
                 additionalScenes.Remove(scene);
                 locationScene = scene;
@@ -408,6 +413,13 @@ namespace Memories.Bootstrap
                 foreach (var root in previous.GetRootGameObjects()) root.SetActive(false);
                 await SceneManager.UnloadSceneAsync(previous);
                 await UnloadAdditionalScenesAsync();
+                // Restore overlapping backyard geometry only after the house has unloaded.
+                if (connectionCovers.TryGetValue(scene.handle, out var cover))
+                {
+                    cover.Restore();
+                    connectionCovers.Remove(scene.handle);
+                }
+                Physics.SyncTransforms();
                 if (disposed) await CleanupAsync();
             }
             finally { busy = false; }

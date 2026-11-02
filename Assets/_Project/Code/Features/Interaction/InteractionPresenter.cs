@@ -8,19 +8,21 @@ namespace Memories.Gameplay.Interaction
         private readonly InteractionProbe probe;
         private readonly IInteractionView view;
         private readonly UI.StoryTextPresenter texts;
+        private readonly UI.GameplayModeState gameplayState;
 
         public InteractionPresenter(IInteractionInput input, InteractionProbe probe, IInteractionView view,
-            UI.StoryTextPresenter texts = null)
+            UI.StoryTextPresenter texts = null, UI.GameplayModeState gameplayState = null)
         {
             this.input = input;
             this.probe = probe;
             this.view = view;
             this.texts = texts;
+            this.gameplayState = gameplayState;
         }
 
         public void Tick()
         {
-            if (!input.InteractionEnabled || texts?.BlocksInteractions == true)
+            if (!input.InteractionEnabled || texts?.BlocksInteractions == true || gameplayState?.ControlsBlocked == true)
             {
                 view.Show(false, false, "");
                 return;
@@ -29,7 +31,7 @@ namespace Memories.Gameplay.Interaction
             if (target != null && input.InteractPressed)
             {
                 target.Interact();
-                if (texts?.BlocksInteractions == true)
+                if (texts?.BlocksInteractions == true || gameplayState?.ControlsBlocked == true)
                 {
                     view.Show(false, false, "");
                     return;

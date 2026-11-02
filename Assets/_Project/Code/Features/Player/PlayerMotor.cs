@@ -7,6 +7,8 @@ namespace Memories.Gameplay.Player
     {
         private CharacterController controller;
         private Transform cameraTransform;
+        public Transform CameraTransform => cameraTransform;
+        public bool CameraPoseControlled { get; set; }
         public float InitialYaw { get; private set; }
         public Vector3 InitialPosition { get; private set; }
         public bool IsGrounded => controller.isGrounded;
@@ -33,7 +35,7 @@ namespace Memories.Gameplay.Player
         public void SetLook(float yaw, float pitch)
         {
             transform.rotation = Quaternion.Euler(0, yaw, 0);
-            cameraTransform.localRotation = Quaternion.Euler(pitch, 0, 0);
+            if (!CameraPoseControlled) cameraTransform.localRotation = Quaternion.Euler(pitch, 0, 0);
         }
 
         public void Teleport(Vector3 position, float yaw)

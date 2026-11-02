@@ -17,6 +17,7 @@ namespace Memories.Gameplay.Memories
         private readonly IPauseInput input;
         private readonly IMemoryMusic music;
         private readonly IMemorySound sounds;
+        private readonly StoryTextPresenter texts;
         private CancellationTokenSource playback;
         private string currentId;
         private MemoryGraph currentGraph;
@@ -28,7 +29,7 @@ namespace Memories.Gameplay.Memories
         public bool HasCollected(string id) => collection.Contains(id);
         public bool CanStartPlayback => !disposed && state.Mode == GameplayMode.Playing;
 
-        public MemoryPresenter(MemoryCollection collection, GameplayModeState state, IMemoryView view, IPauseInput input, IMemoryMusic music, IMemorySound sounds)
+        public MemoryPresenter(MemoryCollection collection, GameplayModeState state, IMemoryView view, IPauseInput input, IMemoryMusic music, IMemorySound sounds, StoryTextPresenter texts = null)
         {
             this.collection = collection;
             this.state = state;
@@ -36,6 +37,7 @@ namespace Memories.Gameplay.Memories
             this.input = input;
             this.music = music;
             this.sounds = sounds;
+            this.texts = texts;
             input.PauseRequested += OnEscape;
             if (input is IAdvanceInput advanceInput) advanceInput.AdvanceRequested += AdvanceFrame;
             view.Hide();
@@ -64,6 +66,7 @@ namespace Memories.Gameplay.Memories
             if (!graph.TryGetSequence(out var frames, out var error))
             { Debug.LogWarning("Воспоминание не запущено: " + error, graph); return false; }
             if (fromPause ? !state.TrySwitch(GameplayMode.Paused, GameplayMode.Reading) : !state.TryEnter(GameplayMode.Reading)) return false;
+            if (!fromPause) texts?.Stop();
             currentId = id;
             currentGraph = graph;
             returnToPause = fromPause;

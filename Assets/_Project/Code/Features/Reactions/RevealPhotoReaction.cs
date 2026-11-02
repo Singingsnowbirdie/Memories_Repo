@@ -17,6 +17,12 @@ namespace Memories.Gameplay.Reactions
         private RenderTexture revealedTexture;
         private Texture photo;
         private bool initialized, revealed;
+        private UI.GameplayModeState gameplayState;
+        private Player.PlayerMotor player;
+        private Transform focusedCamera;
+        private Vector3 originalCameraPosition;
+        private Quaternion originalCameraRotation;
+        private bool previousCameraControl;
 
         public static void ResetProgress()
         {
@@ -24,8 +30,11 @@ namespace Memories.Gameplay.Reactions
             PlayerPrefs.Save();
         }
 
-        public void Restore(CustomVariableStore variables)
+        public void Restore(CustomVariableStore variables, UI.GameplayModeState gameplayState = null,
+            Player.PlayerMotor player = null)
         {
+            this.gameplayState = gameplayState;
+            this.player = player;
             if (variables.PersistProgress && PlayerPrefs.HasKey(SaveKey))
             {
                 if (!variables.HasSavedValue(variableBank, revealedVariableId))
@@ -65,20 +74,66 @@ namespace Memories.Gameplay.Reactions
 
         private IEnumerator Reveal()
         {
+            gameplayState?.BlockControls(this);
+            try
+            {
+                if (player != null && player.CameraTransform != null)
+                {
+                    focusedCamera = player.CameraTransform;
+                    originalCameraPosition = focusedCamera.localPosition;
+                    originalCameraRotation = focusedCamera.localRotation;
+                    previousCameraControl = player.CameraPoseControlled;
+                    player.CameraPoseControlled = true;
+                    var center = photoRenderer.bounds.center;
+                    var offset = focusedCamera.position - center;
+                    float distance = Mathf.Min(offset.magnitude, Mathf.Max(.75f, photoRenderer.bounds.size.magnitude));
+                    var targetPosition = center + offset.normalized * distance;
+                    var targetRotation = Quaternion.LookRotation(center - targetPosition, Vector3.up);
+                    yield return MoveCamera(focusedCamera.parent.InverseTransformPoint(targetPosition),
+                        Quaternion.Inverse(focusedCamera.parent.rotation) * targetRotation);
+                }
+                float elapsed = 0;
+                while (elapsed < 3f)
+                {
+                    elapsed += Time.deltaTime;
+                    blendMaterial.SetFloat("_Reveal", Mathf.SmoothStep(0, 1, elapsed / 3f));
+                    Graphics.Blit(photo, revealedTexture, blendMaterial);
+                    yield return null;
+                }
+                photoMaterial.mainTexture = photo;
+                if (focusedCamera != null) yield return MoveCamera(originalCameraPosition, originalCameraRotation);
+            }
+            finally { RestoreCamera(); gameplayState?.ReleaseControls(this); }
+        }
+
+        private IEnumerator MoveCamera(Vector3 position, Quaternion rotation)
+        {
+            var fromPosition = focusedCamera.localPosition;
+            var fromRotation = focusedCamera.localRotation;
             float elapsed = 0;
-            while (elapsed < 3f)
+            while (elapsed < .8f && focusedCamera != null)
             {
                 elapsed += Time.deltaTime;
-                blendMaterial.SetFloat("_Reveal", Mathf.SmoothStep(0, 1, elapsed / 3f));
-                Graphics.Blit(photo, revealedTexture, blendMaterial);
+                float t = Mathf.SmoothStep(0, 1, elapsed / .8f);
+                focusedCamera.SetLocalPositionAndRotation(Vector3.Lerp(fromPosition, position, t),
+                    Quaternion.Slerp(fromRotation, rotation, t));
                 yield return null;
             }
-            photoMaterial.mainTexture = photo;
+        }
+
+        private void RestoreCamera()
+        {
+            if (focusedCamera == null) return;
+            focusedCamera.SetLocalPositionAndRotation(originalCameraPosition, originalCameraRotation);
+            focusedCamera = null;
+            if (player != null) player.CameraPoseControlled = previousCameraControl;
         }
 
         private void OnDisable()
         {
             StopAllCoroutines();
+            RestoreCamera();
+            gameplayState?.ReleaseControls(this);
             if (revealed && photoMaterial != null) photoMaterial.mainTexture = photo;
         }
 

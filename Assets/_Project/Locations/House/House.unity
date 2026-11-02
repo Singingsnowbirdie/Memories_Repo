@@ -87193,6 +87193,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7725828649327319238, guid: 8231b5e88ffdd3a4cbda1f1760cf3675, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2133085135}
+    - targetCorrespondingSourceObject: {fileID: 7725828649327319238, guid: 8231b5e88ffdd3a4cbda1f1760cf3675, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2133085137}
   m_SourcePrefab: {fileID: 100100000, guid: 8231b5e88ffdd3a4cbda1f1760cf3675, type: 3}
 --- !u!4 &2133085133 stripped
 Transform:
@@ -87223,7 +87226,10 @@ MonoBehaviour:
   - key: "\u041F\u0443\u043B\u044C\u0442 \u043E\u0442 \u0442\u0435\u043B\u0435\u0432\u0438\u0437\u043E\u0440\u0430
       \u0432 \u0440\u0443\u043A\u0435 \u0434\u0435\u0432\u0443\u0448\u043A\u0438"
     target: {fileID: 1669012058}
-  customReactions: []
+  customReactions:
+  - key: "\u041D\u0430\u0435\u0437\u0434 \u043A\u0430\u043C\u0435\u0440\u044B \u043D\u0430
+      \u0442\u0435\u043B\u0435\u0432\u0438\u0437\u043E\u0440"
+    reaction: {fileID: 2133085137}
 --- !u!114 &2133085135
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -87259,6 +87265,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.44, y: 1.5003589, z: 0.75177336}
   m_Center: {x: -0.00000014508898, y: 0.59482056, z: 0.21588665}
+--- !u!114 &2133085137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 913217142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ca35b2141903fe479465df0706b3aa8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.FocusCameraReaction
+  target: {fileID: 880001204}
+  travelDuration: 1.6
+  holdDuration: 2
 --- !u!1 &2133452578
 GameObject:
   m_ObjectHideFlags: 0

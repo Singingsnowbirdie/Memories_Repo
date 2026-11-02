@@ -194,6 +194,64 @@ namespace Memories.Tests.EditMode
             }
         }
 
+        private sealed class TextView : IStoryTextView
+        {
+            public string Text;
+            public CancellationToken LifetimeToken => CancellationToken.None;
+            public UniTask ShowAsync(string text, CancellationToken token) => ChangeTextAsync(text, token);
+            public UniTask ChangeTextAsync(string text, CancellationToken token)
+            { token.ThrowIfCancellationRequested(); Text = text; return UniTask.CompletedTask; }
+            public UniTask HideAsync(CancellationToken token) { HideImmediately(); return UniTask.CompletedTask; }
+            public void HideImmediately() => Text = null;
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void StoryPlaybackCancelsTextsButPauseReplayPreservesThem(bool fromPause)
+        {
+            var input = new Input();
+            var state = new GameplayModeState(input);
+            var collection = new MemoryCollection(persistProgress: false);
+            var textView = new TextView();
+            using var texts = new StoryTextPresenter(textView);
+            using var presenter = new MemoryPresenter(collection, state, new View(), input, new Music(), new Sounds(), texts);
+            var graph = ScriptableObject.CreateInstance<MemoryGraph>();
+            var start = graph.AddNode<MemoryStartNode>();
+            var frame = graph.AddNode<MemoryFrameNode>();
+            var end = graph.AddNode<MemoryEndNode>();
+            var data = new SerializedObject(frame);
+            data.FindProperty("image").objectReferenceValue = Texture2D.whiteTexture;
+            data.ApplyModifiedPropertiesWithoutUndo();
+            start.GetOutputPort("next").Connect(frame.GetInputPort("previous"));
+            frame.GetOutputPort("next").Connect(end.GetInputPort("previous"));
+            var story = texts.ShowAsync(new[] { new StoryTextFragment("old", 60), new StoryTextFragment("must not resume", 60) });
+            var queued = texts.ShowAsync("queued", 60);
+            try
+            {
+                if (fromPause)
+                {
+                    collection.Collect("test", graph);
+                    state.TryEnter(GameplayMode.Paused);
+                    Assert.IsTrue(presenter.ReplayFromCollection("test"));
+                }
+                else Assert.IsTrue(presenter.Open("test", graph));
+                Assert.AreEqual(fromPause, texts.IsPlaying);
+                Assert.AreEqual(fromPause ? "old" : null, textView.Text);
+                Assert.AreEqual(fromPause ? UniTaskStatus.Pending : UniTaskStatus.Canceled, story.Status);
+                Assert.AreEqual(fromPause ? UniTaskStatus.Pending : UniTaskStatus.Canceled, queued.Status);
+                presenter.Close();
+                Assert.AreEqual(fromPause, texts.IsPlaying, "Closing the memory must not revive canceled text.");
+            }
+            finally
+            {
+                presenter.Close();
+                state.Exit(GameplayMode.Paused);
+                texts.Stop();
+                story.SuppressCancellationThrow().Forget();
+                queued.SuppressCancellationThrow().Forget();
+                DestroyGraph(graph);
+            }
+        }
         private static void DestroyGraph(MemoryGraph graph)
         {
             foreach (var node in graph.nodes.ToArray()) UnityEngine.Object.DestroyImmediate(node);

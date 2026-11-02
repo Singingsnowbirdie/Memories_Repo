@@ -1,4 +1,5 @@
 using Memories.Contracts;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Memories.Gameplay.UI
@@ -8,6 +9,10 @@ namespace Memories.Gameplay.UI
     public sealed class GameplayModeState
     {
         private readonly IPauseInput input;
+        private readonly HashSet<object> controlLocks = new HashSet<object>();
+        public bool ControlsBlocked => controlLocks.Count > 0;
+        public void BlockControls(object owner) => controlLocks.Add(owner);
+        public void ReleaseControls(object owner) => controlLocks.Remove(owner);
         private float previousTimeScale;
         private bool previousAudioPause;
         public GameplayMode Mode { get; private set; }
