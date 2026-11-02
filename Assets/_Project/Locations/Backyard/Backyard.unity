@@ -2114,6 +2114,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 95fdbb384eef1814783f965c7ff76235, type: 3}
+--- !u!4 &90145418 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3305581529017779528, guid: 97f7e19c1d174162aae3882511328c05, type: 3}
+  m_PrefabInstance: {fileID: 1844888135}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &96918288
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24872,6 +24877,96 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8811820353570757643, guid: ed0d53bff53cd7a4182b1cd7eb6b7802, type: 3}
   m_PrefabInstance: {fileID: 1211031374}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1212048435
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1212048436}
+  - component: {fileID: 1212048438}
+  - component: {fileID: 1212048437}
+  m_Layer: 0
+  m_Name: Baseball_Ball
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1212048436
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1212048435}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1354252008}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &1212048437
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1212048435}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 719943c4ca1ffc541ac08e8ded48bc9a, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1212048438
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1212048435}
+  m_Mesh: {fileID: 2282087253782314451, guid: e5b00f435dc2b74449f17f3f8cb2aa4f, type: 3}
 --- !u!1001 &1212117928
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28092,6 +28187,53 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4518753930360921349, guid: 5f13adf1020d9d3428e681e3b4de11ff, type: 3}
   m_PrefabInstance: {fileID: 1850273886}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1354252006
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1354252008}
+  - component: {fileID: 1354252007}
+  m_Layer: 0
+  m_Name: "\u041C\u044F\u0447 \u0432 \u0440\u0443\u043A\u0435 \u0411\u0435\u043D\u0430"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1354252007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1354252006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72fa2e38b599425cbb1eceaf9d667a91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.SavedObjectVisibility
+  variableBank: {fileID: 11400000, guid: 83af6fcb806c087438f339fcbcc76145, type: 2}
+  variableId: ben_received_baseball
+--- !u!4 &1354252008
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1354252006}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.0099446215, y: 0.07603389, z: 0.07374381}
+  m_LocalScale: {x: 0.6321217, y: 0.6321217, z: 0.6321217}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1212048436}
+  m_Father: {fileID: 90145418}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1355355469
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -37474,6 +37616,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 751524932186828659, guid: 97f7e19c1d174162aae3882511328c05, type: 3}
+      propertyPath: graph
+      value: 
+      objectReference: {fileID: 11400000, guid: fa86dbb4a07f62f43858bfee8feba2a9, type: 2}
+    - target: {fileID: 751524932186828659, guid: 97f7e19c1d174162aae3882511328c05, type: 3}
+      propertyPath: prompt
+      value: "\u0412\u0437\u0430\u0438\u043C\u043E\u0434\u0435\u0439\u0441\u0442\u0432\u043E\u0432\u0430\u0442\u044C"
+      objectReference: {fileID: 0}
+    - target: {fileID: 751524932186828659, guid: 97f7e19c1d174162aae3882511328c05, type: 3}
+      propertyPath: objectBindings.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 751524932186828659, guid: 97f7e19c1d174162aae3882511328c05, type: 3}
+      propertyPath: objectBindings.Array.data[0].key
+      value: ball_in_hand
+      objectReference: {fileID: 0}
+    - target: {fileID: 751524932186828659, guid: 97f7e19c1d174162aae3882511328c05, type: 3}
+      propertyPath: objectBindings.Array.data[0].target
+      value: 
+      objectReference: {fileID: 1354252006}
     - target: {fileID: 3305581529017779456, guid: 97f7e19c1d174162aae3882511328c05, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.026605416
@@ -38236,7 +38398,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 3305581529017779528, guid: 97f7e19c1d174162aae3882511328c05, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1354252008}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3305581529017948312, guid: 97f7e19c1d174162aae3882511328c05, type: 3}
       insertIndex: -1
