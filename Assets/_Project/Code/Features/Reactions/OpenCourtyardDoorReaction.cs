@@ -14,6 +14,8 @@ namespace Memories.Gameplay.Reactions
         [SerializeField] private Transform hinge;
         [SerializeField] private Renderer view;
         [SerializeField] private Collider closedDoor;
+        [SerializeField, Tooltip("Objects of the house exterior replaced by the loaded courtyard.")]
+        private GameObject[] hideAfterCourtyardLoaded = Array.Empty<GameObject>();
         [SerializeField] private string destination = "Assets/_Project/Locations/CourtyardIsland/CourtyardIsland.unity";
         [SerializeField] private string arrivalMarker = "Вход из дома";
         [SerializeField, Tooltip("Restores an open door on load when this memory was collected. During play, opening is triggered by a custom reaction.")]
@@ -54,6 +56,8 @@ namespace Memories.Gameplay.Reactions
                 if (this == null) return;
                 courtyard = await load(destination);
                 if (this == null) return;
+                foreach (var target in hideAfterCourtyardLoaded)
+                    if (target != null) target.SetActive(false);
                 if (view != null) view.enabled = false;
                 hinge.localRotation *= Quaternion.Euler(0, -100, 0);
                 closedDoor.enabled = false;
