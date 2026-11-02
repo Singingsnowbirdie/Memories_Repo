@@ -9,6 +9,7 @@ namespace Memories.Gameplay.Reactions
     {
         [SerializeField] private Transform leftLeaf;
         [SerializeField] private Transform rightLeaf;
+        [SerializeField] private Transform[] additionalLeaves = new Transform[0];
         [SerializeField] private string completedMemoryId;
 
         public void Restore(MemoryCollection memories)
@@ -23,15 +24,21 @@ namespace Memories.Gameplay.Reactions
                 Debug.LogError("Назначьте обе створки входной двери.", this);
                 return;
             }
-            leftLeaf.localRotation = Quaternion.identity;
-            rightLeaf.localRotation = Quaternion.identity;
-            foreach (var leaf in new[] { leftLeaf, rightLeaf })
-                foreach (var collider in leaf.GetComponentsInChildren<Collider>(true))
-                {
-                    collider.isTrigger = false;
-                    collider.enabled = true;
-                }
+            CloseLeaf(leftLeaf);
+            CloseLeaf(rightLeaf);
+            foreach (var leaf in additionalLeaves) CloseLeaf(leaf);
             Physics.SyncTransforms();
+        }
+
+        private static void CloseLeaf(Transform leaf)
+        {
+            if (leaf == null) return;
+            leaf.localRotation = Quaternion.identity;
+            foreach (var collider in leaf.GetComponentsInChildren<Collider>(true))
+            {
+                collider.isTrigger = false;
+                collider.enabled = true;
+            }
         }
     }
 }
