@@ -9,7 +9,6 @@ namespace Memories.Gameplay.Reactions
     {
         [SerializeField] private Transform leftLeaf;
         [SerializeField] private Transform rightLeaf;
-        [SerializeField] private Transform[] additionalLeaves = new Transform[0];
         [SerializeField] private string completedMemoryId;
 
         public void Restore(MemoryCollection memories)
@@ -26,7 +25,6 @@ namespace Memories.Gameplay.Reactions
             }
             CloseLeaf(leftLeaf);
             CloseLeaf(rightLeaf);
-            foreach (var leaf in additionalLeaves) CloseLeaf(leaf);
             Physics.SyncTransforms();
         }
 

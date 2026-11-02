@@ -274,6 +274,9 @@ namespace Memories.Bootstrap
                 foreach (var reaction in root.GetComponentsInChildren<CloseEntranceDoorsReaction>(true))
                     reaction.Restore(scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
             foreach (var root in scene.GetRootGameObjects())
+                foreach (var reaction in root.GetComponentsInChildren<CloseStairDoorReaction>(true))
+                    reaction.Restore(scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
+            foreach (var root in scene.GetRootGameObjects())
             {
                 foreach (var trigger in root.GetComponentsInChildren<Memories.Gameplay.Triggers.TriggerEvent>(true))
                     trigger.Initialize(scope.Container.Resolve<Memories.Gameplay.UI.StoryTextPresenter>(),

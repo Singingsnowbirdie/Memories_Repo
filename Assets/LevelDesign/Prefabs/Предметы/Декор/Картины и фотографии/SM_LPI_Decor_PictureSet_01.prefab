@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 8425702779013450147}
   - component: {fileID: 5609880872181997200}
   - component: {fileID: 5665754388149814974}
-  - component: {fileID: 7342371683361424406}
   m_Layer: 0
   m_Name: SM_LPI_Decor_PictureSet_01
   m_TagString: Untagged
@@ -67,7 +66,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 7385646444727819863, guid: a196300d2f6ac4ec985f72120aa0c0b9, type: 3}
+  - {fileID: 7385646444727819863, guid: d57ed2e48250e0078fd5bec543594dee, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -91,25 +90,3 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &7342371683361424406
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4780890739004470521}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -4075000622302863819, guid: a196300d2f6ac4ec985f72120aa0c0b9, type: 3}
