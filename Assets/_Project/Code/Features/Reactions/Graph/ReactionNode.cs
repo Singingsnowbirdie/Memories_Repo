@@ -45,7 +45,7 @@ namespace Memories.Gameplay.Reactions
         public string ObjectKey => objectKey;
         [SerializeField] private string hintId;
         [SerializeField] private ReactionGraph hintGraph;
-        [SerializeField, Min(0.01f)] private float hintTimeout = 180f;
+        [SerializeField, Min(0.01f)] private float hintTimeout = 60f;
         [SerializeField] private bool repeatHint = true;
         public string HintId => hintId;
         public ReactionGraph HintGraph => hintGraph;

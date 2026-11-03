@@ -268,6 +268,9 @@ namespace Memories.Bootstrap
         private void BindDoors(Scene scene, LocationLifetimeScope scope)
         {
             foreach (var root in scene.GetRootGameObjects())
+                foreach (var area in root.GetComponentsInChildren<BaseballPlayArea>(true))
+                    area.Initialize(scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<CustomVariableStore>());
+            foreach (var root in scene.GetRootGameObjects())
                 foreach (var photo in root.GetComponentsInChildren<RevealPhotoReaction>(true))
                     photo.Restore(scope.Container.Resolve<CustomVariableStore>(), scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>(),
                         scope.Container.Resolve<PlayerMotor>());
