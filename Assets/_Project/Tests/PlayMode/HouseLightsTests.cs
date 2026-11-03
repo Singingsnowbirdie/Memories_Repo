@@ -12,6 +12,13 @@ namespace Memories.Tests.PlayMode
 {
     public sealed class HouseLightsTests
     {
+        private static Light[] AuthoredLights(HouseLights house)
+        {
+            const System.Reflection.BindingFlags flags = System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic;
+            var lights = (Light[])typeof(HouseLights).GetField("lights", flags).GetValue(house);
+            var enabled = (bool[])typeof(HouseLights).GetField("initiallyEnabled", flags).GetValue(house);
+            return lights.Where((light, index) => enabled[index]).ToArray();
+        }
         [UnityTest]
         public IEnumerator HouseFadesInAfterTheLastHighwayLamp() => UniTask.ToCoroutine(async () =>
         {
@@ -24,8 +31,7 @@ namespace Memories.Tests.PlayMode
                 var house = Object.FindFirstObjectByType<HouseLights>();
                 Assert.IsNotNull(highway);
                 Assert.IsNotNull(house);
-                var lights = house.gameObject.scene.GetRootGameObjects()
-                    .SelectMany(root => root.GetComponentsInChildren<Light>(true)).ToArray();
+                var lights = AuthoredLights(house);
                 Assert.IsNotEmpty(lights);
                 Assert.IsTrue(lights.Any(light => !light.transform.IsChildOf(house.transform)),
                     "Test must include lights on separate house scene roots.");
@@ -83,14 +89,31 @@ namespace Memories.Tests.PlayMode
                 await UniTask.NextFrame();
                 var house = Object.FindFirstObjectByType<HouseLights>();
                 Assert.IsNotNull(house);
-                Assert.IsTrue(house.gameObject.scene.GetRootGameObjects()
-                    .SelectMany(root => root.GetComponentsInChildren<Light>(true)).All(light => light.enabled));
+                Assert.IsTrue(AuthoredLights(house).All(light => light.enabled));
             }
             finally
             {
                 if (SceneManager.GetSceneByPath(TestLocationLauncher.HousePath).isLoaded)
                     await SceneManager.UnloadSceneAsync(TestLocationLauncher.HousePath);
             }
+        });
+
+        [UnityTest]
+        public IEnumerator PreparedHouseWaitsForExplicitReaction() => UniTask.ToCoroutine(async () =>
+        {
+            var root = new GameObject("Explicit light reaction");
+            var light = root.AddComponent<Light>();
+            var house = root.AddComponent<HouseLights>();
+            try
+            {
+                await UniTask.NextFrame();
+                house.Prepare(.01f);
+                await UniTask.DelayFrame(5);
+                Assert.IsFalse(light.enabled, "Preparing a sequence must not start it implicitly.");
+                house.Execute();
+                await UniTask.WaitUntil(() => light.enabled).Timeout(System.TimeSpan.FromSeconds(3));
+            }
+            finally { Object.Destroy(root); }
         });
     }
 }

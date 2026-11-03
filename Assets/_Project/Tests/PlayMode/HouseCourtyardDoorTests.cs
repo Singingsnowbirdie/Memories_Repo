@@ -56,7 +56,7 @@ namespace Memories.Tests.PlayMode
                 motor.SetLook(0, 0); Physics.SyncTransforms();
                 var door = Object.FindFirstObjectByType<OpenCourtyardDoorReaction>();
                 Assert.IsNotNull(door);
-                Assert.IsNull(door.GetComponent<Interactable>(), "The house exit must not be an interactive object.");
+                Assert.IsNull(door.GetComponent<ReactionInteractable>(), "The house exit must not be an interactive object.");
                 var memories = session.SessionScope.Container.Resolve<MemoryCollection>();
                 if (!previouslyFound)
                 {
@@ -86,8 +86,8 @@ namespace Memories.Tests.PlayMode
                 Assert.IsTrue(Physics.Raycast(entrance.transform.TransformPoint(new Vector3(0.5f, 1, 1)),
                     -entrance.transform.forward, out var entranceHit, 2f), "Closed entrance must block the player.");
                 Assert.IsTrue(entranceHit.collider.transform.IsChildOf(entrance.transform));
-                Assert.IsNull(entrance.GetComponent<Interactable>(), "The player must not be able to reopen the entrance.");
-                Assert.IsNull(door.GetComponent<Interactable>());
+                Assert.IsNull(entrance.GetComponent<ReactionInteractable>(), "The player must not be able to reopen the entrance.");
+                Assert.IsNull(door.GetComponent<ReactionInteractable>());
                 Assert.IsTrue(SceneManager.GetSceneByPath(TestLocationLauncher.BackyardPath).isLoaded);
                 Assert.IsTrue(SceneManager.GetSceneByPath(TestLocationLauncher.HousePath).isLoaded, "House must remain in place while looking through the open door.");
                 var playerScene = motor.gameObject.scene;

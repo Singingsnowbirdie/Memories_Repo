@@ -50,7 +50,7 @@ namespace Memories.Gameplay.Reactions
             foreach (var action in actions)
             {
                 if (action.Kind == ReactionKind.ObjectInteractivity && !TryGetInteractable(action, out _))
-                { Debug.LogWarning("На выбранном объекте нужен компонент Interactable: " + action.ObjectKey, owner); return false; }
+                { Debug.LogWarning("На выбранном объекте нужен компонент ReactionInteractable: " + action.ObjectKey, owner); return false; }
                 if (action.Kind == ReactionKind.StoryText && texts == null) return false;
                 if (action.Kind == ReactionKind.Memory && memories == null) return false;
                 if (action.Kind == ReactionKind.Memory && action.FirstCompletionText != null && texts == null) return false;
@@ -72,13 +72,13 @@ namespace Memories.Gameplay.Reactions
             return CustomReactionBinding.TryResolve(customReactions, action.ObjectKey, out reaction);
         }
 
-        private bool TryGetInteractable(ReactionNode action, out Interactable interactable)
+        private bool TryGetInteractable(ReactionNode action, out ReactionInteractable interactable)
         {
             interactable = null;
             if (string.IsNullOrEmpty(action.ObjectKey))
-                interactable = owner as Interactable;
+                interactable = owner as ReactionInteractable;
             else if (ReactionObjectBinding.TryResolve(objectBindings, action.ObjectKey, out var target))
-                interactable = target.GetComponent<Interactable>();
+                interactable = target.GetComponent<ReactionInteractable>();
             return interactable != null;
         }
 

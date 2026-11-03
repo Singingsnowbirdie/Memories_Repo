@@ -6,12 +6,6 @@ using UnityEngine;
 
 namespace Memories.Tests.EditMode
 {
-    public sealed class PersistentInteractionStub : Interactable
-    {
-        public override string Prompt => "Test";
-        public override void Interact() { }
-    }
-
     public sealed class ObjectStatePersistenceTests
     {
         [Test]
@@ -22,7 +16,7 @@ namespace Memories.Tests.EditMode
             GameObject second = null;
             try
             {
-                var interaction = first.AddComponent<PersistentInteractionStub>();
+                var interaction = first.AddComponent<ReactionInteractable>();
                 using (var store = new ObjectStateStore(saveKey: key))
                 {
                     store.Register(first, "scene-object-1");
@@ -32,7 +26,7 @@ namespace Memories.Tests.EditMode
                 }
                 UnityEngine.Object.DestroyImmediate(first);
                 second = new GameObject("Renamed object");
-                var restored = second.AddComponent<PersistentInteractionStub>();
+                var restored = second.AddComponent<ReactionInteractable>();
                 using (var store = new ObjectStateStore(saveKey: key))
                 {
                     store.Register(second, "scene-object-1");

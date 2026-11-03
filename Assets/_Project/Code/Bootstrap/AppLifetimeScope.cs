@@ -21,10 +21,12 @@ namespace Memories.Bootstrap
 #endif
 
         public bool StartAutomatically { get => startAutomatically; set => startAutomatically = value; }
+        internal bool IsTesterSession { get; set; }
         public bool PersistProgress
         {
             get
             {
+                if (IsTesterSession) return false;
 #if UNITY_EDITOR
                 return !UseOpenLocationForEditorPlay;
 #else
@@ -46,6 +48,7 @@ namespace Memories.Bootstrap
             builder.RegisterInstance(playerMovement);
             builder.Register<PlayerInputService>(Lifetime.Singleton).As<IPlayerInput>().As<IInteractionInput>().As<IPauseInput>();
             builder.Register<GameSession>(Lifetime.Singleton).AsSelf().AsImplementedInterfaces();
+            builder.RegisterBuildCallback(container => gameObject.AddComponent<TesterCheckpointUI>().Initialize(container.Resolve<GameSession>()));
             builder.RegisterEntryPoint<HouseCheckpointEntryPoint>();
             if (startAutomatically)
                 builder.RegisterEntryPoint<BootstrapEntryPoint>().WithParameter(

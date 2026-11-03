@@ -14,7 +14,7 @@ namespace Memories.Gameplay.Reactions
         readonly List<(Renderer renderer, Material[] materials, ShadowCastingMode shadows)> renderers = new();
         readonly List<Material> temporary = new();
         readonly List<(Collider collider, bool enabled)> colliders = new();
-        readonly List<(Interactable item, bool enabled)> interactions = new();
+        readonly List<(ReactionInteractable item, bool enabled)> interactions = new();
         bool restored;
 
         public static void Play(GameObject target, Shader shader, float duration, float delay)
@@ -47,7 +47,7 @@ namespace Memories.Gameplay.Reactions
                 renderer.shadowCastingMode = ShadowCastingMode.Off;
             }
             foreach (var c in GetComponentsInChildren<Collider>(true)) { colliders.Add((c, c.enabled)); c.enabled = false; }
-            foreach (var item in GetComponentsInChildren<Interactable>(true))
+            foreach (var item in GetComponentsInChildren<ReactionInteractable>(true))
             { interactions.Add((item, item.enabled)); item.enabled = false; }
         }
 

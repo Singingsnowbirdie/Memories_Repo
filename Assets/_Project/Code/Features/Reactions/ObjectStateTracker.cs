@@ -17,7 +17,7 @@ namespace Memories.Gameplay.Reactions
         }
         private ObjectStateStore store;
         private string id, previous;
-        private Interactable interactable;
+        private ReactionInteractable interactable;
         private readonly Dictionary<string, IObjectStateParticipant> participants = new Dictionary<string, IObjectStateParticipant>();
         private bool restoring;
         private bool previousActive, previousInteraction;
@@ -27,7 +27,7 @@ namespace Memories.Gameplay.Reactions
             this.store = store;
             this.id = id;
             hideFlags = HideFlags.HideInInspector;
-            interactable = GetComponent<Interactable>();
+            interactable = GetComponent<ReactionInteractable>();
             participants.Clear();
             foreach (var component in GetComponents<MonoBehaviour>())
                 if (component is IObjectStateParticipant participant) participants.Add(participant.StateKey, participant);

@@ -37,6 +37,24 @@ namespace Memories.Gameplay
             public float Delay;
         }
         private readonly List<Lamp> lamps = new List<Lamp>();
+        private readonly List<HouseLights> houses = new List<HouseLights>();
+        private GhostCosmosSky sky;
+
+        public void RegisterHouse(HouseLights house)
+        {
+            if (houses.Contains(house)) return;
+            houses.Add(house);
+            house.Prepare(FadeDuration);
+            if (IsFullyLit) house.Execute();
+        }
+
+        public void RegisterSky(GhostCosmosSky target)
+        {
+            if (sky == target) return;
+            sky = target;
+            sky.Prepare();
+            if (IsFullyLit) sky.Execute();
+        }
         private MaterialPropertyBlock properties;
         private float elapsed;
         public bool IsFullyLit { get; private set; }
@@ -116,6 +134,8 @@ namespace Memories.Gameplay
             elapsed = 0;
             SkyBrightness = 0;
             IsFullyLit = false;
+            foreach (var house in houses) if (house != null) house.Prepare(FadeDuration);
+            if (sky != null) sky.Prepare();
         }
 
         private void Update()
@@ -135,7 +155,13 @@ namespace Memories.Gameplay
                 float progress = Mathf.Clamp01((elapsed - startDelay - light.Delay) / FadeDuration);
                 Apply(light, Mathf.SmoothStep(0, 1, progress));
             }
-            IsFullyLit = complete;
+            if (complete && !IsFullyLit)
+            {
+                IsFullyLit = true;
+                // Explicit continuation of this animation sequence, not observers of progress.
+                foreach (var house in houses) if (house != null) house.Execute();
+                if (sky != null) sky.Execute();
+            }
             foreach (var headlight in headlights)
             {
                 float progress = Mathf.Clamp01((elapsed - startDelay - headlight.Delay) / FadeDuration);
@@ -181,6 +207,12 @@ namespace Memories.Gameplay
             foreach (var lamp in lamps) Apply(lamp, 0);
             foreach (var light in additional) Apply(light, 0);
             foreach (var headlight in headlights) Apply(headlight, 0);
+        }
+
+        private void OnDestroy()
+        {
+            foreach (var house in houses) if (house != null) house.ShowImmediately();
+            if (sky != null) sky.ShowImmediately();
         }
     }
 }

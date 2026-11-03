@@ -8,18 +8,24 @@ namespace Memories.Gameplay.Interaction
 {
     [DisallowMultipleComponent]
     [AddComponentMenu("Memories/Interaction/Reaction Interactable")]
-    public sealed class ReactionInteractable : Interactable
+    public sealed class ReactionInteractable : MonoBehaviour
     {
         [SerializeField] private ReactionGraph graph;
         [SerializeField] private ReactionGraph initializationGraph;
-        private WomanTelevisionState televisionState;
         [SerializeField] private string prompt = "Взаимодействовать";
         [SerializeField, InspectorName("Объекты графа")] private ReactionObjectBinding[] objectBindings = new ReactionObjectBinding[0];
         [SerializeField, InspectorName("Кастомные реакции")] private CustomReactionBinding[] customReactions = new CustomReactionBinding[0];
+        private bool interactionEnabled = true;
+        public bool InteractionEnabled => interactionEnabled;
+        public void SetInteractionEnabled(bool value)
+        {
+            interactionEnabled = value;
+            GetComponent<ObjectStateTracker>()?.Capture();
+        }
         private ReactionRunner runner;
         private ReactionRunner initializationRunner;
-        public override string Prompt => prompt;
-        public override bool CanInteract => base.CanInteract && runner != null && runner.CanRun(graph);
+        public string Prompt => prompt;
+        public bool CanInteract => isActiveAndEnabled && interactionEnabled && runner != null && runner.CanRun(graph);
         public bool IsRunning => runner != null && runner.IsRunning;
 
         public void Configure(ReactionGraph reactionGraph, string interactionPrompt)
@@ -30,9 +36,7 @@ namespace Memories.Gameplay.Interaction
 
         public void Initialize(StoryTextPresenter texts, MemoryPresenter memories, ILocationTransition locations = null, QuestInventory inventory = null, CustomVariableStore variables = null)
         {
-            televisionState = GetComponent<WomanTelevisionState>();
-            if (televisionState != null) televisionState.Initialize(variables, objectBindings);
-            SetInteractionEnabled(televisionState == null || !televisionState.IsTelevisionOn);
+            SetInteractionEnabled(true);
             runner?.Dispose();
             initializationRunner?.Dispose();
             runner = new ReactionRunner(texts, memories, this, locations, inventory, variables, objectBindings, customReactions);
@@ -60,7 +64,7 @@ namespace Memories.Gameplay.Interaction
                 }
             }
         }
-        public override void Interact()
+        public void Interact()
         {
             if (CanInteract) runner.TryRun(graph);
         }

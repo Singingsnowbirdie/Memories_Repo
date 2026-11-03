@@ -15,7 +15,7 @@ namespace Memories.Gameplay.Interaction
             playerRoot = controller != null ? controller.transform : null;
         }
 
-        public Interactable FindTarget()
+        public ReactionInteractable FindTarget()
         {
             if (camera == null || !camera.isActiveAndEnabled)
                 return null;
@@ -24,7 +24,7 @@ namespace Memories.Gameplay.Interaction
             ray.origin = camera.transform.position;
             if (!FindNearestHit(ray, out var hit))
                 return null;
-            var target = hit.collider.GetComponentInParent<Interactable>();
+            var target = hit.collider.GetComponentInParent<ReactionInteractable>();
             bool available = target != null && target.CanInteract;
             return available ? target : null;
         }

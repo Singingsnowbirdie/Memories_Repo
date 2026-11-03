@@ -8143,6 +8143,56 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4052485905831964581, guid: 8cf2966042f7c2f44ac97cda7cc59eff, type: 3}
   m_PrefabInstance: {fileID: 737098506}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &342514627
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 342514628}
+  - component: {fileID: 342514629}
+  m_Layer: 0
+  m_Name: "\u0413\u0430\u0440\u0430\u0436 \u043F\u043E\u0441\u043B\u0435 \u0432\u0442\u043E\u0440\u043E\u0433\u043E
+    \u0432\u043E\u0441\u043F\u043E\u043C\u0438\u043D\u0430\u043D\u0438\u044F"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &342514628
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 342514627}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 12.43, y: 0, z: 7}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 911931653}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &342514629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 342514627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72cd772ed9b63664e8c785c755321c86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.BackyardGarageAttachment
+  fenceSections:
+  - {fileID: 1697630376}
+  - {fileID: 1731664384}
+  - {fileID: 1152939405}
+  - {fileID: 1374426130}
 --- !u!1 &343939281
 GameObject:
   m_ObjectHideFlags: 0
@@ -11452,7 +11502,8 @@ GameObject:
   - component: {fileID: 470461208}
   - component: {fileID: 470461207}
   - component: {fileID: 470461206}
-  - component: {fileID: 470461209}
+  - component: {fileID: 470461210}
+  - component: {fileID: 470461211}
   m_Layer: 0
   m_Name: "\u0421\u0430\u0434\u043E\u0432\u0430\u044F \u0434\u043E\u0440\u043E\u0436\u043A\u0430"
   m_TagString: Untagged
@@ -11553,7 +11604,7 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 470461204}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &470461209
+--- !u!114 &470461210
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -11562,20 +11613,42 @@ MonoBehaviour:
   m_GameObject: {fileID: 470461204}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 508c2726550fc6942a903857718351bc, type: 3}
+  m_Script: {fileID: 11500000, guid: 53b337022c48f8648bef71247b751575, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Interaction.BaseballPlayArea
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.RefreshBaseballAreaReaction
   variableBank: {fileID: 11400000, guid: 83af6fcb806c087438f339fcbcc76145, type: 2}
   bat: {fileID: 11400000, guid: 45b3a15aab17b7846a70e34d18147536, type: 2}
   surface: {fileID: 470461206}
   readyMaterial: {fileID: 2100000, guid: ad837a550ba4dcc48ba1e0c135ec2891, type: 2}
-  onInteract:
-    m_PersistentCalls:
-      m_Calls: []
-  reactionGraph: {fileID: 11400000, guid: 0797e320a6086de4cab6e8f496fd10dd, type: 2}
   memoryId: backyard_baseball_second_memory
   intactWindow: {fileID: 1948161214}
   brokenWindow: {fileID: 2025464472}
+--- !u!114 &470461211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 470461204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ba68190f9594ee8b2fc0603419ed015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Interaction.ReactionInteractable
+  graph: {fileID: 11400000, guid: 0797e320a6086de4cab6e8f496fd10dd, type: 2}
+  initializationGraph: {fileID: 0}
+  prompt: "\u0418\u0433\u0440\u0430\u0442\u044C \u0432 \u0431\u0435\u0439\u0441\u0431\u043E\u043B"
+  objectBindings:
+  - key: "\u0426\u0435\u043B\u043E\u0435 \u043E\u043A\u043D\u043E"
+    target: {fileID: 1948161214}
+  - key: "\u0420\u0430\u0437\u0431\u0438\u0442\u043E\u0435 \u043E\u043A\u043D\u043E"
+    target: {fileID: 2025464472}
+  customReactions:
+  - key: "\u041F\u043E\u0434\u0433\u0440\u0443\u0437\u0438\u0442\u044C \u0433\u0430\u0440\u0430\u0436"
+    reaction: {fileID: 342514629}
+  - key: "\u041E\u0431\u043D\u043E\u0432\u0438\u0442\u044C \u0433\u043E\u0442\u043E\u0432\u043D\u043E\u0441\u0442\u044C
+      \u0431\u0435\u0439\u0441\u0431\u043E\u043B\u044C\u043D\u043E\u0439 \u043F\u043B\u043E\u0449\u0430\u0434\u043A\u0438"
+    reaction: {fileID: 470461210}
 --- !u!1 &470860371
 GameObject:
   m_ObjectHideFlags: 0
@@ -22598,6 +22671,7 @@ Transform:
   - {fileID: 1404498534}
   - {fileID: 817436392}
   - {fileID: 1762357940}
+  - {fileID: 342514628}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &913229672
@@ -28954,6 +29028,11 @@ PrefabInstance:
 --- !u!4 &1152939404 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 866424906310939082, guid: 51a8722125d309c46be23bb5dbcfffc9, type: 3}
+  m_PrefabInstance: {fileID: 1152939403}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1152939405 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 831433417242838269, guid: 51a8722125d309c46be23bb5dbcfffc9, type: 3}
   m_PrefabInstance: {fileID: 1152939403}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1156147177
@@ -35417,6 +35496,11 @@ PrefabInstance:
 --- !u!4 &1374426129 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 866424906310939082, guid: 51a8722125d309c46be23bb5dbcfffc9, type: 3}
+  m_PrefabInstance: {fileID: 1374426128}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1374426130 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 831433417242838269, guid: 51a8722125d309c46be23bb5dbcfffc9, type: 3}
   m_PrefabInstance: {fileID: 1374426128}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1376482281
@@ -43155,6 +43239,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 866424906310939082, guid: 51a8722125d309c46be23bb5dbcfffc9, type: 3}
   m_PrefabInstance: {fileID: 1697630374}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1697630376 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 831433417242838269, guid: 51a8722125d309c46be23bb5dbcfffc9, type: 3}
+  m_PrefabInstance: {fileID: 1697630374}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1716660239
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -43500,6 +43589,11 @@ PrefabInstance:
 --- !u!4 &1731664383 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 866424906310939082, guid: 51a8722125d309c46be23bb5dbcfffc9, type: 3}
+  m_PrefabInstance: {fileID: 1731664382}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1731664384 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 831433417242838269, guid: 51a8722125d309c46be23bb5dbcfffc9, type: 3}
   m_PrefabInstance: {fileID: 1731664382}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1732633401
@@ -45788,7 +45882,10 @@ MonoBehaviour:
   objectBindings:
   - key: "\u041F\u0440\u0435\u0434\u043C\u0435\u0442"
     target: {fileID: 1837431689}
-  customReactions: []
+  customReactions:
+  - key: "\u041E\u0431\u043D\u043E\u0432\u0438\u0442\u044C \u0433\u043E\u0442\u043E\u0432\u043D\u043E\u0441\u0442\u044C
+      \u0431\u0435\u0439\u0441\u0431\u043E\u043B\u044C\u043D\u043E\u0439 \u043F\u043B\u043E\u0449\u0430\u0434\u043A\u0438"
+    reaction: {fileID: 470461210}
 --- !u!1001 &1839798042
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -46048,12 +46145,21 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 751524932186828659, guid: 97f7e19c1d174162aae3882511328c05, type: 3}
+      propertyPath: customReactions.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 751524932186828659, guid: 97f7e19c1d174162aae3882511328c05, type: 3}
       propertyPath: objectBindings.Array.data[0].key
       value: ball_in_hand
       objectReference: {fileID: 0}
     - target: {fileID: 751524932186828659, guid: 97f7e19c1d174162aae3882511328c05, type: 3}
       propertyPath: objectBindings.Array.data[1].key
       value: cap_on_head
+      objectReference: {fileID: 0}
+    - target: {fileID: 751524932186828659, guid: 97f7e19c1d174162aae3882511328c05, type: 3}
+      propertyPath: customReactions.Array.data[0].key
+      value: "\u041E\u0431\u043D\u043E\u0432\u0438\u0442\u044C \u0433\u043E\u0442\u043E\u0432\u043D\u043E\u0441\u0442\u044C
+        \u0431\u0435\u0439\u0441\u0431\u043E\u043B\u044C\u043D\u043E\u0439 \u043F\u043B\u043E\u0449\u0430\u0434\u043A\u0438"
       objectReference: {fileID: 0}
     - target: {fileID: 751524932186828659, guid: 97f7e19c1d174162aae3882511328c05, type: 3}
       propertyPath: objectBindings.Array.data[0].target
@@ -46063,6 +46169,10 @@ PrefabInstance:
       propertyPath: objectBindings.Array.data[1].target
       value: 
       objectReference: {fileID: 630401638}
+    - target: {fileID: 751524932186828659, guid: 97f7e19c1d174162aae3882511328c05, type: 3}
+      propertyPath: customReactions.Array.data[0].reaction
+      value: 
+      objectReference: {fileID: 470461210}
     - target: {fileID: 3305581529017779456, guid: 97f7e19c1d174162aae3882511328c05, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.026605416

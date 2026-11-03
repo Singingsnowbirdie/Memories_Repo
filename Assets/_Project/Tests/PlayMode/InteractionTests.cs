@@ -1,5 +1,7 @@
 using System.Collections;
 using Memories.Contracts;
+using Memories.Gameplay.Reactions;
+using System.Reflection;
 using Memories.Gameplay.Interaction;
 using NUnit.Framework;
 using UnityEngine;
@@ -7,17 +9,25 @@ using UnityEngine.TestTools;
 
 namespace Memories.Tests.PlayMode
 {
-    public sealed class InteractionTargetStub : Interactable
+    public sealed class ToggleInteractionTestReaction : CustomReaction
     {
         public bool Activated { get; private set; }
-        public override string Prompt => Activated ? "Деактивировать" : "Активировать";
-        public override void Interact() { if (CanInteract) Activated = !Activated; }
+        public ReactionGraph Graph;
+        public override void Execute()
+        {
+            Activated = !Activated;
+            GetComponent<ReactionInteractable>().Configure(Graph, Activated ? "Деактивировать" : "Активировать");
+        }
     }
     public sealed class InteractionTests
     {
         private GameObject root;
         private Camera camera;
-        private InteractionTargetStub target;
+        private ReactionInteractable target;
+        private ToggleInteractionTestReaction reaction;
+        private ReactionGraph graph;
+        private static void Set(object owner, string field, object value) =>
+            owner.GetType().GetField(field, BindingFlags.Instance | BindingFlags.NonPublic).SetValue(owner, value);
         private InteractionProbe probe;
         private sealed class Input : IInteractionInput
         {
@@ -43,7 +53,22 @@ namespace Memories.Tests.PlayMode
             var item = GameObject.CreatePrimitive(PrimitiveType.Cube);
             item.transform.SetParent(root.transform, false);
             item.transform.localPosition = Vector3.forward * 2;
-            target = item.AddComponent<InteractionTargetStub>();
+            target = item.AddComponent<ReactionInteractable>();
+            reaction = item.AddComponent<ToggleInteractionTestReaction>();
+            graph = ScriptableObject.CreateInstance<ReactionGraph>();
+            var start = graph.AddNode<ReactionStartNode>();
+            var action = graph.AddNode<ReactionNode>();
+            var end = graph.AddNode<ReactionEndNode>();
+            Set(graph, "objectKeys", new System.Collections.Generic.List<string> { "toggle" });
+            Set(start, "runOnce", false);
+            Set(action, "kind", ReactionKind.CustomReaction);
+            Set(action, "objectKey", "toggle");
+            start.GetOutputPort("next").Connect(action.GetInputPort("previous"));
+            action.GetOutputPort("next").Connect(end.GetInputPort("previous"));
+            reaction.Graph = graph;
+            Set(target, "customReactions", new[] { new CustomReactionBinding("toggle", reaction) });
+            target.Configure(graph, "Активировать");
+            target.Initialize(null, null);
             probe = new InteractionProbe(camera);
             Physics.SyncTransforms();
         }
@@ -53,6 +78,8 @@ namespace Memories.Tests.PlayMode
         {
             Object.Destroy(root);
             yield return null;
+            foreach (var node in graph.nodes) Object.DestroyImmediate(node);
+            Object.DestroyImmediate(graph);
         }
 
         [Test]
@@ -120,19 +147,19 @@ namespace Memories.Tests.PlayMode
             Assert.AreEqual("[E] Активировать", view.Prompt);
             input.InteractPressed = true;
             presenter.Tick();
-            Assert.IsTrue(target.Activated);
+            Assert.IsTrue(reaction.Activated);
             Assert.AreEqual("[E] Деактивировать", view.Prompt);
             input.InteractPressed = false;
             presenter.Tick();
-            Assert.IsTrue(target.Activated);
+            Assert.IsTrue(reaction.Activated);
             input.InteractionEnabled = false;
             input.InteractPressed = true;
             presenter.Tick();
             Assert.IsFalse(view.Visible);
-            Assert.IsTrue(target.Activated);
+            Assert.IsTrue(reaction.Activated);
             input.InteractionEnabled = true;
             presenter.Tick();
-            Assert.IsFalse(target.Activated);
+            Assert.IsFalse(reaction.Activated);
             Object.DestroyImmediate(target.gameObject);
             presenter.Tick();
             Assert.IsFalse(view.Available);

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Memories.Gameplay.UI
 {
-    public enum GameplayMode { Playing, Paused, Reading }
+    public enum GameplayMode { Playing, Paused, Reading, Tester }
 
     public sealed class GameplayModeState
     {

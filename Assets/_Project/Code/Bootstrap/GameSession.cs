@@ -22,6 +22,9 @@ namespace Memories.Bootstrap
         private readonly List<Scene> additionalScenes = new List<Scene>();
         private bool busy;
         private bool disposed;
+        private TesterCheckpoint? testerCheckpoint;
+        private TesterCheckpointCatalog checkpointCatalog;
+        private bool jumpingToCheckpoint;
         private readonly LocationProgressStore progress = new LocationProgressStore();
         private bool trackHouseCheckpoint;
         private Transform houseEntrance;
@@ -84,7 +87,55 @@ namespace Memories.Bootstrap
         public LocationLifetimeScope LocationScope { get; private set; }
         public Scene CurrentLocationScene => locationScene;
         public bool IsRunning => LocationScope != null;
-        public bool IsTransitioning => busy;
+        public bool IsTransitioning => busy || jumpingToCheckpoint;
+
+        public async UniTask JumpToCheckpointAsync(TesterCheckpoint checkpoint)
+        {
+            if (disposed || busy || jumpingToCheckpoint) throw new InvalidOperationException("Дождитесь завершения загрузки.");
+            if (!Enum.IsDefined(typeof(TesterCheckpoint), checkpoint)) throw new ArgumentOutOfRangeException(nameof(checkpoint));
+            var catalog = Resources.Load<TesterCheckpointCatalog>("TesterCheckpoints");
+            if (catalog == null) throw new InvalidOperationException("Не найдены настройки контрольных точек.");
+            jumpingToCheckpoint = true;
+            try
+            {
+                if (LocationScope != null)
+                {
+                    LocationScope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>().Close();
+                    LocationScope.Container.Resolve<Memories.Gameplay.UI.StoryTextPresenter>().Stop();
+                    LocationScope.Container.Resolve<Memories.Gameplay.UI.PausePresenter>().Resume();
+                    LocationScope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>().Exit(Memories.Gameplay.UI.GameplayMode.Tester);
+                }
+                busy = true;
+                try { await CleanupAsync(); }
+                finally { busy = false; }
+                applicationScope.IsTesterSession = true;
+                trackHouseCheckpoint = false;
+                testerCheckpoint = checkpoint;
+                checkpointCatalog = catalog;
+                await StartAsync(checkpoint == TesterCheckpoint.BackyardMemoryComplete ? TestLocationLauncher.BackyardPath : TestLocationLauncher.HousePath);
+                if (checkpoint == TesterCheckpoint.HouseMemoryComplete)
+                {
+                    var door = FindComponent<OpenCourtyardDoorReaction>(locationScene);
+                    await UniTask.WaitUntil(() => door != null && door.IsOpen, cancellationToken: shutdown.Token).Timeout(TimeSpan.FromSeconds(30));
+                }
+                else if (checkpoint == TesterCheckpoint.BackyardMemoryComplete)
+                {
+                    var garage = FindComponent<BackyardGarageAttachment>(locationScene);
+                    await UniTask.WaitUntil(() => garage != null && garage.IsOpen, cancellationToken: shutdown.Token).Timeout(TimeSpan.FromSeconds(30));
+                }
+            }
+            finally { jumpingToCheckpoint = false; }
+        }
+
+        private static T FindComponent<T>(Scene scene) where T : Component
+        {
+            foreach (var root in scene.GetRootGameObjects())
+            {
+                var component = root.GetComponentInChildren<T>(true);
+                if (component != null) return component;
+            }
+            return null;
+        }
 
         public bool RestartGame()
         {
@@ -141,7 +192,7 @@ namespace Memories.Bootstrap
             cancellationToken.ThrowIfCancellationRequested();
             bool useOpenScene = false;
 #if UNITY_EDITOR
-            useOpenScene = applicationScope.UseOpenLocationForEditorPlay && SceneManager.GetSceneByPath(scenePath).isLoaded;
+            useOpenScene = !testerCheckpoint.HasValue && applicationScope.UseOpenLocationForEditorPlay && SceneManager.GetSceneByPath(scenePath).isLoaded;
 #endif
             if (string.IsNullOrWhiteSpace(scenePath) || (!useOpenScene && !Application.CanStreamedLevelBeLoaded(scenePath)))
                 throw new ArgumentException("Location must be enabled in Build Settings: " + scenePath, nameof(scenePath));
@@ -154,13 +205,16 @@ namespace Memories.Bootstrap
             {
                 Memories.Gameplay.UI.StoryTextView.BeginSession(useOpenScene);
                 SessionScope = applicationScope.CreateChild<SessionLifetimeScope>(childScopeName: "SessionLifetimeScope");
+                if (testerCheckpoint.HasValue)
+                    checkpointCatalog.Seed(testerCheckpoint.Value, SessionScope.Container.Resolve<CustomVariableStore>(),
+                        SessionScope.Container.Resolve<QuestInventory>(), SessionScope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
                 // Unity scene loading cannot be interrupted safely. Finish the operation,
                 // then honour cancellation and unload the scene we own.
                 if (!useOpenScene) await SceneManager.LoadSceneAsync(scenePath, LoadSceneMode.Additive);
                 locationScene = SceneManager.GetSceneByPath(scenePath);
                 cancellation.Token.ThrowIfCancellationRequested();
 
-                foreach (var additionalPath in resumeHouse ? Array.Empty<string>() : applicationScope.AdditionalLocationScenes)
+                foreach (var additionalPath in resumeHouse || testerCheckpoint.HasValue ? Array.Empty<string>() : applicationScope.AdditionalLocationScenes)
                 {
                     if (string.IsNullOrWhiteSpace(additionalPath) || !Application.CanStreamedLevelBeLoaded(additionalPath))
                         throw new ArgumentException("Additional scene must be enabled in Build Settings: " + additionalPath);
@@ -171,8 +225,15 @@ namespace Memories.Bootstrap
                     cancellation.Token.ThrowIfCancellationRequested();
                 }
 
-                applicationScope.TestLauncher?.Prepare(locationScene);
-                if (resumeHouse) PrepareHouseStart(locationScene);
+                if (!testerCheckpoint.HasValue) applicationScope.TestLauncher?.Prepare(locationScene);
+                if (resumeHouse || (testerCheckpoint.HasValue && scenePath == TestLocationLauncher.HousePath)) PrepareHouseStart(locationScene);
+                if (testerCheckpoint == TesterCheckpoint.HouseMemoryComplete)
+                {
+                    var spawn = FindMarker(locationScene, "PlayerSpawn");
+                    spawn.SetPositionAndRotation(checkpointCatalog.houseMemoryPosition, Quaternion.Euler(0, checkpointCatalog.houseMemoryYaw, 0));
+                }
+                else if (testerCheckpoint == TesterCheckpoint.BackyardMemoryComplete)
+                    FindMarker(locationScene, "PlayerSpawn").SetPositionAndRotation(new Vector3(0, .05f, 17), Quaternion.identity);
                 var root = new GameObject("Persistent gameplay");
                 root.SetActive(false);
                 root.transform.SetParent(SessionScope.transform, false);
@@ -268,9 +329,8 @@ namespace Memories.Bootstrap
         private void BindDoors(Scene scene, LocationLifetimeScope scope)
         {
             foreach (var root in scene.GetRootGameObjects())
-                foreach (var area in root.GetComponentsInChildren<BaseballPlayArea>(true))
-                    area.Initialize(scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<CustomVariableStore>(),
-                        scope.Container.Resolve<Memories.Gameplay.UI.StoryTextPresenter>(), scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>());
+                foreach (var attachment in root.GetComponentsInChildren<BackyardGarageAttachment>(true))
+                    attachment.Initialize(scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>(), LoadBackyardGarageAsync);
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var photo in root.GetComponentsInChildren<RevealPhotoReaction>(true))
                     photo.Restore(scope.Container.Resolve<CustomVariableStore>(), scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>(),
@@ -306,6 +366,11 @@ namespace Memories.Bootstrap
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var visibility in root.GetComponentsInChildren<SavedObjectVisibility>(true))
                     visibility.Restore(scope.Container.Resolve<CustomVariableStore>());
+            if (testerCheckpoint.HasValue) checkpointCatalog.ApplyScene(testerCheckpoint.Value, scene);
+            foreach (var root in scene.GetRootGameObjects())
+                foreach (var reaction in root.GetComponentsInChildren<RefreshBaseballAreaReaction>(true))
+                    reaction.Initialize(scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<CustomVariableStore>(),
+                        scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
         }
 
         private static Transform FindMarker(Scene scene, string name)
@@ -333,6 +398,51 @@ namespace Memories.Bootstrap
                 foreach (var camera in root.GetComponentsInChildren<Camera>(true)) camera.enabled = false;
                 foreach (var listener in root.GetComponentsInChildren<AudioListener>(true)) listener.enabled = false;
             }
+        }
+
+        private async UniTask LoadBackyardGarageAsync(BackyardGarageAttachment attachment)
+        {
+            using var cancellation = CancellationTokenSource.CreateLinkedTokenSource(application.Token,
+                shutdown.Token, attachment.GetCancellationTokenOnDestroy());
+            // A restored yard can still be attached to the house until the player enters it.
+            // Wait for yard ownership so that completing that entry cannot unload the garage.
+            await UniTask.WaitUntil(() => disposed || (!busy && attachment != null &&
+                locationScene == attachment.gameObject.scene), cancellationToken: cancellation.Token);
+            cancellation.Token.ThrowIfCancellationRequested();
+            if (disposed || attachment == null) throw new OperationCanceledException();
+            const string path = TestLocationLauncher.GaragePath;
+            if (!Application.CanStreamedLevelBeLoaded(path))
+                throw new InvalidOperationException("Garage must be enabled in Build Settings.");
+            if (SceneManager.GetSceneByPath(path).isLoaded)
+            {
+                if (additionalScenes.Contains(SceneManager.GetSceneByPath(path))) return;
+                throw new InvalidOperationException("Garage is already loaded outside this session.");
+            }
+            busy = true;
+            Scene garage = default;
+            try
+            {
+                await SceneManager.LoadSceneAsync(path, LoadSceneMode.Additive);
+                garage = SceneManager.GetSceneByPath(path);
+                cancellation.Token.ThrowIfCancellationRequested();
+                var entrance = FindMarker(garage, "Вход из двора");
+                var hinge = FindMarker(garage, "Петля боковой двери");
+                if (entrance == null || hinge == null)
+                    throw new InvalidOperationException("Garage side entrance is not configured.");
+                AlignScene(garage, entrance, attachment.transform.position, attachment.transform.rotation);
+                DisableLocationCameras(garage);
+                BindDoors(garage, LocationScope);
+                hinge.localRotation *= Quaternion.Euler(0, 100, 0);
+                Physics.SyncTransforms();
+                additionalScenes.Add(garage);
+                // Keep Backyard active and keep the Bootstrap player in place.
+            }
+            catch
+            {
+                if (garage.IsValid() && garage.isLoaded) await SceneManager.UnloadSceneAsync(garage);
+                throw;
+            }
+            finally { busy = false; }
         }
 
         private async UniTask<Scene> LoadConnectedSceneAsync(string path, OpenCourtyardDoorReaction door)
