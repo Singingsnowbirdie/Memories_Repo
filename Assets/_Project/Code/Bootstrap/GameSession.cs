@@ -203,7 +203,8 @@ namespace Memories.Bootstrap
             using var cancellation = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, application.Token, shutdown.Token);
             try
             {
-                Memories.Gameplay.UI.StoryTextView.BeginSession(useOpenScene);
+                // Контрольные точки обходят вступление: прицел доступен сразу, без ожидания сюжетного текста.
+                Memories.Gameplay.UI.StoryTextView.BeginSession(useOpenScene || testerCheckpoint.HasValue);
                 SessionScope = applicationScope.CreateChild<SessionLifetimeScope>(childScopeName: "SessionLifetimeScope");
                 if (testerCheckpoint.HasValue)
                     checkpointCatalog.Seed(testerCheckpoint.Value, SessionScope.Container.Resolve<CustomVariableStore>(),

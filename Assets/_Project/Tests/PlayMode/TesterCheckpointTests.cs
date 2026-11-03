@@ -32,6 +32,11 @@ namespace Memories.Tests.PlayMode
     {
      await session.JumpToCheckpointAsync(checkpoint);await UniTask.DelayFrame(3);
      Assert.IsFalse(session.IsTransitioning);Assert.AreEqual(1,Time.timeScale);
+     Assert.IsTrue(StoryTextView.ReticleUnlocked, "Checkpoint must unlock the reticle without waiting for story text.");
+     var hud = Object.FindFirstObjectByType<InteractionHud>();
+     Assert.IsNotNull(hud);
+     Assert.IsTrue(hud.GetComponent<Canvas>().enabled, "Checkpoint must restore the interaction HUD.");
+     Assert.IsTrue(hud.transform.Find("Reticle").GetComponent<UnityEngine.UI.Text>().enabled);
      var scene=session.CurrentLocationScene;var memories=session.SessionScope.Container.Resolve<MemoryCollection>();
      if(checkpoint==TesterCheckpoint.HouseEntrance)
      {
