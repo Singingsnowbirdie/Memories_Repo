@@ -86,9 +86,13 @@ namespace Memories.Tests.PlayMode
      }
      else
      {
-      Assert.IsTrue(Active(scene,"Бен в позе питчера"));
+      Assert.IsFalse(Active(scene,"Бен в позе питчера"));
+      Assert.IsTrue(Active(scene,"Бен под деревом"));
+      var seated = TesterCheckpointCatalog.Find(scene,"Бен под деревом");
+      Assert.IsNotNull(seated.GetComponent<Animator>().runtimeAnimatorController);
+      foreach (string name in new[]{"Кепка на голове Бена","Бита рядом с Беном","Мяч рядом с Беном"})
+       Assert.IsTrue(seated.GetComponentsInChildren<Transform>(true).Single(t=>t.name==name).gameObject.activeInHierarchy);
       Assert.IsFalse(Active(scene,"Бен в айдл позе"));
-      foreach(var t in TesterCheckpointCatalog.Find(scene,"Бен в позе питчера").GetComponentsInChildren<Transform>(true).Where(t=>t.name=="Кепка на голове Бена"||t.name=="Мяч в руке Бена"))Assert.IsTrue(t.gameObject.activeInHierarchy);
       Assert.AreEqual(TestLocationLauncher.BackyardPath,scene.path);Assert.IsTrue(Component<BackyardGarageAttachment>(scene).IsOpen);
       var finishedEntry = Component<BackyardEntranceReaction>(scene);
       Assert.IsFalse(finishedEntry.IsRunning);

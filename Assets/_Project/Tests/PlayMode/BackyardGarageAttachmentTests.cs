@@ -41,6 +41,11 @@ namespace Memories.Tests.PlayMode
                 var attachment = yard.GetRootGameObjects().SelectMany(g => g.GetComponentsInChildren<BackyardGarageAttachment>()).Single();
                 var fence = yard.GetRootGameObjects().SelectMany(g => g.GetComponentsInChildren<Transform>()).Single(t => t.name == "Правый забор");
                 var memories = session.SessionScope.Container.Resolve<MemoryCollection>();
+                var seatedReaction = yard.GetRootGameObjects().SelectMany(g => g.GetComponentsInChildren<ShowSeatedBenReaction>()).Single();
+                var seated = Field<GameObject>(seatedReaction, "seatedBen");
+                var pitcher = Field<GameObject>(seatedReaction, "pitcher");
+                Assert.IsFalse(seated.activeSelf);
+                pitcher.SetActive(true);
                 Assert.IsFalse(SceneManager.GetSceneByPath(TestLocationLauncher.GaragePath).isLoaded);
                 memories.Collect("unrelated-memory");
                 await UniTask.NextFrame();
@@ -71,9 +76,11 @@ namespace Memories.Tests.PlayMode
                 Assert.IsTrue(inventory.Contains(bat.Id), "No implicit consumption in Update.");
                 Assert.IsTrue(intact.activeSelf, "No implicit window replacement in Update.");
                 Assert.IsFalse(broken.activeSelf);
+                Assert.IsFalse(seated.activeSelf, "Collecting the memory must not implicitly switch Ben.");
+                Assert.IsTrue(pitcher.activeSelf);
                 var graph = Field<ReactionGraph>(interactable, "graph");
                 Assert.IsTrue(graph.TryGetSequence(out var sequence, out var error), error);
-                CollectionAssert.AreEqual(new[] { ReactionKind.Memory, ReactionKind.ConsumeInventoryItem, ReactionKind.CustomReaction,
+                CollectionAssert.AreEqual(new[] { ReactionKind.Memory, ReactionKind.CustomReaction, ReactionKind.ConsumeInventoryItem, ReactionKind.CustomReaction,
                     ReactionKind.ObjectActivity, ReactionKind.ObjectActivity, ReactionKind.CustomReaction }, sequence.Select(n => n.Kind));
                 interactable.Interact();
                 var presenter = scope.Container.Resolve<MemoryPresenter>();
@@ -84,6 +91,13 @@ namespace Memories.Tests.PlayMode
                 float deadline = Time.realtimeSinceStartup + 30;
                 while (!attachment.IsOpen && Time.realtimeSinceStartup < deadline) await UniTask.NextFrame();
                 Assert.IsTrue(attachment.IsOpen);
+                Assert.IsFalse(pitcher.activeSelf);
+                Assert.IsTrue(seated.activeSelf);
+                Assert.IsNotNull(seated.GetComponent<Animator>().runtimeAnimatorController);
+                var bones = seated.GetComponentsInChildren<Transform>();
+                var pose = bones.Select(t => t.localRotation).ToArray();
+                await UniTask.DelayFrame(3);
+                for (int i = 0; i < bones.Length; i++) Assert.Less(Quaternion.Angle(pose[i], bones[i].localRotation), .001f);
                 Assert.IsFalse(inventory.Contains(bat.Id));
                 Assert.IsFalse(intact.activeSelf);
                 Assert.IsTrue(broken.activeSelf);
