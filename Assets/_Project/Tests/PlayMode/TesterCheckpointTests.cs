@@ -45,7 +45,10 @@ namespace Memories.Tests.PlayMode
       Assert.IsFalse(SceneManager.GetSceneByPath(TestLocationLauncher.GaragePath).isLoaded);
       Assert.IsTrue(Active(scene,"Гостиная/controller_tv"));
       Assert.IsTrue(Active(scene,"Кухня/BatteryAA_02_Pickup"));
-      Assert.IsTrue(Active(scene,"WC/GameObject/BatteryAA_Pickup"));
+      var plane = Component<RemoveToyPlaneBatteryReaction>(scene);
+      Assert.IsTrue(plane.gameObject.activeInHierarchy);
+      Assert.IsTrue(plane.IsSpinning);
+      Assert.IsTrue(plane.GetComponent<Memories.Gameplay.Interaction.ReactionInteractable>().CanInteract);
       Assert.IsTrue(Active(scene,"Гостиная/Prop_OldTV/TV Static Screen"));
       Assert.IsFalse(Active(scene,"Гостиная/Prop_OldTV/TV Baseball Screen"));
       Assert.IsFalse(Active(scene,"Гостиная/FEMALE Gray Seated"));
@@ -60,6 +63,10 @@ namespace Memories.Tests.PlayMode
      }
      else if(checkpoint==TesterCheckpoint.HouseMemoryComplete)
      {
+      var plane = Component<RemoveToyPlaneBatteryReaction>(scene);
+      Assert.IsTrue(plane.gameObject.activeInHierarchy);
+      Assert.IsFalse(plane.IsSpinning);
+      Assert.IsFalse(plane.GetComponent<Memories.Gameplay.Interaction.ReactionInteractable>().CanInteract);
       Assert.IsTrue(memories.Contains("house-tv-baseball"));Assert.IsTrue(Component<OpenCourtyardDoorReaction>(scene).IsOpen);
       Assert.IsTrue(Field<bool>(Component<RevealPhotoReaction>(scene),"revealed"));
       Assert.Less(Quaternion.Angle(Quaternion.identity,Field<Transform>(Component<CloseStairDoorReaction>(scene),"hinge").localRotation),.1f);

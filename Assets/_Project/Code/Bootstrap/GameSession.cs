@@ -369,6 +369,9 @@ namespace Memories.Bootstrap
                     visibility.Restore(scope.Container.Resolve<CustomVariableStore>());
             if (testerCheckpoint.HasValue) checkpointCatalog.ApplyScene(testerCheckpoint.Value, scene);
             foreach (var root in scene.GetRootGameObjects())
+                foreach (var reaction in root.GetComponentsInChildren<RemoveToyPlaneBatteryReaction>(true))
+                    reaction.Initialize(scope.Container.Resolve<QuestInventory>());
+            foreach (var root in scene.GetRootGameObjects())
                 foreach (var reaction in root.GetComponentsInChildren<RefreshBaseballAreaReaction>(true))
                     reaction.Initialize(scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<CustomVariableStore>(),
                         scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());

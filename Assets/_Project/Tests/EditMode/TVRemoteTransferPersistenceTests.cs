@@ -106,6 +106,7 @@ namespace Memories.Tests.EditMode
                 visibility.Restore(variables);
             foreach (var interactable in All<ReactionInteractable>(scene))
                 interactable.Initialize(texts, null, inventory: inventory, variables: variables);
+            foreach (var plane in All<RemoveToyPlaneBatteryReaction>(scene)) plane.Initialize(inventory);
         }
 
         private static void AssertTransferred(Scene scene, QuestInventory inventory, QuestItem[] items)
@@ -118,7 +119,17 @@ namespace Memories.Tests.EditMode
                     Field<ReactionGraph>(component, "graph").nodes.OfType<ReactionNode>()
                         .Any(node => node.Kind == ReactionKind.AddInventoryItem && node.Item == item)).ToArray();
                 Assert.IsNotEmpty(pickups, "Expected original scene pickup for " + item.Id);
-                foreach (var pickup in pickups) Assert.IsFalse(pickup.gameObject.activeSelf, "Pickup respawned: " + item.Id);
+                foreach (var pickup in pickups)
+                {
+                    var plane = pickup.GetComponent<RemoveToyPlaneBatteryReaction>();
+                    if (plane != null)
+                    {
+                        Assert.IsTrue(pickup.gameObject.activeSelf);
+                        Assert.IsFalse(plane.IsSpinning);
+                        Assert.IsFalse(pickup.CanInteract);
+                    }
+                    else Assert.IsFalse(pickup.gameObject.activeSelf, "Pickup respawned: " + item.Id);
+                }
             }
             Assert.IsTrue(Named(scene, "Remote in hand").activeInHierarchy);
             Assert.AreEqual("RemoteSocket", Named(scene, "Remote in hand").transform.parent.name);
