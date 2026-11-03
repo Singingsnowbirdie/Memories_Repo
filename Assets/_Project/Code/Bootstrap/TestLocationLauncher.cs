@@ -10,7 +10,6 @@ namespace Memories.Bootstrap
         public const string BootstrapPath = "Assets/_Project/Scenes/TestBootstrap.unity";
         public const string HighwayPath = "Assets/_Project/Locations/Highway/Highway.unity";
         public const string HousePath = "Assets/_Project/Locations/House/House.unity";
-        public const string CourtyardPath = "Assets/_Project/Locations/CourtyardIsland/CourtyardIsland.unity";
         public const string BackyardPath = "Assets/_Project/Locations/Backyard/Backyard.unity";
 
         public const string GaragePath = "Assets/_Project/Locations/Garage/Garage.unity";
@@ -21,8 +20,7 @@ namespace Memories.Bootstrap
         {
             [InspectorName("Шоссе")] Highway = 1,
             [InspectorName("Дом")] House,
-            [InspectorName("Двор-колодец")] Courtyard,
-            [InspectorName("Гараж")] Garage,
+            [InspectorName("Гараж")] Garage = 4,
             [InspectorName("Школа")] School,
             [InspectorName("Задний двор")] Backyard
         }
@@ -33,7 +31,6 @@ namespace Memories.Bootstrap
         {
             Location.Highway => HighwayPath,
             Location.House => HousePath,
-            Location.Courtyard => CourtyardPath,
             Location.Garage => GaragePath,
             Location.School => SchoolPath,
             Location.Backyard => BackyardPath,

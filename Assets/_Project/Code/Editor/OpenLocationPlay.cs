@@ -21,12 +21,11 @@ namespace Memories.Editor
             root.SetActive(false);
             SceneManager.MoveGameObjectToScene(root, runtimeScene);
             if (path == TestLocationLauncher.HighwayPath || path == TestLocationLauncher.HousePath ||
-                path == TestLocationLauncher.CourtyardPath || path == AppLifetimeScope.DefaultLocationPath)
+                path == AppLifetimeScope.DefaultLocationPath)
             {
                 var launcher = root.AddComponent<TestLocationLauncher>();
                 launcher.SelectedLocation = path == TestLocationLauncher.HousePath ? TestLocationLauncher.Location.House :
                     path == TestLocationLauncher.HighwayPath ? TestLocationLauncher.Location.Highway :
-                    path == TestLocationLauncher.CourtyardPath ? TestLocationLauncher.Location.Courtyard :
                     TestLocationLauncher.Location.Highway;
             }
             var app = root.AddComponent<AppLifetimeScope>();

@@ -16,7 +16,7 @@ namespace Memories.Gameplay.Reactions
         [SerializeField] private Collider closedDoor;
         [SerializeField, Tooltip("Objects of the house exterior replaced by the loaded courtyard.")]
         private GameObject[] hideAfterCourtyardLoaded = Array.Empty<GameObject>();
-        [SerializeField] private string destination = "Assets/_Project/Locations/CourtyardIsland/CourtyardIsland.unity";
+        [SerializeField] private string destination = "Assets/_Project/Locations/Backyard/Backyard.unity";
         [SerializeField] private string arrivalMarker = "Вход из дома";
         [SerializeField, Tooltip("Restores an open door on load when this memory was collected. During play, opening is triggered by a custom reaction.")]
 
