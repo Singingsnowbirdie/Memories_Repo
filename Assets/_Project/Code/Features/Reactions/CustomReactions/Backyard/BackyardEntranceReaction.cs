@@ -56,10 +56,14 @@ namespace Memories.Gameplay.Reactions
                 float yaw = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
                 float pitch = -Mathf.Atan2(direction.y, new Vector2(direction.x, direction.z).magnitude) * Mathf.Rad2Deg;
                 float initialYaw = movement.Yaw, initialPitch = movement.Pitch;
-                for (float elapsed = 0; elapsed < turnDuration;)
+                float angle = new Vector2(Mathf.DeltaAngle(initialYaw, yaw), pitch - initialPitch).magnitude;
+                // SmoothStep достигает скорости в 1,5 раза выше средней.
+                // Ограничиваем пик примерно 60 градусами в секунду: разворот на 180° занимает 4,5 секунды.
+                float duration = Mathf.Max(turnDuration, angle * 1.5f / 60f);
+                for (float elapsed = 0; elapsed < duration;)
                 {
                     elapsed += Time.deltaTime;
-                    float t = Mathf.SmoothStep(0, 1, Mathf.Clamp01(elapsed / turnDuration));
+                    float t = Mathf.SmoothStep(0, 1, Mathf.Clamp01(elapsed / duration));
                     movement.SetInitialYaw(Mathf.LerpAngle(initialYaw, yaw, t));
                     movement.SetInitialPitch(Mathf.Lerp(initialPitch, pitch, t));
                     player.SetLook(movement.Yaw, movement.Pitch);
