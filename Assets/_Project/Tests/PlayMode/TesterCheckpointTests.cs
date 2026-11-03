@@ -74,6 +74,8 @@ namespace Memories.Tests.PlayMode
       Assert.IsTrue(Field<bool>(Component<RevealPhotoReaction>(scene),"revealed"));
       Assert.Less(Quaternion.Angle(Quaternion.identity,Field<Transform>(Component<CloseStairDoorReaction>(scene),"hinge").localRotation),.1f);
       Assert.IsTrue(SceneManager.GetSceneByPath(TestLocationLauncher.BackyardPath).isLoaded);
+      var waitingEntry = Component<BackyardEntranceReaction>(SceneManager.GetSceneByPath(TestLocationLauncher.BackyardPath));
+      Assert.IsTrue(Field<Light[]>(waitingEntry,"lights").All(l => !l.enabled));
       Assert.IsFalse(Active(scene,"Гостиная/controller_tv"));
       var clock = Component<RemoveClockBatteryReaction>(scene);
       Assert.IsTrue(clock.gameObject.activeInHierarchy);
@@ -88,6 +90,9 @@ namespace Memories.Tests.PlayMode
       Assert.IsFalse(Active(scene,"Бен в айдл позе"));
       foreach(var t in TesterCheckpointCatalog.Find(scene,"Бен в позе питчера").GetComponentsInChildren<Transform>(true).Where(t=>t.name=="Кепка на голове Бена"||t.name=="Мяч в руке Бена"))Assert.IsTrue(t.gameObject.activeInHierarchy);
       Assert.AreEqual(TestLocationLauncher.BackyardPath,scene.path);Assert.IsTrue(Component<BackyardGarageAttachment>(scene).IsOpen);
+      var finishedEntry = Component<BackyardEntranceReaction>(scene);
+      Assert.IsFalse(finishedEntry.IsRunning);
+      Assert.IsTrue(Field<Light[]>(finishedEntry,"lights").All(l => l.enabled));
       Assert.IsTrue(SceneManager.GetSceneByPath(TestLocationLauncher.GaragePath).isLoaded);
       Assert.IsTrue(memories.Contains(BackyardGarageAttachment.MemoryId));Assert.IsTrue(memories.Contains("house-tv-baseball"));
       var area=Component<RefreshBaseballAreaReaction>(scene); Assert.IsFalse(Field<GameObject>(area,"intactWindow").activeSelf);

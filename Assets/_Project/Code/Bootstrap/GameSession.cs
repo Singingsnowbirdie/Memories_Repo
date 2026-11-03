@@ -330,6 +330,11 @@ namespace Memories.Bootstrap
         private void BindDoors(Scene scene, LocationLifetimeScope scope)
         {
             foreach (var root in scene.GetRootGameObjects())
+                foreach (var entrance in root.GetComponentsInChildren<BackyardEntranceReaction>(true))
+                    entrance.Initialize(scope.Container.Resolve<PlayerMotor>(), scope.Container.Resolve<PlayerMovementModel>(),
+                        scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>(),
+                        () => ReplaceConnectedHouseAsync(scene), scene == locationScene);
+            foreach (var root in scene.GetRootGameObjects())
                 foreach (var attachment in root.GetComponentsInChildren<BackyardGarageAttachment>(true))
                     attachment.Initialize(scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>(), LoadBackyardGarageAsync);
             foreach (var root in scene.GetRootGameObjects())
@@ -526,24 +531,35 @@ namespace Memories.Bootstrap
             busy = true;
             try
             {
-                var previous = locationScene;
-                additionalScenes.Remove(scene);
-                locationScene = scene;
-                SceneManager.SetActiveScene(scene);
-                SessionScope.Container.Resolve<ObjectStateStore>().UnloadScene(previous);
-                foreach (var root in previous.GetRootGameObjects()) root.SetActive(false);
-                await SceneManager.UnloadSceneAsync(previous);
-                await UnloadAdditionalScenesAsync();
-                // Restore overlapping backyard geometry only after the house has unloaded.
-                if (connectionCovers.TryGetValue(scene.handle, out var cover))
+                var entrance = FindComponent<BackyardEntranceReaction>(scene);
+                if (entrance != null)
                 {
-                    cover.Restore();
-                    connectionCovers.Remove(scene.handle);
+                    entrance.Execute();
+                    await entrance.Completion;
                 }
-                Physics.SyncTransforms();
-                if (disposed) await CleanupAsync();
+                else await ReplaceConnectedHouseAsync(scene);
             }
             finally { busy = false; }
+        }
+
+        private async UniTask ReplaceConnectedHouseAsync(Scene scene)
+        {
+            var previous = locationScene;
+            additionalScenes.Remove(scene);
+            locationScene = scene;
+            SceneManager.SetActiveScene(scene);
+            SessionScope.Container.Resolve<ObjectStateStore>().UnloadScene(previous);
+            foreach (var root in previous.GetRootGameObjects()) root.SetActive(false);
+            await SceneManager.UnloadSceneAsync(previous);
+            await UnloadAdditionalScenesAsync();
+            // Restore overlapping backyard geometry only after the house has unloaded.
+            if (connectionCovers.TryGetValue(scene.handle, out var cover))
+            {
+                cover.Restore();
+                connectionCovers.Remove(scene.handle);
+            }
+            Physics.SyncTransforms();
+            if (disposed) await CleanupAsync();
         }
 
         private async UniTask CleanupAsync()

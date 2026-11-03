@@ -20,8 +20,9 @@ namespace Memories.Tests.PlayMode
         [UnityTest] public IEnumerator StandaloneHouseOpensOntoVisibleCourtyard() => Check(false);
         [UnityTest] public IEnumerator MainBootstrapHouseOpensOntoVisibleCourtyard() => Check(true);
         [UnityTest] public IEnumerator PreviouslyFoundTVMemoryOpensHouseDoorOnLoad() => Check(false, true);
+        [UnityTest] public IEnumerator BackwardsExitTurnsTowardFenceBeforeReplacingHouse() => Check(false, false, true);
 
-        private static IEnumerator Check(bool main, bool previouslyFound = false) => UniTask.ToCoroutine(async () =>
+        private static IEnumerator Check(bool main, bool previouslyFound = false, bool backwards = false) => UniTask.ToCoroutine(async () =>
         {
             bool hadSave = PlayerPrefs.HasKey(MemoryCollection.DefaultKey);
             string savedMemories = PlayerPrefs.GetString(MemoryCollection.DefaultKey);
@@ -98,6 +99,13 @@ namespace Memories.Tests.PlayMode
                 Assert.IsEmpty(door.GetComponentsInChildren<Camera>(), "No portal camera is allowed.");
                 Assert.AreEqual(1, Object.FindObjectsByType<Camera>(FindObjectsSortMode.None).Count(c => c.enabled));
                 var yard = SceneManager.GetSceneByPath(TestLocationLauncher.BackyardPath);
+                var entry = yard.GetRootGameObjects().SelectMany(r => r.GetComponentsInChildren<BackyardEntranceReaction>()).Single();
+                var entryData = new UnityEditor.SerializedObject(entry);
+                var lightsData = entryData.FindProperty("lights");
+                var entryLights = Enumerable.Range(0, lightsData.arraySize)
+                    .Select(i => (Light)lightsData.GetArrayElementAtIndex(i).objectReferenceValue).ToArray();
+                Assert.AreEqual(8, entryLights.Length);
+                Assert.IsTrue(entryLights.All(l => !l.enabled));
                 var facade = yard.GetRootGameObjects().SelectMany(r => r.GetComponentsInChildren<Transform>(true))
                     .First(t => t.name.StartsWith("Фанерный дом"));
                 Assert.IsFalse(facade.GetComponent<Renderer>().enabled, "The facade must not obstruct the passage.");
@@ -106,20 +114,42 @@ namespace Memories.Tests.PlayMode
                     .First(t => t.name == door.ArrivalMarker);
                 Assert.Less(Vector3.Distance(arrival.position, door.transform.position), .001f);
                 Assert.Less(Quaternion.Angle(arrival.rotation, door.transform.rotation), .001f);
+                var islands = yard.GetRootGameObjects()
+                    .SelectMany(r => r.GetComponentsInChildren<Transform>(true)).Select(t => t.gameObject)
+                    .Where(r => r.name.StartsWith("Остров_")).ToArray();
+                Assert.AreEqual(6, islands.Length);
+                var islandPositions = islands.Select(r => r.transform.position).ToArray();
+                await UniTask.Delay(300);
+                for (int i = 0; i < islands.Length; i++)
+                {
+                    Assert.Less(Vector3.Distance(islandPositions[i], islands[i].transform.position), 1f,
+                        islands[i].name + " must not return to its coordinates before scene alignment.");
+                    Assert.Less(Vector3.Distance(arrival.position, islands[i].transform.position), 100f,
+                        islands[i].name + " must remain beside the connected backyard.");
+                }
                 var forward = door.transform.forward;
                 var origin = door.transform.position;
                 motor.Teleport(origin - forward * 1.2f + Vector3.up * .05f, door.transform.eulerAngles.y);
-                movement.ResetMotion(door.transform.eulerAngles.y);
+                movement.ResetMotion(door.transform.eulerAngles.y + (backwards ? 180 : 0));
                 movement.SetInitialPitch(17);
                 motor.SetLook(movement.Yaw, movement.Pitch);
                 if (!main) Capture(camera, "Temp/streaming-door-open.png");
                 var presenter = session.LocationScope.Container.Resolve<PlayerPresenter>();
                 presenter.ControlsEnabled = false;
                 int steps = 0;
-                while (session.CurrentLocationScene != yard && steps++ < 150)
+                Vector3? lockedCameraPosition = null;
+                var mode = session.LocationScope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>();
+                while (session.CurrentLocationScene != yard && steps++ < 400)
                 {
                     var before = motor.transform.position;
-                    motor.Move(forward * .04f + Vector3.down * .01f);
+                    if (!entry.IsRunning) motor.Move(forward * .04f + Vector3.down * .01f);
+                    else
+                    {
+                        Assert.IsTrue(mode.ControlsBlocked);
+                        if (!lockedCameraPosition.HasValue) lockedCameraPosition = camera.transform.position;
+                        Assert.Less(Vector3.Distance(lockedCameraPosition.Value, camera.transform.position), .02f);
+                        Assert.IsFalse(facade.GetComponent<Renderer>().enabled);
+                    }
                     await UniTask.NextFrame();
                     Assert.Less(Vector3.Distance(before, motor.transform.position), .12f, "Transition moved the player.");
                     Assert.AreSame(motor, session.LocationScope.Container.Resolve<PlayerMotor>());
@@ -136,9 +166,32 @@ namespace Memories.Tests.PlayMode
                 }
                 Assert.AreEqual(yard, session.CurrentLocationScene,
                     "Could not walk through the joined doorway. Player=" + motor.transform.position + " clearance=" + door.ExitClearance);
+                var inscription = yard.GetRootGameObjects().SelectMany(r => r.GetComponentsInChildren<Transform>(true))
+                    .Single(t => t.name == "Ben Alex Friends Forever");
+                Assert.Less(Vector3.Angle(camera.transform.forward, inscription.position - camera.transform.position), 1f,
+                    "House replacement must only start after the player faces the inscription, including a backwards exit.");
+                int previousLit = 0;
+                var observedPairs = new System.Collections.Generic.HashSet<int>();
+                while (session.IsTransitioning)
+                {
+                    Assert.IsTrue(mode.ControlsBlocked);
+                    Assert.Less(Vector3.Distance(lockedCameraPosition.Value, camera.transform.position), .02f);
+                    int lit = entryLights.Count(l => l.enabled);
+                    Assert.AreEqual(0, lit % 2, "Lanterns must switch on in pairs.");
+                    Assert.GreaterOrEqual(lit, previousLit);
+                    for (int i = 0; i < entryLights.Length; i++)
+                        Assert.AreEqual(i < lit, entryLights[i].enabled, "Pairs must light from the entrance toward the fence.");
+                    previousLit = lit;
+                    observedPairs.Add(lit);
+                    await UniTask.NextFrame();
+                }
+                CollectionAssert.IsSubsetOf(new[] { 2, 4, 6, 8 }, observedPairs);
                 Assert.AreSame(gameplayScope, session.LocationScope);
                 Assert.AreSame(movement, session.LocationScope.Container.Resolve<PlayerMovementModel>());
-                Assert.AreEqual(17, movement.Pitch);
+                Assert.Less(Vector3.Angle(camera.transform.forward, inscription.position - camera.transform.position), 1f);
+                Assert.IsFalse(entry.IsRunning);
+                Assert.IsFalse(mode.ControlsBlocked);
+                Assert.IsTrue(entryLights.All(l => l.enabled));
                 Assert.IsTrue(facade.GetComponent<Renderer>().enabled);
                 Assert.IsTrue(facade.GetComponent<Collider>().enabled);
                 if (!main) Capture(camera, "Temp/streaming-yard-entered.png");
@@ -149,6 +202,9 @@ namespace Memories.Tests.PlayMode
                 Assert.IsFalse(SceneManager.GetSceneByPath(TestLocationLauncher.HousePath).isLoaded);
                 Assert.IsFalse(SceneManager.GetSceneByPath(TestLocationLauncher.HighwayPath).isLoaded);
                 await UniTask.WaitUntil(() => !session.IsTransitioning);
+                foreach (var island in islands)
+                    foreach (var renderer in island.GetComponentsInChildren<Renderer>())
+                        Assert.IsTrue(renderer.enabled, island.name + " must be visible after leaving the house.");
                 Assert.AreEqual(1, Object.FindObjectsByType<PlayerMotor>(FindObjectsSortMode.None).Length);
                 Assert.AreEqual(playerScene, camera.gameObject.scene);
                 for (int i = 0; i < 450; i++) motor.Move(forward * .05f + Vector3.down * .04f);
