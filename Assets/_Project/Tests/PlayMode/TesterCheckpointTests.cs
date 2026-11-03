@@ -44,7 +44,10 @@ namespace Memories.Tests.PlayMode
       Assert.IsFalse(SceneManager.GetSceneByPath(TestLocationLauncher.BackyardPath).isLoaded);
       Assert.IsFalse(SceneManager.GetSceneByPath(TestLocationLauncher.GaragePath).isLoaded);
       Assert.IsTrue(Active(scene,"Гостиная/controller_tv"));
-      Assert.IsTrue(Active(scene,"Кухня/BatteryAA_02_Pickup"));
+      var clock = Component<RemoveClockBatteryReaction>(scene);
+      Assert.IsTrue(clock.gameObject.activeInHierarchy);
+      Assert.IsTrue(clock.IsRunning);
+      Assert.IsTrue(clock.GetComponent<Memories.Gameplay.Interaction.ReactionInteractable>().CanInteract);
       var plane = Component<RemoveToyPlaneBatteryReaction>(scene);
       Assert.IsTrue(plane.gameObject.activeInHierarchy);
       Assert.IsTrue(plane.IsSpinning);
@@ -71,7 +74,11 @@ namespace Memories.Tests.PlayMode
       Assert.IsTrue(Field<bool>(Component<RevealPhotoReaction>(scene),"revealed"));
       Assert.Less(Quaternion.Angle(Quaternion.identity,Field<Transform>(Component<CloseStairDoorReaction>(scene),"hinge").localRotation),.1f);
       Assert.IsTrue(SceneManager.GetSceneByPath(TestLocationLauncher.BackyardPath).isLoaded);
-      Assert.IsFalse(Active(scene,"Гостиная/controller_tv"));Assert.IsFalse(Active(scene,"Кухня/BatteryAA_02_Pickup"));
+      Assert.IsFalse(Active(scene,"Гостиная/controller_tv"));
+      var clock = Component<RemoveClockBatteryReaction>(scene);
+      Assert.IsTrue(clock.gameObject.activeInHierarchy);
+      Assert.IsFalse(clock.IsRunning);
+      Assert.IsFalse(clock.GetComponent<Memories.Gameplay.Interaction.ReactionInteractable>().CanInteract);
       Assert.IsFalse(Active(scene,"Гостиная/Prop_OldTV/TV Static Screen"));Assert.IsTrue(Active(scene,"Гостиная/Prop_OldTV/TV Baseball Screen"));
       Assert.IsTrue(Active(scene,"Гостиная/FEMALE Gray Seated"));Assert.IsTrue(Active(scene,"Гостиная/FEMALE Gray Seated/Remote in hand"));
      }

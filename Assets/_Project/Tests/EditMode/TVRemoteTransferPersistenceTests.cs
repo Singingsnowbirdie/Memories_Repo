@@ -107,6 +107,7 @@ namespace Memories.Tests.EditMode
             foreach (var interactable in All<ReactionInteractable>(scene))
                 interactable.Initialize(texts, null, inventory: inventory, variables: variables);
             foreach (var plane in All<RemoveToyPlaneBatteryReaction>(scene)) plane.Initialize(inventory);
+            foreach (var clock in All<RemoveClockBatteryReaction>(scene)) clock.Initialize(inventory);
         }
 
         private static void AssertTransferred(Scene scene, QuestInventory inventory, QuestItem[] items)
@@ -126,6 +127,12 @@ namespace Memories.Tests.EditMode
                     {
                         Assert.IsTrue(pickup.gameObject.activeSelf);
                         Assert.IsFalse(plane.IsSpinning);
+                        Assert.IsFalse(pickup.CanInteract);
+                    }
+                    else if (pickup.TryGetComponent<RemoveClockBatteryReaction>(out var clock))
+                    {
+                        Assert.IsTrue(pickup.gameObject.activeSelf);
+                        Assert.IsFalse(clock.IsRunning);
                         Assert.IsFalse(pickup.CanInteract);
                     }
                     else Assert.IsFalse(pickup.gameObject.activeSelf, "Pickup respawned: " + item.Id);
