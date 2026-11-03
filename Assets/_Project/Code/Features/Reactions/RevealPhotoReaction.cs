@@ -77,6 +77,7 @@ namespace Memories.Gameplay.Reactions
             gameplayState?.BlockControls(this);
             try
             {
+                IEnumerator cameraMovement = null;
                 if (player != null && player.CameraTransform != null)
                 {
                     focusedCamera = player.CameraTransform;
@@ -89,12 +90,13 @@ namespace Memories.Gameplay.Reactions
                     float distance = Mathf.Min(offset.magnitude, Mathf.Max(.75f, photoRenderer.bounds.size.magnitude));
                     var targetPosition = center + offset.normalized * distance;
                     var targetRotation = Quaternion.LookRotation(center - targetPosition, Vector3.up);
-                    yield return MoveCamera(focusedCamera.parent.InverseTransformPoint(targetPosition),
+                    cameraMovement = MoveCamera(focusedCamera.parent.InverseTransformPoint(targetPosition),
                         Quaternion.Inverse(focusedCamera.parent.rotation) * targetRotation);
                 }
                 float elapsed = 0;
                 while (elapsed < 3f)
                 {
+                    if (cameraMovement != null && !cameraMovement.MoveNext()) cameraMovement = null;
                     elapsed += Time.deltaTime;
                     blendMaterial.SetFloat("_Reveal", Mathf.SmoothStep(0, 1, elapsed / 3f));
                     Graphics.Blit(photo, revealedTexture, blendMaterial);

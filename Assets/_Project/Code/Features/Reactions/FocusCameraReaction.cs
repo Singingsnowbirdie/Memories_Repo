@@ -16,6 +16,7 @@ namespace Memories.Gameplay.Reactions
         private Vector3 originalPosition;
         private Quaternion originalRotation;
         private bool previousCameraControl, running;
+        public bool IsApproaching { get; private set; }
 
         public void Initialize(PlayerMotor player, GameplayModeState state)
         { this.player = player; this.state = state; }
@@ -29,6 +30,7 @@ namespace Memories.Gameplay.Reactions
         private IEnumerator Focus()
         {
             running = true;
+            IsApproaching = true;
             cameraTransform = player.CameraTransform;
             originalPosition = cameraTransform.localPosition;
             originalRotation = cameraTransform.localRotation;
@@ -37,15 +39,29 @@ namespace Memories.Gameplay.Reactions
             state?.BlockControls(this);
             try
             {
-                var center = target.bounds.center;
+                var bounds = target.bounds;
+                if (!target.gameObject.activeInHierarchy)
+                {
+                    var localBounds = target.localBounds;
+                    var matrix = target.localToWorldMatrix;
+                    var x = matrix.MultiplyVector(new Vector3(localBounds.extents.x, 0, 0));
+                    var y = matrix.MultiplyVector(new Vector3(0, localBounds.extents.y, 0));
+                    var z = matrix.MultiplyVector(new Vector3(0, 0, localBounds.extents.z));
+                    var extents = new Vector3(Mathf.Abs(x.x) + Mathf.Abs(y.x) + Mathf.Abs(z.x),
+                        Mathf.Abs(x.y) + Mathf.Abs(y.y) + Mathf.Abs(z.y),
+                        Mathf.Abs(x.z) + Mathf.Abs(y.z) + Mathf.Abs(z.z));
+                    bounds = new Bounds(matrix.MultiplyPoint3x4(localBounds.center), extents * 2);
+                }
+                var center = bounds.center;
                 var offset = cameraTransform.position - center;
                 if (offset.sqrMagnitude > .001f)
                 {
-                    float distance = Mathf.Min(offset.magnitude, Mathf.Max(.75f, target.bounds.size.magnitude));
+                    float distance = Mathf.Min(offset.magnitude, Mathf.Max(.75f, bounds.size.magnitude));
                     var position = center + offset.normalized * distance;
                     var rotation = Quaternion.LookRotation(center - position, Vector3.up);
                     yield return Move(cameraTransform.parent.InverseTransformPoint(position),
                         Quaternion.Inverse(cameraTransform.parent.rotation) * rotation);
+                    IsApproaching = false;
                     yield return new WaitForSeconds(holdDuration);
                     yield return Move(originalPosition, originalRotation);
                 }
@@ -70,6 +86,7 @@ namespace Memories.Gameplay.Reactions
 
         private void Restore()
         {
+            IsApproaching = false;
             if (!running) return;
             if (cameraTransform != null) cameraTransform.SetLocalPositionAndRotation(originalPosition, originalRotation);
             if (player != null) player.CameraPoseControlled = previousCameraControl;

@@ -357,7 +357,7 @@ namespace Memories.Bootstrap
                 if (path == TestLocationLauncher.BackyardPath)
                     foreach (var root in scene.GetRootGameObjects())
                         foreach (var t in root.GetComponentsInChildren<Transform>(true))
-                            if (t.name == "Остров_6")
+                            if (t.name == "Остров_6" || t.name == "Остров_5")
                             {
                                 foreach (var collider in t.GetComponentsInChildren<Collider>())
                                     if (collider.enabled) { cover.Colliders.Add(collider); collider.enabled = false; }

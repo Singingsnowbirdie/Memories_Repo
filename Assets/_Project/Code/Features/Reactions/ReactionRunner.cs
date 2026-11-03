@@ -203,6 +203,9 @@ namespace Memories.Gameplay.Reactions
                         if (!TryGetCustomReaction(action, out var customReaction))
                             throw new InvalidOperationException("Компонент CustomReaction недоступен на объекте.");
                         customReaction.Execute();
+                        if (customReaction is FocusCameraReaction focus)
+                            await UniTask.WaitUntil(() => focus == null || !focus.IsApproaching,
+                                cancellationToken: source.Token);
                     }
                     else if (action.Kind == ReactionKind.AddInventoryItem)
                         inventory.TryAdd(action.Item);
