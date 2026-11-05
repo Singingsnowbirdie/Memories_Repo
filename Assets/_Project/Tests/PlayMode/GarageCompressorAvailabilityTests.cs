@@ -102,6 +102,12 @@ private sealed class ComicSounds : Memories.Gameplay.Memories.IMemorySound
                 // The same live session now explicitly unlocks the pickup in the request graph.
                 var father = Find(scene, "Отец у заднего левого колеса").GetComponent<ReactionInteractable>();
                 father.gameObject.SetActive(true);
+                var hoodFather = Find(scene, "Отец у капота");
+                var switchReaction = scene.GetRootGameObjects().SelectMany(g => g.GetComponentsInChildren<GarageHoodFatherMemoryReaction>(true)).Single();
+                switchReaction.Initialize(memories);
+                liveSave.Register(father.gameObject, "father-wheel");
+                liveSave.Register(hoodFather, "father-hood");
+                liveSave.Register(Find(scene, "Компрессор у заднего левого колеса"), "delivered");
                 father.Initialize(texts, memories, inventory: inventory, variables: variables);
                 father.Interact();
                 Assert.IsFalse(pickup.CanInteract, "Keep locked until the request finishes.");
@@ -120,6 +126,9 @@ private sealed class ComicSounds : Memories.Gameplay.Memories.IMemorySound
                 while (!memories.IsPlaying && father.IsRunning && Time.realtimeSinceStartup < deadline) yield return null;
                 Assert.IsTrue(memories.IsPlaying);
                 Assert.AreEqual(1, comicView.Frames);
+                Assert.IsFalse(father.gameObject.activeSelf, "Switch while comic is still playing.");
+                Assert.IsTrue(hoodFather.activeSelf);
+                Assert.IsTrue(memories.IsPlaying, "Hiding father must not cancel the comic.");
                 for (int frame = 0; frame < 4; frame++)
                 {
                     comicInput.Advance();
@@ -129,6 +138,28 @@ private sealed class ComicSounds : Memories.Gameplay.Memories.IMemorySound
                 Assert.AreEqual(4, comicView.Frames);
                 Assert.IsFalse(memories.IsPlaying);
                 Assert.IsTrue(collection.Contains("garage_second_memory"));
+                liveSave.Flush();
+                var reload = EditorSceneManager.OpenPreviewScene("Assets/_Project/Locations/Garage/Garage.unity");
+                try
+                {
+                    using var restored = new ObjectStateStore(saveKey: key);
+                    var wheel = Find(reload, "Отец у заднего левого колеса");
+                    var hood = Find(reload, "Отец у капота");
+                    var compressor = Find(reload, "Компрессор у заднего левого колеса");
+                    restored.Register(wheel, "father-wheel");
+                    restored.Register(hood, "father-hood");
+                    restored.Register(compressor, "delivered");
+                    Assert.IsFalse(wheel.activeSelf);
+                    Assert.IsTrue(hood.activeSelf);
+                    Assert.IsTrue(compressor.activeSelf);
+                    wheel.SetActive(true);
+                    hood.SetActive(false);
+                    reload.GetRootGameObjects().SelectMany(g => g.GetComponentsInChildren<GarageHoodFatherMemoryReaction>(true)).Single().Restore(collection);
+                    Assert.IsFalse(wheel.activeSelf);
+                    Assert.IsTrue(hood.activeSelf);
+                    Assert.IsTrue(compressor.activeSelf);
+                }
+                finally { EditorSceneManager.ClosePreviewScene(reload); }
                 yield return null;
                 father.Interact();
                 Assert.IsFalse(memories.IsPlaying, "Do not replay after the compressor was consumed.");

@@ -70,6 +70,8 @@ namespace Memories.Gameplay.Reactions
                 if (action.Kind == ReactionKind.StoryText && texts == null) return false;
                 if (action.Kind == ReactionKind.Memory && memories == null) return false;
                 if (action.Kind == ReactionKind.Memory && action.FirstCompletionText != null && texts == null) return false;
+                if (action.Kind == ReactionKind.Memory && !string.IsNullOrEmpty(action.MemoryStartedReactionKey) &&
+                    !CustomReactionBinding.TryResolve(customReactions, action.MemoryStartedReactionKey, out _)) return false;
                 if (action.Kind == ReactionKind.CustomReaction && !TryGetCustomReaction(action, out _))
                 { Debug.LogWarning("Назначьте включённый компонент CustomReaction в привязках реакций: " + action.ObjectKey, owner); return false; }
                 if (action.Kind == ReactionKind.ChangeLocation &&
@@ -252,6 +254,15 @@ namespace Memories.Gameplay.Reactions
                         bool alreadyCollected = memories.HasCollected(action.MemoryId);
                         if (!memories.Open(action.MemoryId, action.MemoryGraph, true)) return;
                         ownsMemory = true;
+                        if (!string.IsNullOrEmpty(action.MemoryStartedReactionKey))
+                        {
+                            if (!CustomReactionBinding.TryResolve(customReactions, action.MemoryStartedReactionKey, out var started))
+                                throw new InvalidOperationException("Missing memory start reaction: " + action.MemoryStartedReactionKey);
+                            // The full-screen comic is visible. Its explicit scene change may hide this interaction owner.
+                            IsHidingOwner = true;
+                            try { started.Execute(); }
+                            finally { IsHidingOwner = false; }
+                        }
                         await UniTask.WaitUntil(() => !memories.IsPlaying, cancellationToken: source.Token);
                         ownsMemory = false;
                         if (!alreadyCollected && memories.HasCollected(action.MemoryId) && action.FirstCompletionText != null)

@@ -334,6 +334,9 @@ namespace Memories.Bootstrap
                     reaction.Initialize(scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>(),
                         scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
             foreach (var root in scene.GetRootGameObjects())
+                foreach (var reaction in root.GetComponentsInChildren<GarageHoodFatherMemoryReaction>(true))
+                    reaction.Initialize(scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>());
+            foreach (var root in scene.GetRootGameObjects())
                 foreach (var entrance in root.GetComponentsInChildren<GarageEntranceReaction>(true))
                     entrance.Initialize(scope.Container.Resolve<PlayerMotor>(), scope.Container.Resolve<PlayerMovementModel>(),
                         scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>(),
@@ -379,9 +382,16 @@ namespace Memories.Bootstrap
                         scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
             scope.Container.Resolve<ObjectStateStore>().RestoreScene(scene);
             foreach (var root in scene.GetRootGameObjects())
+                foreach (var reaction in root.GetComponentsInChildren<GarageHoodFatherMemoryReaction>(true))
+                    reaction.Restore(scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
+            foreach (var root in scene.GetRootGameObjects())
                 foreach (var visibility in root.GetComponentsInChildren<SavedObjectVisibility>(true))
                     visibility.Restore(scope.Container.Resolve<CustomVariableStore>());
             if (testerCheckpoint.HasValue) checkpointCatalog.ApplyScene(testerCheckpoint.Value, scene);
+            foreach (var root in scene.GetRootGameObjects())
+                foreach (var reaction in root.GetComponentsInChildren<GarageOpenHoodFatherReaction>(true))
+                    reaction.Restore(scope.Container.Resolve<CustomVariableStore>(),
+                        scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var reaction in root.GetComponentsInChildren<ShowSeatedBenReaction>(true))
                     reaction.Restore(scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());

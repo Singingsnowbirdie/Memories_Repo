@@ -22,6 +22,8 @@ namespace Memories.Gameplay.Reactions
         [SerializeField] private string memoryId;
         [SerializeField] private StoryTextGraph firstCompletionText;
         public StoryTextGraph FirstCompletionText => firstCompletionText;
+        [SerializeField] private string memoryStartedReactionKey;
+        public string MemoryStartedReactionKey => memoryStartedReactionKey;
         [SerializeField] private string locationScenePath;
         [SerializeField] private CustomVariableBank variableBank;
         [SerializeField] private string variableId;

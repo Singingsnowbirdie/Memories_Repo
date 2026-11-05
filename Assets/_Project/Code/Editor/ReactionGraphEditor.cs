@@ -156,6 +156,8 @@ namespace Memories.Editor
                 EditorGUILayout.Space(8);
                 EditorGUILayout.LabelField("Текст после первого просмотра");
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("firstCompletionText"), GUIContent.none);
+                EditorGUILayout.LabelField("Реакция при начале воспоминания");
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("memoryStartedReactionKey"), GUIContent.none);
                 EditorGUILayout.Space(8);
             }
             else if (kind.enumValueIndex == 2)

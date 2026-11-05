@@ -111,6 +111,7 @@ MonoBehaviour:
   memoryGraph: {fileID: 0}
   memoryId: 
   firstCompletionText: {fileID: 0}
+  memoryStartedReactionKey: 
   locationScenePath: 
   variableBank: {fileID: 11400000, guid: 481b44f16de901f4d9a22606581568cb, type: 2}
   variableId: father_compressor_requested
@@ -177,6 +178,7 @@ MonoBehaviour:
   memoryGraph: {fileID: 0}
   memoryId: 
   firstCompletionText: {fileID: 0}
+  memoryStartedReactionKey: 
   locationScenePath: 
   variableBank: {fileID: 11400000, guid: 481b44f16de901f4d9a22606581568cb, type: 2}
   variableId: father_compressor_requested
@@ -321,6 +323,74 @@ MonoBehaviour:
   objectKeys:
   - "\u041A\u043E\u043C\u043F\u0440\u0435\u0441\u0441\u043E\u0440 \u0443 \u043A\u043E\u043B\u0435\u0441\u0430"
   - "\u041F\u043E\u0434\u0431\u0438\u0440\u0430\u0435\u043C\u044B\u0439 \u043A\u043E\u043C\u043F\u0440\u0435\u0441\u0441\u043E\u0440"
+  - show_hood_father
+--- !u!114 &583149124567800001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd260b234eb14d4cbcafbe381aa00ee1, type: 3}
+  m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
+  graph: {fileID: 11400000}
+  position: {x: 1900, y: -420}
+  ports:
+    keys:
+    - previous
+    - next
+    values:
+    - _fieldName: previous
+      _node: {fileID: 583149124567800001}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: next
+        node: {fileID: 4523552354405929159}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: next
+      _node: {fileID: 583149124567800001}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: -509358996153818260}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  previous: {fileID: 0}
+  next: {fileID: 0}
+  kind: 3
+  reactionGraph: {fileID: 0}
+  textGraph: {fileID: 0}
+  memoryGraph: {fileID: 0}
+  memoryId: 
+  firstCompletionText: {fileID: 0}
+  memoryStartedReactionKey: 
+  locationScenePath: 
+  variableBank: {fileID: 0}
+  variableId: 
+  variableValue: 1
+  variableIntValue: 0
+  addToIntValue: 0
+  objectKey: show_hood_father
+  active: 1
+  revealDuration: 0
+  revealDelay: 0
+  revealShader: {fileID: 0}
+  interactionEnabled: 0
+  item: {fileID: 0}
+  hintId: 
+  hintGraph: {fileID: 0}
+  hintTimeout: 60
+  repeatHint: 1
 --- !u!114 &795227823833055045
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -370,6 +440,7 @@ MonoBehaviour:
   memoryGraph: {fileID: 0}
   memoryId: 
   firstCompletionText: {fileID: 0}
+  memoryStartedReactionKey: 
   locationScenePath: 
   variableBank: {fileID: 0}
   variableId: 
@@ -436,6 +507,7 @@ MonoBehaviour:
   memoryGraph: {fileID: 0}
   memoryId: 
   firstCompletionText: {fileID: 0}
+  memoryStartedReactionKey: 
   locationScenePath: 
   variableBank: {fileID: 0}
   variableId: 
@@ -503,6 +575,7 @@ MonoBehaviour:
   memoryGraph: {fileID: 0}
   memoryId: 
   firstCompletionText: {fileID: 0}
+  memoryStartedReactionKey: 
   locationScenePath: 
   variableBank: {fileID: 0}
   variableId: 
@@ -569,6 +642,7 @@ MonoBehaviour:
   memoryGraph: {fileID: 0}
   memoryId: 
   firstCompletionText: {fileID: 0}
+  memoryStartedReactionKey: 
   locationScenePath: 
   variableBank: {fileID: 0}
   variableId: 
@@ -635,6 +709,7 @@ MonoBehaviour:
   memoryGraph: {fileID: 0}
   memoryId: 
   firstCompletionText: {fileID: 0}
+  memoryStartedReactionKey: 
   locationScenePath: 
   variableBank: {fileID: 0}
   variableId: 
@@ -702,6 +777,7 @@ MonoBehaviour:
   memoryGraph: {fileID: 0}
   memoryId: 
   firstCompletionText: {fileID: 0}
+  memoryStartedReactionKey: 
   locationScenePath: 
   variableBank: {fileID: 0}
   variableId: 
@@ -750,69 +826,3 @@ MonoBehaviour:
       _dynamic: 0
   runOnce: 0
   next: {fileID: 0}
---- !u!114 &583149124567800001
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd260b234eb14d4cbcafbe381aa00ee1, type: 3}
-  m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
-  graph: {fileID: 11400000}
-  position: {x: 1900, y: -420}
-  ports:
-    keys:
-    - previous
-    - next
-    values:
-    - _fieldName: previous
-      _node: {fileID: 583149124567800001}
-      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: next
-        node: {fileID: 4523552354405929159}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: next
-      _node: {fileID: 583149124567800001}
-      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: previous
-        node: {fileID: -509358996153818260}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 0
-  previous: {fileID: 0}
-  next: {fileID: 0}
-  kind: 1
-  reactionGraph: {fileID: 0}
-  textGraph: {fileID: 0}
-  memoryGraph: {fileID: 11400000, guid: 3f2a46a8864545b482fb8de16a9379a8, type: 2}
-  memoryId: garage_second_memory
-  firstCompletionText: {fileID: 0}
-  locationScenePath:
-  variableBank: {fileID: 0}
-  variableId:
-  variableValue: 1
-  variableIntValue: 0
-  addToIntValue: 0
-  objectKey:
-  active: 1
-  revealDuration: 0
-  revealDelay: 0
-  revealShader: {fileID: 0}
-  interactionEnabled: 0
-  item: {fileID: 0}
-  hintId:
-  hintGraph: {fileID: 0}
-  hintTimeout: 60
-  repeatHint: 1
