@@ -18,6 +18,33 @@ namespace Memories.Tests.PlayMode
 {
     public sealed class GarageCompressorAvailabilityTests
     {
+
+private sealed class ComicInput : Memories.Contracts.IPauseInput, Memories.Contracts.IAdvanceInput
+{
+    public event Action PauseRequested;
+    public event Action AdvanceRequested;
+    public void SetPaused(bool paused) { }
+    public void Advance() => AdvanceRequested?.Invoke();
+}
+private sealed class ComicView : Memories.Gameplay.Memories.IMemoryView
+{
+    public int Frames;
+    public void Show() { }
+    public void Hide() { }
+    public UniTask ShowFrameAsync(Memories.Gameplay.Memories.MemoryFrameNode frame, CancellationToken token)
+    { Frames++; return UniTask.CompletedTask; }
+}
+private sealed class ComicMusic : Memories.Gameplay.Memories.IMemoryMusic
+{
+    public void Execute(Memories.Gameplay.Memories.MemoryMusicNode node) { }
+    public void StopImmediately() { }
+}
+private sealed class ComicSounds : Memories.Gameplay.Memories.IMemorySound
+{
+    public UniTask PlayAsync(Memories.Gameplay.Memories.MemorySoundNode node, CancellationToken token) => UniTask.CompletedTask;
+    public void StopAll() { }
+}
+
         private sealed class TextView : IStoryTextView
         {
             public CancellationToken LifetimeToken => CancellationToken.None;
@@ -37,6 +64,10 @@ namespace Memories.Tests.PlayMode
             var scene = EditorSceneManager.OpenPreviewScene("Assets/_Project/Locations/Garage/Garage.unity");
             string key = "Memories.Tests.CompressorAvailability." + Guid.NewGuid().ToString("N");
             using var texts = new StoryTextPresenter(new TextView());
+            var comicInput = new ComicInput();
+            var comicView = new ComicView();
+            var collection = new Memories.Gameplay.Memories.MemoryCollection(persistProgress: false);
+            using var memories = new Memories.Gameplay.Memories.MemoryPresenter(collection, new GameplayModeState(comicInput), comicView, comicInput, new ComicMusic(), new ComicSounds());
             var inventory = new QuestInventory();
             var variables = new CustomVariableStore(persistProgress: false);
             try
@@ -71,7 +102,7 @@ namespace Memories.Tests.PlayMode
                 // The same live session now explicitly unlocks the pickup in the request graph.
                 var father = Find(scene, "Отец у заднего левого колеса").GetComponent<ReactionInteractable>();
                 father.gameObject.SetActive(true);
-                father.Initialize(texts, null, inventory: inventory, variables: variables);
+                father.Initialize(texts, memories, inventory: inventory, variables: variables);
                 father.Interact();
                 Assert.IsFalse(pickup.CanInteract, "Keep locked until the request finishes.");
                 float deadline = Time.realtimeSinceStartup + 20f;
@@ -82,6 +113,25 @@ namespace Memories.Tests.PlayMode
                 pickup.Interact();
                 Assert.AreEqual(1, inventory.Items.Count);
                 Assert.IsFalse(pickup.gameObject.activeSelf);
+                father.Interact();
+                Assert.IsEmpty(inventory.Items);
+                Assert.IsTrue(Find(scene, "Компрессор у заднего левого колеса").activeSelf);
+                deadline = Time.realtimeSinceStartup + 2f;
+                while (!memories.IsPlaying && father.IsRunning && Time.realtimeSinceStartup < deadline) yield return null;
+                Assert.IsTrue(memories.IsPlaying);
+                Assert.AreEqual(1, comicView.Frames);
+                for (int frame = 0; frame < 4; frame++)
+                {
+                    comicInput.Advance();
+                    yield return null;
+                    yield return null;
+                }
+                Assert.AreEqual(4, comicView.Frames);
+                Assert.IsFalse(memories.IsPlaying);
+                Assert.IsTrue(collection.Contains("garage_second_memory"));
+                yield return null;
+                father.Interact();
+                Assert.IsFalse(memories.IsPlaying, "Do not replay after the compressor was consumed.");
             }
             finally
             {
