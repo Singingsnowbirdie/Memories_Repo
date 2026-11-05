@@ -380,6 +380,7 @@ namespace Memories.Editor
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("initiallyInteractable"), new GUIContent("Доступен изначально"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("prompt"), new GUIContent("Подсказка"));
             var graph = serializedObject.FindProperty("graph");
             EditorGUILayout.PropertyField(graph, new GUIContent("Граф реакций"));

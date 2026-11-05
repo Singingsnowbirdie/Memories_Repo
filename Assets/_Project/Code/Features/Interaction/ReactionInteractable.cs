@@ -11,6 +11,7 @@ namespace Memories.Gameplay.Interaction
     public sealed class ReactionInteractable : MonoBehaviour, IObjectStateParticipant
     {
         [SerializeField] private ReactionGraph graph;
+        [SerializeField] private bool initiallyInteractable = true;
         [SerializeField] private string prompt = "Взаимодействовать";
         [SerializeField, InspectorName("Объекты графа")] private ReactionObjectBinding[] objectBindings = new ReactionObjectBinding[0];
         [SerializeField, InspectorName("Кастомные реакции")] private CustomReactionBinding[] customReactions = new CustomReactionBinding[0];
@@ -37,7 +38,7 @@ namespace Memories.Gameplay.Interaction
 
         public void Initialize(StoryTextPresenter texts, MemoryPresenter memories, ILocationTransition locations = null, QuestInventory inventory = null, CustomVariableStore variables = null)
         {
-            SetInteractionEnabled(true);
+            SetInteractionEnabled(initiallyInteractable);
             runner?.Dispose();
             runner = new ReactionRunner(texts, memories, this, locations, inventory, variables, objectBindings, customReactions);
             RestorePickupState(inventory);
