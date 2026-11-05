@@ -70,8 +70,7 @@ namespace Memories.Editor
                 using (var settings = new SerializedObject(owner))
                 {
                     var graphProperty = settings.FindProperty("graph") ?? settings.FindProperty("interactionGraph");
-                    var initialization = settings.FindProperty("initializationGraph");
-                    if (graphProperty?.objectReferenceValue != graph && initialization?.objectReferenceValue != graph) return;
+                    if (graphProperty?.objectReferenceValue != graph) return;
                     var bindings = settings.FindProperty("customReactions");
                     if (bindings == null) return;
                     var result = EditorUtility.IsPersistent(owner) ? prefabNames : names;
@@ -382,7 +381,6 @@ namespace Memories.Editor
         {
             serializedObject.Update();
             EditorGUILayout.PropertyField(serializedObject.FindProperty("prompt"), new GUIContent("Подсказка"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("initializationGraph"), new GUIContent("Граф восстановления"));
             var graph = serializedObject.FindProperty("graph");
             EditorGUILayout.PropertyField(graph, new GUIContent("Граф реакций"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("objectBindings"), new GUIContent("Объекты графа"), true);

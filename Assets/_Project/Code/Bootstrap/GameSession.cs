@@ -330,6 +330,10 @@ namespace Memories.Bootstrap
         private void BindDoors(Scene scene, LocationLifetimeScope scope)
         {
             foreach (var root in scene.GetRootGameObjects())
+                foreach (var reaction in root.GetComponentsInChildren<GarageFatherMemoryReaction>(true))
+                    reaction.Initialize(scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>(),
+                        scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
+            foreach (var root in scene.GetRootGameObjects())
                 foreach (var entrance in root.GetComponentsInChildren<GarageEntranceReaction>(true))
                     entrance.Initialize(scope.Container.Resolve<PlayerMotor>(), scope.Container.Resolve<PlayerMovementModel>(),
                         scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>(),

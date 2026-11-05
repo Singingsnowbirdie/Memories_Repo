@@ -38,8 +38,7 @@ namespace Memories.Tests.EditMode
                 visibility.gameObject.SetActive(!revealed);
                 visibility.Restore(variables);
                 Assert.AreEqual(revealed, visibility.gameObject.activeSelf);
-                var photo = All<RevealPhotoReaction>(scene).Single();
-                Assert.IsNull(Field<ReactionGraph>(photo.GetComponent<ReactionInteractable>(), "initializationGraph"));
+                Assert.IsNull(typeof(ReactionInteractable).GetField("initializationGraph", BindingFlags.NonPublic | BindingFlags.Instance));
             }
             finally { EditorSceneManager.ClosePreviewScene(scene); }
         }

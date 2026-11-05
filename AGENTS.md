@@ -18,3 +18,7 @@ The user explicitly requires that gameplay state changes be initiated explicitly
 - Frame-based movement, rendering, input, animation interpolation, and spatial detection are not quest-state observers. They must not contain hidden progress-dependent consequences. Completion of an explicitly started animation may explicitly invoke its next custom reaction.
 - UI bindings and persistence may observe changes only to display or save them, never to advance gameplay. Do not claim that all `Update` methods or all event subscriptions have been removed when only gameplay observers were audited.
 - When adding a graph condition or progression change, inspect all affected paths, including item acquisition order, save restoration, and tester checkpoints.
+
+- Never add restoration/initialization reaction graphs or an inspector field for them. Persist active hints through object state; do not replay reaction graphs when loading a save.
+
+- Always store hint/reminder reaction graphs in Assets/_Project/Configs/Reactions/<Location>/Hints/, alongside their .meta files. Preserve asset GUIDs when moving them.

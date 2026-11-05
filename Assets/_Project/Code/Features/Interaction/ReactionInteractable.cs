@@ -8,10 +8,9 @@ namespace Memories.Gameplay.Interaction
 {
     [DisallowMultipleComponent]
     [AddComponentMenu("Memories/Interaction/Reaction Interactable")]
-    public sealed class ReactionInteractable : MonoBehaviour
+    public sealed class ReactionInteractable : MonoBehaviour, IObjectStateParticipant
     {
         [SerializeField] private ReactionGraph graph;
-        [SerializeField] private ReactionGraph initializationGraph;
         [SerializeField] private string prompt = "Взаимодействовать";
         [SerializeField, InspectorName("Объекты графа")] private ReactionObjectBinding[] objectBindings = new ReactionObjectBinding[0];
         [SerializeField, InspectorName("Кастомные реакции")] private CustomReactionBinding[] customReactions = new CustomReactionBinding[0];
@@ -23,7 +22,9 @@ namespace Memories.Gameplay.Interaction
             GetComponent<ObjectStateTracker>()?.Capture();
         }
         private ReactionRunner runner;
-        private ReactionRunner initializationRunner;
+        public string StateKey => "reactionHints";
+        public string CaptureState() => runner?.CaptureHints() ?? "";
+        public void RestoreState(string state) => runner?.RestoreHints(graph, state);
         public string Prompt => prompt;
         public bool CanInteract => isActiveAndEnabled && interactionEnabled && runner != null && runner.CanRun(graph);
         public bool IsRunning => runner != null && runner.IsRunning;
@@ -38,14 +39,8 @@ namespace Memories.Gameplay.Interaction
         {
             SetInteractionEnabled(true);
             runner?.Dispose();
-            initializationRunner?.Dispose();
             runner = new ReactionRunner(texts, memories, this, locations, inventory, variables, objectBindings, customReactions);
             RestorePickupState(inventory);
-            if (initializationGraph != null)
-            {
-                initializationRunner = new ReactionRunner(texts, memories, this, locations, inventory, variables, objectBindings, customReactions);
-                initializationRunner.TryRun(initializationGraph);
-            }
         }
         private void RestorePickupState(QuestInventory inventory)
         {
@@ -72,12 +67,10 @@ namespace Memories.Gameplay.Interaction
         {
             // A pickup may hide itself before finishing its story-text branch.
             if (runner != null && !runner.IsHidingOwner) runner.Stop();
-            if (initializationRunner != null && !initializationRunner.IsHidingOwner) initializationRunner.Stop();
         }
         private void OnDestroy()
         {
             runner?.Dispose();
-            initializationRunner?.Dispose();
         }
     }
 }

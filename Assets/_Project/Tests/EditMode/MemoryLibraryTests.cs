@@ -67,7 +67,7 @@ namespace Memories.Tests.EditMode
         }
 
         private static MemoryGraph Graph => AssetDatabase.LoadAssetAtPath<MemoryGraph>(
-            "Assets/_Project/Configs/Memories/TVBaseballMemoryGraph.asset");
+            "Assets/_Project/Configs/Memories/House/TVBaseballMemoryGraph.asset");
 
         [Test]
         public void CollectionPersistsGraphReferencesAndDeduplicatesWithoutUnlockingOtherMemories()

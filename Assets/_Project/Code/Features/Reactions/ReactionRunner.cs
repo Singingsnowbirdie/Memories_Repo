@@ -26,6 +26,22 @@ namespace Memories.Gameplay.Reactions
         private bool fired;
         private ReactionRunner hintOwner;
         private readonly Dictionary<string, CancellationTokenSource> hintTimers = new Dictionary<string, CancellationTokenSource>();
+        private readonly HashSet<string> activeHints = new HashSet<string>();
+        [Serializable] private sealed class HintState { public List<string> active = new List<string>(); }
+
+        public string CaptureHints() => JsonUtility.ToJson(new HintState { active = activeHints.ToList() });
+
+        // Resume saved timers only. Never replay the conversation or evaluate quest progress here.
+        public void RestoreHints(ReactionGraph graph, string state)
+        {
+            if (string.IsNullOrEmpty(state) || graph == null ||
+                !graph.TryGetSequence(out var actions, out _)) return;
+            var saved = JsonUtility.FromJson<HintState>(state);
+            if (saved?.active == null) return;
+            foreach (var action in actions)
+                if (action.Kind == ReactionKind.StartHints && saved.active.Contains(action.HintId))
+                    StartHint(action);
+        }
         public bool IsRunning => playback != null;
         public bool IsHidingOwner { get; private set; }
         public ReactionRunner(StoryTextPresenter texts, MemoryPresenter memories, UnityEngine.Object owner,
@@ -94,6 +110,7 @@ namespace Memories.Gameplay.Reactions
 
         private void StopHint(string id)
         {
+            activeHints.Remove(id);
             if (!hintTimers.TryGetValue(id, out var timer)) return;
             hintTimers.Remove(id);
             timer.Cancel();
@@ -102,6 +119,7 @@ namespace Memories.Gameplay.Reactions
         private void StartHint(ReactionNode action)
         {
             if (hintTimers.ContainsKey(action.HintId)) return;
+            activeHints.Add(action.HintId);
             var timer = new CancellationTokenSource();
             hintTimers.Add(action.HintId, timer);
             RunHintAsync(action.HintId, action.HintGraph, action.HintTimeout, action.RepeatHint, timer).Forget();
@@ -128,6 +146,7 @@ namespace Memories.Gameplay.Reactions
                     await UniTask.WaitUntil(() => !child.IsRunning, cancellationToken: timer.Token);
                     child.Dispose();
                     child = null;
+                    if (!repeat) activeHints.Remove(id);
                 } while (repeat);
             }
             catch (OperationCanceledException) { }

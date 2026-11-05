@@ -80,8 +80,6 @@ namespace Memories.Editor
                 string oldName = key.stringValue;
                 key.stringValue = newName.Trim();
                 RenameObject(graph, oldName, key.stringValue);
-                var initializationGraph = property.serializedObject.FindProperty("initializationGraph")?.objectReferenceValue as ReactionGraph;
-                if (initializationGraph != graph) RenameObject(initializationGraph, oldName, key.stringValue);
                 XNodeEditor.NodeEditorWindow.RepaintAll();
             }
             row.y += 24;
