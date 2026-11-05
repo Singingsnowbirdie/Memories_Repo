@@ -129,12 +129,59 @@ namespace Memories.Tests.PlayMode
                 }
                 Assert.Greater(Vector3.Dot(motor.transform.position - attachment.transform.position, attachment.transform.forward), .8f,
                     "Side doorway must be walkable: " + motor.transform.position + "\n" + string.Join("\n", Physics.OverlapSphere(motor.transform.position + Vector3.up, 1.1f).Select(c => c.name + " " + c.bounds)));
-                Assert.AreEqual(yard, session.CurrentLocationScene);
-                Assert.IsTrue(yard.isLoaded);
-                memories.Collect(BackyardGarageAttachment.MemoryId);
-                attachment.Execute();
-                await UniTask.NextFrame();
+                var entrance = garage.GetRootGameObjects().SelectMany(g => g.GetComponentsInChildren<GarageEntranceReaction>(true)).Single();
+                var mode = scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>();
+                Assert.IsTrue(entrance.IsRunning, "Crossing the doorway must run the entrance graph.");
+                Assert.IsTrue(mode.ControlsBlocked);
+                deadline = Time.realtimeSinceStartup + 15;
+                while (entrance.IsRunning && Time.realtimeSinceStartup < deadline) await UniTask.NextFrame();
+                Assert.IsFalse(entrance.IsRunning);
+                Assert.IsFalse(mode.ControlsBlocked);
+                Assert.AreEqual(garage, session.CurrentLocationScene);
+                Assert.AreEqual(garage, SceneManager.GetActiveScene());
+                Assert.IsFalse(SceneManager.GetSceneByPath(TestLocationLauncher.BackyardPath).isLoaded);
+                Assert.AreSame(motor, scope.Container.Resolve<PlayerMotor>());
+                var hinge = Field<Transform>(entrance, "doorHinge");
+                Assert.Less(Quaternion.Angle(hinge.localRotation, Quaternion.Euler(Field<Vector3>(entrance, "closedDoorEuler"))), .01f);
+                var father = Field<Transform>(entrance, "father");
+                Assert.Greater(Vector3.Dot(motor.CameraTransform.forward, (father.position - motor.CameraTransform.position).normalized), .99f);
+                entrance.Execute();
+                Assert.IsFalse(entrance.IsRunning, "The entrance must not replay.");
                 Assert.AreEqual(1, Enumerable.Range(0, SceneManager.sceneCount).Select(SceneManager.GetSceneAt).Count(s => s.path == garage.path));
+            }
+            finally
+            {
+                if (session.IsRunning) await session.EndAsync();
+                Object.Destroy(root);
+                await UniTask.NextFrame();
+            }
+        });
+
+        [UnityTest]
+        public IEnumerator DirectGarageLoadRestoresClosedEntranceWithoutCutscene() => UniTask.ToCoroutine(async () =>
+        {
+            var root = new GameObject("Garage direct load test");
+            root.SetActive(false);
+            var app = root.AddComponent<AppLifetimeScope>();
+            app.StartAutomatically = false;
+#if UNITY_EDITOR
+            app.UseOpenLocationForEditorPlay = true;
+#endif
+            root.SetActive(true);
+            var session = app.Container.Resolve<GameSession>();
+            try
+            {
+                await session.StartAsync(TestLocationLauncher.GaragePath);
+                var garage = session.CurrentLocationScene;
+                var entrance = garage.GetRootGameObjects().SelectMany(g => g.GetComponentsInChildren<GarageEntranceReaction>(true)).Single();
+                entrance.Execute();
+                await UniTask.NextFrame();
+                Assert.IsFalse(entrance.IsRunning);
+                Assert.IsFalse(session.LocationScope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>().ControlsBlocked);
+                Assert.IsFalse(SceneManager.GetSceneByPath(TestLocationLauncher.BackyardPath).isLoaded);
+                var hinge = Field<Transform>(entrance, "doorHinge");
+                Assert.Less(Quaternion.Angle(hinge.localRotation, Quaternion.Euler(Field<Vector3>(entrance, "closedDoorEuler"))), .01f);
+                Assert.IsTrue(hinge.GetComponentsInChildren<Collider>().Any(c => c.enabled && !c.isTrigger));
             }
             finally
             {

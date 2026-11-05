@@ -330,6 +330,11 @@ namespace Memories.Bootstrap
         private void BindDoors(Scene scene, LocationLifetimeScope scope)
         {
             foreach (var root in scene.GetRootGameObjects())
+                foreach (var entrance in root.GetComponentsInChildren<GarageEntranceReaction>(true))
+                    entrance.Initialize(scope.Container.Resolve<PlayerMotor>(), scope.Container.Resolve<PlayerMovementModel>(),
+                        scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>(),
+                        () => EnterGarageAsync(scene), scene == locationScene);
+            foreach (var root in scene.GetRootGameObjects())
                 foreach (var entrance in root.GetComponentsInChildren<BackyardEntranceReaction>(true))
                     entrance.Initialize(scope.Container.Resolve<PlayerMotor>(), scope.Container.Resolve<PlayerMovementModel>(),
                         scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>(),
@@ -525,6 +530,15 @@ namespace Memories.Bootstrap
                 if (disposed) await CleanupAsync();
                 throw;
             }
+            finally { busy = false; }
+        }
+
+        private async UniTask EnterGarageAsync(Scene scene)
+        {
+            if (disposed || busy || !additionalScenes.Contains(scene))
+                throw new InvalidOperationException("Cannot enter the attached garage.");
+            busy = true;
+            try { await ReplaceConnectedHouseAsync(scene); }
             finally { busy = false; }
         }
 

@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 100002, guid: 32b7353aaf14ee04fb669164d83b6817, type: 3}
       propertyPath: m_Name
-      value: Pliers
+      value: Pliers_Variant_3
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 32b7353aaf14ee04fb669164d83b6817, type: 3}
       propertyPath: m_LocalPosition.x
@@ -52,7 +52,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6400002, guid: 32b7353aaf14ee04fb669164d83b6817, type: 3}
+    - {fileID: 6400000, guid: 32b7353aaf14ee04fb669164d83b6817, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
