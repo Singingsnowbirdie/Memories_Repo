@@ -393,6 +393,10 @@ namespace Memories.Bootstrap
                     reaction.Restore(scope.Container.Resolve<CustomVariableStore>(),
                         scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
             foreach (var root in scene.GetRootGameObjects())
+                foreach (var reaction in root.GetComponentsInChildren<GarageFinalMemoryReaction>(true))
+                    reaction.Restore(scope.Container.Resolve<QuestInventory>(),
+                        scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
+            foreach (var root in scene.GetRootGameObjects())
                 foreach (var reaction in root.GetComponentsInChildren<ShowSeatedBenReaction>(true))
                     reaction.Restore(scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
             foreach (var root in scene.GetRootGameObjects())
