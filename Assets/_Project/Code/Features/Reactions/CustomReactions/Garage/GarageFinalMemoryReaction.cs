@@ -10,9 +10,11 @@ namespace Memories.Gameplay.Reactions
         [SerializeField] private GameObject finalFather;
         [SerializeField] private OpenGarageGateReaction gate;
         [SerializeField] private QuestItem[] deliveredItems;
+        [SerializeField] private GarageSchoolConnection schoolConnection;
 
         public override void Execute()
         {
+            if (schoolConnection != null) schoolConnection.Execute();
             finalFather.SetActive(true);
             workingFather.SetActive(false);
         }

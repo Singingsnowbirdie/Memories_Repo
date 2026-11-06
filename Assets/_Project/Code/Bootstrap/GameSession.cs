@@ -35,10 +35,12 @@ namespace Memories.Bootstrap
         {
             public readonly List<Renderer> Renderers = new List<Renderer>();
             public readonly List<Collider> Colliders = new List<Collider>();
+            public readonly List<GameObject> TemporaryObjects = new List<GameObject>();
             public void Restore()
             {
                 foreach (var renderer in Renderers) if (renderer != null) renderer.enabled = true;
                 foreach (var collider in Colliders) if (collider != null) collider.enabled = true;
+                foreach (var target in TemporaryObjects) if (target != null) target.SetActive(false);
             }
         }
 
@@ -330,6 +332,9 @@ namespace Memories.Bootstrap
         private void BindDoors(Scene scene, LocationLifetimeScope scope)
         {
             foreach (var root in scene.GetRootGameObjects())
+                foreach (var connection in root.GetComponentsInChildren<GarageSchoolConnection>(true))
+                    connection.Initialize(scope.Container.Resolve<PlayerMotor>(), LoadGarageSchoolAsync, EnterConnectedSceneAsync);
+            foreach (var root in scene.GetRootGameObjects())
                 foreach (var reaction in root.GetComponentsInChildren<GarageFatherMemoryReaction>(true))
                     reaction.Initialize(scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>(),
                         scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
@@ -481,6 +486,64 @@ namespace Memories.Bootstrap
             catch
             {
                 if (garage.IsValid() && garage.isLoaded) await SceneManager.UnloadSceneAsync(garage);
+                throw;
+            }
+            finally { busy = false; }
+        }
+
+        private async UniTask<Scene> LoadGarageSchoolAsync(GarageSchoolConnection connection)
+        {
+            using var cancellation = CancellationTokenSource.CreateLinkedTokenSource(application.Token,
+                shutdown.Token, connection.GetCancellationTokenOnDestroy());
+            await UniTask.WaitUntil(() => disposed || (!busy && locationScene == connection.gameObject.scene),
+                cancellationToken: cancellation.Token);
+            cancellation.Token.ThrowIfCancellationRequested();
+            if (disposed) throw new OperationCanceledException();
+            const string path = TestLocationLauncher.SchoolPath;
+            if (!Application.CanStreamedLevelBeLoaded(path))
+                throw new InvalidOperationException("School must be enabled in Build Settings.");
+            var existing = SceneManager.GetSceneByPath(path);
+            if (existing.isLoaded)
+            {
+                if (additionalScenes.Contains(existing)) return existing;
+                throw new InvalidOperationException("School is already loaded outside this session.");
+            }
+            busy = true;
+            Scene school = default;
+            try
+            {
+                await SceneManager.LoadSceneAsync(path, LoadSceneMode.Additive);
+                school = SceneManager.GetSceneByPath(path);
+                cancellation.Token.ThrowIfCancellationRequested();
+                var arrival = FindMarker(school, "Вход из гаража");
+                var wall = FindMarker(school, "Торцевая стена");
+                var leftDoor = FindMarker(school, "Закрытая торцевая дверь 0 -1");
+                var rightDoor = FindMarker(school, "Закрытая торцевая дверь 0 1");
+                var frame = FindMarker(school, "Проём из гаража");
+                if (arrival == null || wall == null || leftDoor == null || rightDoor == null || frame == null)
+                    throw new InvalidOperationException("School corridor entrance is not configured.");
+                AlignScene(school, arrival, connection.transform.position, connection.transform.rotation);
+                DisableLocationCameras(school);
+                BindDoors(school, LocationScope);
+                var cover = new ConnectionCover();
+                foreach (var part in new[] { wall, leftDoor, rightDoor })
+                {
+                    foreach (var renderer in part.GetComponentsInChildren<Renderer>())
+                        if (renderer.enabled) { cover.Renderers.Add(renderer); renderer.enabled = false; }
+                    foreach (var collider in part.GetComponentsInChildren<Collider>())
+                        if (collider.enabled) { cover.Colliders.Add(collider); collider.enabled = false; }
+                }
+                frame.gameObject.SetActive(true);
+                cover.TemporaryObjects.Add(frame.gameObject);
+                connectionCovers[school.handle] = cover;
+                additionalScenes.Add(school);
+                Physics.SyncTransforms();
+                return school;
+            }
+            catch
+            {
+                if (school.IsValid() && school.isLoaded) await SceneManager.UnloadSceneAsync(school);
+                if (disposed) await CleanupAsync();
                 throw;
             }
             finally { busy = false; }

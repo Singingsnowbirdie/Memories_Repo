@@ -1,4 +1,6 @@
 using System.Collections;
+using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Memories.Gameplay.Reactions
@@ -17,7 +19,9 @@ namespace Memories.Gameplay.Reactions
         private bool raising;
         private Quaternion closedRotation;
         private bool rotationCaptured;
+        private Func<UniTask> prepareExit;
         public bool IsOpen { get; private set; }
+        public void Initialize(Func<UniTask> preparation) => prepareExit = preparation;
 
         private void CaptureRotation()
         {
@@ -28,11 +32,22 @@ namespace Memories.Gameplay.Reactions
 
         public void RestoreOpen()
         {
+            if (prepareExit != null)
+            {
+                if (!raising && !IsOpen) OpenWhenReadyAsync(true).Forget();
+                return;
+            }
+            RestorePanel();
+        }
+
+        private void RestorePanel()
+        {
             if (panel == null) return;
             CaptureRotation();
             StopAllCoroutines();
             panel.localPosition = raisedPosition;
             panel.localRotation = closedRotation * Quaternion.Euler(90, 0, 0);
+            Physics.SyncTransforms();
             raising = false;
             IsOpen = true;
         }
@@ -40,9 +55,26 @@ namespace Memories.Gameplay.Reactions
         public override void Execute()
         {
             if (panel == null || raising || IsOpen) return;
+            if (prepareExit != null) { OpenWhenReadyAsync(false).Forget(); return; }
             CaptureRotation();
             raising = true;
             StartCoroutine(Raise());
+        }
+
+        private async UniTask OpenWhenReadyAsync(bool restore)
+        {
+            raising = true;
+            try
+            {
+                await prepareExit().AttachExternalCancellation(this.GetCancellationTokenOnDestroy());
+                if (restore) RestorePanel();
+                else { CaptureRotation(); StartCoroutine(Raise()); }
+            }
+            catch (OperationCanceledException) { }
+            catch (Exception exception)
+            {
+                if (this != null) { raising = false; Debug.LogException(exception, this); }
+            }
         }
 
         private IEnumerator Raise()
