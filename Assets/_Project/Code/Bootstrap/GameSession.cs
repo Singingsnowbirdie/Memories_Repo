@@ -382,6 +382,9 @@ namespace Memories.Bootstrap
                         scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
             scope.Container.Resolve<ObjectStateStore>().RestoreScene(scene);
             foreach (var root in scene.GetRootGameObjects())
+                foreach (var interactable in root.GetComponentsInChildren<ReactionInteractable>(true))
+                    interactable.RestoreInitialVisibility(scope.Container.Resolve<QuestInventory>());
+            foreach (var root in scene.GetRootGameObjects())
                 foreach (var reaction in root.GetComponentsInChildren<GarageHoodFatherMemoryReaction>(true))
                     reaction.Restore(scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
             foreach (var root in scene.GetRootGameObjects())

@@ -47,7 +47,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: previous
-        node: {fileID: 795227823833055045}
+        node: {fileID: -6137104579297663461}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -152,8 +152,8 @@ MonoBehaviour:
       _node: {fileID: -6137104579297663461}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
-      - fieldName: next
-        node: {fileID: 795227823833055045}
+      - fieldName: ifAbsent
+        node: {fileID: -7820602623227221645}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -284,10 +284,10 @@ MonoBehaviour:
         node: {fileID: -7820602623227221645}
         reroutePoints: []
       - fieldName: next
-        node: {fileID: 3618552758909924208}
+        node: {fileID: 583149124567800001}
         reroutePoints: []
       - fieldName: next
-        node: {fileID: 583149124567800001}
+        node: {fileID: 795227823833055045}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -320,6 +320,7 @@ MonoBehaviour:
   - {fileID: 4523552354405929159}
   - {fileID: 1933253878646798593}
   - {fileID: 583149124567800001}
+  - {fileID: 860110000000000001}
   objectKeys:
   - "\u041A\u043E\u043C\u043F\u0440\u0435\u0441\u0441\u043E\u0440 \u0443 \u043A\u043E\u043B\u0435\u0441\u0430"
   - "\u041F\u043E\u0434\u0431\u0438\u0440\u0430\u0435\u043C\u044B\u0439 \u043A\u043E\u043C\u043F\u0440\u0435\u0441\u0441\u043E\u0440"
@@ -414,8 +415,8 @@ MonoBehaviour:
       _node: {fileID: 795227823833055045}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
-      - fieldName: ifAbsent
-        node: {fileID: -7820602623227221645}
+      - fieldName: next
+        node: {fileID: 3618552758909924208}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -426,7 +427,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: previous
-        node: {fileID: -6137104579297663461}
+        node: {fileID: -509358996153818260}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -455,6 +456,74 @@ MonoBehaviour:
   interactionEnabled: 0
   item: {fileID: 0}
   hintId: 
+  hintGraph: {fileID: 0}
+  hintTimeout: 60
+  repeatHint: 1
+--- !u!114 &860110000000000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd260b234eb14d4cbcafbe381aa00ee1, type: 3}
+  m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
+  graph: {fileID: 11400000}
+  position: {x: 1750, y: 700}
+  ports:
+    keys:
+    - previous
+    - next
+    values:
+    - _fieldName: previous
+      _node: {fileID: 860110000000000001}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: next
+        node: {fileID: 1933253878646798593}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: next
+      _node: {fileID: 860110000000000001}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: 3618552758909924208}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  previous: {fileID: 0}
+  next: {fileID: 0}
+  kind: 5
+  reactionGraph: {fileID: 0}
+  textGraph: {fileID: 0}
+  memoryGraph: {fileID: 0}
+  memoryId:
+  firstCompletionText: {fileID: 0}
+  memoryStartedReactionKey:
+  locationScenePath:
+  variableBank: {fileID: 0}
+  variableId:
+  variableValue: 1
+  variableIntValue: 0
+  addToIntValue: 0
+  objectKey: "\u041F\u043E\u0434\u0431\u0438\u0440\u0430\u0435\u043C\u044B\u0439
+    \u043A\u043E\u043C\u043F\u0440\u0435\u0441\u0441\u043E\u0440"
+  active: 1
+  revealDuration: 1
+  revealDelay: 0
+  revealShader: {fileID: 4800000, guid: 0420a32a1c6f438fa03008fd3c81f551, type: 3}
+  interactionEnabled: 1
+  item: {fileID: 0}
+  hintId:
   hintGraph: {fileID: 0}
   hintTimeout: 60
   repeatHint: 1
@@ -493,7 +562,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: previous
-        node: {fileID: 3618552758909924208}
+        node: {fileID: 860110000000000001}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -617,7 +686,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: next
-        node: {fileID: 1933253878646798593}
+        node: {fileID: 860110000000000001}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -628,7 +697,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: previous
-        node: {fileID: -509358996153818260}
+        node: {fileID: 795227823833055045}
         reroutePoints: []
       _direction: 1
       _connectionType: 1

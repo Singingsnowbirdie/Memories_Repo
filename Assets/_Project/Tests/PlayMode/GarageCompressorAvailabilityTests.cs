@@ -59,6 +59,65 @@ private sealed class ComicSounds : Memories.Gameplay.Memories.IMemorySound
             .Single(t => t.name == name).gameObject;
 
         [UnityTest]
+        public IEnumerator RequestedSetsRevealBeforeTextAndSkipCollectedItems()
+        {
+            foreach (bool final in new[] { false, true })
+            foreach (bool partial in new[] { false, true })
+            {
+                var scene = EditorSceneManager.OpenPreviewScene("Assets/_Project/Locations/Garage/Garage.unity");
+                using var texts = new StoryTextPresenter(new TextView());
+                var input = new ComicInput();
+                using var memories = new Memories.Gameplay.Memories.MemoryPresenter(
+                    new Memories.Gameplay.Memories.MemoryCollection(persistProgress: false),
+                    new GameplayModeState(input), new ComicView(), input, new ComicMusic(), new ComicSounds());
+                var inventory = new QuestInventory();
+                var variables = new CustomVariableStore(persistProgress: false);
+                try
+                {
+                    var names = final ? new[] { "VacuumHose", "SiliconeSpray", "PaperWipes" }
+                        : new[] { "Headlamp", "Toolbox" };
+                    var pickups = names.Select(n => scene.GetRootGameObjects()
+                        .SelectMany(g => g.GetComponentsInChildren<ReactionInteractable>(true))
+                        .Single(p => new SerializedObject(p).FindProperty("graph").objectReferenceValue ==
+                            AssetDatabase.LoadAssetAtPath<ReactionGraph>(
+                                "Assets/_Project/Configs/Reactions/Garage/Pickup" + n + ".asset"))).ToArray();
+                    var items = names.Select(n => AssetDatabase.LoadAssetAtPath<QuestItem>(
+                        "Assets/_Project/Configs/Инвентарные предметы/Гараж/" + n + ".asset")).ToArray();
+                    if (partial) inventory.TryAdd(items[0]);
+                    foreach (var pickup in pickups)
+                    {
+                        Assert.IsTrue(pickup.gameObject.activeSelf, "Editor scene must keep the item visible.");
+                        pickup.Initialize(texts, memories, inventory: inventory, variables: variables);
+                        Assert.IsFalse(pickup.gameObject.activeSelf);
+                    }
+                    var father = Find(scene, final ? "Отец у открытого капота" : "Отец у капота")
+                        .GetComponent<ReactionInteractable>();
+                    father.gameObject.SetActive(true);
+                    father.Initialize(texts, memories, inventory: inventory, variables: variables);
+                    father.Interact();
+                    for (int i = 0; i < pickups.Length; i++)
+                    {
+                        bool show = !partial || i != 0;
+                        Assert.AreEqual(show, pickups[i].gameObject.activeSelf);
+                        Assert.AreEqual(show, pickups[i].GetComponent<ObjectReveal>() != null);
+                    }
+                    yield return new WaitForSeconds(1.4f);
+                    Assert.IsTrue(father.IsRunning, "Items must become available while text is still playing.");
+                    for (int i = partial ? 1 : 0; i < pickups.Length; i++)
+                    {
+                        Assert.IsTrue(pickups[i].CanInteract);
+                        pickups[i].Interact();
+                        Assert.IsTrue(inventory.Contains(items[i].Id));
+                        Assert.IsFalse(pickups[i].gameObject.activeSelf);
+                        pickups[i].RestoreInitialVisibility(inventory);
+                        Assert.IsFalse(pickups[i].gameObject.activeSelf, "Restoration must not resurrect a collected item.");
+                    }
+                }
+                finally { EditorSceneManager.ClosePreviewScene(scene); }
+            }
+        }
+
+        [UnityTest]
         public IEnumerator RequestUnlocksPickupAndBothStatesSurviveReload()
         {
             var scene = EditorSceneManager.OpenPreviewScene("Assets/_Project/Locations/Garage/Garage.unity");
@@ -74,7 +133,7 @@ private sealed class ComicSounds : Memories.Gameplay.Memories.IMemorySound
             {
                 var pickup = Find(scene, "Компрессор").GetComponent<ReactionInteractable>();
                 pickup.Initialize(texts, null, inventory: inventory, variables: variables);
-                Assert.IsTrue(pickup.gameObject.activeSelf);
+                Assert.IsFalse(pickup.gameObject.activeSelf, "Hidden until the request, but visible in the editor asset.");
                 Assert.IsFalse(pickup.CanInteract);
                 pickup.Interact();
                 Assert.IsEmpty(inventory.Items);
@@ -93,12 +152,17 @@ private sealed class ComicSounds : Memories.Gameplay.Memories.IMemorySound
                         loaded.Initialize(texts, null, inventory: inventory, variables: variables);
                         using var save = new ObjectStateStore(saveKey: key);
                         save.Register(instance, "compressor");
+                        loaded.RestoreInitialVisibility(inventory);
+                        Assert.AreEqual(expected, instance.activeSelf);
                         Assert.AreEqual(expected, loaded.CanInteract);
                     }
                     finally { UnityEngine.Object.DestroyImmediate(instance); }
                 }
 
                 VerifyReload(false);
+                pickup.gameObject.SetActive(true); // Older saves stored locked pickups as visible.
+                VerifyReload(false);
+                pickup.gameObject.SetActive(false);
                 // The same live session now explicitly unlocks the pickup in the request graph.
                 var father = Find(scene, "Отец у заднего левого колеса").GetComponent<ReactionInteractable>();
                 father.gameObject.SetActive(true);
@@ -110,7 +174,13 @@ private sealed class ComicSounds : Memories.Gameplay.Memories.IMemorySound
                 liveSave.Register(Find(scene, "Компрессор у заднего левого колеса"), "delivered");
                 father.Initialize(texts, memories, inventory: inventory, variables: variables);
                 father.Interact();
-                Assert.IsFalse(pickup.CanInteract, "Keep locked until the request finishes.");
+                Assert.IsTrue(pickup.InteractionEnabled);
+                Assert.IsTrue(pickup.gameObject.activeSelf);
+                Assert.IsNotNull(pickup.GetComponent<ObjectReveal>());
+                VerifyReload(true); // Saving during the reveal must keep the unlocked state.
+                yield return new WaitForSeconds(1.3f);
+                Assert.IsTrue(pickup.CanInteract, "Pickup must unlock before the request finishes.");
+                Assert.IsTrue(father.IsRunning, "The request should still be displayed.");
                 float deadline = Time.realtimeSinceStartup + 20f;
                 while (father.IsRunning && Time.realtimeSinceStartup < deadline) yield return null;
                 Assert.IsFalse(father.IsRunning, "Request did not finish.");

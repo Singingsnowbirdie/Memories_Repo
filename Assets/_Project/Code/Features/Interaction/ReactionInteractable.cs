@@ -12,6 +12,7 @@ namespace Memories.Gameplay.Interaction
     {
         [SerializeField] private ReactionGraph graph;
         [SerializeField] private bool initiallyInteractable = true;
+        [SerializeField] private bool initiallyVisible = true;
         [SerializeField] private string prompt = "Взаимодействовать";
         [SerializeField, InspectorName("Объекты графа")] private ReactionObjectBinding[] objectBindings = new ReactionObjectBinding[0];
         [SerializeField, InspectorName("Кастомные реакции")] private CustomReactionBinding[] customReactions = new CustomReactionBinding[0];
@@ -41,11 +42,19 @@ namespace Memories.Gameplay.Interaction
             SetInteractionEnabled(initiallyInteractable);
             runner?.Dispose();
             runner = new ReactionRunner(texts, memories, this, locations, inventory, variables, objectBindings, customReactions);
-            RestorePickupState(inventory);
+            if (!initiallyVisible) gameObject.SetActive(false);
+            if (IsCollectedPickup(inventory)) gameObject.SetActive(false);
         }
-        private void RestorePickupState(QuestInventory inventory)
+        // Called once after saved object states are restored, including older saves
+        // where locked pickups were still visible. Live reveals remain graph actions.
+        public void RestoreInitialVisibility(QuestInventory inventory)
         {
-            if (inventory == null || graph == null || !graph.TryGetSequence(out var actions, out _)) return;
+            if (initiallyVisible) return;
+            gameObject.SetActive(interactionEnabled && !IsCollectedPickup(inventory));
+        }
+        private bool IsCollectedPickup(QuestInventory inventory)
+        {
+            if (inventory == null || graph == null || !graph.TryGetSequence(out var actions, out _)) return false;
             // Restore only a pickup that explicitly hides itself after granting the item.
             // Other item rewards must not hide the object that grants them.
             foreach (var action in actions)
@@ -54,11 +63,9 @@ namespace Memories.Gameplay.Interaction
                 if (!(ReactionGraph.Next(action) is ReactionNode hide) ||
                     hide.Kind != ReactionKind.ObjectActivity || hide.Active) continue;
                 if (ReactionObjectBinding.TryResolve(objectBindings, hide.ObjectKey, out var target) && target == gameObject)
-                {
-                    gameObject.SetActive(false);
-                    return;
-                }
+                    return true;
             }
+            return false;
         }
         public void Interact()
         {
