@@ -18,6 +18,39 @@ namespace Memories.Tests.PlayMode
   static T Component<T>(Scene scene) where T:Component => scene.GetRootGameObjects().SelectMany(r=>r.GetComponentsInChildren<T>(true)).First();
   static T Field<T>(object value,string name)=>(T)value.GetType().GetField(name,System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic).GetValue(value);
   static bool Active(Scene s,string path)=>TesterCheckpointCatalog.Find(s,path).gameObject.activeInHierarchy;
+  [UnityTest] public IEnumerator GarageCorridorCheckpointCanBeRepeated()=>UniTask.ToCoroutine(async()=>
+  {
+   var root=new GameObject("Garage checkpoint test");root.SetActive(false);var app=root.AddComponent<AppLifetimeScope>();app.StartAutomatically=false;
+#if UNITY_EDITOR
+   app.UseOpenLocationForEditorPlay=true;
+#endif
+   root.SetActive(true);var session=app.Container.Resolve<GameSession>();
+   var before=PlayerPrefs.GetString(CustomVariableStore.DefaultKey,"missing");
+   try
+   {
+    for(int i=0;i<2;i++)
+    {
+     await session.JumpToCheckpointAsync(TesterCheckpoint.GarageCorridorOpen);await UniTask.DelayFrame(3);
+     var scene=session.CurrentLocationScene;var memories=session.SessionScope.Container.Resolve<MemoryCollection>();
+     Assert.AreEqual(TestLocationLauncher.GaragePath,scene.path);
+     Assert.IsTrue(Component<OpenGarageGateReaction>(scene).IsOpen);
+     Assert.IsTrue(memories.Contains("garage_final_memory"));
+     var school=SceneManager.GetSceneByPath(TestLocationLauncher.SchoolPath);
+     Assert.IsTrue(school.isLoaded);
+     var entry=Component<SchoolGymEntranceReaction>(school);
+     Assert.IsFalse(entry.IsRunning);
+     Assert.IsFalse(entry.IsCompleted);
+     Assert.IsTrue(entry.transform.Find("Dark corridor from garage").gameObject.activeInHierarchy);
+     Assert.IsFalse(session.LocationScope.Container.Resolve<GameplayModeState>().ControlsBlocked);
+     var exit=Component<GarageSchoolConnection>(scene).transform;
+     var player=session.LocationScope.Container.Resolve<PlayerMotor>().transform;
+     Assert.Less(Vector3.Distance(exit.position-exit.forward*1.5f+Vector3.up*.05f,player.position),.3f);
+     Assert.Less(Quaternion.Angle(exit.rotation,player.rotation),1f);
+     Assert.AreEqual(before,PlayerPrefs.GetString(CustomVariableStore.DefaultKey,"missing"));
+    }
+   }
+   finally {if(session.IsRunning)await session.EndAsync();Object.Destroy(root);await UniTask.NextFrame();}
+  });
   [UnityTest] public IEnumerator CheckpointsRebuildWorldAndCanRewind()=>UniTask.ToCoroutine(async()=>
   {
    var root=new GameObject("Checkpoint test");root.SetActive(false);var app=root.AddComponent<AppLifetimeScope>();app.StartAutomatically=false;

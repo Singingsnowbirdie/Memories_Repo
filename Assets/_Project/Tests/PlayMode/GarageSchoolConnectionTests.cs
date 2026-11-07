@@ -6,6 +6,7 @@ using Memories.Gameplay.Interaction;
 using Memories.Gameplay.Memories;
 using Memories.Gameplay.Player;
 using Memories.Gameplay.Reactions;
+using Memories.Gameplay.UI;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -20,10 +21,61 @@ namespace Memories.Tests.PlayMode
             .SelectMany(g => g.GetComponentsInChildren<T>(true)).Single();
 
         [UnityTest]
-        public IEnumerator FinalMemoryPreloadsSchoolAndGateLeadsIntoCorridor() => CheckPassage(false);
+        public IEnumerator FinalMemoryPreloadsDarkCorridorAndGymThresholdRevealsSchool() => CheckPassage(false);
 
         [UnityTest]
         public IEnumerator RestoredFinalMemoryPreparesPassageWithoutReplayingComic() => CheckPassage(true);
+
+        [UnityTest]
+        public IEnumerator DirectSchoolLoadRestoresSealedGymWithoutCinematic() => CheckDirectSchool(false);
+
+        [UnityTest]
+        public IEnumerator DisablingEntryDuringCameraTurnReleasesControls() => CheckDirectSchool(true);
+
+        private IEnumerator CheckDirectSchool(bool interrupt) => UniTask.ToCoroutine(async () =>
+        {
+            var root = new GameObject("Direct gym entry test");
+            root.SetActive(false);
+            var app = root.AddComponent<AppLifetimeScope>();
+            app.StartAutomatically = false;
+#if UNITY_EDITOR
+            app.UseOpenLocationForEditorPlay = true;
+#endif
+            root.SetActive(true);
+            var session = app.Container.Resolve<GameSession>();
+            try
+            {
+                await session.StartAsync(TestLocationLauncher.SchoolPath);
+                var entry = Find<SchoolGymEntranceReaction>(session.CurrentLocationScene);
+                var motor = session.LocationScope.Container.Resolve<PlayerMotor>();
+                var state = session.LocationScope.Container.Resolve<GameplayModeState>();
+                Assert.IsTrue(entry.IsCompleted);
+                Assert.IsFalse(entry.IsRunning);
+                Assert.IsFalse(state.ControlsBlocked);
+                Assert.IsFalse(entry.transform.Find("Dark corridor from garage").gameObject.activeSelf);
+                Assert.Less(motor.transform.position.x, -10f, "Direct school launches must spawn inside the gym.");
+                Assert.IsTrue(Physics.Raycast(motor.transform.position + Vector3.up, Vector3.right, 3f,
+                    ~0, QueryTriggerInteraction.Ignore), "Direct loads must restore the closed gym door.");
+                if (interrupt)
+                {
+                    entry.PrepareArrival();
+                    entry.Execute();
+                    Assert.IsTrue(entry.IsRunning);
+                    Assert.IsTrue(state.ControlsBlocked);
+                    entry.enabled = false;
+                    await UniTask.NextFrame();
+                    Assert.IsFalse(state.ControlsBlocked, "Cancelling the cinematic must always release its control lock.");
+                    Assert.IsFalse(entry.IsRunning);
+                    Assert.IsFalse(entry.IsCompleted);
+                }
+            }
+            finally
+            {
+                if (session.IsRunning) await session.EndAsync();
+                Object.Destroy(root);
+                await UniTask.NextFrame();
+            }
+        });
 
         [UnityTest]
         public IEnumerator GateWaitsForSlowSchoolLoad()
@@ -134,11 +186,15 @@ namespace Memories.Tests.PlayMode
                 if (!restore) Assert.IsFalse(gate.IsOpen, "Gate must stay closed during the memory.");
                 Assert.AreEqual(garage, session.CurrentLocationScene);
                 var school = SceneManager.GetSceneByPath(TestLocationLauncher.SchoolPath);
-                var arrival = school.GetRootGameObjects().SelectMany(g => g.GetComponentsInChildren<Transform>(true))
-                    .Single(t => t.name == "Вход из гаража");
+                var gymEntry = Find<SchoolGymEntranceReaction>(school);
+                var arrival = gymEntry.CorridorEntrance;
                 Assert.Less(Vector3.Distance(arrival.position, connection.transform.position), .001f);
                 Assert.Less(Quaternion.Angle(arrival.rotation, connection.transform.rotation), .001f);
                 Assert.IsTrue(school.GetRootGameObjects().SelectMany(g => g.GetComponentsInChildren<Camera>(true)).All(c => !c.enabled));
+                var schoolHall = school.GetRootGameObjects().Single(g => g.name == "Школьный коридор");
+                var hallCeiling = schoolHall.transform.Find("Потолок").GetComponent<Renderer>();
+                Assert.IsFalse(hallCeiling.enabled, "The rest of the school must stay hidden during the corridor walk.");
+                Assert.IsTrue(schoolHall.transform.Find("Спортзал").GetComponentsInChildren<Renderer>().Any(r => r.enabled));
                 if (!restore) memories.Close();
                 deadline = Time.realtimeSinceStartup + 10;
                 while (!gate.IsOpen && Time.realtimeSinceStartup < deadline) await UniTask.NextFrame();
@@ -151,18 +207,43 @@ namespace Memories.Tests.PlayMode
                     " parent=" + hit.collider.transform.parent.name + " bounds=" + hit.collider.bounds) +
                     " start=" + start + " direction=" + direction);
                 motor.Teleport(start + Vector3.up * .1f, connection.transform.eulerAngles.y);
+                scope.Container.Resolve<PlayerMovementModel>().ResetMotion(connection.transform.eulerAngles.y);
                 var controller = motor.GetComponent<CharacterController>();
-                deadline = Time.realtimeSinceStartup + 8;
-                while (session.CurrentLocationScene == garage && Time.realtimeSinceStartup < deadline)
+                var mode = scope.Container.Resolve<GameplayModeState>();
+                deadline = Time.realtimeSinceStartup + 15;
+                while (!gymEntry.IsRunning && Time.realtimeSinceStartup < deadline)
                 {
                     controller.Move(direction * (2f * Time.deltaTime) + Vector3.down * .01f);
+                    Assert.AreEqual(garage, session.CurrentLocationScene, "Garage must remain loaded until the gym threshold.");
                     await UniTask.NextFrame();
                 }
-                while (session.IsTransitioning && Time.realtimeSinceStartup < deadline) await UniTask.NextFrame();
+                Assert.IsTrue(gymEntry.IsRunning, "Walking through the gym threshold must run its reaction graph.");
+                Assert.IsTrue(mode.ControlsBlocked);
+                Assert.IsFalse(hallCeiling.enabled, "School must not appear before the camera finishes turning.");
+                var stoppedAt = motor.transform.position;
+                deadline = Time.realtimeSinceStartup + 12;
+                while (gymEntry.IsRunning && Time.realtimeSinceStartup < deadline) await UniTask.NextFrame();
+                Assert.IsFalse(gymEntry.IsRunning);
+                Assert.IsTrue(gymEntry.IsCompleted);
+                Assert.IsFalse(mode.ControlsBlocked);
+                Assert.Less(Vector2.Distance(new Vector2(stoppedAt.x, stoppedAt.z),
+                    new Vector2(motor.transform.position.x, motor.transform.position.z)), .01f);
+                Assert.IsTrue(hallCeiling.enabled);
+                Assert.IsFalse(gymEntry.transform.Find("Dark corridor from garage").gameObject.activeSelf);
+                var focus = gymEntry.transform.Find("Gym opposite wall focus");
+                Assert.Less(Vector3.Angle(motor.CameraTransform.forward, focus.position - motor.CameraTransform.position), 1f);
                 Assert.AreEqual(school, session.CurrentLocationScene);
                 Assert.IsFalse(SceneManager.GetSceneByPath(TestLocationLauncher.GaragePath).isLoaded);
                 Assert.AreSame(motor, session.LocationScope.Container.Resolve<PlayerMotor>());
                 Assert.AreEqual(school, SceneManager.GetActiveScene());
+                Assert.IsTrue(Physics.Raycast(motor.transform.position + Vector3.up, -direction, out var doorHit, 3f,
+                    ~0, QueryTriggerInteraction.Ignore), "A closed door must block returning to the corridor.");
+                Assert.IsTrue(doorHit.transform.IsChildOf(schoolHall.transform.Find("Спортзал/Gym entrance door")));
+                string saved = gymEntry.CaptureState();
+                gymEntry.RestoreState(saved);
+                gymEntry.RestoreForDirectLoad();
+                Assert.IsTrue(gymEntry.IsCompleted);
+                Assert.IsFalse(gymEntry.IsRunning, "Restoration must not replay the cinematic.");
             }
             finally
             {

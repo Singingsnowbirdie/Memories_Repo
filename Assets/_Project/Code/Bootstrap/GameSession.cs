@@ -114,7 +114,9 @@ namespace Memories.Bootstrap
                 trackHouseCheckpoint = false;
                 testerCheckpoint = checkpoint;
                 checkpointCatalog = catalog;
-                await StartAsync(checkpoint == TesterCheckpoint.BackyardMemoryComplete ? TestLocationLauncher.BackyardPath : TestLocationLauncher.HousePath);
+                string checkpointScene = checkpoint == TesterCheckpoint.GarageCorridorOpen ? TestLocationLauncher.GaragePath :
+                    checkpoint == TesterCheckpoint.BackyardMemoryComplete ? TestLocationLauncher.BackyardPath : TestLocationLauncher.HousePath;
+                await StartAsync(checkpointScene);
                 if (checkpoint == TesterCheckpoint.HouseMemoryComplete)
                 {
                     var door = FindComponent<OpenCourtyardDoorReaction>(locationScene);
@@ -124,6 +126,13 @@ namespace Memories.Bootstrap
                 {
                     var garage = FindComponent<BackyardGarageAttachment>(locationScene);
                     await UniTask.WaitUntil(() => garage != null && garage.IsOpen, cancellationToken: shutdown.Token).Timeout(TimeSpan.FromSeconds(30));
+                }
+                else if (checkpoint == TesterCheckpoint.GarageCorridorOpen)
+                {
+                    var connection = FindComponent<GarageSchoolConnection>(locationScene);
+                    await connection.EnsureReadyAsync();
+                    var gate = FindComponent<OpenGarageGateReaction>(locationScene);
+                    await UniTask.WaitUntil(() => gate != null && gate.IsOpen, cancellationToken: shutdown.Token).Timeout(TimeSpan.FromSeconds(30));
                 }
             }
             finally { jumpingToCheckpoint = false; }
@@ -237,6 +246,12 @@ namespace Memories.Bootstrap
                 }
                 else if (testerCheckpoint == TesterCheckpoint.BackyardMemoryComplete)
                     FindMarker(locationScene, "PlayerSpawn").SetPositionAndRotation(new Vector3(0, .05f, 17), Quaternion.identity);
+                else if (testerCheckpoint == TesterCheckpoint.GarageCorridorOpen)
+                {
+                    var exit = FindComponent<GarageSchoolConnection>(locationScene).transform;
+                    FindMarker(locationScene, "PlayerSpawn").SetPositionAndRotation(
+                        exit.position - exit.forward * 1.5f + Vector3.up * .05f, exit.rotation);
+                }
                 var root = new GameObject("Persistent gameplay");
                 root.SetActive(false);
                 root.transform.SetParent(SessionScope.transform, false);
@@ -333,7 +348,11 @@ namespace Memories.Bootstrap
         {
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var connection in root.GetComponentsInChildren<GarageSchoolConnection>(true))
-                    connection.Initialize(scope.Container.Resolve<PlayerMotor>(), LoadGarageSchoolAsync, EnterConnectedSceneAsync);
+                    connection.Initialize(LoadGarageSchoolAsync);
+            foreach (var root in scene.GetRootGameObjects())
+                foreach (var entrance in root.GetComponentsInChildren<SchoolGymEntranceReaction>(true))
+                    entrance.Initialize(scope.Container.Resolve<PlayerMotor>(), scope.Container.Resolve<PlayerMovementModel>(),
+                        scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>(), () => EnterConnectedSceneAsync(scene));
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var reaction in root.GetComponentsInChildren<GarageFatherMemoryReaction>(true))
                     reaction.Initialize(scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>(),
@@ -386,6 +405,10 @@ namespace Memories.Bootstrap
                         path => LoadConnectedSceneAsync(path, door), EnterConnectedSceneAsync,
                         scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
             scope.Container.Resolve<ObjectStateStore>().RestoreScene(scene);
+            if (scene == locationScene)
+                foreach (var root in scene.GetRootGameObjects())
+                    foreach (var entrance in root.GetComponentsInChildren<SchoolGymEntranceReaction>(true))
+                        entrance.RestoreForDirectLoad();
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var interactable in root.GetComponentsInChildren<ReactionInteractable>(true))
                     interactable.RestoreInitialVisibility(scope.Container.Resolve<QuestInventory>());
@@ -515,27 +538,13 @@ namespace Memories.Bootstrap
                 await SceneManager.LoadSceneAsync(path, LoadSceneMode.Additive);
                 school = SceneManager.GetSceneByPath(path);
                 cancellation.Token.ThrowIfCancellationRequested();
-                var arrival = FindMarker(school, "Вход из гаража");
-                var wall = FindMarker(school, "Торцевая стена");
-                var leftDoor = FindMarker(school, "Закрытая торцевая дверь 0 -1");
-                var rightDoor = FindMarker(school, "Закрытая торцевая дверь 0 1");
-                var frame = FindMarker(school, "Проём из гаража");
-                if (arrival == null || wall == null || leftDoor == null || rightDoor == null || frame == null)
-                    throw new InvalidOperationException("School corridor entrance is not configured.");
-                AlignScene(school, arrival, connection.transform.position, connection.transform.rotation);
+                var entrance = FindComponent<SchoolGymEntranceReaction>(school);
+                if (entrance == null || entrance.CorridorEntrance == null)
+                    throw new InvalidOperationException("Gym corridor entrance is not configured.");
+                AlignScene(school, entrance.CorridorEntrance, connection.transform.position, connection.transform.rotation);
                 DisableLocationCameras(school);
                 BindDoors(school, LocationScope);
-                var cover = new ConnectionCover();
-                foreach (var part in new[] { wall, leftDoor, rightDoor })
-                {
-                    foreach (var renderer in part.GetComponentsInChildren<Renderer>())
-                        if (renderer.enabled) { cover.Renderers.Add(renderer); renderer.enabled = false; }
-                    foreach (var collider in part.GetComponentsInChildren<Collider>())
-                        if (collider.enabled) { cover.Colliders.Add(collider); collider.enabled = false; }
-                }
-                frame.gameObject.SetActive(true);
-                cover.TemporaryObjects.Add(frame.gameObject);
-                connectionCovers[school.handle] = cover;
+                entrance.PrepareArrival();
                 additionalScenes.Add(school);
                 Physics.SyncTransforms();
                 return school;

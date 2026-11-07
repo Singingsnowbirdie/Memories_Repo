@@ -1,29 +1,22 @@
 using System;
 using Cysharp.Threading.Tasks;
-using Memories.Gameplay.Player;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Memories.Gameplay.Reactions
 {
-    // Preloading is explicitly started by the final memory reaction. Update only detects crossing.
+    // Preloading is explicitly started by the final memory reaction; the gym threshold owns entry.
     public sealed class GarageSchoolConnection : CustomReaction
     {
         [SerializeField] private OpenGarageGateReaction gate;
         private Func<GarageSchoolConnection, UniTask<Scene>> load;
-        private Func<Scene, UniTask> enter;
-        private PlayerMotor player;
         private UniTaskCompletionSource ready;
         private Scene school;
-        private bool crossing;
         public bool IsReady => school.IsValid() && school.isLoaded;
 
-        public void Initialize(PlayerMotor motor, Func<GarageSchoolConnection, UniTask<Scene>> loader,
-            Func<Scene, UniTask> traveller)
+        public void Initialize(Func<GarageSchoolConnection, UniTask<Scene>> loader)
         {
-            player = motor;
             load = loader;
-            enter = traveller;
             gate.Initialize(EnsureReadyAsync);
         }
 
@@ -61,23 +54,5 @@ namespace Memories.Gameplay.Reactions
             }
         }
 
-        private void LateUpdate()
-        {
-            if (!IsReady || !gate.IsOpen || crossing || player == null) return;
-            var local = transform.InverseTransformPoint(player.transform.position);
-            if (local.z < 2f || local.z > 5f || Mathf.Abs(local.x) > 2.3f || Mathf.Abs(local.y) > 3f) return;
-            crossing = true;
-            EnterAsync().Forget();
-        }
-
-        private async UniTask EnterAsync()
-        {
-            try { await enter(school); }
-            catch (OperationCanceledException) { }
-            catch (Exception exception)
-            {
-                if (this != null) { crossing = false; Debug.LogException(exception, this); }
-            }
-        }
     }
 }
