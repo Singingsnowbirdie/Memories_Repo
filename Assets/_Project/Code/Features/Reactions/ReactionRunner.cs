@@ -110,7 +110,7 @@ namespace Memories.Gameplay.Reactions
         }
         public void Dispose() => Stop();
 
-        private void StopHint(string id)
+        public void StopHint(string id)
         {
             activeHints.Remove(id);
             if (!hintTimers.TryGetValue(id, out var timer)) return;

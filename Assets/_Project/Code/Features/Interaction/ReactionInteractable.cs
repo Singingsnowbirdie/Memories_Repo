@@ -30,6 +30,11 @@ namespace Memories.Gameplay.Interaction
         public string Prompt => prompt;
         public bool CanInteract => isActiveAndEnabled && interactionEnabled && runner != null && runner.CanRun(graph);
         public bool IsRunning => runner != null && runner.IsRunning;
+        public void StopHint(string id)
+        {
+            runner?.StopHint(id);
+            GetComponent<ObjectStateTracker>()?.Capture();
+        }
 
         public void Configure(ReactionGraph reactionGraph, string interactionPrompt)
         {
@@ -50,6 +55,8 @@ namespace Memories.Gameplay.Interaction
         public void RestoreInitialVisibility(QuestInventory inventory)
         {
             if (initiallyVisible) return;
+            // A revealed object may later lose interaction while remaining visible.
+            if (GetComponent<ObjectStateTracker>()?.HasRestoredState == true && !IsCollectedPickup(inventory)) return;
             gameObject.SetActive(interactionEnabled && !IsCollectedPickup(inventory));
         }
         private bool IsCollectedPickup(QuestInventory inventory)

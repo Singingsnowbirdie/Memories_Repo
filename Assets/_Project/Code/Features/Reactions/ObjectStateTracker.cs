@@ -12,6 +12,7 @@ namespace Memories.Gameplay.Reactions
         [SerializeField, Tooltip("Unique, permanent save key, for example school.medicine_cabinet. Set explicitly; do not change after releasing saves.")]
         private string persistentId;
         public string PersistentId => persistentId;
+        public bool HasRestoredState { get; private set; }
         [Serializable] private sealed class Part { public string key; public string value; }
         [Serializable] private sealed class State
         {
@@ -35,6 +36,7 @@ namespace Memories.Gameplay.Reactions
             foreach (var component in GetComponents<MonoBehaviour>())
                 if (component is IObjectStateParticipant participant) participants.Add(participant.StateKey, participant);
             restoring = true;
+            HasRestoredState = !string.IsNullOrEmpty(saved);
             try
             {
                 if (!string.IsNullOrEmpty(saved))

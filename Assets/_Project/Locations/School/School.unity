@@ -36510,6 +36510,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.SchoolGymEntranceReaction
   corridorEntrance: {fileID: 880320021}
   corridor: {fileID: 880320010}
+  garageOpening:
+  - {fileID: 880321000}
+  - {fileID: 880324000}
+  - {fileID: 880324010}
   gym: {fileID: 1390491424}
   doorHinge: {fileID: 880321019}
   lookTarget: {fileID: 880320041}
@@ -36748,7 +36752,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &880321001
 Transform:
   m_ObjectHideFlags: 0
@@ -38827,7 +38831,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &880324001
 Transform:
   m_ObjectHideFlags: 0
@@ -38939,7 +38943,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &880324011
 Transform:
   m_ObjectHideFlags: 0
@@ -46066,6 +46070,7 @@ GameObject:
   - component: {fileID: 991200003}
   - component: {fileID: 998500013}
   - component: {fileID: 998500014}
+  - component: {fileID: 998500015}
   m_Layer: 0
   m_Name: "\u0410\u043F\u0442\u0435\u0447\u043A\u0430"
   m_TagString: Untagged
@@ -46108,7 +46113,9 @@ MonoBehaviour:
   objectBindings:
   - key: "\u041F\u0440\u0435\u0434\u043C\u0435\u0442"
     target: {fileID: 991200001}
-  customReactions: []
+  customReactions:
+  - key: stop_first_aid_hint
+    reaction: {fileID: 998500015}
 --- !u!1 &991300000
 GameObject:
   m_ObjectHideFlags: 0
@@ -70447,6 +70454,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: school.first_aid_kit
+--- !u!114 &998500015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 991200001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e0d42797332aa74a947fa0ea787279e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.StopFirstAidReminderReaction
+  coach: {fileID: 2041208587}
 --- !u!1001 &998600011
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -78238,6 +78258,18 @@ PrefabInstance:
       propertyPath: initiallyInteractable
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3815247265442631581, guid: 39c765075c1ba8640850dcfcb5256284, type: 3}
+      propertyPath: customReactions.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3815247265442631581, guid: 39c765075c1ba8640850dcfcb5256284, type: 3}
+      propertyPath: customReactions.Array.data[0].key
+      value: reveal_coach
+      objectReference: {fileID: 0}
+    - target: {fileID: 3815247265442631581, guid: 39c765075c1ba8640850dcfcb5256284, type: 3}
+      propertyPath: customReactions.Array.data[0].reaction
+      value: 
+      objectReference: {fileID: 1657148734}
     m_RemovedComponents:
     - {fileID: 4428626960114599975, guid: 39c765075c1ba8640850dcfcb5256284, type: 3}
     m_RemovedGameObjects: []
@@ -78255,6 +78287,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1387179320816990326, guid: 39c765075c1ba8640850dcfcb5256284, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1657148733}
+    - targetCorrespondingSourceObject: {fileID: 1387179320816990326, guid: 39c765075c1ba8640850dcfcb5256284, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1657148734}
   m_SourcePrefab: {fileID: 100100000, guid: 39c765075c1ba8640850dcfcb5256284, type: 3}
 --- !u!4 &1085297422 stripped
 Transform:
@@ -82877,6 +82912,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4484839133857539390, guid: c32171d180dd1734db07137bf245749f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1249460131}
+    - targetCorrespondingSourceObject: {fileID: 4484839133857539390, guid: c32171d180dd1734db07137bf245749f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1249460133}
   m_SourcePrefab: {fileID: 100100000, guid: c32171d180dd1734db07137bf245749f, type: 3}
 --- !u!4 &1249460129 stripped
 Transform:
@@ -97449,6 +97487,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: school.giles
+--- !u!114 &1657148734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1657148728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e52fb8cb19f5cf418c52a65fa65c87d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.RevealCoachReaction
+  giles: {fileID: 1657148729}
+  coach: {fileID: 2041208587}
 --- !u!1001 &1658327006
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -103665,7 +103717,9 @@ MonoBehaviour:
   initiallyInteractable: 1
   initiallyVisible: 1
   prompt: "\u041A\u043E\u043C\u043C\u0435\u043D\u0442\u0430\u0442\u043E\u0440"
-  objectBindings: []
+  objectBindings:
+  - key: lily
+    target: {fileID: 1249460130}
   customReactions:
   - key: reveal_giles
     reaction: {fileID: 1787801125}
@@ -103705,6 +103759,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.RevealGilesReaction
   giles: {fileID: 1657148729}
+  coach: {fileID: 2041208587}
 --- !u!1 &1787937630
 GameObject:
   m_ObjectHideFlags: 0
@@ -111460,6 +111515,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 9200431368797393190, guid: d237bb1ecd8f85147b8f7cba04757d92, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2041208587}
+    - targetCorrespondingSourceObject: {fileID: 9200431368797393190, guid: d237bb1ecd8f85147b8f7cba04757d92, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2041208591}
+    - targetCorrespondingSourceObject: {fileID: 9200431368797393190, guid: d237bb1ecd8f85147b8f7cba04757d92, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2041208590}
   m_SourcePrefab: {fileID: 100100000, guid: d237bb1ecd8f85147b8f7cba04757d92, type: 3}
 --- !u!4 &2041208585 stripped
 Transform:
@@ -111483,12 +111544,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ba68190f9594ee8b2fc0603419ed015, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Interaction.ReactionInteractable
-  graph: {fileID: 0}
+  graph: {fileID: 11400000, guid: cb9b5ec30bab5164e8dc0148dffa79ec, type: 2}
   initiallyInteractable: 0
   initiallyVisible: 0
-  prompt: "\u0412\u0437\u0430\u0438\u043C\u043E\u0434\u0435\u0439\u0441\u0442\u0432\u043E\u0432\u0430\u0442\u044C"
+  prompt: "\u0422\u0440\u0435\u043D\u0435\u0440"
   objectBindings: []
-  customReactions: []
+  customReactions:
+  - key: open_corridor
+    reaction: {fileID: 2041208590}
+--- !u!114 &2041208590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2041208586}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 423e7bf7e79dffd449d3d9d25ced64f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.OpenGymCorridorReaction
+  entrance: {fileID: 880320002}
+--- !u!114 &2041208591
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2041208586}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: school.coach
 --- !u!1 &2041468142
 GameObject:
   m_ObjectHideFlags: 0
@@ -163203,3 +163292,16 @@ SceneRoots:
   - {fileID: 1390491424}
   - {fileID: 1193937706}
   - {fileID: 283037911}
+--- !u!114 &1249460133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1249460130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: school.lily
