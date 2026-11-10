@@ -13,7 +13,7 @@ namespace Memories.Gameplay.UI
         [SerializeField, Min(0)] private float initialTextDelay = .7f;
         [SerializeField, Min(0)] private float textFadeDuration = .15f;
         private const float BottomMargin = 40f;
-        private const float PanelHeight = 50f;
+        private const float PanelHeight = 100f;
         private Canvas canvas;
         private RectTransform panel;
         private Text caption;
