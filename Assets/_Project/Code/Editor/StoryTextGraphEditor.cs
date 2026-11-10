@@ -16,7 +16,7 @@ namespace Memories.Editor
         [UnityEditor.Callbacks.OnOpenAsset(-1)]
         private static bool OpenTextAsset(int instanceId, int line)
         {
-            if (!(EditorUtility.InstanceIDToObject(instanceId) is StoryTextGraph graph)) return false;
+            if (!(EditorUtility.EntityIdToObject(instanceId) is StoryTextGraph graph)) return false;
             OpenGraph(graph);
             return true;
         }
@@ -44,7 +44,7 @@ namespace Memories.Editor
         {
             string key = NavigationKey(window);
             if (SessionState.GetInt(key + ".text", 0) != target.GetInstanceID()) return;
-            var parent = EditorUtility.InstanceIDToObject(SessionState.GetInt(key + ".parent", 0)) as ReactionGraph;
+            var parent = EditorUtility.EntityIdToObject(SessionState.GetInt(key + ".parent", 0)) as ReactionGraph;
             if (parent == null) return;
             if (GUI.Button(new Rect(10, 10, 90, 24), new GUIContent("← Назад", parent.name)))
             {
