@@ -20478,6 +20478,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1828553533823636012, guid: 2f80b576a92323141b1af9fd88106b4c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1978083517}
+    - targetCorrespondingSourceObject: {fileID: 1828553533823636012, guid: 2f80b576a92323141b1af9fd88106b4c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1978083520}
   m_SourcePrefab: {fileID: 100100000, guid: 2f80b576a92323141b1af9fd88106b4c, type: 3}
 --- !u!4 &488296830 stripped
 Transform:
@@ -35332,6 +35335,7 @@ GameObject:
   - component: {fileID: 880001102}
   - component: {fileID: 880001103}
   - component: {fileID: 880001104}
+  - component: {fileID: 880001105}
   m_Layer: 0
   m_Name: TV Static Screen
   m_TagString: Untagged
@@ -35411,6 +35415,19 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &880001105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 880001101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: house.tv_static_screen
 --- !u!1 &880001201
 GameObject:
   m_ObjectHideFlags: 0
@@ -35425,6 +35442,7 @@ GameObject:
   - component: {fileID: 880001205}
   - component: {fileID: 880001206}
   - component: {fileID: 880001207}
+  - component: {fileID: 880001209}
   m_Layer: 0
   m_Name: TV Baseball Screen
   m_TagString: Untagged
@@ -35604,6 +35622,19 @@ MonoBehaviour:
   destination: Assets/_Project/Locations/Backyard/Backyard.unity
   arrivalMarker: "\u0412\u0445\u043E\u0434 \u0438\u0437 \u0434\u043E\u043C\u0430"
   requiredMemoryId: house-tv-baseball
+--- !u!114 &880001209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 880001201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: house.tv_baseball_screen
 --- !u!114 &880003004 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 880003001, guid: b7d651134251215439006063f8efd54e, type: 3}
@@ -44464,13 +44495,34 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2938097339736585005, guid: 966773fb361d0244bb4dc4b3fee00b57, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1120750336}
   m_SourcePrefab: {fileID: 100100000, guid: 966773fb361d0244bb4dc4b3fee00b57, type: 3}
 --- !u!4 &1120750334 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2561958137317075351, guid: 966773fb361d0244bb4dc4b3fee00b57, type: 3}
   m_PrefabInstance: {fileID: 1120750333}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1120750335 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2938097339736585005, guid: 966773fb361d0244bb4dc4b3fee00b57, type: 3}
+  m_PrefabInstance: {fileID: 1120750333}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1120750336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1120750335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: house.couple_photo
 --- !u!1 &1126540947
 GameObject:
   m_ObjectHideFlags: 0
@@ -66771,6 +66823,19 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6394675493229805642, guid: 8231b5e88ffdd3a4cbda1f1760cf3675, type: 3}
   m_PrefabInstance: {fileID: 2133085132}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1669012059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1669012058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: house.remote_in_hand
 --- !u!1001 &1669952699
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -77119,6 +77184,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8062689656816638925, guid: 76a00c86ade17a84f906e15376fcd200, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1885583384}
+    - targetCorrespondingSourceObject: {fileID: 8062689656816638925, guid: 76a00c86ade17a84f906e15376fcd200, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1885583387}
   m_SourcePrefab: {fileID: 100100000, guid: 76a00c86ade17a84f906e15376fcd200, type: 3}
 --- !u!4 &1885583382 stripped
 Transform:
@@ -77187,6 +77255,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.3303439, y: 0.09532157, z: 0.2760716}
   m_Center: {x: 0, y: 0.045409013, z: 0.007603012}
+--- !u!114 &1885583387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1885583383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: house.toy_plane
 --- !u!1 &1886120857
 GameObject:
   m_ObjectHideFlags: 0
@@ -80662,6 +80743,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.20195176, y: 0.20195174, z: 0.01929722}
   m_Center: {x: -0.00000010430813, y: 0, z: 0.009636082}
+--- !u!114 &1978083520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1978083514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: house.wall_clock
 --- !u!4 &1978269091 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1075192519576066942, guid: ca708df1257bc8a4e9509f90b26ef5ea, type: 3}
@@ -87500,6 +87594,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7725828649327319238, guid: 8231b5e88ffdd3a4cbda1f1760cf3675, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2133085137}
+    - targetCorrespondingSourceObject: {fileID: 7725828649327319238, guid: 8231b5e88ffdd3a4cbda1f1760cf3675, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2133085138}
+    - targetCorrespondingSourceObject: {fileID: 6394675493229805642, guid: 8231b5e88ffdd3a4cbda1f1760cf3675, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1669012059}
   m_SourcePrefab: {fileID: 100100000, guid: 8231b5e88ffdd3a4cbda1f1760cf3675, type: 3}
 --- !u!4 &2133085133 stripped
 Transform:
@@ -87583,6 +87683,19 @@ MonoBehaviour:
   target: {fileID: 880001204}
   travelDuration: 1.6
   holdDuration: 2
+--- !u!114 &2133085138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 913217142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: house.seated_woman
 --- !u!1 &2133452578
 GameObject:
   m_ObjectHideFlags: 0
@@ -94684,6 +94797,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6974969224502298569, guid: 784e980c1cf96344d9d04f01e2618d6b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8516035423531171489}
+    - targetCorrespondingSourceObject: {fileID: 6974969224502298569, guid: 784e980c1cf96344d9d04f01e2618d6b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8516035423531171491}
   m_SourcePrefab: {fileID: 100100000, guid: 784e980c1cf96344d9d04f01e2618d6b, type: 3}
 --- !u!1 &8516035423531171488 stripped
 GameObject:
@@ -94713,6 +94829,19 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8884498055708056954, guid: 784e980c1cf96344d9d04f01e2618d6b, type: 3}
   m_PrefabInstance: {fileID: 8516035423531171487}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8516035423531171491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8516035423531171488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: house.tv_remote
 --- !u!1001 &8584459198755903117
 PrefabInstance:
   m_ObjectHideFlags: 0

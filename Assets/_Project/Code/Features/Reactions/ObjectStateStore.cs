@@ -23,7 +23,6 @@ namespace Memories.Gameplay.Reactions
         private readonly string saveKey;
         private readonly bool persist;
         private bool dirty, stopped;
-        public static Func<GameObject, string> EditorIdentity;
 
         public ObjectStateStore(bool persistProgress = true, string saveKey = DefaultKey)
         {
@@ -42,26 +41,46 @@ namespace Memories.Gameplay.Reactions
 
         public void RestoreScene(Scene scene)
         {
-            var identities = new Dictionary<GameObject, string>();
+            var identities = new Dictionary<string, ObjectStateTracker>(StringComparer.Ordinal);
             foreach (var root in scene.GetRootGameObjects())
-                foreach (var map in root.GetComponentsInChildren<SceneObjectIds>(true))
-                    for (int i = 0; i < map.objects.Length; i++)
-                        if (map.objects[i] != null) identities[map.objects[i]] = map.ids[i];
-            foreach (var root in scene.GetRootGameObjects())
-                foreach (var transform in root.GetComponentsInChildren<Transform>(true))
+                foreach (var tracker in root.GetComponentsInChildren<ObjectStateTracker>(true))
                 {
-                    var target = transform.gameObject;
-                    if (!identities.TryGetValue(target, out var id)) id = EditorIdentity?.Invoke(target);
-                    if (!string.IsNullOrEmpty(id)) Register(target, id);
+                    var id = tracker.PersistentId;
+                    ValidateIdentity(tracker.gameObject, id);
+                    if (identities.TryGetValue(id, out var other))
+                        throw DuplicateIdentity(id, other.gameObject, tracker.gameObject);
+                    identities.Add(id, tracker);
+                    if (trackers.TryGetValue(id, out var existing) && existing != null && existing != tracker)
+                        throw DuplicateIdentity(id, existing.gameObject, tracker.gameObject);
                 }
+            // Validate the entire scene before applying any saved state.
+            foreach (var pair in identities) Register(pair.Value.gameObject, pair.Key);
         }
+
+        public static void ValidateIdentity(GameObject target, string id)
+        {
+            if (string.IsNullOrWhiteSpace(id) || id != id.Trim())
+                throw new InvalidOperationException("Missing or invalid persistent ID on " + Describe(target));
+        }
+
+        private static string Describe(GameObject target)
+        {
+            string path = target.name;
+            for (var parent = target.transform.parent; parent != null; parent = parent.parent)
+                path = parent.name + "/" + path;
+            return target.scene.name + ":" + path;
+        }
+
+        private static InvalidOperationException DuplicateIdentity(string id, GameObject first, GameObject second) =>
+            new InvalidOperationException("Duplicate persistent object ID '" + id + "': " + Describe(first) + " and " + Describe(second));
 
         public void Register(GameObject target, string id)
         {
             if (stopped) return;
+            ValidateIdentity(target, id);
             if (trackers.TryGetValue(id, out var existing) && existing != null)
             {
-                if (existing.gameObject != target) throw new InvalidOperationException("Duplicate persistent object ID: " + id);
+                if (existing.gameObject != target) throw DuplicateIdentity(id, existing.gameObject, target);
                 return;
             }
             var tracker = target.GetComponent<ObjectStateTracker>() ?? target.AddComponent<ObjectStateTracker>();

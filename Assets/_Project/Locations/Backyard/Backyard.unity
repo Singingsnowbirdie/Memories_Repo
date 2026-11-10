@@ -3392,6 +3392,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3305581529017948312, guid: 97f7e19c1d174162aae3882511328c05, type: 3}
       insertIndex: -1
       addedObject: {fileID: 59154258}
+    - targetCorrespondingSourceObject: {fileID: 3305581529017948312, guid: 97f7e19c1d174162aae3882511328c05, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1162792688}
   m_SourcePrefab: {fileID: 100100000, guid: 97f7e19c1d174162aae3882511328c05, type: 3}
 --- !u!1 &59154257 stripped
 GameObject:
@@ -5958,6 +5961,19 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 674031216319709062, guid: c0f2e87eb7ed186479dabfa706c206a3, type: 3}
   m_PrefabInstance: {fileID: 143640256}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &143889814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1844888136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: backyard.ben_pitcher
 --- !u!1001 &146066893
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7011,6 +7027,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.SavedObjectVisibility
   variableBank: {fileID: 11400000, guid: 83af6fcb806c087438f339fcbcc76145, type: 2}
   variableId: ben_home_first_interaction
+--- !u!114 &174242525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 174242518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: backyard.fishing_rod_variant
 --- !u!1001 &174475326
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9542,6 +9571,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.SavedObjectVisibility
   variableBank: {fileID: 11400000, guid: 83af6fcb806c087438f339fcbcc76145, type: 2}
   variableId: ben_home_first_interaction
+--- !u!114 &255719932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 255719925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: backyard.fishing_rod
 --- !u!1001 &257142822
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14726,6 +14768,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1189198572637911586, guid: 72c3880aa9165ab4da9cb0656012807f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 446926718}
+    - targetCorrespondingSourceObject: {fileID: 1189198572637911586, guid: 72c3880aa9165ab4da9cb0656012807f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 446926719}
   m_SourcePrefab: {fileID: 100100000, guid: 72c3880aa9165ab4da9cb0656012807f, type: 3}
 --- !u!4 &446926715 stripped
 Transform:
@@ -14772,6 +14817,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.SavedObjectVisibility
   variableBank: {fileID: 11400000, guid: 83af6fcb806c087438f339fcbcc76145, type: 2}
   variableId: ben_home_first_interaction
+--- !u!114 &446926719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 446926716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: backyard.wheelbarrow
 --- !u!1001 &449409964
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15056,6 +15114,7 @@ GameObject:
   - component: {fileID: 470461206}
   - component: {fileID: 470461210}
   - component: {fileID: 470461211}
+  - component: {fileID: 470461212}
   m_Layer: 0
   m_Name: "\u0421\u0430\u0434\u043E\u0432\u0430\u044F \u0434\u043E\u0440\u043E\u0436\u043A\u0430"
   m_TagString: Untagged
@@ -15204,6 +15263,19 @@ MonoBehaviour:
   - key: "\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u044C \u0441\u0438\u0434\u044F\u0449\u0435\u0433\u043E
       \u0411\u0435\u043D\u0430"
     reaction: {fileID: 1003858873}
+--- !u!114 &470461212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 470461204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: backyard.baseball_path
 --- !u!1 &470860371
 GameObject:
   m_ObjectHideFlags: 0
@@ -19367,6 +19439,7 @@ GameObject:
   - component: {fileID: 630401641}
   - component: {fileID: 630401640}
   - component: {fileID: 630401639}
+  - component: {fileID: 630401643}
   m_Layer: 0
   m_Name: "\u041A\u0435\u043F\u043A\u0430 \u043D\u0430 \u0433\u043E\u043B\u043E\u0432\u0435
     \u0411\u0435\u043D\u0430"
@@ -19462,6 +19535,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 130816514}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &630401643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 630401638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: backyard.ben_worn_cap
 --- !u!1 &631581563
 GameObject:
   m_ObjectHideFlags: 0
@@ -20003,6 +20089,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1000, guid: 682224c503794703a9ac406e0742394c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 640603808}
+    - targetCorrespondingSourceObject: {fileID: 1000, guid: 682224c503794703a9ac406e0742394c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 640603810}
   m_SourcePrefab: {fileID: 100100000, guid: 682224c503794703a9ac406e0742394c, type: 3}
 --- !u!1 &640603806 stripped
 GameObject:
@@ -20072,6 +20161,19 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4000, guid: 682224c503794703a9ac406e0742394c, type: 3}
   m_PrefabInstance: {fileID: 640603805}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &640603810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 640603806}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: backyard.friendship_photo
 --- !u!1001 &642013800
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20451,6 +20553,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7308407615459530428, guid: 0ad2c13af28a395499044e9fbb68b47d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 653190907}
+    - targetCorrespondingSourceObject: {fileID: 7308407615459530428, guid: 0ad2c13af28a395499044e9fbb68b47d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 653190908}
   m_SourcePrefab: {fileID: 100100000, guid: 0ad2c13af28a395499044e9fbb68b47d, type: 3}
 --- !u!1 &653190901 stripped
 GameObject:
@@ -20495,6 +20600,19 @@ MonoBehaviour:
   - key: "\u041F\u0440\u0435\u0434\u043C\u0435\u0442"
     target: {fileID: 653190901}
   customReactions: []
+--- !u!114 &653190908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 653190901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: backyard.baseball_cap
 --- !u!1 &655189434
 GameObject:
   m_ObjectHideFlags: 0
@@ -22776,6 +22894,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1121525155587680, guid: c6865c562fd3f2841a92dc0cbbd6b4b4, type: 3}
       insertIndex: -1
       addedObject: {fileID: 978543470}
+    - targetCorrespondingSourceObject: {fileID: 1121525155587680, guid: c6865c562fd3f2841a92dc0cbbd6b4b4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 978543471}
   m_SourcePrefab: {fileID: 100100000, guid: c6865c562fd3f2841a92dc0cbbd6b4b4, type: 3}
 --- !u!4 &727628663 stripped
 Transform:
@@ -23692,6 +23813,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8308326459262462758, guid: 3027674a0646755449d782a51475b888, type: 3}
       insertIndex: -1
       addedObject: {fileID: 866899109}
+    - targetCorrespondingSourceObject: {fileID: 8308326459262462758, guid: 3027674a0646755449d782a51475b888, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 866899111}
   m_SourcePrefab: {fileID: 100100000, guid: 3027674a0646755449d782a51475b888, type: 3}
 --- !u!4 &769537927 stripped
 Transform:
@@ -25411,6 +25535,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8613954126185663617, guid: f2cfc7cd690e6fe4f9678427228e5322, type: 3}
       insertIndex: -1
       addedObject: {fileID: 255719931}
+    - targetCorrespondingSourceObject: {fileID: 8613954126185663617, guid: f2cfc7cd690e6fe4f9678427228e5322, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 255719932}
   m_SourcePrefab: {fileID: 100100000, guid: f2cfc7cd690e6fe4f9678427228e5322, type: 3}
 --- !u!1 &839790242
 GameObject:
@@ -26249,6 +26376,19 @@ MonoBehaviour:
   - key: "\u041F\u0440\u0435\u0434\u043C\u0435\u0442"
     target: {fileID: 866899105}
   customReactions: []
+--- !u!114 &866899111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 866899105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: backyard.baseball_ball
 --- !u!4 &871209671 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5286838764939523295, guid: 76fc15f3b8e1bb842b9aafa06448ac96, type: 3}
@@ -29040,6 +29180,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3527919270657827498, guid: 23f31d065789fef46939174133491b96, type: 3}
       insertIndex: -1
       addedObject: {fileID: 174242524}
+    - targetCorrespondingSourceObject: {fileID: 3527919270657827498, guid: 23f31d065789fef46939174133491b96, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 174242525}
   m_SourcePrefab: {fileID: 100100000, guid: 23f31d065789fef46939174133491b96, type: 3}
 --- !u!1 &956109572
 GameObject:
@@ -29793,6 +29936,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.SavedObjectVisibility
   variableBank: {fileID: 11400000, guid: 83af6fcb806c087438f339fcbcc76145, type: 2}
   variableId: ben_home_first_interaction
+--- !u!114 &978543471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 978543465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: backyard.water_pistol
 --- !u!4 &983768871 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7734629909419328613, guid: cd4966c00b4b5cd4bb9c05716d12cac7, type: 3}
@@ -35049,6 +35205,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 9172754988475064542, guid: 44aa9d7738e2750459b0b10bad9c6e30, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1156147181}
+    - targetCorrespondingSourceObject: {fileID: 9172754988475064542, guid: 44aa9d7738e2750459b0b10bad9c6e30, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1156147182}
   m_SourcePrefab: {fileID: 100100000, guid: 44aa9d7738e2750459b0b10bad9c6e30, type: 3}
 --- !u!4 &1156147178 stripped
 Transform:
@@ -35095,6 +35254,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.SavedObjectVisibility
   variableBank: {fileID: 11400000, guid: 83af6fcb806c087438f339fcbcc76145, type: 2}
   variableId: ben_home_first_interaction
+--- !u!114 &1156147182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1156147179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: backyard.garden_hose
 --- !u!1 &1161784469
 GameObject:
   m_ObjectHideFlags: 0
@@ -35186,6 +35358,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1161784469}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1162792688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 59154257}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: backyard.ben_idle
 --- !u!1 &1163860475
 GameObject:
   m_ObjectHideFlags: 0
@@ -41222,6 +41407,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1354252008}
   - component: {fileID: 1354252007}
+  - component: {fileID: 1354252009}
   m_Layer: 0
   m_Name: "\u041C\u044F\u0447 \u0432 \u0440\u0443\u043A\u0435 \u0411\u0435\u043D\u0430"
   m_TagString: Untagged
@@ -41259,6 +41445,19 @@ Transform:
   - {fileID: 1212048436}
   m_Father: {fileID: 90145418}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1354252009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1354252006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: backyard.ben_held_ball
 --- !u!1 &1354793485
 GameObject:
   m_ObjectHideFlags: 0
@@ -46263,6 +46462,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2779073015522754645, guid: bd12404ca3be7ad4f917ded3f0542c97, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1515662857}
+    - targetCorrespondingSourceObject: {fileID: 2779073015522754645, guid: bd12404ca3be7ad4f917ded3f0542c97, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1515662858}
   m_SourcePrefab: {fileID: 100100000, guid: bd12404ca3be7ad4f917ded3f0542c97, type: 3}
 --- !u!1 &1515662856 stripped
 GameObject:
@@ -46283,6 +46485,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.SavedObjectVisibility
   variableBank: {fileID: 11400000, guid: 83af6fcb806c087438f339fcbcc76145, type: 2}
   variableId: ben_home_first_interaction
+--- !u!114 &1515662858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1515662856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: backyard.bicycle
 --- !u!1 &1519464849
 GameObject:
   m_ObjectHideFlags: 0
@@ -54116,6 +54331,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1459886359065782981, guid: d29be6a54b6f49146898017ea976affb, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1837431694}
+    - targetCorrespondingSourceObject: {fileID: 1459886359065782981, guid: d29be6a54b6f49146898017ea976affb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1837431695}
   m_SourcePrefab: {fileID: 100100000, guid: d29be6a54b6f49146898017ea976affb, type: 3}
 --- !u!4 &1837431688 stripped
 Transform:
@@ -54184,6 +54402,19 @@ MonoBehaviour:
   - key: "\u041E\u0431\u043D\u043E\u0432\u0438\u0442\u044C \u0433\u043E\u0442\u043E\u0432\u043D\u043E\u0441\u0442\u044C
       \u0431\u0435\u0439\u0441\u0431\u043E\u043B\u044C\u043D\u043E\u0439 \u043F\u043B\u043E\u0449\u0430\u0434\u043A\u0438"
     reaction: {fileID: 470461210}
+--- !u!114 &1837431695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1837431689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: backyard.baseball_bat
 --- !u!1001 &1839798042
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -57036,6 +57267,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3305581529017948312, guid: 97f7e19c1d174162aae3882511328c05, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1844888137}
+    - targetCorrespondingSourceObject: {fileID: 3305581529017948312, guid: 97f7e19c1d174162aae3882511328c05, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 143889814}
   m_SourcePrefab: {fileID: 100100000, guid: 97f7e19c1d174162aae3882511328c05, type: 3}
 --- !u!1 &1844888136 stripped
 GameObject:
@@ -60360,6 +60594,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1948161215}
+  - component: {fileID: 1948161216}
   m_Layer: 0
   m_Name: "\u041E\u043A\u043D\u043E \u2014 2 \u044D\u0442\u0430\u0436"
   m_TagString: Untagged
@@ -60390,6 +60625,19 @@ Transform:
   - {fileID: 1576055454}
   m_Father: {fileID: 817436392}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1948161216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1948161214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: backyard.neighbor_window
 --- !u!1001 &1950686714
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -62584,6 +62832,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2025464473}
+  - component: {fileID: 2025464474}
   m_Layer: 0
   m_Name: "\u0420\u0430\u0437\u0431\u0438\u0442\u043E\u0435 \u043E\u043A\u043D\u043E
     \u0441 \u0437\u0430\u043D\u0430\u0432\u0435\u0441\u043A\u0430\u043C\u0438"
@@ -62619,6 +62868,19 @@ Transform:
   - {fileID: 62165515}
   m_Father: {fileID: 817436392}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2025464474
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2025464472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: backyard.neighbor_broken_window
 --- !u!1 &2026674562
 GameObject:
   m_ObjectHideFlags: 0
@@ -63899,6 +64161,7 @@ GameObject:
   - component: {fileID: 2071776374}
   - component: {fileID: 2071776376}
   - component: {fileID: 2071776375}
+  - component: {fileID: 2071776377}
   m_Layer: 0
   m_Name: "\u0411\u0435\u043D \u043F\u043E\u0434 \u0434\u0435\u0440\u0435\u0432\u043E\u043C"
   m_TagString: Untagged
@@ -63992,6 +64255,19 @@ MonoBehaviour:
     \u0441 \u0411\u0435\u043D\u043E\u043C"
   objectBindings: []
   customReactions: []
+--- !u!114 &2071776377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2071776372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: backyard.ben_seated
 --- !u!1001 &2076767606
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -65163,6 +65439,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 739452338329536689, guid: 63c1b9ab01cefc749a66f9e709dcd39f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1745913492145905552}
+    - targetCorrespondingSourceObject: {fileID: 739452338329536689, guid: 63c1b9ab01cefc749a66f9e709dcd39f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1745913492145905553}
   m_SourcePrefab: {fileID: 100100000, guid: 63c1b9ab01cefc749a66f9e709dcd39f, type: 3}
 --- !u!1 &1745913492145905551 stripped
 GameObject:
@@ -65183,6 +65462,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.SavedObjectVisibility
   variableBank: {fileID: 11400000, guid: 83af6fcb806c087438f339fcbcc76145, type: 2}
   variableId: ben_home_first_interaction
+--- !u!114 &1745913492145905553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1745913492145905551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: backyard.briefcase
 --- !u!1001 &2346968320440341699
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -65309,6 +65601,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1311246062939086, guid: 787a31f2409a3f64c987faeb2a72ab86, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2346968320440341705}
+    - targetCorrespondingSourceObject: {fileID: 1311246062939086, guid: 787a31f2409a3f64c987faeb2a72ab86, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2346968320440341706}
   m_SourcePrefab: {fileID: 100100000, guid: 787a31f2409a3f64c987faeb2a72ab86, type: 3}
 --- !u!1 &2346968320440341700 stripped
 GameObject:
@@ -65355,6 +65650,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.SavedObjectVisibility
   variableBank: {fileID: 11400000, guid: 83af6fcb806c087438f339fcbcc76145, type: 2}
   variableId: ben_home_first_interaction
+--- !u!114 &2346968320440341706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2346968320440341700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: backyard.watergun_large
 --- !u!1001 &2407513063954859915
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -65554,6 +65862,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1607291360844622, guid: f528363d2aaa5d748ab9fcd16b601236, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2722140591818603996}
+    - targetCorrespondingSourceObject: {fileID: 1607291360844622, guid: f528363d2aaa5d748ab9fcd16b601236, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2722140591818603997}
   m_SourcePrefab: {fileID: 100100000, guid: f528363d2aaa5d748ab9fcd16b601236, type: 3}
 --- !u!1 &2722140591818603991 stripped
 GameObject:
@@ -65600,6 +65911,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.SavedObjectVisibility
   variableBank: {fileID: 11400000, guid: 83af6fcb806c087438f339fcbcc76145, type: 2}
   variableId: ben_home_first_interaction
+--- !u!114 &2722140591818603997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2722140591818603991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: backyard.watergun_small
 --- !u!1001 &3187086116820991508
 PrefabInstance:
   m_ObjectHideFlags: 0

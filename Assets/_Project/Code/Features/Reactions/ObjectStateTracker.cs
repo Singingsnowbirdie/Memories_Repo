@@ -5,9 +5,13 @@ using UnityEngine;
 
 namespace Memories.Gameplay.Reactions
 {
-    [AddComponentMenu("")]
+    [DisallowMultipleComponent]
+    [AddComponentMenu("Memories/Persistence/Object State Tracker")]
     public sealed class ObjectStateTracker : MonoBehaviour
     {
+        [SerializeField, Tooltip("Unique, permanent save key, for example school.medicine_cabinet. Set explicitly; do not change after releasing saves.")]
+        private string persistentId;
+        public string PersistentId => persistentId;
         [Serializable] private sealed class Part { public string key; public string value; }
         [Serializable] private sealed class State
         {
@@ -26,7 +30,6 @@ namespace Memories.Gameplay.Reactions
         {
             this.store = store;
             this.id = id;
-            hideFlags = HideFlags.HideInInspector;
             interactable = GetComponent<ReactionInteractable>();
             participants.Clear();
             foreach (var component in GetComponents<MonoBehaviour>())

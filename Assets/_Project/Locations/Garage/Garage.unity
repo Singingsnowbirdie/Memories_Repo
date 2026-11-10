@@ -2870,6 +2870,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2277101191908393175, guid: 7acce17562482f14d9a916f6d442448c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 72671028}
+    - targetCorrespondingSourceObject: {fileID: 2277101191908393175, guid: 7acce17562482f14d9a916f6d442448c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 72671029}
   m_SourcePrefab: {fileID: 100100000, guid: 7acce17562482f14d9a916f6d442448c, type: 3}
 --- !u!1 &72671025 stripped
 GameObject:
@@ -2932,6 +2935,19 @@ MonoBehaviour:
     reaction: {fileID: 862074735}
   - key: open_gate_after_final_memory
     reaction: {fileID: 1402361889}
+--- !u!114 &72671029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 72671025}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: garage.father_under_hood
 --- !u!1 &74618976
 GameObject:
   m_ObjectHideFlags: 0
@@ -4242,6 +4258,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2277101191908393175, guid: 7acce17562482f14d9a916f6d442448c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 79438514}
+    - targetCorrespondingSourceObject: {fileID: 2277101191908393175, guid: 7acce17562482f14d9a916f6d442448c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 79438516}
   m_SourcePrefab: {fileID: 100100000, guid: 7acce17562482f14d9a916f6d442448c, type: 3}
 --- !u!1 &79438513 stripped
 GameObject:
@@ -4295,6 +4314,19 @@ MonoBehaviour:
   customReactions:
   - key: show_hood_father
     reaction: {fileID: 1414625742}
+--- !u!114 &79438516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 79438513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: garage.father_at_wheel
 --- !u!1 &80007881
 GameObject:
   m_ObjectHideFlags: 0
@@ -4531,13 +4563,29 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7104914069798235840, guid: 8c31e1e1c5d3caf4daf4be0ce84f5a2c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 91965151}
   m_SourcePrefab: {fileID: 100100000, guid: 8c31e1e1c5d3caf4daf4be0ce84f5a2c, type: 3}
 --- !u!1 &91965150 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7104914069798235840, guid: 8c31e1e1c5d3caf4daf4be0ce84f5a2c, type: 3}
   m_PrefabInstance: {fileID: 91965149}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &91965151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 91965150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: garage.vacuum_hose
 --- !u!1001 &95041459
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8401,6 +8449,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f0b5cfcbd4e314845a74a587547af180, type: 3}
       insertIndex: -1
       addedObject: {fileID: 382634881}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f0b5cfcbd4e314845a74a587547af180, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 382634883}
   m_SourcePrefab: {fileID: 100100000, guid: f0b5cfcbd4e314845a74a587547af180, type: 3}
 --- !u!1 &286626001 stripped
 GameObject:
@@ -10911,6 +10962,19 @@ MonoBehaviour:
   - key: "\u041F\u0440\u0435\u0434\u043C\u0435\u0442"
     target: {fileID: 286626001}
   customReactions: []
+--- !u!114 &382634883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 286626001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: garage.toolbox
 --- !u!1 &389828432
 GameObject:
   m_ObjectHideFlags: 0
@@ -11805,13 +11869,29 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5104098422038733671, guid: 400ea27121b396a41b11ecf6a4de6b82, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 424232208}
   m_SourcePrefab: {fileID: 100100000, guid: 400ea27121b396a41b11ecf6a4de6b82, type: 3}
 --- !u!1 &424232207 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5104098422038733671, guid: 400ea27121b396a41b11ecf6a4de6b82, type: 3}
   m_PrefabInstance: {fileID: 424232206}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &424232208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 424232207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: garage.paper_wipes
 --- !u!1001 &425589895
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18205,11 +18285,19 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5223674690964249768, guid: 1d92f5d9bdf26ed418fb11ff7e7cfef3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1121034355}
   m_SourcePrefab: {fileID: 100100000, guid: 1d92f5d9bdf26ed418fb11ff7e7cfef3, type: 3}
 --- !u!4 &686901172 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3021509416298729842, guid: 1d92f5d9bdf26ed418fb11ff7e7cfef3, type: 3}
+  m_PrefabInstance: {fileID: 686901171}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &686901173 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5223674690964249768, guid: 1d92f5d9bdf26ed418fb11ff7e7cfef3, type: 3}
   m_PrefabInstance: {fileID: 686901171}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &689172097 stripped
@@ -21290,6 +21378,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 860340996}
+  - component: {fileID: 860340997}
   m_Layer: 0
   m_Name: "\u041A\u043E\u043C\u043F\u0440\u0435\u0441\u0441\u043E\u0440 \u0443 \u0437\u0430\u0434\u043D\u0435\u0433\u043E
     \u043B\u0435\u0432\u043E\u0433\u043E \u043A\u043E\u043B\u0435\u0441\u0430"
@@ -21314,6 +21403,19 @@ Transform:
   - {fileID: 1205189635}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &860340997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 860340993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: garage.compressor_at_wheel
 --- !u!1 &862074734
 GameObject:
   m_ObjectHideFlags: 0
@@ -22289,13 +22391,29 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2475949763529322590, guid: 9abc848f207e30c458df91eadc803b52, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 907313831}
   m_SourcePrefab: {fileID: 100100000, guid: 9abc848f207e30c458df91eadc803b52, type: 3}
 --- !u!1 &907313830 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2475949763529322590, guid: 9abc848f207e30c458df91eadc803b52, type: 3}
   m_PrefabInstance: {fileID: 907313829}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &907313831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 907313830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: garage.compressor_pickup
 --- !u!1001 &907546212
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24791,6 +24909,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2277101191908393175, guid: 7acce17562482f14d9a916f6d442448c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1205745555}
+    - targetCorrespondingSourceObject: {fileID: 2277101191908393175, guid: 7acce17562482f14d9a916f6d442448c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1205745557}
   m_SourcePrefab: {fileID: 100100000, guid: 7acce17562482f14d9a916f6d442448c, type: 3}
 --- !u!4 &1018955869 stripped
 Transform:
@@ -25032,13 +25153,29 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1565009746815670037, guid: 5680227a80d74e9499b26ae202c423f0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1040506263}
   m_SourcePrefab: {fileID: 100100000, guid: 5680227a80d74e9499b26ae202c423f0, type: 3}
 --- !u!1 &1040506262 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1565009746815670037, guid: 5680227a80d74e9499b26ae202c423f0, type: 3}
   m_PrefabInstance: {fileID: 1040506261}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1040506263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1040506262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: garage.silicone_spray
 --- !u!1001 &1043949390
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -26375,6 +26512,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2277101191908393175, guid: 7acce17562482f14d9a916f6d442448c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1074503756}
+    - targetCorrespondingSourceObject: {fileID: 2277101191908393175, guid: 7acce17562482f14d9a916f6d442448c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1074503758}
   m_SourcePrefab: {fileID: 100100000, guid: 7acce17562482f14d9a916f6d442448c, type: 3}
 --- !u!1 &1074503755 stripped
 GameObject:
@@ -26428,6 +26568,19 @@ MonoBehaviour:
   customReactions:
   - key: show_open_hood_father
     reaction: {fileID: 263362228}
+--- !u!114 &1074503758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1074503755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: garage.father_at_hood
 --- !u!1001 &1075263445
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -27316,6 +27469,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17874c27076875b4cb9c784d4520ef29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.SetCarHoodReaction
+--- !u!114 &1121034355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 686901173}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: garage.car_hood
 --- !u!4 &1125041639 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5717346234106124422, guid: ae1b00ab0436c534c8afc42e19ab6e96, type: 3}
@@ -28672,6 +28838,19 @@ MonoBehaviour:
   customReactions:
   - key: show_kneeling_father
     reaction: {fileID: 1414625740}
+--- !u!114 &1205745557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1205745552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: garage.father_standing
 --- !u!1001 &1221597719
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -29369,13 +29548,29 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 207351999309502631, guid: 59fca67f14e86744591e9c23cc8adf45, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1280315323}
   m_SourcePrefab: {fileID: 100100000, guid: 59fca67f14e86744591e9c23cc8adf45, type: 3}
 --- !u!1 &1280315322 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 207351999309502631, guid: 59fca67f14e86744591e9c23cc8adf45, type: 3}
   m_PrefabInstance: {fileID: 1280315321}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1280315323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1280315322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: garage.headlamp
 --- !u!1001 &1282286595
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -31835,6 +32030,7 @@ GameObject:
   - component: {fileID: 1402361887}
   - component: {fileID: 1402361889}
   - component: {fileID: 1402361888}
+  - component: {fileID: 1402361890}
   m_Layer: 0
   m_Name: "\u041F\u043E\u0434\u044A\u0451\u043C\u043D\u044B\u0435 \u0433\u0430\u0440\u0430\u0436\u043D\u044B\u0435
     \u0432\u043E\u0440\u043E\u0442\u0430"
@@ -31898,6 +32094,19 @@ MonoBehaviour:
   panel: {fileID: 710986425}
   duration: 3.5
   raisedPosition: {x: 0, y: 3.35, z: 1.65}
+--- !u!114 &1402361890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1402361886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: garage.gate
 --- !u!1 &1405499455
 GameObject:
   m_ObjectHideFlags: 0
