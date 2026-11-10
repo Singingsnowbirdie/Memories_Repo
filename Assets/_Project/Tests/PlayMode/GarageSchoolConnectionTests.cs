@@ -53,7 +53,11 @@ namespace Memories.Tests.PlayMode
                 Assert.IsFalse(entry.IsRunning);
                 Assert.IsFalse(state.ControlsBlocked);
                 Assert.IsFalse(entry.transform.Find("Dark corridor from garage").gameObject.activeSelf);
-                Assert.Less(motor.transform.position.x, -10f, "Direct school launches must spawn inside the gym.");
+                var gym = session.CurrentLocationScene.GetRootGameObjects().Single(g => g.name == "Спортзал").transform;
+                var door = gym.Find("Gym entrance door");
+                var focus = entry.transform.Find("Gym opposite wall focus");
+                Assert.Greater(Vector3.Dot(motor.transform.position - door.position, focus.position - door.position), 0f,
+                    "Direct school launches must spawn on the gym side of the closed door, including when the gym is moved.");
                 Assert.IsTrue(Physics.Raycast(motor.transform.position + Vector3.up, Vector3.right, 3f,
                     ~0, QueryTriggerInteraction.Ignore), "Direct loads must restore the closed gym door.");
                 if (interrupt)
