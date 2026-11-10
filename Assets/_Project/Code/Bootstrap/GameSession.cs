@@ -347,6 +347,9 @@ namespace Memories.Bootstrap
         private void BindDoors(Scene scene, LocationLifetimeScope scope)
         {
             foreach (var root in scene.GetRootGameObjects())
+                foreach (var phone in root.GetComponentsInChildren<RevealSchoolPhoneReaction>(true))
+                    phone.Initialize(scope.Container.Resolve<QuestInventory>());
+            foreach (var root in scene.GetRootGameObjects())
                 foreach (var supplies in root.GetComponentsInChildren<SchoolFirstAidProgressReaction>(true))
                     supplies.Initialize(scope.Container.Resolve<Memories.Gameplay.UI.StoryTextPresenter>(),
                         scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>(), scope.Container.Resolve<QuestInventory>());
