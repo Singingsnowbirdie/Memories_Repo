@@ -252,6 +252,34 @@ namespace Memories.Tests.EditMode
                 DestroyGraph(graph);
             }
         }
+        [Test]
+        public void SchoolSupplyReminderStartsDuringMemoryWithoutInterruptingIt()
+        {
+            var input = new Input();
+            using var presenter = new MemoryPresenter(new MemoryCollection(persistProgress: false),
+                new GameplayModeState(input), new View(), input, new Music(), new Sounds());
+            var memory = AssetDatabase.LoadAssetAtPath<MemoryGraph>(
+                AssetDatabase.GUIDToAssetPath("086fd8587ac9a9c40901d66dff7c4855"));
+            var refresh = AssetDatabase.LoadAssetAtPath<Memories.Gameplay.Reactions.ReactionGraph>(
+                "Assets/_Project/Configs/Reactions/School/RefreshSupplyReminder.asset");
+            var owner = new GameObject("School reminder regression");
+            try
+            {
+                var progress = owner.AddComponent<Memories.Gameplay.Reactions.SchoolFirstAidProgressReaction>();
+                var data = new SerializedObject(progress);
+                data.FindProperty("refreshGraph").objectReferenceValue = refresh;
+                data.ApplyModifiedPropertiesWithoutUndo();
+                progress.Initialize(null, presenter, new Memories.Gameplay.Interaction.QuestInventory());
+                Assert.IsTrue(presenter.Open("school-reminder-regression", memory));
+                using var ordinary = new Memories.Gameplay.Reactions.ReactionRunner(null, presenter, owner);
+                Assert.IsFalse(ordinary.CanRun(refresh), "Ordinary interactions stay blocked during a comic.");
+                Assert.DoesNotThrow(progress.Begin);
+                StringAssert.Contains("school.first-aid-kit", progress.CaptureState());
+                Assert.IsTrue(presenter.IsPlaying, "Starting the reminder must not cancel the memory or its following text.");
+            }
+            finally { UnityEngine.Object.DestroyImmediate(owner); }
+        }
+
         private static void DestroyGraph(MemoryGraph graph)
         {
             foreach (var node in graph.nodes.ToArray()) UnityEngine.Object.DestroyImmediate(node);

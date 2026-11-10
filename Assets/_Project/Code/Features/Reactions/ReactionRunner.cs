@@ -47,11 +47,12 @@ namespace Memories.Gameplay.Reactions
         public ReactionRunner(StoryTextPresenter texts, MemoryPresenter memories, UnityEngine.Object owner,
             ILocationTransition locations = null, QuestInventory inventory = null, CustomVariableStore variables = null, ReactionObjectBinding[] objectBindings = null, CustomReactionBinding[] customReactions = null)
         { this.texts = texts; this.memories = memories; this.owner = owner; this.locations = locations; this.inventory = inventory; this.variables = variables; this.objectBindings = objectBindings; this.customReactions = customReactions; hintOwner = this; }
-        public bool CanRun(ReactionGraph graph) => graph != null && !IsRunning &&
-            !(graph.RunOnce && fired) && (memories == null || memories.CanStartPlayback);
-        public bool TryRun(ReactionGraph graph)
+        public bool CanRun(ReactionGraph graph, bool allowDuringMemory = false) => graph != null && !IsRunning &&
+            !(graph.RunOnce && fired) && (memories == null || memories.CanStartPlayback ||
+                (allowDuringMemory && memories.IsPlaying));
+        public bool TryRun(ReactionGraph graph, bool allowDuringMemory = false)
         {
-            if (!CanRun(graph)) return false;
+            if (!CanRun(graph, allowDuringMemory)) return false;
             if (!graph.TryGetSequence(out var actions, out var error))
             { Debug.LogWarning("Цепочка реакций не запущена: " + error, owner); return false; }
             var conditions = actions.Select(action => action.graph)

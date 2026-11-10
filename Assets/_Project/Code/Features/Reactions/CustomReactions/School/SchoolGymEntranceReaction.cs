@@ -126,7 +126,7 @@ namespace Memories.Gameplay.Reactions
 
         private void ShowSchoolAndSealDoor()
         {
-            doorHinge.localRotation = Quaternion.identity;
+            doorHinge.localRotation = Quaternion.Euler(0, corridorOpened ? 100 : 0, 0);
             SetGarageOpeningActive(false);
             foreach (var renderer in hiddenRenderers) if (renderer != null) renderer.enabled = true;
             foreach (var collider in hiddenColliders) if (collider != null) collider.enabled = true;
