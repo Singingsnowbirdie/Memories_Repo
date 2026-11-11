@@ -14821,6 +14821,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+  - component: {fileID: 8800000000101}
   - component: {fileID: 283037911}
   - component: {fileID: 283037912}
   m_Layer: 0
@@ -167119,3 +167120,25 @@ SceneRoots:
   - {fileID: 1390491424}
   - {fileID: 1193937706}
   - {fileID: 283037911}
+--- !u!114 &8800000000101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 283037910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fca2ebe3e6854401a8bfc5b353d0e0a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.FloatingScenery
+  objects:
+  - {fileID: 1050803039}
+  - {fileID: 1307811621}
+  - {fileID: 547805938}
+  - {fileID: 588689400}
+  - {fileID: 2143390729}
+  bobHeight: 0.125
+  period: 28
+  tiltAngle: 1
+  turnAngle: 3
