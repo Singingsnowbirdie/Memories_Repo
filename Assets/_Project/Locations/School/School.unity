@@ -8233,6 +8233,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1909834876}
     m_Modifications:
+    - target: {fileID: 1414196137617344592, guid: 367ab66e2689a8345a8fb8fd14a4f90c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
+    - target: {fileID: 1987643193280244065, guid: 367ab66e2689a8345a8fb8fd14a4f90c, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
+    - target: {fileID: 6140726643089354878, guid: 367ab66e2689a8345a8fb8fd14a4f90c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
     - target: {fileID: 7296054959696050501, guid: 367ab66e2689a8345a8fb8fd14a4f90c, type: 3}
       propertyPath: m_Name
       value: PT_Fruit_Tree_01_plums (1)
@@ -8289,18 +8301,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1414196137617344592, guid: 367ab66e2689a8345a8fb8fd14a4f90c, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value:
-      objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
-    - target: {fileID: 1987643193280244065, guid: 367ab66e2689a8345a8fb8fd14a4f90c, type: 3}
-      propertyPath: m_Materials.Array.data[1]
-      value:
-      objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
-    - target: {fileID: 6140726643089354878, guid: 367ab66e2689a8345a8fb8fd14a4f90c, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value:
-      objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -26407,8 +26407,8 @@ GameObject:
   m_Component:
   - component: {fileID: 531081668}
   - component: {fileID: 531081671}
-  - component: {fileID: 531081670}
   - component: {fileID: 531081669}
+  - component: {fileID: 531081672}
   m_Layer: 0
   m_Name: "\u0423\u0440\u043D\u0430"
   m_TagString: Untagged
@@ -26426,7 +26426,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 18, y: 0, z: 42.5}
-  m_LocalScale: {x: 0.65, y: 0, z: 0.65}
+  m_LocalScale: {x: 1.1, y: 1.1, z: 1.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 283037911}
@@ -26481,8 +26481,16 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &531081670
-CapsuleCollider:
+--- !u!33 &531081671
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 531081667}
+  m_Mesh: {fileID: 4300000, guid: 192cfc96764db6143802c4d4a244c70e, type: 2}
+--- !u!65 &531081672
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -26499,19 +26507,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.31
-  m_Height: 0.725194
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.359834, z: 0}
---- !u!33 &531081671
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 531081667}
-  m_Mesh: {fileID: 4300000, guid: 192cfc96764db6143802c4d4a244c70e, type: 2}
+  serializedVersion: 3
+  m_Size: {x: 0.62284946, y: 0.72519374, z: 0.59546405}
+  m_Center: {x: 0, y: 0.35983354, z: 0.000000059604645}
 --- !u!1 &531606135
 GameObject:
   m_ObjectHideFlags: 0
@@ -42216,10 +42214,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1588095800}
     m_Modifications:
+    - target: {fileID: 340751423047132367, guid: e05ae677c7b3bc546bd36b488586fb0c, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
     - target: {fileID: 5935278547815300987, guid: e05ae677c7b3bc546bd36b488586fb0c, type: 3}
       propertyPath: m_Name
       value: PT_Fruit_Tree_01_apples
       objectReference: {fileID: 0}
+    - target: {fileID: 6038074568851490021, guid: e05ae677c7b3bc546bd36b488586fb0c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
     - target: {fileID: 6419187236850804161, guid: e05ae677c7b3bc546bd36b488586fb0c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.3345995
@@ -42261,16 +42267,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7525788340159858592, guid: e05ae677c7b3bc546bd36b488586fb0c, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value:
-      objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
-    - target: {fileID: 6038074568851490021, guid: e05ae677c7b3bc546bd36b488586fb0c, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value:
-      objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
-    - target: {fileID: 340751423047132367, guid: e05ae677c7b3bc546bd36b488586fb0c, type: 3}
-      propertyPath: m_Materials.Array.data[1]
-      value:
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
       objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -77891,10 +77889,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 45711179}
     m_Modifications:
+    - target: {fileID: 340751423047132367, guid: e05ae677c7b3bc546bd36b488586fb0c, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
     - target: {fileID: 5935278547815300987, guid: e05ae677c7b3bc546bd36b488586fb0c, type: 3}
       propertyPath: m_Name
       value: PT_Fruit_Tree_01_apples
       objectReference: {fileID: 0}
+    - target: {fileID: 6038074568851490021, guid: e05ae677c7b3bc546bd36b488586fb0c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
     - target: {fileID: 6419187236850804161, guid: e05ae677c7b3bc546bd36b488586fb0c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.3345995
@@ -77936,16 +77942,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7525788340159858592, guid: e05ae677c7b3bc546bd36b488586fb0c, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value:
-      objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
-    - target: {fileID: 6038074568851490021, guid: e05ae677c7b3bc546bd36b488586fb0c, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value:
-      objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
-    - target: {fileID: 340751423047132367, guid: e05ae677c7b3bc546bd36b488586fb0c, type: 3}
-      propertyPath: m_Materials.Array.data[1]
-      value:
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
       objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -83289,6 +83287,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1520052102}
     m_Modifications:
+    - target: {fileID: 1094804630965145243, guid: c31bf8ec8e29cd74f9fb9a970fde7a53, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
+    - target: {fileID: 1613519660729417021, guid: c31bf8ec8e29cd74f9fb9a970fde7a53, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
+    - target: {fileID: 2558605503083844748, guid: c31bf8ec8e29cd74f9fb9a970fde7a53, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
     - target: {fileID: 4696216175943693753, guid: c31bf8ec8e29cd74f9fb9a970fde7a53, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.1945
@@ -83345,18 +83355,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: PT_Fruit_Tree_01_green
       objectReference: {fileID: 0}
-    - target: {fileID: 1094804630965145243, guid: c31bf8ec8e29cd74f9fb9a970fde7a53, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value:
-      objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
-    - target: {fileID: 2558605503083844748, guid: c31bf8ec8e29cd74f9fb9a970fde7a53, type: 3}
-      propertyPath: m_Materials.Array.data[1]
-      value:
-      objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
-    - target: {fileID: 1613519660729417021, guid: c31bf8ec8e29cd74f9fb9a970fde7a53, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value:
-      objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -89356,6 +89354,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 243038890}
     m_Modifications:
+    - target: {fileID: 1414196137617344592, guid: 367ab66e2689a8345a8fb8fd14a4f90c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
+    - target: {fileID: 1987643193280244065, guid: 367ab66e2689a8345a8fb8fd14a4f90c, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
+    - target: {fileID: 6140726643089354878, guid: 367ab66e2689a8345a8fb8fd14a4f90c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
     - target: {fileID: 7296054959696050501, guid: 367ab66e2689a8345a8fb8fd14a4f90c, type: 3}
       propertyPath: m_Name
       value: PT_Fruit_Tree_01_plums (1)
@@ -89412,18 +89422,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1414196137617344592, guid: 367ab66e2689a8345a8fb8fd14a4f90c, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value:
-      objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
-    - target: {fileID: 1987643193280244065, guid: 367ab66e2689a8345a8fb8fd14a4f90c, type: 3}
-      propertyPath: m_Materials.Array.data[1]
-      value:
-      objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
-    - target: {fileID: 6140726643089354878, guid: 367ab66e2689a8345a8fb8fd14a4f90c, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value:
-      objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -94491,8 +94489,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1484022244}
   - component: {fileID: 1484022247}
-  - component: {fileID: 1484022246}
   - component: {fileID: 1484022245}
+  - component: {fileID: 1484022248}
   m_Layer: 0
   m_Name: "\u0423\u0440\u043D\u0430"
   m_TagString: Untagged
@@ -94510,7 +94508,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -6.405, y: 0, z: 49.29}
-  m_LocalScale: {x: 0.65, y: 0, z: 0.65}
+  m_LocalScale: {x: 1.1, y: 1.1, z: 1.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 283037911}
@@ -94565,8 +94563,16 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &1484022246
-CapsuleCollider:
+--- !u!33 &1484022247
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1484022243}
+  m_Mesh: {fileID: 4300000, guid: 192cfc96764db6143802c4d4a244c70e, type: 2}
+--- !u!65 &1484022248
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -94583,19 +94589,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.31
-  m_Height: 0.725194
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.359834, z: 0}
---- !u!33 &1484022247
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1484022243}
-  m_Mesh: {fileID: 4300000, guid: 192cfc96764db6143802c4d4a244c70e, type: 2}
+  serializedVersion: 3
+  m_Size: {x: 0.62284946, y: 0.72519374, z: 0.59546405}
+  m_Center: {x: 0, y: 0.35983354, z: 0.000000059604645}
 --- !u!1001 &1486600286
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -97287,6 +97283,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 319838595}
     m_Modifications:
+    - target: {fileID: 1414196137617344592, guid: 367ab66e2689a8345a8fb8fd14a4f90c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
+    - target: {fileID: 1987643193280244065, guid: 367ab66e2689a8345a8fb8fd14a4f90c, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
+    - target: {fileID: 6140726643089354878, guid: 367ab66e2689a8345a8fb8fd14a4f90c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
     - target: {fileID: 7296054959696050501, guid: 367ab66e2689a8345a8fb8fd14a4f90c, type: 3}
       propertyPath: m_Name
       value: PT_Fruit_Tree_01_plums (1)
@@ -97343,18 +97351,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1414196137617344592, guid: 367ab66e2689a8345a8fb8fd14a4f90c, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value:
-      objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
-    - target: {fileID: 1987643193280244065, guid: 367ab66e2689a8345a8fb8fd14a4f90c, type: 3}
-      propertyPath: m_Materials.Array.data[1]
-      value:
-      objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
-    - target: {fileID: 6140726643089354878, guid: 367ab66e2689a8345a8fb8fd14a4f90c, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value:
-      objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -100170,8 +100166,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1622877205}
   - component: {fileID: 1622877208}
-  - component: {fileID: 1622877207}
   - component: {fileID: 1622877206}
+  - component: {fileID: 1622877209}
   m_Layer: 0
   m_Name: "\u0423\u0440\u043D\u0430"
   m_TagString: Untagged
@@ -100188,7 +100184,7 @@ Transform:
   m_GameObject: {fileID: 1622877204}
   serializedVersion: 2
   m_LocalRotation: {x: 0.1081757, y: -0.021998638, z: 0.1980634, w: 0.97395325}
-  m_LocalPosition: {x: 6.275189, y: 0.0533827, z: 49.075046}
+  m_LocalPosition: {x: 6.18, y: 0.27, z: 49.12}
   m_LocalScale: {x: 1.1, y: 1.1, z: 1.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -100244,8 +100240,16 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &1622877207
-CapsuleCollider:
+--- !u!33 &1622877208
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1622877204}
+  m_Mesh: {fileID: 4300000, guid: 192cfc96764db6143802c4d4a244c70e, type: 2}
+--- !u!65 &1622877209
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -100262,19 +100266,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.31
-  m_Height: 0.725194
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.359834, z: 0}
---- !u!33 &1622877208
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1622877204}
-  m_Mesh: {fileID: 4300000, guid: 192cfc96764db6143802c4d4a244c70e, type: 2}
+  serializedVersion: 3
+  m_Size: {x: 0.62284946, y: 0.72519374, z: 0.595464}
+  m_Center: {x: 0.0000000020107258, y: 0.35983354, z: 0.00000006496658}
 --- !u!1001 &1623259727
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -119608,10 +119602,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1868699279}
     m_Modifications:
+    - target: {fileID: 340751423047132367, guid: e05ae677c7b3bc546bd36b488586fb0c, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
     - target: {fileID: 5935278547815300987, guid: e05ae677c7b3bc546bd36b488586fb0c, type: 3}
       propertyPath: m_Name
       value: PT_Fruit_Tree_01_apples
       objectReference: {fileID: 0}
+    - target: {fileID: 6038074568851490021, guid: e05ae677c7b3bc546bd36b488586fb0c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
     - target: {fileID: 6419187236850804161, guid: e05ae677c7b3bc546bd36b488586fb0c, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.726
@@ -119665,16 +119667,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7525788340159858592, guid: e05ae677c7b3bc546bd36b488586fb0c, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value:
-      objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
-    - target: {fileID: 6038074568851490021, guid: e05ae677c7b3bc546bd36b488586fb0c, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value:
-      objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
-    - target: {fileID: 340751423047132367, guid: e05ae677c7b3bc546bd36b488586fb0c, type: 3}
-      propertyPath: m_Materials.Array.data[1]
-      value:
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
       objectReference: {fileID: 2100000, guid: a991ee916541480db8dbedcd622875a0, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
