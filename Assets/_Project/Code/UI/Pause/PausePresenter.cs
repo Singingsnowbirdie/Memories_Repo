@@ -19,17 +19,19 @@ namespace Memories.Gameplay.UI
         private MemoryCollection collection;
         private MemoryPresenter memories;
         private readonly AudioVolumeSettings audio;
+        private readonly Player.CursorSettings cursor;
         private readonly Func<bool> returnToStart;
         private readonly Func<bool> restart;
         public bool IsPaused => state.Mode == GameplayMode.Paused;
 
         public PausePresenter(IPauseInput input, IPauseView view, GameplayModeState state, AudioVolumeSettings audio,
-            Func<bool> returnToStart = null, Func<bool> restart = null)
+            Func<bool> returnToStart = null, Func<bool> restart = null, Player.CursorSettings cursor = null)
         {
             this.input = input;
             this.view = view;
             this.state = state;
             this.audio = audio;
+            this.cursor = cursor ?? new Player.CursorSettings();
             this.returnToStart = returnToStart;
             this.restart = restart;
             view.RestartRequested += Restart;
@@ -44,6 +46,8 @@ namespace Memories.Gameplay.UI
             view.MasterChanged += audio.SetMaster;
             view.MusicChanged += audio.SetMusic;
             view.SoundsChanged += audio.SetSounds;
+            view.InvertXChanged += this.cursor.SetInvertX;
+            view.InvertYChanged += this.cursor.SetInvertY;
             input.PauseRequested += Toggle;
             view.ResumeRequested += Resume;
             view.QuitRequested += Quit;
@@ -102,7 +106,7 @@ namespace Memories.Gameplay.UI
         {
             if (disposed || !IsPaused) return;
             settingsOpen = true;
-            view.ShowSettings(true, audio.Master, audio.Music, audio.Sounds);
+            view.ShowSettings(true, audio.Master, audio.Music, audio.Sounds, cursor.InvertX, cursor.InvertY);
         }
 
         private void OpenCredits()
@@ -130,7 +134,7 @@ namespace Memories.Gameplay.UI
             if (disposed || !settingsOpen) return;
             settingsOpen = false;
             audio.Save();
-            view.ShowSettings(false, audio.Master, audio.Music, audio.Sounds);
+            view.ShowSettings(false, audio.Master, audio.Music, audio.Sounds, cursor.InvertX, cursor.InvertY);
         }
 
         // Connect after both presenters have been constructed so Escape reaches pause before reading.
@@ -196,6 +200,8 @@ namespace Memories.Gameplay.UI
             view.MasterChanged -= audio.SetMaster;
             view.MusicChanged -= audio.SetMusic;
             view.SoundsChanged -= audio.SetSounds;
+            view.InvertXChanged -= cursor.SetInvertX;
+            view.InvertYChanged -= cursor.SetInvertY;
             audio.Save();
             // The player owns cursor cleanup; do not recapture it while unloading.
             state.Exit(GameplayMode.Paused, false);

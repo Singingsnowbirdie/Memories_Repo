@@ -23,6 +23,8 @@ namespace Memories.Gameplay.UI
         public event Action<float> MasterChanged;
         public event Action<float> MusicChanged;
         public event Action<float> SoundsChanged;
+        public event Action<bool> InvertXChanged;
+        public event Action<bool> InvertYChanged;
         private GameObject panel;
         private GameObject menuContent;
         private GameObject settingsContent;
@@ -33,6 +35,8 @@ namespace Memories.Gameplay.UI
         private Button cancelRestart;
         private Slider masterSlider, musicSlider, soundsSlider;
         private Button settingsButton;
+        private Button invertXButton, invertYButton;
+        private bool invertXValue, invertYValue;
         private Button resume;
         private Text hint;
         private int nextHint;
@@ -91,11 +95,23 @@ namespace Memories.Gameplay.UI
             CreateText(creditsContent.transform, "Титры", 40, 195);
             creditsBack = CreateButton(creditsContent.transform, "Назад", -240, () => BackRequested?.Invoke());
             creditsContent.SetActive(false);
-            CreateText(settingsContent.transform, "Настройки звука", 40, 240);
+            CreateText(settingsContent.transform, "Настройки", 40, 300);
             masterSlider = CreateSlider("Общая громкость", 120, value => MasterChanged?.Invoke(value));
             musicSlider = CreateSlider("Музыка", 0, value => MusicChanged?.Invoke(value));
             soundsSlider = CreateSlider("Другие звуки", -120, value => SoundsChanged?.Invoke(value));
-            CreateButton(settingsContent.transform, "Назад", -240, () => BackRequested?.Invoke());
+            invertXButton = CreateButton(settingsContent.transform, "Инверсия X: выкл.", -205, () =>
+            {
+                invertXValue = !invertXValue;
+                SetInversionCaption(invertXButton, "X", invertXValue);
+                InvertXChanged?.Invoke(invertXValue);
+            });
+            invertYButton = CreateButton(settingsContent.transform, "Инверсия Y: выкл.", -285, () =>
+            {
+                invertYValue = !invertYValue;
+                SetInversionCaption(invertYButton, "Y", invertYValue);
+                InvertYChanged?.Invoke(invertYValue);
+            });
+            CreateButton(settingsContent.transform, "Назад", -365, () => BackRequested?.Invoke());
             hint = CreateLabel(panel.transform, Hints[0], 0);
             var hintRect = hint.rectTransform;
             hintRect.anchorMin = new Vector2(.1f, 0);
@@ -178,12 +194,21 @@ namespace Memories.Gameplay.UI
                 .GetComponent<Text>().text = caption + "  " + Mathf.RoundToInt(value * 100) + "%";
         }
 
-        public void ShowSettings(bool visible, float master, float music, float sounds)
+        private static void SetInversionCaption(Button button, string axis, bool enabled)
+        {
+            button.GetComponentInChildren<Text>().text = "Инверсия " + axis + ": " + (enabled ? "вкл." : "выкл.");
+        }
+
+        public void ShowSettings(bool visible, float master, float music, float sounds, bool invertX = false, bool invertY = false)
         {
             menuContent.SetActive(!visible);
             settingsContent.SetActive(visible);
             if (visible)
             {
+                invertXValue = invertX;
+                invertYValue = invertY;
+                SetInversionCaption(invertXButton, "X", invertX);
+                SetInversionCaption(invertYButton, "Y", invertY);
                 SetSlider(masterSlider, master, "Общая громкость");
                 SetSlider(musicSlider, music, "Музыка");
                 SetSlider(soundsSlider, sounds, "Другие звуки");

@@ -11,17 +11,19 @@ namespace Memories.Gameplay.Player
         private readonly IPlayerView view;
         private readonly PlayerMovementSettings settings;
         private bool started;
+        private readonly CursorSettings cursor;
         private readonly UI.GameplayModeState gameplayState;
         public bool ControlsEnabled { get; set; } = true;
 
         public PlayerPresenter(IPlayerInput input, PlayerMovementModel model, IPlayerView view, PlayerMovementSettings settings,
-            UI.GameplayModeState gameplayState = null)
+            UI.GameplayModeState gameplayState = null, CursorSettings cursor = null)
         {
             this.input = input;
             this.model = model;
             this.view = view;
             this.settings = settings;
             this.gameplayState = gameplayState;
+            this.cursor = cursor;
         }
 
         public void Start()
@@ -40,6 +42,7 @@ namespace Memories.Gameplay.Player
             bool controlsEnabled = ControlsEnabled && gameplayState?.ControlsBlocked != true;
             var look = controlsEnabled ? input.LookDelta : Vector2.zero;
             // Mouse delta is already a displacement; do not multiply it by deltaTime.
+            if (cursor != null) look = cursor.Apply(look);
             model.Look(look.x, look.y);
             view.SetLook(model.Yaw, model.Pitch);
             var move = controlsEnabled ? Vector2.ClampMagnitude(input.Move, 1f) : Vector2.zero;

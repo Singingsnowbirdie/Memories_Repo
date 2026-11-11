@@ -55,11 +55,13 @@ namespace Memories.Tests.EditMode
             public event Action<float> MasterChanged { add { } remove { } }
             public event Action<float> MusicChanged { add { } remove { } }
             public event Action<float> SoundsChanged { add { } remove { } }
+            public event Action<bool> InvertXChanged { add { } remove { } }
+            public event Action<bool> InvertYChanged { add { } remove { } }
             public bool Visible, LibraryVisible;
             public void Show(bool visible) { Visible = visible; LibraryVisible = false; }
             public void ShowRestartConfirmation(bool visible) { }
             public void ShowCredits(bool visible) { }
-            public void ShowSettings(bool visible, float master, float music, float sounds) { }
+            public void ShowSettings(bool visible, float master, float music, float sounds, bool invertX = false, bool invertY = false) { }
             public void SetMemoriesAvailable(bool available) { }
             public void ShowMemories(bool visible, IReadOnlyList<MemoryCollection.FoundMemory> memories) => LibraryVisible = visible;
             public void OpenLibrary() => MemoriesRequested?.Invoke();

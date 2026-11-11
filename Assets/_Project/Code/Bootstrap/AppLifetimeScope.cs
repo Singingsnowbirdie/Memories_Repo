@@ -43,6 +43,7 @@ namespace Memories.Bootstrap
             Instantiate(Resources.Load<GameObject>("SharedSky"), transform);
             builder.Register<ApplicationContext>(Lifetime.Singleton);
             builder.Register<AudioVolumeSettings>(Lifetime.Singleton);
+            builder.Register<CursorSettings>(Lifetime.Singleton);
             builder.RegisterBuildCallback(container => container.Resolve<AudioVolumeSettings>());
             playerMovement.Validate();
             builder.RegisterInstance(playerMovement);

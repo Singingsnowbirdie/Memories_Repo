@@ -44,8 +44,10 @@ namespace Memories.Tests.EditMode
             public event Action<float> MasterChanged { add { } remove { } }
             public event Action<float> MusicChanged { add { } remove { } }
             public event Action<float> SoundsChanged { add { } remove { } }
+            public event Action<bool> InvertXChanged { add { } remove { } }
+            public event Action<bool> InvertYChanged { add { } remove { } }
             public bool SettingsVisible;
-            public void ShowSettings(bool visible, float master, float music, float sounds) => SettingsVisible = visible;
+            public void ShowSettings(bool visible, float master, float music, float sounds, bool invertX = false, bool invertY = false) => SettingsVisible = visible;
             public void Settings() => SettingsRequested?.Invoke();
             public bool Visible;
             public void Show(bool visible) => Visible = visible;

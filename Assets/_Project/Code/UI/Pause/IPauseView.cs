@@ -20,11 +20,13 @@ namespace Memories.Gameplay.UI
         event Action<float> MasterChanged;
         event Action<float> MusicChanged;
         event Action<float> SoundsChanged;
+        event Action<bool> InvertXChanged;
+        event Action<bool> InvertYChanged;
         void Show(bool visible);
         void SetMemoriesAvailable(bool available);
         void ShowRestartConfirmation(bool visible);
         void ShowCredits(bool visible);
         void ShowMemories(bool visible, IReadOnlyList<MemoryCollection.FoundMemory> memories);
-        void ShowSettings(bool visible, float master, float music, float sounds);
+        void ShowSettings(bool visible, float master, float music, float sounds, bool invertX = false, bool invertY = false);
     }
 }
