@@ -245,7 +245,11 @@ namespace Memories.Bootstrap
                     spawn.SetPositionAndRotation(checkpointCatalog.houseMemoryPosition, Quaternion.Euler(0, checkpointCatalog.houseMemoryYaw, 0));
                 }
                 else if (testerCheckpoint == TesterCheckpoint.BackyardMemoryComplete)
-                    FindMarker(locationScene, "PlayerSpawn").SetPositionAndRotation(new Vector3(0, .05f, 17), Quaternion.identity);
+                {
+                    var entrance = FindMarker(locationScene, "Вход из дома");
+                    FindMarker(locationScene, "PlayerSpawn").SetPositionAndRotation(
+                        entrance.TransformPoint(new Vector3(0, .05f, 16.84f)), entrance.rotation);
+                }
                 else if (testerCheckpoint == TesterCheckpoint.GarageCorridorOpen)
                 {
                     var exit = FindComponent<GarageSchoolConnection>(locationScene).transform;
@@ -313,9 +317,10 @@ namespace Memories.Bootstrap
                 var spawn = FindMarker(nextScene, "PlayerSpawn");
                 if (spawn == null) throw new InvalidOperationException("Missing PlayerSpawn: " + scenePath);
                 var player = LocationScope.Container.Resolve<PlayerMotor>();
-                AlignScene(nextScene, spawn, player.transform.position, player.transform.rotation);
                 DisableLocationCameras(nextScene);
                 BindDoors(nextScene, LocationScope);
+                player.Teleport(spawn.position, spawn.eulerAngles.y);
+                LocationScope.Container.Resolve<PlayerMovementModel>().ResetMotion(spawn.eulerAngles.y);
                 var previous = locationScene;
                 locationScene = nextScene;
                 SceneManager.SetActiveScene(nextScene);
@@ -457,14 +462,14 @@ namespace Memories.Bootstrap
             return null;
         }
 
-        public static void AlignScene(Scene scene, Transform marker, Vector3 position, Quaternion rotation)
+        private static void ValidateConnection(Transform entrance, Transform exit)
         {
-            var origin = marker.position;
-            var delta = rotation * Quaternion.Inverse(marker.rotation);
-            foreach (var root in scene.GetRootGameObjects())
-                root.transform.SetPositionAndRotation(position + delta * (root.transform.position - origin),
-                    delta * root.transform.rotation);
-            Physics.SyncTransforms();
+            // Locations are authored in shared world coordinates. Never move loaded static geometry.
+            if (Vector3.Distance(entrance.position, exit.position) > .01f ||
+                Quaternion.Angle(entrance.rotation, exit.rotation) > .1f)
+                throw new InvalidOperationException("Scene entrances must be aligned in the Editor: " +
+                    exit.gameObject.scene.name + "/" + exit.name + " -> " +
+                    entrance.gameObject.scene.name + "/" + entrance.name);
         }
 
         private static void DisableLocationCameras(Scene scene)
@@ -505,7 +510,7 @@ namespace Memories.Bootstrap
                 var hinge = FindMarker(garage, "Петля боковой двери");
                 if (entrance == null || hinge == null)
                     throw new InvalidOperationException("Garage side entrance is not configured.");
-                AlignScene(garage, entrance, attachment.transform.position, attachment.transform.rotation);
+                ValidateConnection(entrance, attachment.transform);
                 DisableLocationCameras(garage);
                 BindDoors(garage, LocationScope);
                 hinge.localRotation *= Quaternion.Euler(0, 100, 0);
@@ -548,7 +553,7 @@ namespace Memories.Bootstrap
                 var entrance = FindComponent<SchoolGymEntranceReaction>(school);
                 if (entrance == null || entrance.CorridorEntrance == null)
                     throw new InvalidOperationException("Gym corridor entrance is not configured.");
-                AlignScene(school, entrance.CorridorEntrance, connection.transform.position, connection.transform.rotation);
+                ValidateConnection(entrance.CorridorEntrance, connection.transform);
                 DisableLocationCameras(school);
                 BindDoors(school, LocationScope);
                 entrance.PrepareArrival();
@@ -581,7 +586,7 @@ namespace Memories.Bootstrap
                 cancellation.Token.ThrowIfCancellationRequested();
                 var arrival = FindMarker(scene, door.ArrivalMarker);
                 if (arrival == null) throw new InvalidOperationException("Missing entrance marker: " + door.ArrivalMarker);
-                AlignScene(scene, arrival, door.transform.position, door.transform.rotation);
+                ValidateConnection(arrival, door.transform);
                 DisableLocationCameras(scene);
                 BindDoors(scene, LocationScope);
                 additionalScenes.Add(scene);
