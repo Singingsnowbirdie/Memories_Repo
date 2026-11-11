@@ -43,7 +43,8 @@ namespace Memories.Editor
             var ids = new Dictionary<string, ObjectStateTracker>();
             foreach (var root in scene.GetRootGameObjects())
             foreach (var component in root.GetComponentsInChildren<MonoBehaviour>(true))
-                if (component is IObjectStateParticipant && component.GetComponent<ObjectStateTracker>() == null)
+                if (component is IObjectStateParticipant participant && ObjectStateStore.RequiresPersistence(participant) &&
+                    component.GetComponent<ObjectStateTracker>() == null)
                     throw new BuildFailedException($"Missing ObjectStateTracker and explicit persistent ID: {scene.path}/{component.name}");
             foreach (var root in scene.GetRootGameObjects())
             foreach (var tracker in root.GetComponentsInChildren<ObjectStateTracker>(true))

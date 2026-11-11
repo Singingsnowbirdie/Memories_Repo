@@ -8,7 +8,7 @@ namespace Memories.Gameplay.Interaction
 {
     [DisallowMultipleComponent]
     [AddComponentMenu("Memories/Interaction/Reaction Interactable")]
-    public sealed class ReactionInteractable : MonoBehaviour, IObjectStateParticipant
+    public sealed class ReactionInteractable : MonoBehaviour, IConditionalObjectStateParticipant
     {
         [SerializeField] private ReactionGraph graph;
         [SerializeField] private bool initiallyInteractable = true;
@@ -25,6 +25,24 @@ namespace Memories.Gameplay.Interaction
         }
         private ReactionRunner runner;
         public string StateKey => "reactionHints";
+        public bool RequiresPersistence => RequiresSavedState(graph, new System.Collections.Generic.HashSet<ReactionGraph>());
+
+        private bool RequiresSavedState(ReactionGraph candidate, System.Collections.Generic.HashSet<ReactionGraph> visited)
+        {
+            if (candidate == null || !visited.Add(candidate)) return false;
+            foreach (var node in candidate.nodes)
+            {
+                if (!(node is ReactionNode action)) continue;
+                if (action.Kind == ReactionKind.StartHints) return true;
+                if (action.Kind == ReactionKind.RunGraph && RequiresSavedState(action.ReactionGraph, visited)) return true;
+                if (action.Kind != ReactionKind.ObjectActivity && action.Kind != ReactionKind.ObjectInteractivity) continue;
+                if (action.Kind == ReactionKind.ObjectInteractivity && string.IsNullOrEmpty(action.ObjectKey)) return true;
+                if (ReactionObjectBinding.TryResolve(objectBindings, action.ObjectKey, out var target) && target == gameObject)
+                    return true;
+            }
+            return false;
+        }
+
         public string CaptureState() => runner?.CaptureHints() ?? "";
         public void RestoreState(string state) => runner?.RestoreHints(graph, state);
         public string Prompt => prompt;

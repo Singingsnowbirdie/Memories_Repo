@@ -13,8 +13,17 @@ namespace Memories.Gameplay.Reactions
         void RestoreState(string state);
     }
 
+    // Components with optional state can declare whether this configuration needs saving.
+    public interface IConditionalObjectStateParticipant : IObjectStateParticipant
+    {
+        bool RequiresPersistence { get; }
+    }
+
     public sealed class ObjectStateStore : IDisposable
     {
+        public static bool RequiresPersistence(IObjectStateParticipant participant) =>
+            !(participant is IConditionalObjectStateParticipant conditional) || conditional.RequiresPersistence;
+
         public const string DefaultKey = "Memories.Progress.Objects.v1";
         [Serializable] private sealed class Entry { public string id; public string state; }
         [Serializable] private sealed class Data { public List<Entry> entries = new List<Entry>(); }

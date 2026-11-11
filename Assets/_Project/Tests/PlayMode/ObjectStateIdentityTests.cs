@@ -68,7 +68,8 @@ namespace Memories.Tests.PlayMode
                         Assert.IsFalse(string.IsNullOrWhiteSpace(tracker.PersistentId), tracker.name);
                         Assert.IsTrue(allIds.Add(tracker.PersistentId), tracker.PersistentId);
                     }
-                    foreach (var participant in scene.GetRootGameObjects().SelectMany(root => root.GetComponentsInChildren<MonoBehaviour>(true)).Where(c => c is IObjectStateParticipant))
+                    foreach (var participant in scene.GetRootGameObjects().SelectMany(root => root.GetComponentsInChildren<MonoBehaviour>(true))
+                        .Where(c => c is IObjectStateParticipant participant && ObjectStateStore.RequiresPersistence(participant)))
                         Assert.IsNotNull(participant.GetComponent<ObjectStateTracker>(), participant.name);
                     store = new ObjectStateStore(saveKey: key);
                     store.RestoreScene(scene);
