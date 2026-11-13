@@ -137,7 +137,7 @@ namespace Memories.Gameplay.UI
             view.ShowSettings(false, audio.Master, audio.Music, audio.Sounds, cursor.InvertX, cursor.InvertY);
         }
 
-        // Connect after both presenters have been constructed so Escape reaches pause before reading.
+        // Подключаем после создания обоих презентеров, чтобы Escape сначала обрабатывался паузой, а затем чтением.
         public void ConnectMemories(MemoryCollection collection, MemoryPresenter memories)
         {
             if (this.memories != null) this.memories.Closed -= OnMemoryClosed;
@@ -203,7 +203,7 @@ namespace Memories.Gameplay.UI
             view.InvertXChanged -= cursor.SetInvertX;
             view.InvertYChanged -= cursor.SetInvertY;
             audio.Save();
-            // The player owns cursor cleanup; do not recapture it while unloading.
+            // За освобождение курсора отвечает игрок; при выгрузке не захватываем его повторно.
             state.Exit(GameplayMode.Paused, false);
         }
     }

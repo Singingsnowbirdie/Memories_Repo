@@ -61,6 +61,52 @@ namespace Memories.Editor
     [CustomNodeEditor(typeof(ReactionNode))]
     public sealed class ReactionNodeEditor : NodeEditor
     {
+        private static void OpenHintGraph(ReactionGraph source, string hintId)
+        {
+            var matches = new System.Collections.Generic.HashSet<ReactionGraph>();
+            var visited = new System.Collections.Generic.HashSet<ReactionGraph>();
+            void Collect(ReactionGraph graph)
+            {
+                if (graph == null || !visited.Add(graph)) return;
+                foreach (var node in graph.nodes)
+                {
+                    if (!(node is ReactionNode action)) continue;
+                    if (action.Kind == ReactionKind.StartHints && action.HintId == hintId && action.HintGraph != null)
+                        matches.Add(action.HintGraph);
+                    if (action.Kind == ReactionKind.RunGraph) Collect(action.ReactionGraph);
+                }
+            }
+
+            // Сначала ищем в вызывающем графе и его подграфах: ID подсказок относятся к их владельцу.
+            Collect(source);
+            if (matches.Count == 0)
+                foreach (var guid in AssetDatabase.FindAssets("t:ReactionGraph", new[] { "Assets" }))
+                    Collect(AssetDatabase.LoadAssetAtPath<ReactionGraph>(AssetDatabase.GUIDToAssetPath(guid)));
+
+            if (matches.Count == 0)
+            {
+                EditorUtility.DisplayDialog("Граф подсказки не найден",
+                    "Не найдено действие «Запустить подсказки» с ID «" + hintId + "» и назначенным графом.", "ОК");
+                return;
+            }
+            if (matches.Count == 1)
+            {
+                foreach (var graph in matches) NodeEditorWindow.Open(graph);
+                return;
+            }
+            // Один ID может использоваться разными владельцами. Даём дизайнеру выбрать граф.
+            var choices = new System.Collections.Generic.List<ReactionGraph>(matches);
+            choices.Sort((a, b) => string.CompareOrdinal(AssetDatabase.GetAssetPath(a), AssetDatabase.GetAssetPath(b)));
+            var menu = new GenericMenu();
+            foreach (var graph in choices)
+            {
+                var destination = graph;
+                menu.AddItem(new GUIContent(AssetDatabase.GetAssetPath(graph)), false,
+                    () => { if (destination != null) NodeEditorWindow.Open(destination); });
+            }
+            menu.ShowAsContext();
+        }
+
         private void DrawCustomReaction(ReactionGraph graph, SerializedProperty key)
         {
             var names = new System.Collections.Generic.List<string>();
@@ -125,13 +171,13 @@ namespace Memories.Editor
             NodeEditorGUILayout.PortField(new GUIContent("Далее"), target.GetOutputPort("next"));
             var kind = serializedObject.FindProperty("kind");
             EditorGUILayout.LabelField("Действие");
-            // Keep existing serialized add/remove actions while presenting one inventory action.
+            // Сохраняем сериализованные действия добавления и удаления, показывая единое действие инвентаря.
             int displayedKind = kind.intValue == (int)ReactionKind.ConsumeInventoryItem
                 ? (int)ReactionKind.AddInventoryItem : kind.intValue;
             EditorGUI.BeginChangeCheck();
             int chosenKind = EditorGUILayout.IntPopup(displayedKind,
-                new[] { "Показать текст", "Показать воспоминание", "Перейти в локацию", "Запустить реакцию объекта", "Установить кастомную переменную", "Активность объекта", "Инвентарный предмет", "Запустить подсказки", "Остановить подсказки", "Интерактивность предмета", "Запустить граф реакций" },
-                new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11 });
+                new[] { "Показать текст", "Показать воспоминание", "Перейти в локацию", "Запустить реакцию объекта", "Установить кастомную переменную", "Активность объекта", "Инвентарный предмет", "Запустить подсказки", "Остановить подсказки", "Интерактивность предмета", "Запустить граф реакций", "Посмотреть на объект" },
+                new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12 });
             if (EditorGUI.EndChangeCheck()) kind.intValue = chosenKind;
             EditorGUILayout.Space(8);
             if (kind.intValue == (int)ReactionKind.RunGraph)
@@ -213,8 +259,9 @@ namespace Memories.Editor
             {
                 DrawCustomReaction((ReactionGraph)target.graph, serializedObject.FindProperty("objectKey"));
             }
-            else if (kind.enumValueIndex == 5 || kind.enumValueIndex == 10)
+            else if (kind.enumValueIndex == 5 || kind.enumValueIndex == 10 || kind.intValue == (int)ReactionKind.LookAtObject)
             {
+                bool lookAt = kind.intValue == (int)ReactionKind.LookAtObject;
                 bool interactivity = kind.enumValueIndex == 10;
                 var graph = (ReactionGraph)target.graph;
                 var key = serializedObject.FindProperty("objectKey");
@@ -233,36 +280,65 @@ namespace Memories.Editor
                         key.stringValue = interactivity && chosen == 0 ? "" : names[chosen];
                 }
                 EditorGUILayout.Space(8);
-                EditorGUILayout.LabelField(interactivity ? "Интерактивность" : "Активность");
-                var active = serializedObject.FindProperty(interactivity ? "interactionEnabled" : "active");
-                active.boolValue = EditorGUILayout.Popup(active.boolValue ? 0 : 1, new[] { "Включить", "Выключить" }) == 0;
-                if (!interactivity && active.boolValue)
+                if (lookAt)
                 {
-                    EditorGUILayout.Space(8);
-                    EditorGUILayout.LabelField("Проявление, сек. (0 — сразу)");
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("revealDuration"), GUIContent.none);
-                    if (serializedObject.FindProperty("revealDuration").floatValue > 0)
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("lookDuration"), new GUIContent("Длительность, сек."));
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("lookMaxSpeed"), new GUIContent("Макс. скорость, °/сек."));
+                    EditorGUILayout.HelpBox("Поворачивает взгляд к позиции объекта без перемещения игрока. Ограничение скорости может увеличить длительность. Управление заблокировано до конца поворота; затем выполняется следующая нода.", MessageType.Info);
+                }
+                else
+                {
+                    EditorGUILayout.LabelField(interactivity ? "Интерактивность" : "Активность");
+                    var active = serializedObject.FindProperty(interactivity ? "interactionEnabled" : "active");
+                    active.boolValue = EditorGUILayout.Popup(active.boolValue ? 0 : 1, new[] { "Включить", "Выключить" }) == 0;
+                    if (!interactivity && active.boolValue)
                     {
                         EditorGUILayout.Space(8);
-                        EditorGUILayout.LabelField("Задержка, сек.");
-                        EditorGUILayout.PropertyField(serializedObject.FindProperty("revealDelay"), GUIContent.none);
-                        EditorGUILayout.Space(8);
-                        EditorGUILayout.LabelField("Шейдер проявления");
-                        EditorGUILayout.PropertyField(serializedObject.FindProperty("revealShader"), GUIContent.none);
+                        EditorGUILayout.LabelField("Проявление, сек. (0 — сразу)");
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("revealDuration"), GUIContent.none);
+                        if (serializedObject.FindProperty("revealDuration").floatValue > 0)
+                        {
+                            EditorGUILayout.Space(8);
+                            EditorGUILayout.LabelField("Задержка, сек.");
+                            EditorGUILayout.PropertyField(serializedObject.FindProperty("revealDelay"), GUIContent.none);
+                            EditorGUILayout.Space(8);
+                            EditorGUILayout.LabelField("Шейдер проявления");
+                            EditorGUILayout.PropertyField(serializedObject.FindProperty("revealShader"), GUIContent.none);
+                        }
                     }
                 }
             }
             else if (kind.enumValueIndex == 7 || kind.enumValueIndex == 8)
             {
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("hintId"), new GUIContent("ID подсказки"));
+                EditorGUILayout.LabelField("ID подсказки");
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("hintId"), GUIContent.none);
                 if (kind.enumValueIndex == 7)
                 {
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("hintGraph"), new GUIContent("Граф подсказки"));
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("hintTimeout"), new GUIContent("Таймаут, сек."));
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("repeatHint"), new GUIContent("Повторять"));
+                    EditorGUILayout.Space(8);
+                    EditorGUILayout.LabelField("Граф подсказки");
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("hintGraph"), GUIContent.none);
+                    EditorGUILayout.Space(8);
+                    EditorGUILayout.LabelField("Таймаут, сек.");
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("hintTimeout"), GUIContent.none);
+                    EditorGUILayout.Space(8);
+                    EditorGUILayout.LabelField("Повторять");
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("repeatHint"), GUIContent.none);
+                    EditorGUILayout.Space(8);
                     EditorGUILayout.HelpBox("Первый запуск после таймаута; повтор — после завершения графа и нового таймаута. Проверки предметов задаются в графе подсказки. Пауза останавливает отсчёт. Повторный запуск того же ID не сбрасывает таймер.", MessageType.Info);
                 }
-                EditorGUILayout.HelpBox("ID действует в пределах объекта, запустившего граф. При отключении объекта или выгрузке сцены таймеры прекращаются; между запусками игры не сохраняются.", MessageType.Info);
+                if (kind.enumValueIndex == 8)
+                {
+                    EditorGUILayout.Space(8);
+                    string hintId = serializedObject.FindProperty("hintId").stringValue;
+                    using (new EditorGUI.DisabledScope(string.IsNullOrWhiteSpace(hintId)))
+                        if (GUILayout.Button("Открыть граф подсказки"))
+                        {
+                            var source = (ReactionGraph)target.graph;
+                            EditorApplication.delayCall += () => OpenHintGraph(source, hintId);
+                        }
+                    EditorGUILayout.Space(8);
+                }
+                EditorGUILayout.HelpBox("ID действует в пределах объекта, запустившего граф. При отключении объекта или выгрузке сцены таймеры прекращаются.", MessageType.Info);
             }
             else if (kind.enumValueIndex == 6 || kind.enumValueIndex == 9)
             {

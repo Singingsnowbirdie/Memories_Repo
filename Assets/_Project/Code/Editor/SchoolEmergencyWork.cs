@@ -94,7 +94,7 @@ internal static class SchoolEmergencyWork
             GameObject Find(string name)=>all.Single(t=>t.name==name).gameObject;
             var phone=Find("Настенный таксофон");var coin=Find("Монета в лотке сдачи");var car=Find("Ambulance-Truck");var doctor=Find("Doctor Gray School");
             var coach=Find("UrbanManV1 Gray Coach").GetComponent<ReactionInteractable>();
-            var coinItem=Asset<QuestItem>("Assets/_Project/Configs/Инвентарные предметы/SchoolVendingCoin.asset");
+            var coinItem=Asset<QuestItem>("Assets/_Project/Configs/Инвентарные предметы/Школа/SchoolVendingCoin.asset");
             var call=Memory("CallAmbulanceMemory","CallAmbulanceMemory",3);
             var depart=Memory("AmbulanceDepartureMemory","AmbulanceDepartureMemory",1);
             var missing=Text("PayphoneMissingCoin","Где бы взять монетку?");

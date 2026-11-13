@@ -146,7 +146,7 @@ Shader "Memories/Ghost Cosmos Clouds"{
 
 			fixed4 frag (v2f i) : COLOR
 			{
-				// Independent sampling coordinates and deformation for each nebula layer.
+				// Независимые координаты выборки и деформация для каждого слоя туманности.
                 float3 direction = normalize(i.texcoord);
                 float3 blueDirection = direction;
                 float3 redDirection = direction;
@@ -169,7 +169,7 @@ Shader "Memories/Ghost Cosmos Clouds"{
                 float3 redTint = lerp(_RedShadowColor.rgb, _RedColor.rgb, smoothstep(0.03, 0.4, warm));
                 float3 nebula = cold * _BlueColor.rgb * _BlueIntensity * lerp(1, blueDetail, _D1I)
                     + warm * redTint * _RedIntensity * lerp(1, redDetail, _D1I);
-                // Stars stay fixed in space; only brightness changes slightly.
+                // Звёзды неподвижны в пространстве; немного меняется только яркость.
                 float starSample = triplanar(_Detail2, direction, _D2Scale).r;
                 float stars = pow(starSample, 2.5) * _D2I;
                 float twinkle = 1 + 0.035 * sin(_Time.y * 0.65 + dot(direction, float3(71, 43, 97)));

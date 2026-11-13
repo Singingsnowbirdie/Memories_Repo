@@ -2,13 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Memories.Gameplay.Player;
 using Memories.Gameplay.UI;
 using UnityEngine;
 
 namespace Memories.Gameplay.Reactions
 {
-    // The threshold's SceneTrigger graph explicitly starts this transition.
+    // Этот переход явно запускает граф SceneTrigger на пороге.
     public sealed class SchoolGymEntranceReaction : CustomReaction, IObjectStateParticipant
     {
         [SerializeField] private Transform corridorEntrance;
@@ -16,14 +15,11 @@ namespace Memories.Gameplay.Reactions
         [SerializeField] private GameObject[] garageOpening;
         [SerializeField] private Transform gym;
         [SerializeField] private Transform doorHinge;
-        [SerializeField] private Transform lookTarget;
-        [SerializeField, Min(.1f)] private float turnDuration = 1.2f;
         [SerializeField, Min(0)] private float holdDuration = 1.5f;
         private readonly List<Renderer> hiddenRenderers = new List<Renderer>();
         private readonly List<Collider> hiddenColliders = new List<Collider>();
         private readonly List<Light> hiddenLights = new List<Light>();
-        private PlayerMotor player;
-        private PlayerMovementModel movement;
+        [SerializeField] private global::Memories.Gameplay.Triggers.SceneTrigger entranceTrigger;
         private GameplayModeState state;
         private Func<UniTask> enterSchool;
         private CancellationTokenSource animationCancellation;
@@ -34,15 +30,13 @@ namespace Memories.Gameplay.Reactions
         public bool IsCompleted => completed;
         public string StateKey => "school-gym-entry";
 
-        public void Initialize(PlayerMotor motor, PlayerMovementModel model, GameplayModeState mode, Func<UniTask> entry)
+        public void Initialize(GameplayModeState mode, Func<UniTask> entry)
         {
-            player = motor;
-            movement = model;
             state = mode;
             enterSchool = entry;
         }
 
-        // Called once by the explicit garage preload action, after binding saved objects.
+        // Вызывается один раз явным действием предзагрузки из гаража после восстановления объектов.
         public void PrepareArrival()
         {
             if (prepared) return;
@@ -50,7 +44,7 @@ namespace Memories.Gameplay.Reactions
             prepared = true;
             SetGarageOpeningActive(true);
             doorHinge.localRotation = Quaternion.Euler(0, 100, 0);
-            // Component visibility is transient: do not save a temporarily hidden school as inactive objects.
+            // Временная видимость компонентов не сохраняется: временно скрытую школу нельзя записывать как неактивные объекты.
             foreach (var root in gameObject.scene.GetRootGameObjects())
             {
                 foreach (var renderer in root.GetComponentsInChildren<Renderer>(true))
@@ -70,6 +64,7 @@ namespace Memories.Gameplay.Reactions
 
         public void RestoreForDirectLoad()
         {
+            entranceTrigger.enabled = false;
             completed = true;
             prepared = false;
             ShowSchoolAndSealDoor();
@@ -77,7 +72,7 @@ namespace Memories.Gameplay.Reactions
 
         public override void Execute()
         {
-            if (!prepared || completed || IsRunning || player == null || lookTarget == null || enterSchool == null) return;
+            if (!prepared || completed || IsRunning || enterSchool == null) return;
             PlayAsync().Forget(exception =>
             {
                 if (!(exception is OperationCanceledException)) Debug.LogException(exception, this);
@@ -92,22 +87,7 @@ namespace Memories.Gameplay.Reactions
             var token = animationCancellation.Token;
             try
             {
-                var direction = lookTarget.position - player.CameraTransform.position;
-                float yaw = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-                float pitch = -Mathf.Atan2(direction.y, new Vector2(direction.x, direction.z).magnitude) * Mathf.Rad2Deg;
-                float fromYaw = movement.Yaw, fromPitch = movement.Pitch;
-                float angle = new Vector2(Mathf.DeltaAngle(fromYaw, yaw), pitch - fromPitch).magnitude;
-                float duration = Mathf.Max(turnDuration, angle / 60f);
-                for (float elapsed = 0; elapsed < duration;)
-                {
-                    elapsed += Time.deltaTime;
-                    float t = Mathf.SmoothStep(0, 1, Mathf.Clamp01(elapsed / duration));
-                    movement.SetInitialYaw(Mathf.LerpAngle(fromYaw, yaw, t));
-                    movement.SetInitialPitch(Mathf.Lerp(fromPitch, pitch, t));
-                    player.SetLook(movement.Yaw, movement.Pitch);
-                    await UniTask.NextFrame(cancellationToken: token);
-                }
-                // The camera now faces away from the entrance. Commit scene ownership while controls stay locked.
+                // Камера уже направлена от входа. Меняем активную локацию, сохраняя блокировку управления.
                 await enterSchool();
                 token.ThrowIfCancellationRequested();
                 ShowSchoolAndSealDoor();

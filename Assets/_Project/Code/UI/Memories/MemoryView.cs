@@ -102,7 +102,7 @@ namespace Memories.Gameplay.UI
             }
             else
             {
-                // Each layer includes its black background and caption.
+                // Каждый слой включает собственные чёрный фон и подпись.
                 await CrossFade(duration, token);
             }
             token.ThrowIfCancellationRequested();

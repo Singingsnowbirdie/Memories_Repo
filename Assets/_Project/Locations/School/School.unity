@@ -42439,9 +42439,8 @@ MonoBehaviour:
   - {fileID: 880324010}
   gym: {fileID: 1390491424}
   doorHinge: {fileID: 880321019}
-  lookTarget: {fileID: 880320041}
-  turnDuration: 1.2
   holdDuration: 1.5
+  entranceTrigger: {fileID: 880320034}
 --- !u!114 &880320003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42640,7 +42639,9 @@ MonoBehaviour:
   graph: {fileID: 11400000, guid: eb31cdff52964541a75c95020f6a4ba0, type: 2}
   triggerEvent: {fileID: 0}
   triggerOnce: 1
-  objectBindings: []
+  objectBindings:
+  - key: entrance_look_target
+    target: {fileID: 880320040}
   customReactions:
   - key: enter_gym
     reaction: {fileID: 880320002}
@@ -171337,9 +171338,60 @@ GameObject:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 990900001}
   - {fileID: 369086812}
   - {fileID: 880320001}
   - {fileID: 1055562081}
   - {fileID: 1390491424}
   - {fileID: 1193937706}
   - {fileID: 283037911}
+--- !u!1 &990900000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 990900001}
+  - component: {fileID: 990900002}
+  m_Layer: 0
+  m_Name: LocationBindings
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &990900001
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 990900000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &990900002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 990900000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8094193f27f546838e99a1b9a63b063e, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Bootstrap::Memories.Bootstrap.LocationBindings
+  courtyardDoor: {fileID: 0}
+  backyardEntrance: {fileID: 0}
+  garageAttachment: {fileID: 0}
+  schoolConnection: {fileID: 0}
+  garageGate: {fileID: 0}
+  gymEntrance: {fileID: 880320002}

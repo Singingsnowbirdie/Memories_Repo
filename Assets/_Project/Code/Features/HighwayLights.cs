@@ -158,7 +158,7 @@ namespace Memories.Gameplay
             if (complete && !IsFullyLit)
             {
                 IsFullyLit = true;
-                // Explicit continuation of this animation sequence, not observers of progress.
+                // Явное продолжение этой анимационной последовательности без наблюдения за прогрессом.
                 foreach (var house in houses) if (house != null) house.Execute();
                 if (sky != null) sky.Execute();
             }

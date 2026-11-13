@@ -7,7 +7,7 @@ using VContainer;
 
 namespace Memories.Bootstrap
 {
-    // Runtime UI: deliberately available in builds, independent of the developer console.
+    // Игровой интерфейс намеренно доступен в сборках и не зависит от консоли разработчика.
     public sealed class TesterCheckpointUI : MonoBehaviour
     {
         private GameSession session;

@@ -75,7 +75,7 @@ namespace Memories.Gameplay.UI
                 Uninterruptible = blockInteractionsForWholeSequence,
                 Cancellation = CancellationTokenSource.CreateLinkedTokenSource(token, view.LifetimeToken)
             };
-            // Capture the task before the pump can complete a synchronous view operation.
+            // Получаем задачу до того, как обработчик очереди завершит синхронную операцию представления.
             var task = request.Completion.Task.AttachExternalCancellation(request.Cancellation.Token);
             request.Registration = request.Cancellation.Token.Register(() =>
             {
@@ -124,7 +124,7 @@ namespace Memories.Gameplay.UI
                         await UniTask.NextFrame(cancellationToken: token);
                         elapsed += Time.deltaTime;
                     }
-                    // Hand off the existing panel without sliding it out and back in.
+                    // Передаём существующую панель без анимации скрытия и повторного появления.
                     while (i < request.Fragments.Length - 1 && !request.Uninterruptible && pending.Count > 0)
                     {
                         token.ThrowIfCancellationRequested();
@@ -139,7 +139,7 @@ namespace Memories.Gameplay.UI
                         token.ThrowIfCancellationRequested();
                         if (!request.Uninterruptible && pending.Count > 0)
                         {
-                            // Only one playback owns the view. Freeze the parent's remaining pause.
+                            // Только одно воспроизведение управляет представлением. Приостанавливаем оставшуюся задержку родительского воспроизведения.
                             await PlayAsync(pending.Dequeue());
                             token.ThrowIfCancellationRequested();
                             await view.ChangeTextAsync(string.Empty, token);
@@ -171,7 +171,7 @@ namespace Memories.Gameplay.UI
 
         public void Stop()
         {
-            // Cancels active, suspended and queued requests, including their waiting reaction runners.
+            // Отменяет активные, приостановленные и ожидающие запросы, включая ожидающие их исполнители реакций.
             foreach (var request in new List<Request>(requests)) request.Cancellation.Cancel();
             HideImmediately();
         }

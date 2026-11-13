@@ -21,7 +21,7 @@ Shader "Memories/Graffiti Ink"
  V vert(A v) { V o; o.positionCS=TransformObjectToHClip(v.positionOS.xyz); o.uv=v.uv*_MainTex_ST.xy+_MainTex_ST.zw; return o; }
  half4 frag(V i):SV_Target {
  half3 ink=SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex,i.uv).rgb;
- // Multiplication leaves the white paper invisible and preserves wall lighting.
+ // Умножение делает белую бумагу невидимой и сохраняет освещение стены.
  ink=saturate((ink-0.025)/0.93);
  return half4(lerp(half3(1,1,1),ink,_Strength),1);
  }

@@ -7,7 +7,7 @@ using UnityEngine.Rendering;
 
 namespace Memories.Gameplay.Reactions
 {
-    // Temporary runtime materials only: the original assets and renderer state are restored.
+    // Используем только временные материалы во время игры: исходные ресурсы и состояние рендереров восстанавливаются.
     [DisallowMultipleComponent]
     public sealed class ObjectReveal : MonoBehaviour
     {
@@ -23,7 +23,7 @@ namespace Memories.Gameplay.Reactions
             var effect = target.AddComponent<ObjectReveal>();
             effect.Prepare(shader);
             target.SetActive(true);
-            // OnEnable may configure an interactable, so block input after activation too.
+            // OnEnable может настроить интерактивный объект, поэтому блокируем ввод и после активации.
             foreach (var state in effect.interactions) if (state.item != null) state.item.enabled = false;
             effect.StartCoroutine(effect.Animate(Mathf.Max(.01f, duration), Mathf.Max(0, delay)));
         }
@@ -43,7 +43,7 @@ namespace Memories.Gameplay.Reactions
                     return material;
                 }).ToArray();
                 renderer.sharedMaterials = replacements;
-                // Avoid a solid shadow before the object itself has appeared.
+                // Не допускаем сплошной тени до появления самого объекта.
                 renderer.shadowCastingMode = ShadowCastingMode.Off;
             }
             foreach (var c in GetComponentsInChildren<Collider>(true)) { colliders.Add((c, c.enabled)); c.enabled = false; }

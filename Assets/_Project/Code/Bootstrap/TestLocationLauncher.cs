@@ -62,7 +62,7 @@ namespace Memories.Bootstrap
                 camera.nearClipPlane = 0.1f;
                 camera.farClipPlane = 1000;
                 view.AddComponent<AudioListener>();
-                // The path normally joins the highway; close its free edge in isolation.
+                // Обычно дорожка соединяется с шоссе; при отдельном запуске закрываем её свободный край.
                 var boundary = new GameObject("Тестовая граница перед домом");
                 SceneManager.MoveGameObjectToScene(boundary, scene);
                 boundary.transform.position = new Vector3(0, 2.5f, 299.5f);

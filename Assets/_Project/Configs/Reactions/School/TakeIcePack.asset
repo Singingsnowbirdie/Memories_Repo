@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
   graph: {fileID: 11400000}
-  position: {x: 960, y: 0}
+  position: {x: 632, y: 8}
   ports:
     keys:
     - previous
@@ -23,8 +23,8 @@ MonoBehaviour:
       _node: {fileID: -8415994047962693821}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
-      - fieldName: ifAbsent
-        node: {fileID: -4369513090421305903}
+      - fieldName: next
+        node: {fileID: -6665578163347536655}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -57,6 +57,8 @@ MonoBehaviour:
   variableIntValue: 0
   addToIntValue: 0
   objectKey: 
+  lookDuration: 1.2
+  lookMaxSpeed: 60
   active: 1
   revealDuration: 0
   revealDelay: 0
@@ -80,7 +82,7 @@ MonoBehaviour:
   m_Name: "\u041A\u043E\u043D\u0435\u0446"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionEndNode
   graph: {fileID: 11400000}
-  position: {x: 640, y: 0}
+  position: {x: 2200, y: 8}
   ports:
     keys:
     - previous
@@ -89,9 +91,6 @@ MonoBehaviour:
       _node: {fileID: -8374642131980757139}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
-      - fieldName: ifPresent
-        node: {fileID: -4369513090421305903}
-        reroutePoints: []
       - fieldName: next
         node: {fileID: -774042857339166332}
         reroutePoints: []
@@ -113,7 +112,7 @@ MonoBehaviour:
   m_Name: "\u041D\u0430\u0447\u0430\u043B\u043E"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionStartNode
   graph: {fileID: 11400000}
-  position: {x: 0, y: 0}
+  position: {x: 296, y: 8}
   ports:
     keys:
     - next
@@ -123,7 +122,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: previous
-        node: {fileID: -4369513090421305903}
+        node: {fileID: -8415994047962693821}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -131,68 +130,6 @@ MonoBehaviour:
       _dynamic: 0
   runOnce: 0
   next: {fileID: 0}
---- !u!114 &-4369513090421305903
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a549a313236a40fa9098ece4b48729d8, type: 3}
-  m_Name: "\u0423\u0441\u043B\u043E\u0432\u0438\u0435"
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionConditionNode
-  graph: {fileID: 11400000}
-  position: {x: 320, y: 0}
-  ports:
-    keys:
-    - previous
-    - ifPresent
-    - ifAbsent
-    values:
-    - _fieldName: previous
-      _node: {fileID: -4369513090421305903}
-      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: next
-        node: {fileID: -6665578163347536655}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: ifPresent
-      _node: {fileID: -4369513090421305903}
-      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: previous
-        node: {fileID: -8374642131980757139}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: ifAbsent
-      _node: {fileID: -4369513090421305903}
-      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: previous
-        node: {fileID: -8415994047962693821}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 0
-  previous: {fileID: 0}
-  kind: 0
-  item: {fileID: 11400000, guid: e1b6904414aa44e99b49a374bbb75a3c, type: 2}
-  variableBank: {fileID: 0}
-  variableId: 
-  integerComparison: 0
-  integerValue: 0
-  ifPresent: {fileID: 0}
-  ifAbsent: {fileID: 0}
 --- !u!114 &-2293858306472412994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -206,7 +143,7 @@ MonoBehaviour:
   m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
   graph: {fileID: 11400000}
-  position: {x: 1600, y: 0}
+  position: {x: 1400, y: 8}
   ports:
     keys:
     - previous
@@ -250,6 +187,8 @@ MonoBehaviour:
   variableIntValue: 0
   addToIntValue: 0
   objectKey: refresh_supplies
+  lookDuration: 1.2
+  lookMaxSpeed: 60
   active: 1
   revealDuration: 0
   revealDelay: 0
@@ -273,7 +212,7 @@ MonoBehaviour:
   m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
   graph: {fileID: 11400000}
-  position: {x: 1920, y: 0}
+  position: {x: 1784, y: 8}
   ports:
     keys:
     - previous
@@ -317,6 +256,8 @@ MonoBehaviour:
   variableIntValue: 0
   addToIntValue: 0
   objectKey: 
+  lookDuration: 1.2
+  lookMaxSpeed: 60
   active: 1
   revealDuration: 0
   revealDelay: 0
@@ -341,7 +282,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionGraph
   nodes:
   - {fileID: -6665578163347536655}
-  - {fileID: -4369513090421305903}
   - {fileID: -8374642131980757139}
   - {fileID: -8415994047962693821}
   - {fileID: 2047025341729305488}
@@ -363,7 +303,7 @@ MonoBehaviour:
   m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
   graph: {fileID: 11400000}
-  position: {x: 1280, y: 0}
+  position: {x: 1016, y: 8}
   ports:
     keys:
     - previous
@@ -407,6 +347,8 @@ MonoBehaviour:
   variableIntValue: 0
   addToIntValue: 0
   objectKey: 
+  lookDuration: 1.2
+  lookMaxSpeed: 60
   active: 1
   revealDuration: 0
   revealDelay: 0

@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 namespace Memories.Gameplay
 {
-    // Created only for House; also pauses highway grass while the player is inside.
+    // Создаётся только для дома; также приостанавливает траву шоссе, пока игрок внутри.
     public sealed class HouseAnimationProximity : MonoBehaviour
     {
         private const float EnterDistance = 15f;
@@ -53,7 +53,7 @@ namespace Memories.Gameplay
                     }
                 }
             }
-            // Measure against the footprint, so every floor of the house is inside.
+            // Проверяем горизонтальные границы дома, чтобы все этажи считались его внутренним пространством.
             CheckDistance();
         }
 

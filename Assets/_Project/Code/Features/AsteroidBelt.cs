@@ -3,7 +3,7 @@ using UnityEngine.Rendering;
 
 namespace Memories.Gameplay
 {
-    // Distant scenery follows the player while retaining its world-space tilt and offset.
+    // Дальнее окружение следует за игроком, сохраняя наклон и смещение в мировых координатах.
     internal sealed class AsteroidBelt
     {
         private readonly Mesh[] meshes;

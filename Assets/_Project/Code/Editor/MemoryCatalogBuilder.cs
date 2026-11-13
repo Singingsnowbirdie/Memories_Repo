@@ -19,7 +19,7 @@ namespace Memories.Editor
                 catalog = ScriptableObject.CreateInstance<MemoryCatalog>();
                 AssetDatabase.CreateAsset(catalog, path);
             }
-            // Include every graph, including ones referenced only by scene triggers.
+            // Включаем все графы, в том числе используемые только триггерами сцен.
             catalog.entries = MemoryCatalog.LoadEntries().OrderBy(entry => entry.key).ToArray();
             EditorUtility.SetDirty(catalog);
             AssetDatabase.SaveAssetIfDirty(catalog);

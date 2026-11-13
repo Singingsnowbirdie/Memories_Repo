@@ -60,28 +60,28 @@ namespace Memories.Gameplay.Interaction
             prompt = interactionPrompt;
         }
 
-        public void Initialize(StoryTextPresenter texts, MemoryPresenter memories, ILocationTransition locations = null, QuestInventory inventory = null, CustomVariableStore variables = null)
+        public void Initialize(StoryTextPresenter texts, MemoryPresenter memories, ILocationTransition locations = null, QuestInventory inventory = null, CustomVariableStore variables = null, PlayerLookAction playerLook = null)
         {
             SetInteractionEnabled(initiallyInteractable);
             runner?.Dispose();
-            runner = new ReactionRunner(texts, memories, this, locations, inventory, variables, objectBindings, customReactions);
+            runner = new ReactionRunner(texts, memories, this, locations, inventory, variables, objectBindings, customReactions, playerLook);
             if (!initiallyVisible) gameObject.SetActive(false);
             if (IsCollectedPickup(inventory)) gameObject.SetActive(false);
         }
-        // Called once after saved object states are restored, including older saves
-        // where locked pickups were still visible. Live reveals remain graph actions.
+        // Вызывается один раз после восстановления состояний объектов, в том числе из старых сохранений,
+        // где недоступные для подбора предметы ещё были видны. Во время игры объекты появляются по действиям графа.
         public void RestoreInitialVisibility(QuestInventory inventory)
         {
             if (initiallyVisible) return;
-            // A revealed object may later lose interaction while remaining visible.
+            // Показанный объект впоследствии может потерять интерактивность, оставаясь видимым.
             if (GetComponent<ObjectStateTracker>()?.HasRestoredState == true && !IsCollectedPickup(inventory)) return;
             gameObject.SetActive(interactionEnabled && !IsCollectedPickup(inventory));
         }
         private bool IsCollectedPickup(QuestInventory inventory)
         {
             if (inventory == null || graph == null || !graph.TryGetSequence(out var actions, out _)) return false;
-            // Restore only a pickup that explicitly hides itself after granting the item.
-            // Other item rewards must not hide the object that grants them.
+            // Восстанавливаем только предметы, которые явно скрывают себя после выдачи в инвентарь.
+            // Выдача других предметов не должна скрывать объект, который их выдаёт.
             foreach (var action in actions)
             {
                 if (action.Kind != ReactionKind.AddInventoryItem || !inventory.WasCollected(action.Item.Id)) continue;
@@ -98,7 +98,7 @@ namespace Memories.Gameplay.Interaction
         }
         private void OnDisable()
         {
-            // A pickup may hide itself before finishing its story-text branch.
+            // Подбираемый предмет может скрыть себя до завершения своей текстовой ветки.
             if (runner != null && !runner.IsHidingOwner) runner.Stop();
         }
         private void OnDestroy()

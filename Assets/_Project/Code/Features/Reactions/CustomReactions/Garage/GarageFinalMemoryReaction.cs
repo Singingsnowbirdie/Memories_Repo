@@ -19,7 +19,7 @@ namespace Memories.Gameplay.Reactions
             workingFather.SetActive(false);
         }
 
-        // Restore once after earlier father stages; never replay the memory on load.
+        // Восстанавливаем один раз после предыдущих этапов отца; при загрузке воспоминание не повторяем.
         public void Restore(QuestInventory inventory, MemoryCollection memories)
         {
             bool delivered = deliveredItems != null && deliveredItems.Length == 3;

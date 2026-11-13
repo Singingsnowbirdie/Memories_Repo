@@ -22,7 +22,7 @@ namespace Memories.Gameplay
 
         private void Awake()
         {
-            // Floors can be separate scene roots, outside this controller's hierarchy.
+            // Этажи могут быть отдельными корневыми объектами сцены вне иерархии этого контроллера.
             var sceneLights = new List<Light>();
             foreach (var root in gameObject.scene.GetRootGameObjects())
                 sceneLights.AddRange(root.GetComponentsInChildren<Light>(true));
@@ -39,7 +39,7 @@ namespace Memories.Gameplay
 
         private void Start()
         {
-            // Bootstrap loads the highway first. An isolated house test has no highway.
+            // Bootstrap сначала загружает шоссе. При отдельном тестировании дома шоссе отсутствует.
             var highway = FindFirstObjectByType<HighwayLights>();
             if (highway == null) ShowImmediately();
             else highway.RegisterHouse(this);

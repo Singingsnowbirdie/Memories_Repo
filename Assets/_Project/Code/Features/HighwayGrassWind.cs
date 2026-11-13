@@ -46,7 +46,7 @@ namespace Memories.Gameplay
                 for (int v = 0; v < rest.Length; v++)
                 {
                     float fraction = Mathf.Clamp01((rest[v].y - mesh.bounds.min.y) / height);
-                    // Keep the base fixed; bending grows towards the blade tips.
+                    // Основание остаётся неподвижным; изгиб усиливается к кончикам травинок.
                     weights[v] = height * fraction * fraction;
                 }
                 patches[i] = new GrassPatch
@@ -73,7 +73,7 @@ namespace Memories.Gameplay
                 var patch = patches[i];
                 if (patch != null)
                 {
-                    // Horizontal deformation never lifts either end of the long patch.
+                    // Горизонтальная деформация не поднимает ни один конец длинного участка.
                     float strength = Mathf.Tan(angle * Mathf.Deg2Rad) * fade *
                         plant.TransformVector(Vector3.up).magnitude;
                     Vector3 offset = plant.InverseTransformVector(new Vector3(

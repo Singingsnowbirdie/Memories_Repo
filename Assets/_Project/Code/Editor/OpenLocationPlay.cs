@@ -15,7 +15,7 @@ namespace Memories.Editor
             string path = location.path;
             if (!path.StartsWith("Assets/_Project/Locations/") && path != AppLifetimeScope.DefaultLocationPath) return;
 
-            // Runtime-only bootstrap. Keep the open scene and its unsaved edits intact.
+            // Запускаем Bootstrap только на время игры. Открытую сцену и несохранённые правки сохраняем.
             var runtimeScene = SceneManager.CreateScene("Editor location bootstrap");
             var root = new GameObject("Запуск открытой локации");
             root.SetActive(false);

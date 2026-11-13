@@ -6,12 +6,14 @@ using UnityEngine;
 
 namespace Memories.Gameplay.Reactions
 {
-    // Only memory-start and pickup graph actions advance this objective.
+    // Задачу продвигают только действия графов начала воспоминания и подбора предметов.
     public sealed class SchoolFirstAidProgressReaction : CustomReaction, IObjectStateParticipant
     {
+        private const string HintId = "school.first-aid-kit";
         [SerializeField] private ReactionGraph refreshGraph;
         private ReactionRunner runner;
         private bool started, returned;
+        [Serializable] private sealed class SavedHints { public string[] active; }
         [Serializable] private sealed class State
         {
             public bool started, returned;
@@ -35,7 +37,7 @@ namespace Memories.Gameplay.Reactions
         public override void Execute()
         {
             if (!started || returned || runner == null) return;
-            // This graph contains only explicit stop/start actions and inventory branches.
+            // Подбор предметов явно перезапускает один таймер. Его граф подсказки выбирает актуальный текст.
             if (!runner.TryRun(refreshGraph, allowDuringMemory: true))
                 throw new InvalidOperationException("School first-aid reminder graph could not run.");
             GetComponent<ObjectStateTracker>()?.Capture();
@@ -44,7 +46,7 @@ namespace Memories.Gameplay.Reactions
         public void ReturnToCoach()
         {
             returned = true;
-            runner?.StopHint("school.return-to-coach");
+            runner?.StopHint(HintId);
             GetComponent<ObjectStateTracker>()?.Capture();
         }
 
@@ -57,7 +59,16 @@ namespace Memories.Gameplay.Reactions
             var state = JsonUtility.FromJson<State>(value);
             started = state.started;
             returned = state.returned;
-            if (started && !returned) runner?.RestoreHints(refreshGraph, state.hints);
+            if (started && !returned && !string.IsNullOrEmpty(state.hints))
+            {
+                // В старых сохранениях для каждого запрошенного предмета использовался отдельный ID таймера.
+                // Восстанавливаем активное напоминание без повторного запуска графа обновления.
+                var hints = JsonUtility.FromJson<SavedHints>(state.hints);
+                if (hints?.active != null && Array.Exists(hints.active, id =>
+                    id == HintId || id == "school.ice-pack" || id == "school.ruler" ||
+                    id == "school.tissues" || id == "school.return-to-coach"))
+                    runner?.RestoreHints(refreshGraph, JsonUtility.ToJson(new SavedHints { active = new[] { HintId } }));
+            }
         }
 
         private void OnDisable() => runner?.Stop();

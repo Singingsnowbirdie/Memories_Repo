@@ -4,7 +4,7 @@ namespace Memories.Gameplay.Player
 {
     public sealed class CursorSettings
     {
-        // Options are independent of session progress and survive save resets.
+        // Настройки не зависят от прогресса сессии и сохраняются при сбросе сохранений.
         private const string Prefix = "Memories.Options.Cursor.";
         public bool InvertX { get; private set; } = PlayerPrefs.GetInt(Prefix + "InvertX", 0) != 0;
         public bool InvertY { get; private set; } = PlayerPrefs.GetInt(Prefix + "InvertY", 0) != 0;

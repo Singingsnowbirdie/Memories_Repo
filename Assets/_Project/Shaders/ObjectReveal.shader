@@ -3,7 +3,7 @@ Shader "Memories/Object Reveal"
     Properties
     {
         _Reveal("Reveal", Range(0,1)) = 1
-        // Specular vs Metallic workflow
+        // Модели материала на основе зеркального отражения и металличности.
         _WorkflowMode("WorkflowMode", Float) = 1.0
 
         [MainTexture] _BaseMap("Albedo", 2D) = "white" {}
@@ -41,11 +41,11 @@ Shader "Memories/Object Reveal"
         _DetailNormalMapScale("Scale", Range(0.0, 2.0)) = 1.0
         [Normal] _DetailNormalMap("Normal Map", 2D) = "bump" {}
 
-        // SRP batching compatibility for Clear Coat (Not used in Lit)
+        // Совместимость прозрачного покрытия с пакетной обработкой SRP (не используется в Lit).
         [HideInInspector] _ClearCoatMask("_ClearCoatMask", Float) = 0.0
         [HideInInspector] _ClearCoatSmoothness("_ClearCoatSmoothness", Float) = 0.0
 
-        // Blending state
+        // Настройки смешивания.
         _Surface("__surface", Float) = 0.0
         _Blend("__blend", Float) = 0.0
         _Cull("__cull", Float) = 2.0
@@ -61,10 +61,10 @@ Shader "Memories/Object Reveal"
         [HideInInspector] _XRMotionVectorsPass("_XRMotionVectorsPass", Float) = 1.0
 
         [ToggleUI] _ReceiveShadows("Receive Shadows", Float) = 1.0
-        // Editmode props
+        // Свойства режима редактирования.
         _QueueOffset("Queue offset", Float) = 0.0
 
-        // ObsoleteProperties
+        // Устаревшие свойства.
         [HideInInspector] _MainTex("BaseMap", 2D) = "white" {}
         [HideInInspector] _Color("Base Color", Color) = (1, 1, 1, 1)
         [HideInInspector] _GlossMapScale("Smoothness", Float) = 0.0
@@ -78,9 +78,9 @@ Shader "Memories/Object Reveal"
 
     SubShader
     {
-        // Universal Pipeline tag is required. If Universal render pipeline is not set in the graphics settings
-        // this Subshader will fail. One can add a subshader below or fallback to Standard built-in to make this
-        // material work with both Universal Render Pipeline and Builtin Unity Pipeline
+        // Тег Universal Pipeline обязателен. Если Universal Render Pipeline не выбран в настройках графики,
+        // этот Subshader не будет работать. Можно добавить ниже ещё один подшейдер или резервный Standard,
+        // чтобы материал работал как с Universal Render Pipeline, так и со встроенным конвейером Unity.
         Tags
         {
             "RenderType" = "Opaque"
@@ -91,11 +91,11 @@ Shader "Memories/Object Reveal"
         LOD 300
 
         // ------------------------------------------------------------------
-        //  Forward pass. Shades all light in a single pass. GI + emission + Fog
+        //  Прямой проход: всё освещение за один проход, включая глобальное освещение, свечение и туман.
         Pass
         {
-            // Lightmode matches the ShaderPassName set in UniversalRenderPipeline.cs. SRPDefaultUnlit and passes with
-            // no LightMode tag are also rendered by Universal Render Pipeline
+            // LightMode соответствует ShaderPassName в UniversalRenderPipeline.cs. Universal Render Pipeline также рисует
+            // проходы SRPDefaultUnlit и проходы без тега LightMode.
             Name "ForwardLit"
             Tags
             {
@@ -103,7 +103,7 @@ Shader "Memories/Object Reveal"
             }
 
             // -------------------------------------
-            // Render State Commands
+            // Команды настройки состояния рендеринга.
             Blend[_SrcBlend][_DstBlend], [_SrcBlendAlpha][_DstBlendAlpha]
             ZWrite[_ZWrite]
             Cull[_Cull]
@@ -113,12 +113,12 @@ Shader "Memories/Object Reveal"
             #pragma target 2.0
 
             // -------------------------------------
-            // Shader Stages
+            // Этапы шейдера.
             #pragma vertex LitPassVertex
             #pragma fragment RevealFragment
 
             // -------------------------------------
-            // Material Keywords
+            // Ключевые слова материала.
             #pragma shader_feature_local _NORMALMAP
             #pragma shader_feature_local _PARALLAXMAP
             #pragma shader_feature_local _RECEIVE_SHADOWS_OFF
@@ -135,7 +135,7 @@ Shader "Memories/Object Reveal"
             #pragma shader_feature_local_fragment _SPECULAR_SETUP
 
             // -------------------------------------
-            // Universal Pipeline keywords
+            // Ключевые слова Universal Render Pipeline.
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
             #pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
             #pragma multi_compile _ EVALUATE_SH_MIXED EVALUATE_SH_VERTEX
@@ -155,7 +155,7 @@ Shader "Memories/Object Reveal"
 
 
             // -------------------------------------
-            // Unity defined keywords
+            // Ключевые слова, определённые Unity.
             #pragma multi_compile _ LIGHTMAP_SHADOW_MIXING
             #pragma multi_compile _ SHADOWS_SHADOWMASK
             #pragma multi_compile _ DIRLIGHTMAP_COMBINED
@@ -170,7 +170,7 @@ Shader "Memories/Object Reveal"
             #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ProbeVolumeVariants.hlsl"
 
             //--------------------------------------
-            // GPU Instancing
+            // Отрисовка экземпляров на GPU.
             #pragma multi_compile_instancing
             #pragma instancing_options renderinglayer
             #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"

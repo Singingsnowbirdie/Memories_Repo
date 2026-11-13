@@ -41,7 +41,7 @@ namespace Memories.Gameplay.Player
             if (deltaTime <= 0) return;
             bool controlsEnabled = ControlsEnabled && gameplayState?.ControlsBlocked != true;
             var look = controlsEnabled ? input.LookDelta : Vector2.zero;
-            // Mouse delta is already a displacement; do not multiply it by deltaTime.
+            // Изменение позиции мыши уже является смещением; не умножаем его на deltaTime.
             if (cursor != null) look = cursor.Apply(look);
             model.Look(look.x, look.y);
             view.SetLook(model.Yaw, model.Pitch);

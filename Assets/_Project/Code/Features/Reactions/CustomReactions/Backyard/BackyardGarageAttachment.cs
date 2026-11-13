@@ -22,7 +22,7 @@ namespace Memories.Gameplay.Reactions
         public void Initialize(MemoryCollection memories, Func<BackyardGarageAttachment, UniTask> loader)
         {
             load = loader;
-            // Restore completed progress only. During play the graph explicitly invokes Execute.
+            // Восстанавливаем только завершённый прогресс. Во время игры граф явно вызывает Execute.
             if (memories.Contains(MemoryId)) Execute();
         }
 
@@ -37,7 +37,7 @@ namespace Memories.Gameplay.Reactions
         {
             try
             {
-                // Let playback close and session initialization finish first.
+                // Сначала даём завершиться воспроизведению и инициализации сессии.
                 await UniTask.NextFrame(cancellationToken: this.GetCancellationTokenOnDestroy());
                 await load(this);
                 if (this == null) return;

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Memories.Gameplay.Reactions
 {
-    // Invoked explicitly when the fourth memory opens.
+    // Явно вызывается при открытии четвёртого воспоминания.
     public sealed class RevealSchoolPhoneReaction : CustomReaction
     {
         [SerializeField] private ReactionInteractable phone;

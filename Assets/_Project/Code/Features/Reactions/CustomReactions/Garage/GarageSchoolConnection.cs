@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 namespace Memories.Gameplay.Reactions
 {
-    // Preloading is explicitly started by the final memory reaction; the gym threshold owns entry.
+    // Предзагрузку явно запускает реакция последнего воспоминания; вход запускается на пороге спортзала.
     public sealed class GarageSchoolConnection : CustomReaction
     {
         [SerializeField] private OpenGarageGateReaction gate;

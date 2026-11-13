@@ -20,7 +20,7 @@ Shader "Memories/White Laundry"
  V vert(A v) { V o; o.positionWS=TransformObjectToWorld(v.positionOS.xyz);o.positionCS=TransformWorldToHClip(o.positionWS);o.normalWS=TransformObjectToWorldNormal(v.normalOS);return o; }
  half4 frag(V i):SV_Target {
  half3 n=normalize(i.normalWS);
- // Fabric receives ambient/probe lighting as well as direct lamp lighting.
+ // Ткань получает фоновое освещение и освещение от проб, а также прямой свет ламп.
  half3 light=EvaluateAmbientProbeSRGB(n)+_MinimumLight*(0.8+0.2*abs(n.y));
  Light main=GetMainLight();light+=main.color*abs(dot(n,main.direction))*main.distanceAttenuation;
  #ifdef _ADDITIONAL_LIGHTS

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Memories.Gameplay.Reactions
 {
-    // The phone memory explicitly opens the yard and reveals the waiting ambulance.
+    // Воспоминание у телефона явно открывает двор и показывает ожидающую скорую помощь.
     public sealed class SchoolAmbulanceArrivalReaction : CustomReaction, IObjectStateParticipant
     {
         [SerializeField] private Transform[] hinges;

@@ -15,7 +15,7 @@ namespace Memories.Gameplay.Memories
 
         protected override void Init() => name = "Начало";
 
-        // This port describes execution order; it does not evaluate a data value.
+        // Этот порт задаёт порядок выполнения, а не вычисляет значение данных.
         public override object GetValue(NodePort port) => null;
     }
 }

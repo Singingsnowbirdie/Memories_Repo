@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Memories.Gameplay.UI
 {
-    // Playback and fades write Volume; the binding applies the player's category gain.
+    // Воспроизведение и плавные переходы задают Volume; привязка применяет пользовательскую громкость категории.
     [RequireComponent(typeof(AudioSource))]
     public sealed class AudioVolumeBinding : MonoBehaviour
     {

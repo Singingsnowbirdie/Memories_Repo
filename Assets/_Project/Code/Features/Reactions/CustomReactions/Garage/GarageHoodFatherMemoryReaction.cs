@@ -13,7 +13,7 @@ namespace Memories.Gameplay.Reactions
 
         public void Initialize(MemoryPresenter memoryPresenter) => presenter = memoryPresenter;
 
-        // Called once after saved object states have been bound, including older saves.
+        // Вызывается один раз после применения сохранённых состояний объектов, включая старые сохранения.
         public void Restore(MemoryCollection collection)
         {
             if (collection.Contains(MemoryId)) ShowHoodFather();
@@ -21,7 +21,7 @@ namespace Memories.Gameplay.Reactions
 
         public override void Execute()
         {
-            // The comic covers the switch. This component lives outside either father.
+            // Комикс скрывает переключение. Компонент находится вне обоих объектов отца.
             if (presenter == null || !presenter.Open(MemoryId, memory, true)) return;
             ShowHoodFather();
         }

@@ -44,7 +44,7 @@ Shader "Memories/TV Static"
             half4 Frag(Varyings input) : SV_Target
             {
                 float2 uv = input.uv;
-                // Match the existing glass: narrower at its bottom, with a small inset.
+                // Повторяем форму существующего стекла: сужение книзу и небольшой отступ внутрь.
                 float halfWidth = lerp(0.4458, 0.499, uv.y);
                 clip(halfWidth - abs(uv.x - 0.5));
                 float frame = floor(_Time.y * _Speed);

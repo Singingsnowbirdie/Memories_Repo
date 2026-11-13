@@ -27,7 +27,7 @@ namespace Memories.Editor
                     {
                         var names = graphSettings.FindProperty("objectKeys");
                         bool oldNameUsedByObject = graph.nodes.Exists(node => node is ReactionNode action &&
-                            (action.Kind == ReactionKind.ObjectActivity || action.Kind == ReactionKind.ObjectInteractivity) &&
+                            (action.Kind == ReactionKind.ObjectActivity || action.Kind == ReactionKind.ObjectInteractivity || action.Kind == ReactionKind.LookAtObject) &&
                             action.ObjectKey == oldName);
                         if (!oldNameUsedByObject && oldName != key.stringValue)
                             for (int i = names.arraySize - 1; i >= 0; i--)
@@ -109,12 +109,12 @@ namespace Memories.Editor
                 }
                 settings.ApplyModifiedProperties();
             }
-            // An empty key means the invoking object, not a newly added binding.
+            // Пустой ключ означает вызывающий объект, а не новую привязку.
             if (string.IsNullOrEmpty(oldName)) return;
             foreach (var node in graph.nodes)
             {
                 if (!(node is ReactionNode action) || action.ObjectKey != oldName ||
-                    (action.Kind != ReactionKind.ObjectActivity && action.Kind != ReactionKind.ObjectInteractivity)) continue;
+                    (action.Kind != ReactionKind.ObjectActivity && action.Kind != ReactionKind.ObjectInteractivity && action.Kind != ReactionKind.LookAtObject)) continue;
                 using (var settings = new SerializedObject(action))
                 {
                     settings.FindProperty("objectKey").stringValue = newName;

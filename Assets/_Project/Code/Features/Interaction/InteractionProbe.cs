@@ -20,7 +20,7 @@ namespace Memories.Gameplay.Interaction
             if (camera == null || !camera.isActiveAndEnabled)
                 return null;
             var ray = camera.ViewportPointToRay(new Vector3(.5f, .5f, 0));
-            // Cast from the camera position so an obstacle inside the near clip is not skipped.
+            // Пускаем луч от позиции камеры, чтобы не пропустить препятствие перед ближней плоскостью отсечения.
             ray.origin = camera.transform.position;
             if (!FindNearestHit(ray, out var hit))
                 return null;
@@ -32,7 +32,7 @@ namespace Memories.Gameplay.Interaction
         private bool FindNearestHit(Ray ray, out RaycastHit nearest)
         {
             int count;
-            // A full buffer may omit the nearest obstacle: grow and repeat before filtering.
+            // Заполненный буфер может не содержать ближайшее препятствие: увеличиваем его и повторяем запрос до фильтрации.
             while ((count = Physics.RaycastNonAlloc(ray, hits, Reach, Physics.DefaultRaycastLayers,
                        QueryTriggerInteraction.Ignore)) == hits.Length)
                 System.Array.Resize(ref hits, hits.Length * 2);

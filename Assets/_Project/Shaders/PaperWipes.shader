@@ -43,7 +43,7 @@ Shader "Memories/Paper Wipes Matte"
             output.positionCS = pos.positionCS;
             output.positionWS = pos.positionWS;
             output.normalWS = TransformObjectToWorldNormal(input.normalOS);
-            // Preserve the packaging vertex colors with a subdued matte response.
+            // Сохраняем цвета вершин упаковки с приглушённым матовым откликом.
             output.color = input.color.rgb * _Color.rgb;
             output.fog = ComputeFogFactor(pos.positionCS.z);
             return output;

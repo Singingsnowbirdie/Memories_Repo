@@ -14,7 +14,7 @@ namespace Memories.Gameplay.Reactions
         public void Initialize(MemoryPresenter memoryPresenter, MemoryCollection collection)
         {
             presenter = memoryPresenter;
-            // Restore completed progress once; live changes are invoked only by the graph.
+            // Однократно восстанавливаем завершённый прогресс; изменения во время игры вызывает только граф.
             bool completed = collection.Contains(MemoryId);
             standingFather.SetActive(!completed);
             kneelingFather.SetActive(completed);
@@ -22,8 +22,8 @@ namespace Memories.Gameplay.Reactions
 
         public override void Execute()
         {
-            // Open shows the full-screen comic before changing the scene behind it.
-            // This reaction lives outside the father, so hiding him cannot destroy playback.
+            // Open показывает полноэкранный комикс до изменения сцены за ним.
+            // Реакция находится вне объекта отца, поэтому его скрытие не прерывает воспроизведение.
             if (presenter == null || !presenter.Open(MemoryId, memory, true)) return;
             kneelingFather.SetActive(true);
             standingFather.SetActive(false);

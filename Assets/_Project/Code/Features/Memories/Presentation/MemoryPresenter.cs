@@ -112,7 +112,7 @@ namespace Memories.Gameplay.Memories
                     }
                     showingFrame = false;
                 }
-                // Keep the last frame and input lock until an explicitly started scene load finishes.
+                // Сохраняем последний кадр и блокировку ввода до завершения явно запущенной загрузки сцены.
                 await completionBarrier;
                 source.Token.ThrowIfCancellationRequested();
                 completed = true;
@@ -148,7 +148,7 @@ namespace Memories.Gameplay.Memories
             if (IsPlaying && showingFrame) advanceRequested = true;
         }
 
-        // Programmatic cancellation remains available for teardown and reaction cancellation.
+        // Программная отмена остаётся доступной для завершения работы и отмены реакций.
         public void Close() => Cancel(true);
 
         private void Cancel(bool restoreControl)

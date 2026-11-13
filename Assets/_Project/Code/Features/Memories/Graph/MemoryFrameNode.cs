@@ -27,7 +27,7 @@ namespace Memories.Gameplay.Memories
         public string Text => text;
         public MemoryFrameTransition Transition => transition;
         public float TransitionDuration => transition == MemoryFrameTransition.Instant ? 0 : transitionDuration;
-        // Fully visible time, after the incoming transition finishes. Continuation is always automatic.
+        // Время полного отображения после завершения входного перехода. Продолжение всегда автоматическое.
         public float DisplayDuration => displayDuration;
 
         protected override void Init() => name = "Кадр";

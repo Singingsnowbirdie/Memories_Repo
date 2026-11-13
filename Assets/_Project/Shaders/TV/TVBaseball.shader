@@ -39,7 +39,7 @@ Shader "Memories/TV Baseball"
             half4 Frag(Varyings input) : SV_Target
             {
                 float2 uv = input.uv;
-                // Match the existing glass: narrower at its bottom, with a small inset.
+                // Повторяем форму существующего стекла: сужение книзу и небольшой отступ внутрь.
                 float halfWidth = lerp(0.4458, 0.499, uv.y);
                 clip(halfWidth - abs(uv.x - 0.5));
                 float frame = fmod(floor(max(0, _Time.y - _StartTime) / max(0.1, _FrameDuration)), 3.0);

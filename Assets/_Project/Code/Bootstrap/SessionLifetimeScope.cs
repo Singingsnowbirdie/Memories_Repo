@@ -27,7 +27,7 @@ namespace Memories.Bootstrap
                 container.Resolve<SessionContext>();
                 container.Resolve<QuestInventorySave>();
                 gameObject.AddComponent<ObjectStateSaveDriver>().Store = container.Resolve<ObjectStateStore>();
-                // UI input must outlive overlapping location loads and unloads.
+                // Обработка ввода интерфейса должна сохраняться при одновременной загрузке и выгрузке локаций.
                 if (EventSystem.current == null)
                 {
                     var events = new GameObject("UI EventSystem");

@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 
 namespace Memories.Editor
 {
-    // Validate authored keys. Never generate identities or modify the processed scene.
+    // Проверяем заданные ключи. Не создаём идентификаторы и не изменяем обрабатываемую сцену.
     public sealed class ObjectStateIdentityProcessor : IProcessSceneWithReport, IPreprocessBuildWithReport
     {
         public int callbackOrder => 0;

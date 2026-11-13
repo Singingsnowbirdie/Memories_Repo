@@ -1,6 +1,5 @@
 using System;
 using Cysharp.Threading.Tasks;
-using Memories.Gameplay.Player;
 using Memories.Gameplay.Memories;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,7 +10,6 @@ namespace Memories.Gameplay.Reactions
     /// Запускается графом TV_BaseballMemory после просмотра первого воспоминания в доме.
     /// При Initialize также восстанавливает открытый проход, если нужное воспоминание уже просмотрено.
     /// Подгружает двор, скрывает заменяемые части фасада и изображение за дверью, открывает дверь и отключает её коллайдер.
-    /// После фактического прохода игрока через проём передаёт сессии вход в уже загруженный двор.
     /// </summary>
     [DisallowMultipleComponent]
     [AddComponentMenu("Memories/Reactions/Open Courtyard Door Reaction")]
@@ -28,18 +26,14 @@ namespace Memories.Gameplay.Reactions
 
         private string requiredMemoryId;
         private Func<string, UniTask<Scene>> load;
-        private Func<Scene, UniTask> enter;
-        private PlayerMotor player;
-        private Scene courtyard;
-        private bool opening, opened, crossing, passedDoorway;
+        private bool opening, opened;
         public bool IsOpen => opened;
         public string ArrivalMarker => arrivalMarker;
-        public float ExitClearance { get; set; } = .6f;
 
-        public void Initialize(PlayerMotor motor, Func<string, UniTask<Scene>> loader,
-            Func<Scene, UniTask> traveller, MemoryCollection collection = null)
+        public void Initialize(Func<string, UniTask<Scene>> loader,
+            MemoryCollection collection = null)
         {
-            player = motor; load = loader; enter = traveller;
+            load = loader;
             if (collection != null && !string.IsNullOrWhiteSpace(requiredMemoryId) && collection.Contains(requiredMemoryId))
                 Execute();
         }
@@ -57,10 +51,10 @@ namespace Memories.Gameplay.Reactions
         {
             try
             {
-                // A restored memory can be bound while the session is still finishing its scene load.
+                // Восстановленное воспоминание может быть привязано, пока сессия ещё завершает загрузку сцены.
                 if (!string.IsNullOrWhiteSpace(requiredMemoryId)) await UniTask.NextFrame();
                 if (this == null) return;
-                courtyard = await load(destination);
+                await load(destination);
                 if (this == null) return;
                 foreach (var target in hideAfterCourtyardLoaded)
                     if (target != null) target.SetActive(false);
@@ -76,18 +70,5 @@ namespace Memories.Gameplay.Reactions
             }
         }
 
-        private void LateUpdate()
-        {
-            if (!opened || crossing || player == null) return;
-            Vector3 local = transform.InverseTransformPoint(player.transform.position);
-            float distance = Vector3.Dot(player.transform.position - transform.position, transform.forward);
-            if (distance < 0) passedDoorway = false;
-            else if (Mathf.Abs(local.x) < .65f) passedDoorway = true;
-            if (passedDoorway && distance >= ExitClearance)
-            {
-                crossing = true;
-                enter(courtyard).Forget();
-            }
-        }
     }
 }

@@ -23,10 +23,10 @@ namespace Memories.Gameplay.Triggers
         [SerializeField, InspectorName("Кастомные реакции")] private CustomReactionBinding[] customReactions = new CustomReactionBinding[0];
         private ReactionRunner runner;
         public bool IsRunning => runner != null && runner.IsRunning;
-        public void Initialize(StoryTextPresenter texts, MemoryPresenter memories, ILocationTransition locations = null, QuestInventory inventory = null, CustomVariableStore variables = null)
+        public void Initialize(StoryTextPresenter texts, MemoryPresenter memories, ILocationTransition locations = null, QuestInventory inventory = null, CustomVariableStore variables = null, PlayerLookAction playerLook = null)
         {
             runner?.Dispose();
-            runner = new ReactionRunner(texts, memories, this, locations, inventory, variables, objectBindings, customReactions);
+            runner = new ReactionRunner(texts, memories, this, locations, inventory, variables, objectBindings, customReactions, playerLook);
         }
         public bool TryActivate()
         {

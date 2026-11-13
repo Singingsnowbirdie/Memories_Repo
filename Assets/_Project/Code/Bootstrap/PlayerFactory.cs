@@ -29,8 +29,8 @@ namespace Memories.Bootstrap
             if (spawn == null || viewCamera == null)
                 throw new InvalidOperationException("Location requires one PlayerSpawn and one active MainCamera.");
 
-            // The location camera is only an authoring template. Create the live camera
-            // directly under the Bootstrap scope; never transfer it out of a location.
+            // Камера локации служит только шаблоном для настройки. Рабочую камеру создаём
+            // непосредственно в области Bootstrap; никогда не переносим её из локации.
             var template = viewCamera;
             template.enabled = false;
             var templateListener = template.GetComponent<AudioListener>();

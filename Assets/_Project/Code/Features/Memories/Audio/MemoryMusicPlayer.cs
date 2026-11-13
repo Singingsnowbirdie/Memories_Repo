@@ -27,7 +27,7 @@ namespace Memories.Gameplay.Memories
 
         public void Execute(MemoryMusicNode node)
         {
-            // Empty designer placeholders do not interrupt an already playing track.
+            // Пустые заготовки дизайнера не прерывают уже воспроизводимый трек.
             if (node.Action == MemoryMusicAction.Play && node.Clip == null) return;
             CancelFade();
             float target;

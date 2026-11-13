@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Memories.Gameplay.Reactions
 {
-    // Invoked explicitly by the first school memory's start action.
+    // Явно вызывается действием начала первого школьного воспоминания.
     public sealed class RevealGilesReaction : CustomReaction
     {
         [SerializeField] private ReactionInteractable giles;

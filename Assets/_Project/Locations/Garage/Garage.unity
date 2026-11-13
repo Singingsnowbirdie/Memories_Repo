@@ -44841,11 +44841,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df5d5cd5ee2289948a89205b164c1e2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.GarageEntranceReaction
-  father: {fileID: 1018955869}
   doorHinge: {fileID: 342514628}
   closedDoorEuler: {x: 0, y: 0, z: 0}
-  turnDuration: 1.2
   closeDuration: 1.5
+  entranceTrigger: {fileID: 2032875913}
 --- !u!114 &2032875913
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44861,7 +44860,9 @@ MonoBehaviour:
   graph: {fileID: 11400000, guid: f7d7fce6efbe61b459070c2b907ea11d, type: 2}
   triggerEvent: {fileID: 0}
   triggerOnce: 1
-  objectBindings: []
+  objectBindings:
+  - key: entrance_look_target
+    target: {fileID: 1205745552}
   customReactions:
   - key: enter_garage
     reaction: {fileID: 2032875912}
@@ -47944,6 +47945,7 @@ PrefabInstance:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 990900001}
   - {fileID: 1405499456}
   - {fileID: 2097502942}
   - {fileID: 1537240611}
@@ -47967,3 +47969,53 @@ SceneRoots:
   - {fileID: 862074736}
   - {fileID: 1495673688}
   - {fileID: 713442586}
+--- !u!1 &990900000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 990900001}
+  - component: {fileID: 990900002}
+  m_Layer: 0
+  m_Name: LocationBindings
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &990900001
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 990900000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &990900002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 990900000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8094193f27f546838e99a1b9a63b063e, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Bootstrap::Memories.Bootstrap.LocationBindings
+  courtyardDoor: {fileID: 0}
+  backyardEntrance: {fileID: 0}
+  garageAttachment: {fileID: 0}
+  schoolConnection: {fileID: 880300003}
+  garageGate: {fileID: 1402361889}
+  gymEntrance: {fileID: 0}

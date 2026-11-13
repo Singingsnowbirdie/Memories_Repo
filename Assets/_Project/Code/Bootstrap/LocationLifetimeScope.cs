@@ -14,7 +14,7 @@ namespace Memories.Bootstrap
 {
     public sealed class LocationLifetimeScope : LifetimeScope
     {
-        // Session-long gameplay services live in Bootstrap, independently of streamed scenery.
+        // Игровые сервисы на время сессии находятся в Bootstrap независимо от подгружаемого окружения.
         public Scene InitialScene { get; set; }
         protected override void Configure(IContainerBuilder builder)
         {
@@ -24,6 +24,7 @@ namespace Memories.Bootstrap
             builder.Register<PlayerMotor>(container => PlayerFactory.Create(this, container.Resolve<PlayerMovementSettings>()), Lifetime.Singleton)
                 .AsSelf().As<IPlayerView>();
             builder.Register<PlayerMovementModel>(Lifetime.Singleton);
+            builder.Register<PlayerLookAction>(Lifetime.Singleton);
             builder.Register<PlayerPresenter>(Lifetime.Singleton);
             builder.RegisterEntryPoint<PlayerEntryPoint>();
             builder.Register<InteractionProbe>(container => new InteractionProbe(
@@ -87,7 +88,7 @@ namespace Memories.Bootstrap
             }, Lifetime.Singleton);
             builder.RegisterBuildCallback(container =>
             {
-                // Register Escape handling after pause: reading consumes it by closing its own window.
+                // Регистрируем обработку Escape после паузы: режим чтения перехватывает клавишу, закрывая своё окно.
                 container.Resolve<PausePresenter>();
                 var presenter = container.Resolve<MemoryPresenter>();
                 container.Resolve<PausePresenter>().ConnectMemories(container.Resolve<MemoryCollection>(), presenter);

@@ -35,7 +35,7 @@ namespace Memories.Gameplay.Reactions
             this.memories = memories;
             interactable = GetComponent<ReactionInteractable>();
             if (surface != null && originalMaterial == null) originalMaterial = surface.sharedMaterial;
-            // Restore a loaded location once. Live consequences belong to explicit graph nodes.
+            // Восстанавливаем загруженную локацию один раз. Последствия во время игры запускаются явными нодами графа.
             bool completed = memories.Contains(memoryId);
             if (completed && bat != null && inventory.Contains(bat.Id)) inventory.TryConsume(bat);
             if (intactWindow != null) intactWindow.SetActive(!completed);

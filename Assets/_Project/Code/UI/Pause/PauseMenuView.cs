@@ -189,7 +189,7 @@ namespace Memories.Gameplay.UI
         private static void SetSlider(Slider slider, float value, string caption)
         {
             slider.SetValueWithoutNotify(value);
-            // Each slider immediately follows its label in the settings hierarchy.
+            // В иерархии настроек каждый ползунок расположен сразу после своей подписи.
             slider.transform.parent.GetChild(slider.transform.GetSiblingIndex() - 1)
                 .GetComponent<Text>().text = caption + "  " + Mathf.RoundToInt(value * 100) + "%";
         }

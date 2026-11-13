@@ -6,7 +6,7 @@ using XNode;
 
 namespace Memories.Gameplay.Reactions
 {
-    public enum ReactionKind { StoryText, Memory, ChangeLocation, CustomReaction, SetCustomVariable, ObjectActivity, AddInventoryItem, StartHints, StopHints, ConsumeInventoryItem, ObjectInteractivity, RunGraph }
+    public enum ReactionKind { StoryText, Memory, ChangeLocation, CustomReaction, SetCustomVariable, ObjectActivity, AddInventoryItem, StartHints, StopHints, ConsumeInventoryItem, ObjectInteractivity, RunGraph, LookAtObject }
 
     [Node.CreateNodeMenu("Реакция"), Node.NodeWidth(320), Node.NodeTint("#284C53")]
     [MovedFrom(true, sourceNamespace: "Memories.Gameplay.Triggers", sourceAssembly: "Memories.Gameplay", sourceClassName: "TriggerActionNode")]
@@ -33,6 +33,10 @@ namespace Memories.Gameplay.Reactions
         [SerializeField] private bool addToIntValue;
         public bool AddToIntValue => addToIntValue;
         [SerializeField] private string objectKey;
+        [SerializeField, Min(.01f)] private float lookDuration = 1.2f;
+        [SerializeField, Min(.01f)] private float lookMaxSpeed = 60f;
+        public float LookDuration => lookDuration;
+        public float LookMaxSpeed => lookMaxSpeed;
         [SerializeField] private bool active = true;
         [SerializeField, Min(0)] private float revealDuration;
         [SerializeField, Min(0)] private float revealDelay;
@@ -68,6 +72,15 @@ namespace Memories.Gameplay.Reactions
         public bool Validate(out string error)
         {
             error = null;
+            if (kind == ReactionKind.LookAtObject)
+            {
+                if (!(graph is ReactionGraph lookGraph) || !lookGraph.HasObjectKey(objectKey))
+                { error = "Выберите объект, на который должен посмотреть игрок."; return false; }
+                if (float.IsNaN(lookDuration) || float.IsInfinity(lookDuration) || lookDuration <= 0 ||
+                    float.IsNaN(lookMaxSpeed) || float.IsInfinity(lookMaxSpeed) || lookMaxSpeed <= 0)
+                { error = "Длительность и скорость поворота должны быть конечными положительными числами."; return false; }
+                return true;
+            }
             if (kind == ReactionKind.RunGraph)
             {
                 if (reactionGraph != null && reactionGraph != graph) return true;

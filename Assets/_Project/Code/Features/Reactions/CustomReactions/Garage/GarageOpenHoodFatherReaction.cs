@@ -19,7 +19,7 @@ namespace Memories.Gameplay.Reactions
             waitingFather.SetActive(false);
         }
 
-        // Called once after saved object states and the earlier father stages are restored.
+        // Вызывается один раз после восстановления состояний объектов и предыдущих этапов отца.
         public void Restore(CustomVariableStore store, MemoryCollection memories)
         {
             if (store.Get(variables, "father_hood_items_delivered") || memories.Contains("garage_third_memory"))

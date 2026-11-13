@@ -50,7 +50,7 @@ namespace Memories.Bootstrap
         {
             if (scene.path != TestLocationLauncher.HousePath) return;
             bool completed = checkpoint != TesterCheckpoint.HouseEntrance;
-            // Match the completed reaction presentation, including bindings whose display names are localized.
+            // Восстанавливаем результат завершённой реакции, включая привязки с локализованными названиями.
             Set(scene, "Гостиная/Prop_OldTV/TV Static Screen", !completed);
             Set(scene, "Гостиная/Prop_OldTV/TV Baseball Screen", completed);
             Set(scene, "Гостиная/FEMALE Gray Seated/Remote in hand", completed);

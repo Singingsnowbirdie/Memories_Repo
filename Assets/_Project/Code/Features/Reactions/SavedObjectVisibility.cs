@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Memories.Gameplay.Reactions
 {
-    // A variable-driven object derives its visibility from that variable, not a cached active flag.
+    // Видимость объекта, управляемого переменной, определяется этой переменной, а не сохранённым флагом активности.
     [DisallowMultipleComponent]
     public sealed class SavedObjectVisibility : MonoBehaviour
     {

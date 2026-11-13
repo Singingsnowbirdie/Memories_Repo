@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 namespace Memories.Gameplay.Reactions
 {
-    // Implemented by code when a component has additional persistent state.
+    // Реализуется компонентами с дополнительным сохраняемым состоянием.
     public interface IObjectStateParticipant
     {
         string StateKey { get; }
@@ -13,7 +13,7 @@ namespace Memories.Gameplay.Reactions
         void RestoreState(string state);
     }
 
-    // Components with optional state can declare whether this configuration needs saving.
+    // Компоненты с необязательным состоянием могут указать, нужно ли сохранять эту конфигурацию.
     public interface IConditionalObjectStateParticipant : IObjectStateParticipant
     {
         bool RequiresPersistence { get; }
@@ -62,7 +62,7 @@ namespace Memories.Gameplay.Reactions
                     if (trackers.TryGetValue(id, out var existing) && existing != null && existing != tracker)
                         throw DuplicateIdentity(id, existing.gameObject, tracker.gameObject);
                 }
-            // Validate the entire scene before applying any saved state.
+            // Проверяем всю сцену до применения любого сохранённого состояния.
             foreach (var pair in identities) Register(pair.Value.gameObject, pair.Key);
         }
 

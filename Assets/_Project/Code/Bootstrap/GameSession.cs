@@ -12,7 +12,7 @@ using UnityEngine.SceneManagement;
 
 namespace Memories.Bootstrap
 {
-    // Composition and scene ownership only. Gameplay depends on its own contracts.
+    // Только сборка зависимостей и управление сценами. Игровая логика зависит от собственных контрактов.
     public sealed class GameSession : IDisposable, ILocationTransition
     {
         private readonly AppLifetimeScope applicationScope;
@@ -102,10 +102,10 @@ namespace Memories.Bootstrap
             {
                 if (LocationScope != null)
                 {
-                    LocationScope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>().Close();
-                    LocationScope.Container.Resolve<Memories.Gameplay.UI.StoryTextPresenter>().Stop();
-                    LocationScope.Container.Resolve<Memories.Gameplay.UI.PausePresenter>().Resume();
-                    LocationScope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>().Exit(Memories.Gameplay.UI.GameplayMode.Tester);
+                    LocationScope.Container.Resolve<Gameplay.Memories.MemoryPresenter>().Close();
+                    LocationScope.Container.Resolve<Gameplay.UI.StoryTextPresenter>().Stop();
+                    LocationScope.Container.Resolve<Gameplay.UI.PausePresenter>().Resume();
+                    LocationScope.Container.Resolve<Gameplay.UI.GameplayModeState>().Exit(Gameplay.UI.GameplayMode.Tester);
                 }
                 busy = true;
                 try { await CleanupAsync(); }
@@ -119,33 +119,23 @@ namespace Memories.Bootstrap
                 await StartAsync(checkpointScene);
                 if (checkpoint == TesterCheckpoint.HouseMemoryComplete)
                 {
-                    var door = FindComponent<OpenCourtyardDoorReaction>(locationScene);
+                    var door = LocationBindings.For(locationScene).CourtyardDoor;
                     await UniTask.WaitUntil(() => door != null && door.IsOpen, cancellationToken: shutdown.Token).Timeout(TimeSpan.FromSeconds(30));
                 }
                 else if (checkpoint == TesterCheckpoint.BackyardMemoryComplete)
                 {
-                    var garage = FindComponent<BackyardGarageAttachment>(locationScene);
+                    var garage = LocationBindings.For(locationScene).GarageAttachment;
                     await UniTask.WaitUntil(() => garage != null && garage.IsOpen, cancellationToken: shutdown.Token).Timeout(TimeSpan.FromSeconds(30));
                 }
                 else if (checkpoint == TesterCheckpoint.GarageCorridorOpen)
                 {
-                    var connection = FindComponent<GarageSchoolConnection>(locationScene);
+                    var connection = LocationBindings.For(locationScene).SchoolConnection;
                     await connection.EnsureReadyAsync();
-                    var gate = FindComponent<OpenGarageGateReaction>(locationScene);
+                    var gate = LocationBindings.For(locationScene).GarageGate;
                     await UniTask.WaitUntil(() => gate != null && gate.IsOpen, cancellationToken: shutdown.Token).Timeout(TimeSpan.FromSeconds(30));
                 }
             }
             finally { jumpingToCheckpoint = false; }
-        }
-
-        private static T FindComponent<T>(Scene scene) where T : Component
-        {
-            foreach (var root in scene.GetRootGameObjects())
-            {
-                var component = root.GetComponentInChildren<T>(true);
-                if (component != null) return component;
-            }
-            return null;
         }
 
         public bool RestartGame()
@@ -176,7 +166,7 @@ namespace Memories.Bootstrap
             var spawn = FindMarker(locationScene, "PlayerSpawn");
             var position = spawn != null ? spawn.position : player.InitialPosition;
             float yaw = spawn != null ? spawn.eulerAngles.y : player.InitialYaw;
-            // The house and highway share a player until the next doorway transition.
+            // Дом и шоссе используют одного игрока до следующего перехода через дверной проём.
             var house = SceneManager.GetSceneByPath(TestLocationLauncher.HousePath);
             if (house.isLoaded && (locationScene == house ||
                 (locationScene.path == TestLocationLauncher.HighwayPath && player.transform.position.z >= 300f)))
@@ -220,8 +210,8 @@ namespace Memories.Bootstrap
                 if (testerCheckpoint.HasValue)
                     checkpointCatalog.Seed(testerCheckpoint.Value, SessionScope.Container.Resolve<CustomVariableStore>(),
                         SessionScope.Container.Resolve<QuestInventory>(), SessionScope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
-                // Unity scene loading cannot be interrupted safely. Finish the operation,
-                // then honour cancellation and unload the scene we own.
+                // Загрузку сцены Unity нельзя безопасно прервать. Сначала завершаем операцию,
+                // затем обрабатываем отмену и выгружаем сцену, которой управляем.
                 if (!useOpenScene) await SceneManager.LoadSceneAsync(scenePath, LoadSceneMode.Additive);
                 locationScene = SceneManager.GetSceneByPath(scenePath);
                 cancellation.Token.ThrowIfCancellationRequested();
@@ -252,7 +242,7 @@ namespace Memories.Bootstrap
                 }
                 else if (testerCheckpoint == TesterCheckpoint.GarageCorridorOpen)
                 {
-                    var exit = FindComponent<GarageSchoolConnection>(locationScene).transform;
+                    var exit = LocationBindings.For(locationScene).SchoolConnection.transform;
                     FindMarker(locationScene, "PlayerSpawn").SetPositionAndRotation(
                         exit.position - exit.forward * 1.5f + Vector3.up * .05f, exit.rotation);
                 }
@@ -294,7 +284,7 @@ namespace Memories.Bootstrap
             camera.nearClipPlane = .1f;
             camera.farClipPlane = 1000;
             view.AddComponent<AudioListener>();
-            // The highway is not loaded when continuing from the house checkpoint.
+            // При продолжении с контрольной точки дома шоссе не загружается.
             var boundary = new GameObject("House start boundary");
             SceneManager.MoveGameObjectToScene(boundary, scene);
             boundary.transform.position = new Vector3(0, 2.5f, 299.5f);
@@ -316,7 +306,7 @@ namespace Memories.Bootstrap
                 cancellation.Token.ThrowIfCancellationRequested();
                 DisableLocationCameras(nextScene);
                 BindDoors(nextScene, LocationScope);
-                // Locations share world coordinates; the Bootstrap player and camera stay in place.
+                // Локации используют общие мировые координаты; игрок и камера в Bootstrap остаются на месте.
                 var previous = locationScene;
                 locationScene = nextScene;
                 SceneManager.SetActiveScene(nextScene);
@@ -364,8 +354,7 @@ namespace Memories.Bootstrap
                     connection.Initialize(LoadGarageSchoolAsync);
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var entrance in root.GetComponentsInChildren<SchoolGymEntranceReaction>(true))
-                    entrance.Initialize(scope.Container.Resolve<PlayerMotor>(), scope.Container.Resolve<PlayerMovementModel>(),
-                        scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>(), () => EnterConnectedSceneAsync(scene));
+                    entrance.Initialize(scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>(), () => EnterConnectedSceneAsync(scene));
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var reaction in root.GetComponentsInChildren<GarageFatherMemoryReaction>(true))
                     reaction.Initialize(scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>(),
@@ -375,14 +364,12 @@ namespace Memories.Bootstrap
                     reaction.Initialize(scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>());
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var entrance in root.GetComponentsInChildren<GarageEntranceReaction>(true))
-                    entrance.Initialize(scope.Container.Resolve<PlayerMotor>(), scope.Container.Resolve<PlayerMovementModel>(),
-                        scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>(),
+                    entrance.Initialize(scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>(),
                         () => EnterGarageAsync(scene), scene == locationScene);
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var entrance in root.GetComponentsInChildren<BackyardEntranceReaction>(true))
-                    entrance.Initialize(scope.Container.Resolve<PlayerMotor>(), scope.Container.Resolve<PlayerMovementModel>(),
-                        scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>(),
-                        () => ReplaceConnectedHouseAsync(scene), scene == locationScene);
+                    entrance.Initialize(scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>(),
+                        () => EnterConnectedSceneAsync(scene), scene == locationScene);
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var attachment in root.GetComponentsInChildren<BackyardGarageAttachment>(true))
                     attachment.Initialize(scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>(), LoadBackyardGarageAsync);
@@ -407,15 +394,15 @@ namespace Memories.Bootstrap
                 foreach (var trigger in root.GetComponentsInChildren<Memories.Gameplay.Triggers.SceneTrigger>(true))
                     trigger.Initialize(scope.Container.Resolve<Memories.Gameplay.UI.StoryTextPresenter>(),
                         scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>(), this,
-                        scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<CustomVariableStore>());
+                        scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<CustomVariableStore>(), scope.Container.Resolve<PlayerLookAction>());
                 foreach (var interactable in root.GetComponentsInChildren<ReactionInteractable>(true))
                     interactable.Initialize(scope.Container.Resolve<Memories.Gameplay.UI.StoryTextPresenter>(),
-                        scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>(), this, scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<CustomVariableStore>());
+                        scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>(), this, scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<CustomVariableStore>(), scope.Container.Resolve<PlayerLookAction>());
             }
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var door in root.GetComponentsInChildren<OpenCourtyardDoorReaction>(true))
-                    door.Initialize(scope.Container.Resolve<PlayerMotor>(),
-                        path => LoadConnectedSceneAsync(path, door), EnterConnectedSceneAsync,
+                    door.Initialize(
+                        path => LoadConnectedSceneAsync(path, door),
                         scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
             scope.Container.Resolve<ObjectStateStore>().RestoreScene(scene);
             if (scene == locationScene)
@@ -465,7 +452,7 @@ namespace Memories.Bootstrap
 
         private static void ValidateConnection(Transform entrance, Transform exit)
         {
-            // Locations are authored in shared world coordinates. Never move loaded static geometry.
+            // Локации созданы в общих мировых координатах. Загруженную статическую геометрию не перемещаем.
             if (Vector3.Distance(entrance.position, exit.position) > .01f ||
                 Quaternion.Angle(entrance.rotation, exit.rotation) > .1f)
                 throw new InvalidOperationException("Scene entrances must be aligned in the Editor: " +
@@ -486,8 +473,8 @@ namespace Memories.Bootstrap
         {
             using var cancellation = CancellationTokenSource.CreateLinkedTokenSource(application.Token,
                 shutdown.Token, attachment.GetCancellationTokenOnDestroy());
-            // A restored yard can still be attached to the house until the player enters it.
-            // Wait for yard ownership so that completing that entry cannot unload the garage.
+            // Восстановленный двор может оставаться присоединённым к дому, пока игрок не войдёт в него.
+            // Ждём завершения входа во двор, чтобы этот переход не выгрузил гараж.
             await UniTask.WaitUntil(() => disposed || (!busy && attachment != null &&
                 locationScene == attachment.gameObject.scene), cancellationToken: cancellation.Token);
             cancellation.Token.ThrowIfCancellationRequested();
@@ -517,7 +504,7 @@ namespace Memories.Bootstrap
                 hinge.localRotation *= Quaternion.Euler(0, 100, 0);
                 Physics.SyncTransforms();
                 additionalScenes.Add(garage);
-                // Keep Backyard active and keep the Bootstrap player in place.
+                // Оставляем Backyard активной сценой, а игрока в Bootstrap — на месте.
             }
             catch
             {
@@ -551,7 +538,7 @@ namespace Memories.Bootstrap
                 await SceneManager.LoadSceneAsync(path, LoadSceneMode.Additive);
                 school = SceneManager.GetSceneByPath(path);
                 cancellation.Token.ThrowIfCancellationRequested();
-                var entrance = FindComponent<SchoolGymEntranceReaction>(school);
+                var entrance = LocationBindings.For(school).GymEntrance;
                 if (entrance == null || entrance.CorridorEntrance == null)
                     throw new InvalidOperationException("Gym corridor entrance is not configured.");
                 ValidateConnection(entrance.CorridorEntrance, connection.transform);
@@ -626,7 +613,15 @@ namespace Memories.Bootstrap
                                     if (renderer.enabled) { cover.Renderers.Add(renderer); renderer.enabled = false; }
                             }
                 connectionCovers[scene.handle] = cover;
-                door.ExitClearance = clearance;
+                var backyardEntrance = LocationBindings.For(scene).BackyardEntrance;
+                if (backyardEntrance != null)
+                {
+                    // Контакт с триггером начинается только после того, как капсула игрока минует старый фасад.
+                    var trigger = backyardEntrance.EntranceTrigger;
+                    trigger.transform.SetPositionAndRotation(
+                        door.transform.position + door.transform.forward * (clearance + controller.radius + .2f),
+                        door.transform.rotation);
+                }
                 return scene;
             }
             catch
@@ -654,13 +649,7 @@ namespace Memories.Bootstrap
             busy = true;
             try
             {
-                var entrance = FindComponent<BackyardEntranceReaction>(scene);
-                if (entrance != null)
-                {
-                    entrance.Execute();
-                    await entrance.Completion;
-                }
-                else await ReplaceConnectedHouseAsync(scene);
+                await ReplaceConnectedHouseAsync(scene);
             }
             finally { busy = false; }
         }
@@ -675,7 +664,7 @@ namespace Memories.Bootstrap
             foreach (var root in previous.GetRootGameObjects()) root.SetActive(false);
             await SceneManager.UnloadSceneAsync(previous);
             await UnloadAdditionalScenesAsync();
-            // Restore overlapping backyard geometry only after the house has unloaded.
+            // Восстанавливаем перекрывающуюся геометрию двора только после выгрузки дома.
             if (connectionCovers.TryGetValue(scene.handle, out var cover))
             {
                 cover.Restore();
@@ -723,7 +712,7 @@ namespace Memories.Bootstrap
             disposed = true;
             shutdown.Cancel();
             shutdown.Dispose();
-            // An in-flight StartAsync owns cleanup after its scene load finishes.
+            // Выполняющийся StartAsync отвечает за очистку после завершения загрузки своей сцены.
             if (busy) return;
             ReleaseScopes();
             if (Application.isPlaying)

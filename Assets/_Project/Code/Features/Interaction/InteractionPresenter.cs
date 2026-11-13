@@ -36,7 +36,7 @@ namespace Memories.Gameplay.Interaction
                     view.Show(false, false, "");
                     return;
                 }
-                // Interaction may destroy, disable or move the target.
+                // Взаимодействие может уничтожить, отключить или переместить цель.
                 target = probe.FindTarget();
             }
             view.Show(true, target != null, target != null ? "[E] " + target.Prompt : "");

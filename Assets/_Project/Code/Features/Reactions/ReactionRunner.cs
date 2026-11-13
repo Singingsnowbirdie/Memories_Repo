@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace Memories.Gameplay.Reactions
 {
-    // Playback and one-shot state belong to the invoking object, never to the shared asset.
+    // Воспроизведение и состояние одноразового запуска принадлежат вызывающему объекту, а не общему ресурсу графа.
     public sealed class ReactionRunner : IDisposable
     {
         private readonly StoryTextPresenter texts;
@@ -22,6 +22,7 @@ namespace Memories.Gameplay.Reactions
         private readonly CustomVariableStore variables;
         private readonly ReactionObjectBinding[] objectBindings;
         private readonly CustomReactionBinding[] customReactions;
+        private readonly PlayerLookAction playerLook;
         private CancellationTokenSource playback;
         private bool fired;
         private ReactionRunner hintOwner;
@@ -31,7 +32,7 @@ namespace Memories.Gameplay.Reactions
 
         public string CaptureHints() => JsonUtility.ToJson(new HintState { active = activeHints.ToList() });
 
-        // Resume saved timers only. Never replay the conversation or evaluate quest progress here.
+        // Возобновляем только сохранённые таймеры. Не повторяем диалог и не проверяем прогресс задания здесь.
         public void RestoreHints(ReactionGraph graph, string state)
         {
             if (string.IsNullOrEmpty(state) || graph == null ||
@@ -45,8 +46,8 @@ namespace Memories.Gameplay.Reactions
         public bool IsRunning => playback != null;
         public bool IsHidingOwner { get; private set; }
         public ReactionRunner(StoryTextPresenter texts, MemoryPresenter memories, UnityEngine.Object owner,
-            ILocationTransition locations = null, QuestInventory inventory = null, CustomVariableStore variables = null, ReactionObjectBinding[] objectBindings = null, CustomReactionBinding[] customReactions = null)
-        { this.texts = texts; this.memories = memories; this.owner = owner; this.locations = locations; this.inventory = inventory; this.variables = variables; this.objectBindings = objectBindings; this.customReactions = customReactions; hintOwner = this; }
+            ILocationTransition locations = null, QuestInventory inventory = null, CustomVariableStore variables = null, ReactionObjectBinding[] objectBindings = null, CustomReactionBinding[] customReactions = null, PlayerLookAction playerLook = null)
+        { this.texts = texts; this.memories = memories; this.owner = owner; this.locations = locations; this.inventory = inventory; this.variables = variables; this.objectBindings = objectBindings; this.customReactions = customReactions; this.playerLook = playerLook; hintOwner = this; }
         public bool CanRun(ReactionGraph graph, bool allowDuringMemory = false) => graph != null && !IsRunning &&
             !(graph.RunOnce && fired) && (memories == null || memories.CanStartPlayback ||
                 (allowDuringMemory && memories.IsPlaying));
@@ -66,6 +67,9 @@ namespace Memories.Gameplay.Reactions
             { Debug.LogWarning("Хранилище кастомных переменных не подключено.", owner); return false; }
             foreach (var action in actions)
             {
+                if (action.Kind == ReactionKind.LookAtObject && (playerLook == null ||
+                    !ReactionObjectBinding.TryResolve(objectBindings, action.ObjectKey, out _)))
+                { Debug.LogWarning("Не назначены исполнитель поворота или объект взгляда: " + action.ObjectKey, owner); return false; }
                 if (action.Kind == ReactionKind.ObjectInteractivity && !TryGetInteractable(action, out _))
                 { Debug.LogWarning("На выбранном объекте нужен компонент ReactionInteractable: " + action.ObjectKey, owner); return false; }
                 if (action.Kind == ReactionKind.StoryText && texts == null) return false;
@@ -136,15 +140,15 @@ namespace Memories.Gameplay.Reactions
             {
                 do
                 {
-                    // Scaled time freezes in pause and memory views.
+                    // Масштабируемое время останавливается в паузе и при просмотре воспоминаний.
                     await UniTask.Delay(TimeSpan.FromSeconds(timeout), cancellationToken: timer.Token);
                     await UniTask.WaitUntil(() => !IsRunning && (texts == null || !texts.IsPlaying) &&
                         (memories == null || memories.CanStartPlayback) && Time.timeScale > 0,
                         cancellationToken: timer.Token);
                     timer.Token.ThrowIfCancellationRequested();
-                    child = new ReactionRunner(texts, memories, owner, locations, inventory, variables, objectBindings, customReactions);
+                    child = new ReactionRunner(texts, memories, owner, locations, inventory, variables, objectBindings, customReactions, playerLook);
                     child.hintOwner = this;
-                    // Each traversal evaluates graph conditions against the current inventory.
+                    // При каждом проходе условия графа проверяют текущее содержимое инвентаря.
                     if (!child.TryRun(graph)) return;
                     await UniTask.WaitUntil(() => !child.IsRunning, cancellationToken: timer.Token);
                     child.Dispose();
@@ -190,7 +194,7 @@ namespace Memories.Gameplay.Reactions
                     var action = (ReactionNode)node;
                     if (action.Kind == ReactionKind.RunGraph)
                     {
-                        // Inline execution shares bindings, cancellation and the owner's lifetime.
+                        // Вложенное выполнение использует общие привязки, отмену и время жизни владельца.
                         returns.Push(ReactionGraph.Next(node));
                         node = ReactionGraph.Next(action.ReactionGraph.nodes.OfType<ReactionStartNode>().Single());
                         continue;
@@ -210,7 +214,13 @@ namespace Memories.Gameplay.Reactions
                         node = ReactionGraph.Next(node);
                         continue;
                     }
-                    if (action.Kind == ReactionKind.ObjectInteractivity)
+                    if (action.Kind == ReactionKind.LookAtObject)
+                    {
+                        if (!ReactionObjectBinding.TryResolve(objectBindings, action.ObjectKey, out var lookTarget))
+                            throw new InvalidOperationException("Look target is unavailable: " + action.ObjectKey);
+                        await playerLook.ExecuteAsync(lookTarget.transform, action.LookDuration, action.LookMaxSpeed, source.Token);
+                    }
+                    else if (action.Kind == ReactionKind.ObjectInteractivity)
                     {
                         if (!TryGetInteractable(action, out var interactable))
                             throw new InvalidOperationException("Интерактивный объект недоступен: " + action.ObjectKey);
@@ -250,7 +260,7 @@ namespace Memories.Gameplay.Reactions
                     }
                     else
                     {
-                        // Other triggers may already be showing a memory; keep sequence order.
+                        // Другие триггеры уже могут показывать воспоминание; сохраняем порядок последовательности.
                         await UniTask.WaitUntil(() => memories.CanOpen(action.MemoryId, true), cancellationToken: source.Token);
                         bool alreadyCollected = memories.HasCollected(action.MemoryId);
                         if (!memories.Open(action.MemoryId, action.MemoryGraph, true)) return;
@@ -259,7 +269,7 @@ namespace Memories.Gameplay.Reactions
                         {
                             if (!CustomReactionBinding.TryResolve(customReactions, action.MemoryStartedReactionKey, out var started))
                                 throw new InvalidOperationException("Missing memory start reaction: " + action.MemoryStartedReactionKey);
-                            // The full-screen comic is visible. Its explicit scene change may hide this interaction owner.
+                            // Полноэкранный комикс уже виден. Явная смена сцены может скрыть владельца этого взаимодействия.
                             IsHidingOwner = true;
                             try { started.Execute(); }
                             finally { IsHidingOwner = false; }

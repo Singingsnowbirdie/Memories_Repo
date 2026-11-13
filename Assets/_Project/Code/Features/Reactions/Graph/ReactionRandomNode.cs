@@ -54,7 +54,7 @@ namespace Memories.Gameplay.Reactions
             return true;
         }
 
-        // Validation never draws random numbers. Only execution chooses a branch.
+        // Проверка не генерирует случайные числа. Ветка выбирается только при выполнении.
         public string SelectOutput(double sample)
         {
             if (!Validate(out var error)) throw new InvalidOperationException(error);
@@ -69,7 +69,7 @@ namespace Memories.Gameplay.Reactions
                 if (remaining < choice.Weight) return choice.PortName;
                 remaining -= choice.Weight;
             }
-            return lastPositive; // Unity's Random.value may equal one.
+            return lastPositive; // Random.value в Unity может быть равен единице.
         }
 
         protected override void Init() => name = "Случайный выбор";
