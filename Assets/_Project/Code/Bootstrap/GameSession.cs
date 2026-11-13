@@ -25,9 +25,7 @@ namespace Memories.Bootstrap
         private bool lifecycleBusy;
         private bool busy { get => lifecycleBusy || transitions.IsBusy; set => lifecycleBusy = value; }
         private bool disposed;
-        private TesterCheckpoint? testerCheckpoint;
-        private TesterCheckpointCatalog checkpointCatalog;
-        private bool jumpingToCheckpoint;
+        private readonly TesterCheckpointRunner checkpoints;
         private readonly LocationProgressStore progress = new LocationProgressStore();
         private bool trackHouseCheckpoint;
         private Transform houseEntrance;
@@ -72,55 +70,18 @@ namespace Memories.Bootstrap
         public LocationLifetimeScope LocationScope { get; private set; }
         public Scene CurrentLocationScene => locationScene;
         public bool IsRunning => LocationScope != null;
-        public bool IsTransitioning => busy || jumpingToCheckpoint;
+        public bool IsTransitioning => busy || checkpoints.IsJumping;
 
-        public async UniTask JumpToCheckpointAsync(TesterCheckpoint checkpoint)
+        public UniTask JumpToCheckpointAsync(TesterCheckpoint checkpoint) => checkpoints.JumpToCheckpointAsync(checkpoint);
+
+        private async UniTask PrepareTesterSessionAsync()
         {
-            if (disposed || busy || jumpingToCheckpoint) throw new InvalidOperationException("Дождитесь завершения загрузки.");
-            if (!Enum.IsDefined(typeof(TesterCheckpoint), checkpoint)) throw new ArgumentOutOfRangeException(nameof(checkpoint));
-            var catalog = Resources.Load<TesterCheckpointCatalog>("TesterCheckpoints");
-            if (catalog == null) throw new InvalidOperationException("Не найдены настройки контрольных точек.");
-            jumpingToCheckpoint = true;
-            try
-            {
-                if (LocationScope != null)
-                {
-                    LocationScope.Container.Resolve<Gameplay.Memories.MemoryPresenter>().Close();
-                    LocationScope.Container.Resolve<Gameplay.UI.StoryTextPresenter>().Stop();
-                    LocationScope.Container.Resolve<Gameplay.UI.PausePresenter>().Resume();
-                    LocationScope.Container.Resolve<Gameplay.UI.GameplayModeState>().Exit(Gameplay.UI.GameplayMode.Tester);
-                }
-                busy = true;
-                try { await CleanupAsync(); }
-                finally { busy = false; }
-                applicationScope.IsTesterSession = true;
-                trackHouseCheckpoint = false;
-                testerCheckpoint = checkpoint;
-                checkpointCatalog = catalog;
-                string checkpointScene = checkpoint == TesterCheckpoint.GarageCorridorOpen ? TestLocationLauncher.GaragePath :
-                    checkpoint == TesterCheckpoint.BackyardMemoryComplete ? TestLocationLauncher.BackyardPath : TestLocationLauncher.HousePath;
-                await StartAsync(checkpointScene);
-                if (checkpoint == TesterCheckpoint.HouseMemoryComplete)
-                {
-                    var door = FindComponent<OpenCourtyardDoorReaction>(locationScene);
-                    await UniTask.WaitUntil(() => door != null && door.IsOpen, cancellationToken: shutdown.Token).Timeout(TimeSpan.FromSeconds(30));
-                }
-                else if (checkpoint == TesterCheckpoint.BackyardMemoryComplete)
-                {
-                    var garage = FindComponent<BackyardGarageAttachment>(locationScene);
-                    await UniTask.WaitUntil(() => garage != null && garage.IsOpen, cancellationToken: shutdown.Token).Timeout(TimeSpan.FromSeconds(30));
-                }
-                else if (checkpoint == TesterCheckpoint.GarageCorridorOpen)
-                {
-                    var connection = FindComponent<GarageSchoolConnection>(locationScene);
-                    await connection.EnsureReadyAsync();
-                    var gate = FindComponent<OpenGarageGateReaction>(locationScene);
-                    await UniTask.WaitUntil(() => gate != null && gate.IsOpen, cancellationToken: shutdown.Token).Timeout(TimeSpan.FromSeconds(30));
-                }
-            }
-            finally { jumpingToCheckpoint = false; }
+            busy = true;
+            try { await CleanupAsync(); }
+            finally { busy = false; }
+            applicationScope.IsTesterSession = true;
+            trackHouseCheckpoint = false;
         }
-
         public bool RestartGame()
         {
             const string bootstrap = "Assets/_Project/Scenes/Bootstrap.unity";
@@ -170,6 +131,8 @@ namespace Memories.Bootstrap
                 () => disposed, () => lifecycleBusy, () => LocationScope, () => SessionScope,
                 BindLocation, CleanupAsync);
             binder = new LocationBinder(transitions, this);
+            checkpoints = new TesterCheckpointRunner(() => LocationScope, () => locationScene,
+                () => !disposed && !busy, PrepareTesterSessionAsync, path => StartAsync(path), shutdown.Token);
         }
 
         public async UniTask StartAsync(string scenePath, CancellationToken cancellationToken = default,
@@ -180,7 +143,7 @@ namespace Memories.Bootstrap
             cancellationToken.ThrowIfCancellationRequested();
             bool useOpenScene = false;
 #if UNITY_EDITOR
-            useOpenScene = !testerCheckpoint.HasValue && applicationScope.UseOpenLocationForEditorPlay && SceneManager.GetSceneByPath(scenePath).isLoaded;
+            useOpenScene = !checkpoints.HasSelection && applicationScope.UseOpenLocationForEditorPlay && SceneManager.GetSceneByPath(scenePath).isLoaded;
 #endif
             if (string.IsNullOrWhiteSpace(scenePath) || (!useOpenScene && !Application.CanStreamedLevelBeLoaded(scenePath)))
                 throw new ArgumentException("Location must be enabled in Build Settings: " + scenePath, nameof(scenePath));
@@ -192,34 +155,16 @@ namespace Memories.Bootstrap
             try
             {
                 // Контрольные точки обходят вступление: прицел доступен сразу, без ожидания сюжетного текста.
-                Memories.Gameplay.UI.StoryTextView.BeginSession(useOpenScene || testerCheckpoint.HasValue);
+                Memories.Gameplay.UI.StoryTextView.BeginSession(useOpenScene || checkpoints.HasSelection);
                 SessionScope = applicationScope.CreateChild<SessionLifetimeScope>(childScopeName: "SessionLifetimeScope");
-                if (testerCheckpoint.HasValue)
-                    checkpointCatalog.Seed(testerCheckpoint.Value, SessionScope.Container.Resolve<CustomVariableStore>(),
-                        SessionScope.Container.Resolve<QuestInventory>(), SessionScope.Container.Resolve<Gameplay.Memories.MemoryCollection>());
+                checkpoints.Seed(SessionScope);
                 await transitions.LoadInitialScenesAsync(scenePath, useOpenScene,
-                    resumeHouse || testerCheckpoint.HasValue ? Array.Empty<string>() : applicationScope.AdditionalLocationScenes,
+                    resumeHouse || checkpoints.HasSelection ? Array.Empty<string>() : applicationScope.AdditionalLocationScenes,
                     cancellation.Token);
 
-                if (!testerCheckpoint.HasValue) applicationScope.TestLauncher?.Prepare(locationScene);
-                if (resumeHouse || (testerCheckpoint.HasValue && scenePath == TestLocationLauncher.HousePath)) PrepareHouseStart(locationScene);
-                if (testerCheckpoint == TesterCheckpoint.HouseMemoryComplete)
-                {
-                    var spawn = FindMarker(locationScene, "PlayerSpawn");
-                    spawn.SetPositionAndRotation(checkpointCatalog.houseMemoryPosition, Quaternion.Euler(0, checkpointCatalog.houseMemoryYaw, 0));
-                }
-                else if (testerCheckpoint == TesterCheckpoint.BackyardMemoryComplete)
-                {
-                    var entrance = FindMarker(locationScene, "Вход из дома");
-                    FindMarker(locationScene, "PlayerSpawn").SetPositionAndRotation(
-                        entrance.TransformPoint(new Vector3(0, .05f, 16.84f)), entrance.rotation);
-                }
-                else if (testerCheckpoint == TesterCheckpoint.GarageCorridorOpen)
-                {
-                    var exit = FindComponent<GarageSchoolConnection>(locationScene).transform;
-                    FindMarker(locationScene, "PlayerSpawn").SetPositionAndRotation(
-                        exit.position - exit.forward * 1.5f + Vector3.up * .05f, exit.rotation);
-                }
+                if (!checkpoints.HasSelection) applicationScope.TestLauncher?.Prepare(locationScene);
+                if (resumeHouse || (checkpoints.HasSelection && scenePath == TestLocationLauncher.HousePath)) PrepareHouseStart(locationScene);
+                checkpoints.PrepareSpawn(locationScene);
                 var root = new GameObject("Persistent gameplay");
                 root.SetActive(false);
                 root.transform.SetParent(SessionScope.transform, false);
@@ -275,7 +220,7 @@ namespace Memories.Bootstrap
         }
 
         private void BindLocation(Scene scene, LocationLifetimeScope scope) =>
-            binder.Bind(scene, scope, scene == locationScene, testerCheckpoint, checkpointCatalog);
+            binder.Bind(scene, scope, scene == locationScene, checkpoints.Selected, checkpoints.Catalog);
 
         private async UniTask CleanupAsync()
         {
