@@ -65348,50 +65348,6 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 2315c9ac8da89c443a0a87784731cc21, type: 2}
-    - target: {fileID: 5958762266296462292, guid: 63c1b9ab01cefc749a66f9e709dcd39f, type: 3}
-      propertyPath: objectBindings.Array.size
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5958762266296462292, guid: 63c1b9ab01cefc749a66f9e709dcd39f, type: 3}
-      propertyPath: objectBindings.Array.data[0].key
-      value: baseball_bat
-      objectReference: {fileID: 0}
-    - target: {fileID: 5958762266296462292, guid: 63c1b9ab01cefc749a66f9e709dcd39f, type: 3}
-      propertyPath: objectBindings.Array.data[1].key
-      value: baseball_ball
-      objectReference: {fileID: 0}
-    - target: {fileID: 5958762266296462292, guid: 63c1b9ab01cefc749a66f9e709dcd39f, type: 3}
-      propertyPath: objectBindings.Array.data[2].key
-      value: baseball_cap
-      objectReference: {fileID: 0}
-    - target: {fileID: 5958762266296462292, guid: 63c1b9ab01cefc749a66f9e709dcd39f, type: 3}
-      propertyPath: objectBindings.Array.data[3].key
-      value: ben_home
-      objectReference: {fileID: 0}
-    - target: {fileID: 5958762266296462292, guid: 63c1b9ab01cefc749a66f9e709dcd39f, type: 3}
-      propertyPath: objectBindings.Array.data[4].key
-      value: ben_pitcher
-      objectReference: {fileID: 0}
-    - target: {fileID: 5958762266296462292, guid: 63c1b9ab01cefc749a66f9e709dcd39f, type: 3}
-      propertyPath: objectBindings.Array.data[0].target
-      value: 
-      objectReference: {fileID: 1837431689}
-    - target: {fileID: 5958762266296462292, guid: 63c1b9ab01cefc749a66f9e709dcd39f, type: 3}
-      propertyPath: objectBindings.Array.data[1].target
-      value: 
-      objectReference: {fileID: 866899105}
-    - target: {fileID: 5958762266296462292, guid: 63c1b9ab01cefc749a66f9e709dcd39f, type: 3}
-      propertyPath: objectBindings.Array.data[2].target
-      value: 
-      objectReference: {fileID: 653190901}
-    - target: {fileID: 5958762266296462292, guid: 63c1b9ab01cefc749a66f9e709dcd39f, type: 3}
-      propertyPath: objectBindings.Array.data[3].target
-      value: 
-      objectReference: {fileID: 59154257}
-    - target: {fileID: 5958762266296462292, guid: 63c1b9ab01cefc749a66f9e709dcd39f, type: 3}
-      propertyPath: objectBindings.Array.data[4].target
-      value: 
-      objectReference: {fileID: 1844888136}
     - target: {fileID: 6602126124339937792, guid: 63c1b9ab01cefc749a66f9e709dcd39f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.908646
@@ -65442,12 +65398,41 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 739452338329536689, guid: 63c1b9ab01cefc749a66f9e709dcd39f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1745913492145905553}
+    - targetCorrespondingSourceObject: {fileID: 739452338329536689, guid: 63c1b9ab01cefc749a66f9e709dcd39f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1745913492145905554}
   m_SourcePrefab: {fileID: 100100000, guid: 63c1b9ab01cefc749a66f9e709dcd39f, type: 3}
 --- !u!1 &1745913492145905551 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 739452338329536689, guid: 63c1b9ab01cefc749a66f9e709dcd39f, type: 3}
   m_PrefabInstance: {fileID: 1745913492145905550}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1745913492145905554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1745913492145905551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ba68190f9594ee8b2fc0603419ed015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Interaction.ReactionInteractable
+  graph: {fileID: 11400000, guid: 9befb80014d32914fbef3e477b8dfb80, type: 2}
+  prompt: "\u041E\u0441\u043C\u043E\u0442\u0440\u0435\u0442\u044C"
+  objectBindings:
+  - key: baseball_bat
+    target: {fileID: 1837431689}
+  - key: baseball_ball
+    target: {fileID: 866899105}
+  - key: baseball_cap
+    target: {fileID: 653190901}
+  - key: ben_home
+    target: {fileID: 59154257}
+  - key: ben_pitcher
+    target: {fileID: 1844888136}
+  customReactions: []
 --- !u!114 &1745913492145905552
 MonoBehaviour:
   m_ObjectHideFlags: 0
