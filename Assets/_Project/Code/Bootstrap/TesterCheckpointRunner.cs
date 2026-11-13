@@ -56,6 +56,14 @@ namespace Memories.Bootstrap
                 FindMarker(scene, "PlayerSpawn").SetPositionAndRotation(
                     entrance.TransformPoint(new Vector3(0, .05f, 16.84f)), entrance.rotation);
             }
+            else if (Selected == TesterCheckpoint.SchoolCourtyardOpen)
+            {
+                var corridor = FindMarker(scene, "Школьный коридор");
+                var spawn = FindMarker(scene, "PlayerSpawn");
+                var position = corridor.TransformPoint(new Vector3(0, .05f, 33.8f));
+
+                spawn.SetPositionAndRotation(position, corridor.rotation);
+            }
             else if (Selected == TesterCheckpoint.GarageCorridorOpen)
             {
                 var exit = FindComponent<GarageSchoolConnection>(scene).transform;
@@ -83,7 +91,8 @@ namespace Memories.Bootstrap
                 await prepareSession();
                 Selected = checkpoint;
                 Catalog = catalog;
-                string checkpointScene = checkpoint == TesterCheckpoint.GarageCorridorOpen ? TestLocationLauncher.GaragePath :
+                string checkpointScene = checkpoint == TesterCheckpoint.SchoolCourtyardOpen ? TestLocationLauncher.SchoolPath :
+                    checkpoint == TesterCheckpoint.GarageCorridorOpen ? TestLocationLauncher.GaragePath :
                     checkpoint == TesterCheckpoint.BackyardMemoryComplete ? TestLocationLauncher.BackyardPath : TestLocationLauncher.HousePath;
                 await startSession(checkpointScene);
                 if (checkpoint == TesterCheckpoint.HouseMemoryComplete)

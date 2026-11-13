@@ -81,10 +81,11 @@ namespace Memories.Bootstrap
             GUILayout.Space(16);
             GUI.enabled = !loading && session != null && !session.IsTransitioning;
             var button = new GUIStyle(GUI.skin.button) { fontSize = 17, wordWrap = true };
-            if (GUILayout.Button("1. Вход в дом\nНичего не подобрано и не активировано", button, GUILayout.Height(64))) Select(TesterCheckpoint.HouseEntrance).Forget();
-            if (GUILayout.Button("2. После воспоминания в доме\nТелевизор включён, выход во двор открыт", button, GUILayout.Height(64))) Select(TesterCheckpoint.HouseMemoryComplete).Forget();
-            if (GUILayout.Button("3. После второго воспоминания во дворе\nОкно разбито, гараж подгружен и открыт", button, GUILayout.Height(64))) Select(TesterCheckpoint.BackyardMemoryComplete).Forget();
-            if (GUILayout.Button("4. Двери гаража открыты в коридор\nФинал гаража завершён, проход в спортзал готов", button, GUILayout.Height(64))) Select(TesterCheckpoint.GarageCorridorOpen).Forget();
+            if (GUILayout.Button("1. Вход в дом\nНичего не подобрано и не активировано", button, GUILayout.Height(54))) Select(TesterCheckpoint.HouseEntrance).Forget();
+            if (GUILayout.Button("2. После воспоминания в доме\nТелевизор включён, выход во двор открыт", button, GUILayout.Height(54))) Select(TesterCheckpoint.HouseMemoryComplete).Forget();
+            if (GUILayout.Button("3. После второго воспоминания во дворе\nОкно разбито, гараж подгружен и открыт", button, GUILayout.Height(54))) Select(TesterCheckpoint.BackyardMemoryComplete).Forget();
+            if (GUILayout.Button("4. Двери гаража открыты в коридор\nФинал гаража завершён, проход в спортзал готов", button, GUILayout.Height(54))) Select(TesterCheckpoint.GarageCorridorOpen).Forget();
+            if (GUILayout.Button("5. Дверь в школьный двор открыта\nСкорая вызвана, можно выйти к врачу", button, GUILayout.Height(54))) Select(TesterCheckpoint.SchoolCourtyardOpen).Forget();
             GUI.enabled = !loading;
             GUILayout.Space(10);
             if (GUILayout.Button("Закрыть", GUILayout.Height(30))) Toggle();
