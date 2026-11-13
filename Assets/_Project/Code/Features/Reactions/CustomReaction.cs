@@ -5,6 +5,8 @@ namespace Memories.Gameplay.Reactions
     public abstract class CustomReaction : MonoBehaviour
     {
         public abstract void Execute();
+        // A scene replacement leaves playback with the persistent memory presenter.
+        public virtual bool TransfersMemoryOwnership => false;
 
         public static bool TryFind(Object owner, out CustomReaction reaction)
         {

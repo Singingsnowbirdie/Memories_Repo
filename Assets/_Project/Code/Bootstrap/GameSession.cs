@@ -314,13 +314,9 @@ namespace Memories.Bootstrap
                 await SceneManager.LoadSceneAsync(scenePath, LoadSceneMode.Additive);
                 nextScene = SceneManager.GetSceneByPath(scenePath);
                 cancellation.Token.ThrowIfCancellationRequested();
-                var spawn = FindMarker(nextScene, "PlayerSpawn");
-                if (spawn == null) throw new InvalidOperationException("Missing PlayerSpawn: " + scenePath);
-                var player = LocationScope.Container.Resolve<PlayerMotor>();
                 DisableLocationCameras(nextScene);
                 BindDoors(nextScene, LocationScope);
-                player.Teleport(spawn.position, spawn.eulerAngles.y);
-                LocationScope.Container.Resolve<PlayerMovementModel>().ResetMotion(spawn.eulerAngles.y);
+                // Locations share world coordinates; the Bootstrap player and camera stay in place.
                 var previous = locationScene;
                 locationScene = nextScene;
                 SceneManager.SetActiveScene(nextScene);
@@ -328,6 +324,7 @@ namespace Memories.Bootstrap
                 SessionScope.Container.Resolve<ObjectStateStore>().UnloadScene(previous);
                 await SceneManager.UnloadSceneAsync(previous);
                 await UnloadAdditionalScenesAsync();
+                Physics.SyncTransforms();
                 if (disposed) await CleanupAsync();
             }
             catch
@@ -351,6 +348,10 @@ namespace Memories.Bootstrap
 
         private void BindDoors(Scene scene, LocationLifetimeScope scope)
         {
+            foreach (var root in scene.GetRootGameObjects())
+                foreach (var departure in root.GetComponentsInChildren<SchoolAmbulanceDepartureReaction>(true))
+                    departure.Initialize(scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>(),
+                        () => ChangeLocationAsync("Assets/_Project/Locations/Park/Park.unity"));
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var phone in root.GetComponentsInChildren<RevealSchoolPhoneReaction>(true))
                     phone.Initialize(scope.Container.Resolve<QuestInventory>());

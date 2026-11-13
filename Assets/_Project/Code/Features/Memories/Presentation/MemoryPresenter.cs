@@ -25,6 +25,9 @@ namespace Memories.Gameplay.Memories
         public event Action Closed;
         private bool disposed;
         private bool showingFrame, advanceRequested;
+        private UniTask completionBarrier;
+
+        public void DeferCompletion(UniTask operation) => completionBarrier = operation;
         public bool IsPlaying => playback != null;
         public bool HasCollected(string id) => collection.Contains(id);
         public bool CanStartPlayback => !disposed && state.Mode == GameplayMode.Playing;
@@ -71,6 +74,7 @@ namespace Memories.Gameplay.Memories
             currentGraph = graph;
             returnToPause = fromPause;
             playback = new CancellationTokenSource();
+            completionBarrier = UniTask.CompletedTask;
             PlayAsync(frames, playback).Forget();
             return true;
         }
@@ -108,6 +112,9 @@ namespace Memories.Gameplay.Memories
                     }
                     showingFrame = false;
                 }
+                // Keep the last frame and input lock until an explicitly started scene load finishes.
+                await completionBarrier;
+                source.Token.ThrowIfCancellationRequested();
                 completed = true;
             }
             catch (OperationCanceledException) { }

@@ -263,6 +263,11 @@ namespace Memories.Gameplay.Reactions
                             IsHidingOwner = true;
                             try { started.Execute(); }
                             finally { IsHidingOwner = false; }
+                            if (started.TransfersMemoryOwnership)
+                            {
+                                ownsMemory = false;
+                                return;
+                            }
                         }
                         await UniTask.WaitUntil(() => !memories.IsPlaying, cancellationToken: source.Token);
                         ownsMemory = false;
