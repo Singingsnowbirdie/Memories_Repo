@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: "\u0422\u0435\u043A\u0441\u0442"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Story.StoryTextNode
   graph: {fileID: 11400000}
-  position: {x: 360, y: 0}
+  position: {x: 520, y: 8}
   ports:
     keys:
     - previous
@@ -67,7 +67,7 @@ MonoBehaviour:
   - {fileID: -33562066558030718}
   - {fileID: 8894454090500951307}
   pauseBetweenFragments: 0
-  blockInteractionsForWholeSequence: 1
+  blockInteractionsForWholeSequence: 0
 --- !u!114 &6556264598827212247
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -111,7 +111,7 @@ MonoBehaviour:
   m_Name: "\u041A\u043E\u043D\u0435\u0446"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Story.StoryTextEndNode
   graph: {fileID: 11400000}
-  position: {x: 540, y: 0}
+  position: {x: 952, y: 24}
   ports:
     keys:
     - previous

@@ -12,7 +12,9 @@ namespace Memories.Gameplay.Reactions
         [SerializeField] private GameObject bouquet;
         [SerializeField] private Shader dissolveShader;
         [SerializeField] private float duration = 4f;
+        [SerializeField] private ParkCinemaSequence cinemaSequence;
         private bool completed;
+        public bool Completed => completed;
         private readonly List<(Renderer renderer, Material[] originals)> originals = new();
         private readonly List<Material> temporary = new();
         public string StateKey => "park.lily.bouquet";
@@ -22,7 +24,6 @@ namespace Memories.Gameplay.Reactions
         {
             if (completed) return;
             completed = true;
-            ObjectReveal.Play(bouquet, dissolveShader, 1.5f, 0);
             GetComponent<ReactionInteractable>().SetInteractionEnabled(false);
             GetComponent<ObjectStateTracker>().Capture();
             StartCoroutine(Transition());
@@ -30,8 +31,6 @@ namespace Memories.Gameplay.Reactions
 
         private IEnumerator Transition()
         {
-            // Finish the explicitly started reveal before replacing its temporary materials.
-            yield return new WaitUntil(() => bouquet.GetComponent<ObjectReveal>() == null);
             yield return new WaitForSeconds(.6f);
             foreach (var renderer in GetComponentsInChildren<Renderer>(true))
             {
@@ -48,7 +47,8 @@ namespace Memories.Gameplay.Reactions
                 }
                 renderer.sharedMaterials = replacement;
             }
-            ObjectReveal.Play(cinemaLily, dissolveShader, duration, 0);
+            if (cinemaSequence != null) cinemaSequence.RevealCinema();
+            else ObjectReveal.Play(cinemaLily, dissolveShader, duration, 0);
             for (float elapsed = 0; elapsed < duration; elapsed += Time.deltaTime)
             {
                 foreach (var material in temporary)
@@ -80,7 +80,7 @@ namespace Memories.Gameplay.Reactions
             foreach (var renderer in GetComponentsInChildren<Renderer>(true)) renderer.enabled = false;
             foreach (var collider in GetComponentsInChildren<Collider>(true)) collider.enabled = false;
             bouquet.SetActive(false);
-            cinemaLily.SetActive(true);
+            if (cinemaSequence == null) cinemaLily.SetActive(true);
             GetComponent<ReactionInteractable>().SetInteractionEnabled(false);
         }
 

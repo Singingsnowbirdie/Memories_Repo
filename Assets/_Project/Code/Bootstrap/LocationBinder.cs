@@ -105,6 +105,9 @@ namespace Memories.Bootstrap
                     visibility.Restore(scope.Container.Resolve<CustomVariableStore>());
             if (testerCheckpoint.HasValue) checkpointCatalog.ApplyScene(testerCheckpoint.Value, scene);
             foreach (var root in scene.GetRootGameObjects())
+                foreach (var cinema in root.GetComponentsInChildren<ParkCinemaSequence>(true))
+                    cinema.Bind(scope.Container.Resolve<QuestInventory>());
+            foreach (var root in scene.GetRootGameObjects())
                 foreach (var reaction in root.GetComponentsInChildren<GarageOpenHoodFatherReaction>(true))
                     reaction.Restore(scope.Container.Resolve<CustomVariableStore>(),
                         scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
