@@ -20,17 +20,20 @@ namespace Memories.Editor
             var root = new GameObject("Запуск открытой локации");
             root.SetActive(false);
             SceneManager.MoveGameObjectToScene(root, runtimeScene);
-            if (path == TestLocationLauncher.HighwayPath || path == TestLocationLauncher.HousePath ||
-                path == AppLifetimeScope.DefaultLocationPath)
+            if (path == TestLocationLauncher.HousePath)
             {
                 var launcher = root.AddComponent<TestLocationLauncher>();
-                launcher.SelectedLocation = path == TestLocationLauncher.HousePath ? TestLocationLauncher.Location.House :
-                    path == TestLocationLauncher.HighwayPath ? TestLocationLauncher.Location.Highway :
-                    TestLocationLauncher.Location.Highway;
+                launcher.SelectedLocation = TestLocationLauncher.Location.House;
             }
             var app = root.AddComponent<AppLifetimeScope>();
             var settings = new SerializedObject(app);
             settings.FindProperty("initialLocationPath").stringValue = path;
+            if (path == TestLocationLauncher.HighwayPath)
+            {
+                var additionalScenes = settings.FindProperty("additionalLocationScenes");
+                additionalScenes.arraySize = 1;
+                additionalScenes.GetArrayElementAtIndex(0).stringValue = TestLocationLauncher.HousePath;
+            }
             settings.ApplyModifiedPropertiesWithoutUndo();
             app.UseOpenLocationForEditorPlay = true;
             root.SetActive(true);

@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Memories.Gameplay.Reactions
@@ -29,6 +31,7 @@ namespace Memories.Gameplay.Reactions
         private Vector3 originalCameraPosition;
         private Quaternion originalCameraRotation;
         private bool previousCameraControl;
+        private CancellationTokenSource revealCancellation;
 
         public static void ResetProgress()
         {
@@ -78,9 +81,29 @@ namespace Memories.Gameplay.Reactions
             StartCoroutine(Reveal());
         }
 
+        public override async UniTask ExecuteAsync(CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            Initialize(false);
+            if (revealed) return;
+            revealed = true;
+            using var lifetime = CancellationTokenSource.CreateLinkedTokenSource(
+                cancellationToken, this.GetCancellationTokenOnDestroy());
+            revealCancellation = lifetime;
+            try { await Reveal().ToUniTask(cancellationToken: lifetime.Token); }
+            catch
+            {
+                RestoreCamera();
+                gameplayState?.ReleaseControls(this);
+                throw;
+            }
+            finally { revealCancellation = null; }
+        }
+
         private IEnumerator Reveal()
         {
             gameplayState?.BlockControls(this);
+            bool returningCamera = false;
             try
             {
                 IEnumerator cameraMovement = null;
@@ -109,6 +132,20 @@ namespace Memories.Gameplay.Reactions
                     yield return null;
                 }
                 photoMaterial.mainTexture = photo;
+                // Continue the graph as soon as the photo is visible; return the camera in parallel.
+                StartCoroutine(ReturnCamera());
+                returningCamera = true;
+            }
+            finally
+            {
+                if (!returningCamera) { RestoreCamera(); gameplayState?.ReleaseControls(this); }
+            }
+        }
+
+        private IEnumerator ReturnCamera()
+        {
+            try
+            {
                 if (focusedCamera != null) yield return MoveCamera(originalCameraPosition, originalCameraRotation);
             }
             finally { RestoreCamera(); gameplayState?.ReleaseControls(this); }
@@ -139,6 +176,7 @@ namespace Memories.Gameplay.Reactions
 
         private void OnDisable()
         {
+            revealCancellation?.Cancel();
             StopAllCoroutines();
             RestoreCamera();
             gameplayState?.ReleaseControls(this);

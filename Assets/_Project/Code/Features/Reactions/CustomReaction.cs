@@ -1,10 +1,18 @@
 using UnityEngine;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 
 namespace Memories.Gameplay.Reactions
 {
     public abstract class CustomReaction : MonoBehaviour
     {
         public abstract void Execute();
+        public virtual UniTask ExecuteAsync(CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            Execute();
+            return UniTask.CompletedTask;
+        }
         // При замене сцены воспроизведение остаётся у постоянного презентера воспоминаний.
         public virtual bool TransfersMemoryOwnership => false;
 
