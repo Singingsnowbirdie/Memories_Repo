@@ -44,6 +44,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   kind: 9
+  pauseDuration: 1
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 0}
   memoryGraph: {fileID: 0}
@@ -51,6 +52,7 @@ MonoBehaviour:
   firstCompletionText: {fileID: 0}
   memoryStartedReactionKey: 
   locationScenePath: 
+  arrivalMarker: 
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -117,6 +119,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   kind: 1
+  pauseDuration: 1
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 0}
   memoryGraph: {fileID: 11400000, guid: c655615ef6777144fb1e96f0938e6875, type: 2}
@@ -124,6 +127,7 @@ MonoBehaviour:
   firstCompletionText: {fileID: 0}
   memoryStartedReactionKey: 
   locationScenePath: 
+  arrivalMarker: 
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -190,6 +194,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   kind: 9
+  pauseDuration: 1
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 0}
   memoryGraph: {fileID: 0}
@@ -197,6 +202,7 @@ MonoBehaviour:
   firstCompletionText: {fileID: 0}
   memoryStartedReactionKey: 
   locationScenePath: 
+  arrivalMarker: 
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -242,10 +248,10 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: next
-        node: {fileID: -3069901904906445139}
+        node: {fileID: -4916842061129799310}
         reroutePoints: []
       - fieldName: next
-        node: {fileID: -4916842061129799310}
+        node: {fileID: -3069901904906445139}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -358,6 +364,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   kind: 7
+  pauseDuration: 1
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 0}
   memoryGraph: {fileID: 0}
@@ -365,6 +372,7 @@ MonoBehaviour:
   firstCompletionText: {fileID: 0}
   memoryStartedReactionKey: 
   locationScenePath: 
+  arrivalMarker: 
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -493,6 +501,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   kind: 4
+  pauseDuration: 1
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 0}
   memoryGraph: {fileID: 0}
@@ -500,6 +509,7 @@ MonoBehaviour:
   firstCompletionText: {fileID: 0}
   memoryStartedReactionKey: 
   locationScenePath: 
+  arrivalMarker: 
   variableBank: {fileID: 11400000, guid: e60a1bfed5e93444eb00e33b43faeeac, type: 2}
   variableId: 533df6a400b34918b24179ce48127816
   variableValue: 1
@@ -546,16 +556,16 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: ifAbsent
-        node: {fileID: 11474031818839803}
+        node: {fileID: -5205264147753124664}
         reroutePoints: []
       - fieldName: ifAbsent
-        node: {fileID: 8332236009619900756}
+        node: {fileID: 11474031818839803}
         reroutePoints: []
       - fieldName: ifAbsent
         node: {fileID: 113250498353720428}
         reroutePoints: []
       - fieldName: ifAbsent
-        node: {fileID: -5205264147753124664}
+        node: {fileID: 8332236009619900756}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -575,6 +585,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   kind: 0
+  pauseDuration: 1
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 11400000, guid: 393fcc2b778ed8c4499cb2485bcaa519, type: 2}
   memoryGraph: {fileID: 0}
@@ -582,6 +593,7 @@ MonoBehaviour:
   firstCompletionText: {fileID: 0}
   memoryStartedReactionKey: 
   locationScenePath: 
+  arrivalMarker: 
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -638,7 +650,6 @@ MonoBehaviour:
   - {fileID: -4916842061129799310}
   - {fileID: 990440001}
   - {fileID: 1546118060520860629}
-  - {fileID: 5898487442595502553}
   - {fileID: 3009316781784763082}
   objectKeys:
   - coach
@@ -689,6 +700,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   kind: 5
+  pauseDuration: 1
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 0}
   memoryGraph: {fileID: 0}
@@ -696,6 +708,7 @@ MonoBehaviour:
   firstCompletionText: {fileID: 0}
   memoryStartedReactionKey: 
   locationScenePath: 
+  arrivalMarker: 
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -886,6 +899,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   kind: 3
+  pauseDuration: 1
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 0}
   memoryGraph: {fileID: 0}
@@ -893,6 +907,7 @@ MonoBehaviour:
   firstCompletionText: {fileID: 0}
   memoryStartedReactionKey: 
   locationScenePath: 
+  arrivalMarker: 
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -989,6 +1004,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   kind: 10
+  pauseDuration: 1
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 0}
   memoryGraph: {fileID: 0}
@@ -996,6 +1012,7 @@ MonoBehaviour:
   firstCompletionText: {fileID: 0}
   memoryStartedReactionKey: 
   locationScenePath: 
+  arrivalMarker: 
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -1062,6 +1079,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   kind: 4
+  pauseDuration: 1
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 0}
   memoryGraph: {fileID: 0}
@@ -1069,6 +1087,7 @@ MonoBehaviour:
   firstCompletionText: {fileID: 0}
   memoryStartedReactionKey: 
   locationScenePath: 
+  arrivalMarker: 
   variableBank: {fileID: 11400000, guid: e60a1bfed5e93444eb00e33b43faeeac, type: 2}
   variableId: school_supplies_returned
   variableValue: 1
@@ -1113,7 +1132,10 @@ MonoBehaviour:
     - _fieldName: previous
       _node: {fileID: 3557661679369701482}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections: []
+      connections:
+      - fieldName: next
+        node: {fileID: 6634578378158881415}
+        reroutePoints: []
       _direction: 0
       _connectionType: 0
       _typeConstraint: 0
@@ -1132,6 +1154,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   kind: 9
+  pauseDuration: 1
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 0}
   memoryGraph: {fileID: 0}
@@ -1139,6 +1162,7 @@ MonoBehaviour:
   firstCompletionText: {fileID: 0}
   memoryStartedReactionKey: 
   locationScenePath: 
+  arrivalMarker: 
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -1205,6 +1229,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   kind: 1
+  pauseDuration: 1
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 0}
   memoryGraph: {fileID: 11400000, guid: d29134a9faf34096b67899a72ca3607a, type: 2}
@@ -1212,6 +1237,7 @@ MonoBehaviour:
   firstCompletionText: {fileID: 0}
   memoryStartedReactionKey: reveal_phone
   locationScenePath: 
+  arrivalMarker: 
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -1265,36 +1291,6 @@ MonoBehaviour:
       _dynamic: 0
   runOnce: 0
   next: {fileID: 0}
---- !u!114 &5898487442595502553
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ddcb8ac0ad6e48ccb386abec87533848, type: 3}
-  m_Name: "\u041A\u043E\u043D\u0435\u0446"
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionEndNode
-  graph: {fileID: 11400000}
-  position: {x: 2680, y: 104}
-  ports:
-    keys:
-    - previous
-    values:
-    - _fieldName: previous
-      _node: {fileID: 5898487442595502553}
-      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: next
-        node: {fileID: 6634578378158881415}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  previous: {fileID: 0}
 --- !u!114 &6634578378158881415
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1330,7 +1326,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: previous
-        node: {fileID: 5898487442595502553}
+        node: {fileID: 3557661679369701482}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -1339,6 +1335,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   kind: 3
+  pauseDuration: 1
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 0}
   memoryGraph: {fileID: 0}
@@ -1346,6 +1343,7 @@ MonoBehaviour:
   firstCompletionText: {fileID: 0}
   memoryStartedReactionKey: 
   locationScenePath: 
+  arrivalMarker: 
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -1412,6 +1410,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   kind: 9
+  pauseDuration: 1
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 0}
   memoryGraph: {fileID: 0}
@@ -1419,6 +1418,7 @@ MonoBehaviour:
   firstCompletionText: {fileID: 0}
   memoryStartedReactionKey: 
   locationScenePath: 
+  arrivalMarker: 
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1

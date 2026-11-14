@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: "\u041D\u0430\u0447\u0430\u043B\u043E"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionStartNode
   graph: {fileID: 11400000}
-  position: {x: 0, y: 0}
+  position: {x: -792, y: 8}
   ports:
     keys:
     - next
@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
   graph: {fileID: 11400000}
-  position: {x: 380, y: 0}
+  position: {x: -408, y: 8}
   ports:
     keys:
     - previous
@@ -75,6 +75,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   kind: 6
+  pauseDuration: 1
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 0}
   memoryGraph: {fileID: 0}
@@ -82,6 +83,7 @@ MonoBehaviour:
   firstCompletionText: {fileID: 0}
   memoryStartedReactionKey: 
   locationScenePath: 
+  arrivalMarker: 
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -148,6 +150,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   kind: 10
+  pauseDuration: 1
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 0}
   memoryGraph: {fileID: 0}
@@ -155,6 +158,7 @@ MonoBehaviour:
   firstCompletionText: {fileID: 0}
   memoryStartedReactionKey: 
   locationScenePath: 
+  arrivalMarker: 
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -190,7 +194,7 @@ MonoBehaviour:
   m_Name: "\u041A\u043E\u043D\u0435\u0446"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionEndNode
   graph: {fileID: 11400000}
-  position: {x: 2240, y: 0}
+  position: {x: 2280, y: -184}
   ports:
     keys:
     - previous
@@ -199,9 +203,6 @@ MonoBehaviour:
       _node: {fileID: 4}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
-      - fieldName: ifAbsent
-        node: {fileID: 5}
-        reroutePoints: []
       - fieldName: ifPresent
         node: {fileID: 6}
         reroutePoints: []
@@ -260,7 +261,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: previous
-        node: {fileID: 4}
+        node: {fileID: 7711159573534889554}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -288,7 +289,7 @@ MonoBehaviour:
   m_Name: "\u0423\u0441\u043B\u043E\u0432\u0438\u0435"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionConditionNode
   graph: {fileID: 11400000}
-  position: {x: 1500, y: 0}
+  position: {x: 1480, y: -296}
   ports:
     keys:
     - previous
@@ -350,7 +351,7 @@ MonoBehaviour:
   m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
   graph: {fileID: 11400000}
-  position: {x: 1860, y: 180}
+  position: {x: 1880, y: -72}
   ports:
     keys:
     - previous
@@ -381,6 +382,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   kind: 0
+  pauseDuration: 1
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 11400000, guid: 3effecd701b34679bd35efec950268b8, type: 2}
   memoryGraph: {fileID: 0}
@@ -388,6 +390,7 @@ MonoBehaviour:
   firstCompletionText: {fileID: 0}
   memoryStartedReactionKey: 
   locationScenePath: 
+  arrivalMarker: 
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -432,6 +435,7 @@ MonoBehaviour:
   - {fileID: 7}
   - {fileID: 1347750226817865119}
   - {fileID: 4953361731938333845}
+  - {fileID: 7711159573534889554}
   objectKeys:
   - "\u0421\u0430\u043C\u043E\u043B\u0451\u0442\u0438\u043A"
   - "\u041E\u0441\u0442\u0430\u043D\u043E\u0432\u0438\u0442\u044C \u043F\u0440\u043E\u043F\u0435\u043B\u043B\u0435\u0440"
@@ -448,7 +452,7 @@ MonoBehaviour:
   m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
   graph: {fileID: 11400000}
-  position: {x: 760, y: -220}
+  position: {x: 360, y: 8}
   ports:
     keys:
     - previous
@@ -479,6 +483,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   kind: 3
+  pauseDuration: 1
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 0}
   memoryGraph: {fileID: 0}
@@ -486,6 +491,7 @@ MonoBehaviour:
   firstCompletionText: {fileID: 0}
   memoryStartedReactionKey: 
   locationScenePath: 
+  arrivalMarker: 
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -521,7 +527,7 @@ MonoBehaviour:
   m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
   graph: {fileID: 11400000}
-  position: {x: 380, y: 240}
+  position: {x: -8, y: 8}
   ports:
     keys:
     - previous
@@ -552,6 +558,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   kind: 4
+  pauseDuration: 1
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 0}
   memoryGraph: {fileID: 0}
@@ -559,6 +566,7 @@ MonoBehaviour:
   firstCompletionText: {fileID: 0}
   memoryStartedReactionKey: 
   locationScenePath: 
+  arrivalMarker: 
   variableBank: {fileID: 11400000, guid: 1e3cd4cc4f3341b080b5d2fd69506a3f, type: 2}
   variableId: remote_battery_first_found
   variableValue: 1
@@ -581,3 +589,33 @@ MonoBehaviour:
   hintTimeout: 60
   repeatHint: 1
   playTextInBackground: 0
+--- !u!114 &7711159573534889554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddcb8ac0ad6e48ccb386abec87533848, type: 3}
+  m_Name: "\u041A\u043E\u043D\u0435\u0446"
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionEndNode
+  graph: {fileID: 11400000}
+  position: {x: 1496, y: 232}
+  ports:
+    keys:
+    - previous
+    values:
+    - _fieldName: previous
+      _node: {fileID: 7711159573534889554}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: ifAbsent
+        node: {fileID: 5}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  previous: {fileID: 0}

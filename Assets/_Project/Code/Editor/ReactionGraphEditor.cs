@@ -18,6 +18,7 @@ namespace Memories.Editor
             if (type == typeof(ReactionNode)) return "Реакция";
             if (type == typeof(ReactionConditionNode)) return "Условие";
             if (type == typeof(ReactionRandomNode)) return "Случайный выбор";
+            if (type == typeof(ReactionHubNode)) return "Хаб";
             if (type == typeof(ReactionEndNode)) return "Конец";
             return null;
         }
@@ -42,6 +43,42 @@ namespace Memories.Editor
             AssetDatabase.SaveAssets();
             Selection.activeObject = graph;
             NodeEditorWindow.Open(graph);
+        }
+    }
+
+    [CustomNodeEditor(typeof(ReactionHubNode))]
+    public sealed class ReactionHubNodeEditor : NodeEditor
+    {
+        public override void OnHeaderGUI() => GUILayout.Label("Хаб", NodeEditorResources.styles.nodeHeader, GUILayout.Height(30));
+        public override void OnBodyGUI()
+        {
+            var hub = (ReactionHubNode)target;
+            NodeEditorGUILayout.PortField(new GUIContent("Вход"), hub.GetInputPort("previous"));
+            EditorGUILayout.HelpBox("Ветки запускаются одновременно. Соедините их с общей нодой: она выполнится один раз после завершения всех веток. Действия без ожидания не задерживают ветку.", MessageType.Info);
+            EditorGUILayout.Space(8);
+            for (int i = 0; i < hub.Branches.Count; i++)
+            {
+                EditorGUILayout.BeginHorizontal();
+                bool remove = GUILayout.Button("−", GUILayout.Width(24));
+                NodeEditorGUILayout.PortField(new GUIContent("Ветка " + (i + 1)), hub.GetOutputPort(hub.Branches[i]));
+                EditorGUILayout.EndHorizontal();
+                if (!remove) continue;
+                Undo.RecordObjects(hub.graph.nodes.Cast<UnityEngine.Object>().Append(hub.graph).ToArray(), "Удалить ветку хаба");
+                hub.RemoveBranch(i);
+                foreach (var node in hub.graph.nodes) EditorUtility.SetDirty(node);
+                EditorUtility.SetDirty(hub.graph);
+                NodeEditorWindow.RepaintAll();
+                break;
+            }
+            if (GUILayout.Button("Добавить ветку"))
+            {
+                Undo.RecordObject(hub, "Добавить ветку хаба");
+                hub.AddBranch();
+                EditorUtility.SetDirty(hub);
+                NodeEditorWindow.RepaintAll();
+            }
+            EditorGUILayout.Space(8);
+            if (!hub.Validate(out var error)) EditorGUILayout.HelpBox(error, MessageType.Warning);
         }
     }
 
@@ -112,12 +149,14 @@ namespace Memories.Editor
         {
             var names = new System.Collections.Generic.List<string>();
             var prefabNames = new System.Collections.Generic.List<string>();
+            bool ownerFound = false;
             void Collect(Component owner)
             {
                 using (var settings = new SerializedObject(owner))
                 {
                     var graphProperty = settings.FindProperty("graph") ?? settings.FindProperty("interactionGraph");
                     if (graphProperty?.objectReferenceValue != graph) return;
+                    ownerFound = true;
                     var bindings = settings.FindProperty("customReactions");
                     if (bindings == null) return;
                     var result = EditorUtility.IsPersistent(owner) ? prefabNames : names;
@@ -137,7 +176,7 @@ namespace Memories.Editor
             EditorGUILayout.LabelField("Кастомная реакция");
             string selected = key.stringValue;
             bool found = names.Contains(selected);
-            string label = found ? (string.IsNullOrEmpty(selected) ? "Основная реакция" : selected) : "Выберите реакцию";
+            string label = !string.IsNullOrEmpty(selected) ? selected : found ? "Основная реакция" : "Выберите реакцию";
             using (new EditorGUI.DisabledScope(names.Count == 0))
                 if (EditorGUILayout.DropdownButton(new GUIContent(label), FocusType.Keyboard))
                 {
@@ -158,10 +197,12 @@ namespace Memories.Editor
                     }
                     menu.ShowAsContext();
                 }
-            if (!found)
+            if (!ownerFound)
+                EditorGUILayout.HelpBox("Объект с этим графом не загружен. Откройте его сцену или префаб, чтобы проверить привязку и выбрать реакцию.", MessageType.Info);
+            else if (!found)
                 EditorGUILayout.HelpBox(names.Count == 0
-                    ? "Назначьте CustomReaction в инспекторе объекта с этим графом."
-                    : "Прежняя привязка отсутствует. Выберите назначенную реакцию.", MessageType.Warning);
+                    ? "У загруженного объекта с этим графом нет назначенных кастомных реакций."
+                    : "Сохранённая привязка не найдена у загруженных объектов. Выберите назначенную реакцию.", MessageType.Warning);
         }
 
         public override void OnHeaderGUI() => GUILayout.Label("Реакция", NodeEditorResources.styles.nodeHeader, GUILayout.Height(30));
@@ -183,7 +224,8 @@ namespace Memories.Editor
             EditorGUILayout.Space(8);
             if (kind.intValue == (int)ReactionKind.Pause)
             {
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("pauseDuration"), new GUIContent("Длительность, сек."));
+                EditorGUILayout.LabelField("Длительность, сек.");
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("pauseDuration"), GUIContent.none);
                 EditorGUILayout.HelpBox("Ожидание по игровому времени. После паузы граф продолжится; остановка графа отменяет ожидание.", MessageType.Info);
             }
             else if (kind.intValue == (int)ReactionKind.RunGraph)
@@ -197,8 +239,10 @@ namespace Memories.Editor
             {
                 EditorGUILayout.LabelField("Граф текста");
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("textGraph"), GUIContent.none);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("playTextInBackground"),
-                    new GUIContent("Не ждать окончания текста", "Граф продолжится сразу; текст не удерживает интерактивный объект."));
+                var playTextInBackground = serializedObject.FindProperty("playTextInBackground");
+                playTextInBackground.boolValue = EditorGUILayout.ToggleLeft(
+                    new GUIContent("Не ждать окончания текста", "Граф продолжится сразу; текст не удерживает интерактивный объект."),
+                    playTextInBackground.boolValue);
             }
             else if (kind.enumValueIndex == 1)
             {
@@ -210,6 +254,7 @@ namespace Memories.Editor
                 EditorGUILayout.Space(8);
                 EditorGUILayout.LabelField("Текст после первого просмотра");
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("firstCompletionText"), GUIContent.none);
+                EditorGUILayout.Space(8);
                 EditorGUILayout.LabelField("Реакция при начале воспоминания");
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("memoryStartedReactionKey"), GUIContent.none);
                 EditorGUILayout.Space(8);
@@ -219,14 +264,20 @@ namespace Memories.Editor
                 var path = serializedObject.FindProperty("locationScenePath");
                 var current = AssetDatabase.LoadAssetAtPath<SceneAsset>(path.stringValue);
                 EditorGUI.BeginChangeCheck();
-                var scene = (SceneAsset)EditorGUILayout.ObjectField("Сцена сегмента", current, typeof(SceneAsset), false);
+                EditorGUILayout.LabelField("Сцена сегмента");
+                var scene = (SceneAsset)EditorGUILayout.ObjectField(current, typeof(SceneAsset), false);
                 if (EditorGUI.EndChangeCheck()) path.stringValue = scene == null ? "" : AssetDatabase.GetAssetPath(scene);
+                EditorGUILayout.Space(8);
                 var key = serializedObject.FindProperty("objectKey");
                 var names = ((ReactionGraph)target.graph).ObjectKeys.ToArray();
+                EditorGUILayout.LabelField("Точка соединения");
                 EditorGUI.BeginChangeCheck();
-                int chosen = EditorGUILayout.Popup("Точка соединения", System.Array.IndexOf(names, key.stringValue), names);
+                int chosen = EditorGUILayout.Popup(System.Array.IndexOf(names, key.stringValue), names);
                 if (EditorGUI.EndChangeCheck() && chosen >= 0) key.stringValue = names[chosen];
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("arrivalMarker"), new GUIContent("Входной маркер"));
+                EditorGUILayout.Space(8);
+                EditorGUILayout.LabelField("Входной маркер");
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("arrivalMarker"), GUIContent.none);
+                EditorGUILayout.Space(8);
                 EditorGUILayout.HelpBox("Подгружает сцену без переноса игрока. Следующее действие выполняется после готовности сегмента.", MessageType.Info);
             }
             else if (kind.enumValueIndex == 2)
@@ -305,15 +356,24 @@ namespace Memories.Editor
                 EditorGUILayout.Space(8);
                 if (kind.intValue == (int)ReactionKind.ChangeLighting)
                 {
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("lightingBrightness"), new GUIContent("Яркость (1 — исходная)"));
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("lightingDuration"), new GUIContent("Переход, сек."));
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("waitForLighting"), new GUIContent("Ждать завершения"));
+                    EditorGUILayout.LabelField("Яркость (1 — исходная)");
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("lightingBrightness"), GUIContent.none);
+                    EditorGUILayout.Space(8);
+                    EditorGUILayout.LabelField("Переход, сек.");
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("lightingDuration"), GUIContent.none);
+                    EditorGUILayout.Space(8);
+                    var waitForLighting = serializedObject.FindProperty("waitForLighting");
+                    waitForLighting.boolValue = EditorGUILayout.ToggleLeft("Ждать завершения", waitForLighting.boolValue);
                     EditorGUILayout.HelpBox("Объект должен иметь LightingGroup. 0 — погасить, 1 — исходная яркость. Без ожидания следующая нода запускается сразу. Перегоревшие лампы не включаются.", MessageType.Info);
                 }
                 else if (lookAt)
                 {
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("lookDuration"), new GUIContent("Длительность, сек."));
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("lookMaxSpeed"), new GUIContent("Макс. скорость, °/сек."));
+                    EditorGUILayout.LabelField("Длительность, сек.");
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("lookDuration"), GUIContent.none);
+                    EditorGUILayout.Space(8);
+                    EditorGUILayout.LabelField("Макс. скорость, °/сек.");
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("lookMaxSpeed"), GUIContent.none);
+                    EditorGUILayout.Space(8);
                     EditorGUILayout.HelpBox("Поворачивает взгляд к позиции объекта без перемещения игрока. Ограничение скорости может увеличить длительность. Управление заблокировано до конца поворота; затем выполняется следующая нода.", MessageType.Info);
                 }
                 else

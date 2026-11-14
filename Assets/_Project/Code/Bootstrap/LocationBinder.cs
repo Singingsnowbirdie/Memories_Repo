@@ -53,8 +53,13 @@ namespace Memories.Bootstrap
                         () => transitions.EnterGarageAsync(scene), isCurrentLocation);
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var entrance in root.GetComponentsInChildren<BackyardEntranceReaction>(true))
+                {
                     entrance.Initialize(scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>(),
                         () => transitions.EnterConnectedSceneAsync(scene), isCurrentLocation);
+                    if (isCurrentLocation)
+                        foreach (var group in entrance.GetComponentsInChildren<LightingGroup>(true))
+                            group.RestoreBrightness(1);
+                }
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var attachment in root.GetComponentsInChildren<BackyardGarageAttachment>(true))
                     attachment.Initialize(scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>(), transitions.LoadBackyardGarageAsync);

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
   graph: {fileID: 11400000}
-  position: {x: 0, y: -260}
+  position: {x: 24, y: -104}
   ports:
     keys:
     - previous
@@ -44,6 +44,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   kind: 8
+  pauseDuration: 1
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 0}
   memoryGraph: {fileID: 0}
@@ -51,6 +52,7 @@ MonoBehaviour:
   firstCompletionText: {fileID: 0}
   memoryStartedReactionKey: 
   locationScenePath: 
+  arrivalMarker: 
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -117,7 +119,7 @@ MonoBehaviour:
   m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
   graph: {fileID: 11400000}
-  position: {x: 328, y: -56}
+  position: {x: 24, y: 232}
   ports:
     keys:
     - previous
@@ -148,6 +150,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   kind: 0
+  pauseDuration: 1
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 11400000, guid: a4c2f3e448dd403689b6e78827598fdb, type: 2}
   memoryGraph: {fileID: 0}
@@ -155,6 +158,7 @@ MonoBehaviour:
   firstCompletionText: {fileID: 0}
   memoryStartedReactionKey: 
   locationScenePath: 
+  arrivalMarker: 
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -190,7 +194,7 @@ MonoBehaviour:
   m_Name: "\u041A\u043E\u043D\u0435\u0446"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionEndNode
   graph: {fileID: 11400000}
-  position: {x: 792, y: 8}
+  position: {x: 408, y: 232}
   ports:
     keys:
     - previous
@@ -240,7 +244,7 @@ MonoBehaviour:
   m_Name: "\u041A\u043E\u043D\u0435\u0446"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionEndNode
   graph: {fileID: 11400000}
-  position: {x: 360, y: -260}
+  position: {x: 392, y: -104}
   ports:
     keys:
     - previous

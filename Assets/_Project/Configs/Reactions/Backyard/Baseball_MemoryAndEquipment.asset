@@ -44,6 +44,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   kind: 5
+  pauseDuration: 1
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 0}
   memoryGraph: {fileID: 0}
@@ -51,6 +52,7 @@ MonoBehaviour:
   firstCompletionText: {fileID: 0}
   memoryStartedReactionKey: 
   locationScenePath: 
+  arrivalMarker: 
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -86,7 +88,7 @@ MonoBehaviour:
   m_Name: "\u041A\u043E\u043D\u0435\u0446"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionEndNode
   graph: {fileID: 11400000}
-  position: {x: 3650, y: 0}
+  position: {x: 1064, y: 440}
   ports:
     keys:
     - previous
@@ -147,6 +149,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   kind: 4
+  pauseDuration: 1
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 0}
   memoryGraph: {fileID: 0}
@@ -154,6 +157,7 @@ MonoBehaviour:
   firstCompletionText: {fileID: 0}
   memoryStartedReactionKey: 
   locationScenePath: 
+  arrivalMarker: 
   variableBank: {fileID: 11400000, guid: 83af6fcb806c087438f339fcbcc76145, type: 2}
   variableId: ben_home_visible
   variableValue: 0
@@ -251,6 +255,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   kind: 5
+  pauseDuration: 1
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 0}
   memoryGraph: {fileID: 0}
@@ -258,6 +263,7 @@ MonoBehaviour:
   firstCompletionText: {fileID: 0}
   memoryStartedReactionKey: 
   locationScenePath: 
+  arrivalMarker: 
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -324,6 +330,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   kind: 4
+  pauseDuration: 1
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 0}
   memoryGraph: {fileID: 0}
@@ -331,6 +338,7 @@ MonoBehaviour:
   firstCompletionText: {fileID: 0}
   memoryStartedReactionKey: 
   locationScenePath: 
+  arrivalMarker: 
   variableBank: {fileID: 11400000, guid: 83af6fcb806c087438f339fcbcc76145, type: 2}
   variableId: baseball_cap_visible
   variableValue: 1
@@ -397,6 +405,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   kind: 4
+  pauseDuration: 1
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 0}
   memoryGraph: {fileID: 0}
@@ -404,6 +413,7 @@ MonoBehaviour:
   firstCompletionText: {fileID: 0}
   memoryStartedReactionKey: 
   locationScenePath: 
+  arrivalMarker: 
   variableBank: {fileID: 11400000, guid: 83af6fcb806c087438f339fcbcc76145, type: 2}
   variableId: baseball_ball_visible
   variableValue: 1
@@ -470,6 +480,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   kind: 4
+  pauseDuration: 1
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 0}
   memoryGraph: {fileID: 0}
@@ -477,6 +488,7 @@ MonoBehaviour:
   firstCompletionText: {fileID: 0}
   memoryStartedReactionKey: 
   locationScenePath: 
+  arrivalMarker: 
   variableBank: {fileID: 11400000, guid: 83af6fcb806c087438f339fcbcc76145, type: 2}
   variableId: baseball_equipment_revealed
   variableValue: 1
@@ -543,6 +555,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   kind: 4
+  pauseDuration: 1
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 0}
   memoryGraph: {fileID: 0}
@@ -550,6 +563,7 @@ MonoBehaviour:
   firstCompletionText: {fileID: 0}
   memoryStartedReactionKey: 
   locationScenePath: 
+  arrivalMarker: 
   variableBank: {fileID: 11400000, guid: 83af6fcb806c087438f339fcbcc76145, type: 2}
   variableId: baseball_bat_visible
   variableValue: 1
@@ -616,6 +630,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   kind: 5
+  pauseDuration: 1
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 0}
   memoryGraph: {fileID: 0}
@@ -623,6 +638,7 @@ MonoBehaviour:
   firstCompletionText: {fileID: 0}
   memoryStartedReactionKey: 
   locationScenePath: 
+  arrivalMarker: 
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -723,6 +739,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   kind: 4
+  pauseDuration: 1
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 0}
   memoryGraph: {fileID: 0}
@@ -730,6 +747,7 @@ MonoBehaviour:
   firstCompletionText: {fileID: 0}
   memoryStartedReactionKey: 
   locationScenePath: 
+  arrivalMarker: 
   variableBank: {fileID: 11400000, guid: 83af6fcb806c087438f339fcbcc76145, type: 2}
   variableId: optional_interactives_memory_started
   variableValue: 1
@@ -765,7 +783,7 @@ MonoBehaviour:
   m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
   graph: {fileID: 11400000}
-  position: {x: 320, y: 0}
+  position: {x: 312, y: 328}
   ports:
     keys:
     - previous
@@ -796,6 +814,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   kind: 1
+  pauseDuration: 1
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 0}
   memoryGraph: {fileID: 11400000, guid: d8e437b1a51edc546a514a9caf69a8e5, type: 2}
@@ -803,6 +822,7 @@ MonoBehaviour:
   firstCompletionText: {fileID: 0}
   memoryStartedReactionKey: 
   locationScenePath: 
+  arrivalMarker: 
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -869,6 +889,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   kind: 5
+  pauseDuration: 1
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 0}
   memoryGraph: {fileID: 0}
@@ -876,6 +897,7 @@ MonoBehaviour:
   firstCompletionText: {fileID: 0}
   memoryStartedReactionKey: 
   locationScenePath: 
+  arrivalMarker: 
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -911,7 +933,7 @@ MonoBehaviour:
   m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
   graph: {fileID: 11400000}
-  position: {x: 690, y: 0}
+  position: {x: 696, y: 376}
   ports:
     keys:
     - previous
@@ -942,6 +964,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   kind: 0
+  pauseDuration: 1
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 11400000, guid: ecfe5ef7619f45142b0d967ba42ac0c4, type: 2}
   memoryGraph: {fileID: 0}
@@ -949,6 +972,7 @@ MonoBehaviour:
   firstCompletionText: {fileID: 0}
   memoryStartedReactionKey: 
   locationScenePath: 
+  arrivalMarker: 
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -1015,6 +1039,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   kind: 5
+  pauseDuration: 1
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 0}
   memoryGraph: {fileID: 0}
@@ -1022,6 +1047,7 @@ MonoBehaviour:
   firstCompletionText: {fileID: 0}
   memoryStartedReactionKey: 
   locationScenePath: 
+  arrivalMarker: 
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1

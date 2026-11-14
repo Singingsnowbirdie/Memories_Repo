@@ -5,19 +5,10 @@ using UnityEngine;
 
 namespace Memories.Gameplay.Reactions
 {
-    /// <summary>
-    /// Запускается явно реакцией выхода из дома после пересечения дверного проёма.
-    /// После отдельной ноды поворота взгляда забирает управление,
-    /// заменяет дом за спиной и зажигает фонари парами. Затем возвращает управление.
-    /// При загрузке непосредственно во двор восстанавливает уже включённые фонари без вступления.
-    /// </summary>
+    /// <summary>Заменяет дом после поворота взгляда и удерживает управление до завершения графа входа.</summary>
     public sealed class BackyardEntranceReaction : CustomReaction
     {
         [SerializeField] private Triggers.SceneTrigger entranceTrigger;
-        [SerializeField] private Light[] lights;
-        [SerializeField] private Renderer[] lanterns;
-        [SerializeField] private Material litGlass;
-        [SerializeField, Min(.1f)] private float pairInterval = .45f;
         private GameplayModeState state;
         private Func<UniTask> replaceHouse;
         private bool completed;
@@ -29,11 +20,7 @@ namespace Memories.Gameplay.Reactions
         {
             state = mode; replaceHouse = replacement;
             entranceTrigger.enabled = !alreadyEntered;
-            if (alreadyEntered)
-            {
-                for (int i = 0; i < lights.Length; i++) LightLantern(i);
-                completed = true;
-            }
+            completed = alreadyEntered;
         }
 
         public override void Execute()
@@ -51,13 +38,9 @@ namespace Memories.Gameplay.Reactions
             {
                 // Игрок уже смотрит на забор: только теперь можно заменить дом.
                 var replacement = replaceHouse();
-                for (int i = 0; i < lights.Length; i += 2)
-                {
-                    LightLantern(i);
-                    if (i + 1 < lights.Length) LightLantern(i + 1);
-                    await UniTask.Delay(TimeSpan.FromSeconds(pairInterval), cancellationToken: cancellation);
-                }
                 await replacement;
+                await UniTask.WaitUntil(() => entranceTrigger == null || !entranceTrigger.IsRunning,
+                    cancellationToken: cancellation);
                 completed = true;
             }
             finally
@@ -67,12 +50,5 @@ namespace Memories.Gameplay.Reactions
             }
         }
 
-        private void LightLantern(int index)
-        {
-            lights[index].enabled = true;
-            var materials = lanterns[index].sharedMaterials;
-            materials[1] = litGlass;
-            lanterns[index].sharedMaterials = materials;
-        }
     }
 }

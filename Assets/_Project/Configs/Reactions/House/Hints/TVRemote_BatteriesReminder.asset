@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Name: "\u041A\u043E\u043D\u0435\u0446"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionEndNode
   graph: {fileID: 11400000}
-  position: {x: 1440, y: 0}
+  position: {x: 1512, y: 120}
   ports:
     keys:
     - previous
@@ -77,7 +77,7 @@ MonoBehaviour:
   m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
   graph: {fileID: 11400000}
-  position: {x: 1040, y: 200}
+  position: {x: 1032, y: 216}
   ports:
     keys:
     - previous
@@ -111,6 +111,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   kind: 0
+  pauseDuration: 1
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 11400000, guid: 17f2cacb5d57486fbff3715be3484086, type: 2}
   memoryGraph: {fileID: 0}
@@ -118,6 +119,7 @@ MonoBehaviour:
   firstCompletionText: {fileID: 0}
   memoryStartedReactionKey: 
   locationScenePath: 
+  arrivalMarker: 
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -308,6 +310,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   kind: 8
+  pauseDuration: 1
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 0}
   memoryGraph: {fileID: 0}
@@ -315,6 +318,7 @@ MonoBehaviour:
   firstCompletionText: {fileID: 0}
   memoryStartedReactionKey: 
   locationScenePath: 
+  arrivalMarker: 
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
