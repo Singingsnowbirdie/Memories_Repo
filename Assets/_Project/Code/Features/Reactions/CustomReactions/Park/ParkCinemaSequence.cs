@@ -18,6 +18,10 @@ namespace Memories.Gameplay.Reactions
         [SerializeField] private Light[] lights = Array.Empty<Light>();
         [SerializeField] private float[] intensities = Array.Empty<float>();
         [SerializeField] private float fadeDuration = 4f;
+        [SerializeField] private Light[] benchIslandLights = Array.Empty<Light>();
+        [SerializeField] private float[] benchIslandIntensities = Array.Empty<float>();
+        [SerializeField] private Renderer[] benchIslandGlowingRenderers = Array.Empty<Renderer>();
+        private readonly List<(Renderer renderer, int slot, Color emission, Color color)> benchGlow = new();
         private int stage; // 0: dark, 1: Lily arrived, 2: cashier available, 3: bought, 4: finished.
         private readonly List<(Renderer renderer, int slot, Color emission, Color color)> glow = new();
         private readonly List<(Renderer renderer, Material[] materials)> originals = new();
@@ -43,6 +47,18 @@ namespace Memories.Gameplay.Reactions
                 }
             }
             SetLight(0);
+            foreach (var renderer in benchIslandGlowingRenderers)
+            {
+                if (!renderer) continue;
+                var materials = renderer.sharedMaterials;
+                for (int i = 0; i < materials.Length; i++)
+                {
+                    var m = materials[i];
+                    if (!m || !m.IsKeywordEnabled("_EMISSION") || !m.HasProperty("_EmissionColor") || !m.HasProperty("_BaseColor")) continue;
+                    var emission = m.GetColor("_EmissionColor");
+                    if (emission.maxColorComponent > 0) benchGlow.Add((renderer, i, emission, m.GetColor("_BaseColor")));
+                }
+            }
         }
 
         // Called once after all object states and tester checkpoints have been restored.
@@ -51,11 +67,13 @@ namespace Memories.Gameplay.Reactions
             if (stage == 0 && bouquetReaction.Completed) stage = 1; // Older saves.
             if (inventory.IsConsumed(tickets.Id)) stage = 4;
             else if (inventory.Contains(tickets.Id)) stage = 3;
+            bouquetReaction.SetApproachLighting(stage == 0 && !bouquetReaction.Completed);
             lily.SetActive(stage > 0 && stage < 4);
             lily.GetComponent<ReactionInteractable>().SetInteractionEnabled(stage > 0 && stage < 4);
             cashier.SetActive(stage >= 2 && stage < 4);
             cashier.GetComponent<ReactionInteractable>().SetInteractionEnabled(stage == 2);
             SetLight(stage > 0 && stage < 4 ? 1 : 0);
+            SetBenchIslandLight(stage < 4 ? 1 : 0);
         }
 
         public void RevealCinema()
@@ -130,12 +148,33 @@ namespace Memories.Gameplay.Reactions
                 float value = 1 - Mathf.SmoothStep(0, 1, elapsed / fadeDuration);
                 foreach (var material in dissolveMaterials) material.SetFloat("_Reveal", value);
                 SetLight(value);
+                SetBenchIslandLight(value);
                 yield return null;
             }
             lily.SetActive(false);
             cashier.SetActive(false);
             RestoreMaterials();
             SetLight(0);
+            SetBenchIslandLight(0);
+        }
+        private void SetBenchIslandLight(float value)
+        {
+            block ??= new MaterialPropertyBlock();
+            foreach (var entry in benchGlow)
+            {
+                if (!entry.renderer) continue;
+                entry.renderer.GetPropertyBlock(block, entry.slot);
+                block.SetColor("_EmissionColor", entry.emission * value);
+                block.SetColor("_BaseColor", Color.Lerp(entry.color * .12f, entry.color, value));
+                entry.renderer.SetPropertyBlock(block, entry.slot);
+                block.Clear();
+            }
+            for (int i = 0; i < benchIslandLights.Length; i++)
+                if (benchIslandLights[i])
+                {
+                    benchIslandLights[i].intensity = benchIslandIntensities[i] * value;
+                    benchIslandLights[i].enabled = value > 0;
+                }
         }
         private void Save() => GetComponent<ObjectStateTracker>().Capture();
         private void SetLight(float value)

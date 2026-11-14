@@ -13,6 +13,12 @@ namespace Memories.Gameplay.Reactions
         [SerializeField] private Shader dissolveShader;
         [SerializeField] private float duration = 4f;
         [SerializeField] private ParkCinemaSequence cinemaSequence;
+        [SerializeField] private Light[] approachLights = System.Array.Empty<Light>();
+        [SerializeField] private Renderer[] approachGlowingRenderers = System.Array.Empty<Renderer>();
+        private readonly List<(Light light, bool enabled, float intensity)> approachLightDefaults = new();
+        private readonly List<(Renderer renderer, int slot, Color emission, Color color)> approachGlowDefaults = new();
+        private bool approachCached;
+        private MaterialPropertyBlock approachBlock;
         private bool completed;
         public bool Completed => completed;
         private readonly List<(Renderer renderer, Material[] originals)> originals = new();
@@ -24,6 +30,7 @@ namespace Memories.Gameplay.Reactions
         {
             if (completed) return;
             completed = true;
+            StartCoroutine(FadeApproachLighting());
             GetComponent<ReactionInteractable>().SetInteractionEnabled(false);
             GetComponent<ObjectStateTracker>().Capture();
             StartCoroutine(Transition());
@@ -64,6 +71,7 @@ namespace Memories.Gameplay.Reactions
             StopAllCoroutines();
             RestoreMaterials();
             completed = state == "1";
+            SetApproachLighting(!completed);
             if (completed) ApplyCompleted();
             else
             {
@@ -91,6 +99,57 @@ namespace Memories.Gameplay.Reactions
             originals.Clear();
             foreach (var material in temporary) if (material != null) Destroy(material);
             temporary.Clear();
+        }
+        private IEnumerator FadeApproachLighting()
+        {
+            float fadeDuration = Mathf.Max(.01f, duration);
+            for (float elapsed = 0; elapsed < fadeDuration; elapsed += Time.deltaTime)
+            {
+                ApplyApproachLighting(1 - Mathf.SmoothStep(0, 1, elapsed / fadeDuration));
+                yield return null;
+            }
+            ApplyApproachLighting(0);
+        }
+
+        // Saved progress restores the final lighting without replaying the transition.
+        public void SetApproachLighting(bool enabled) => ApplyApproachLighting(enabled ? 1 : 0);
+
+        private void ApplyApproachLighting(float brightness)
+        {
+            if (!approachCached)
+            {
+                foreach (var light in approachLights)
+                    if (light) approachLightDefaults.Add((light, light.enabled, light.intensity));
+                foreach (var renderer in approachGlowingRenderers)
+                {
+                    if (!renderer) continue;
+                    var materials = renderer.sharedMaterials;
+                    for (int i = 0; i < materials.Length; i++)
+                    {
+                        var material = materials[i];
+                        if (!material || !material.IsKeywordEnabled("_EMISSION") || !material.HasProperty("_EmissionColor") || !material.HasProperty("_BaseColor")) continue;
+                        var emission = material.GetColor("_EmissionColor");
+                        if (emission.maxColorComponent <= 0) continue;
+                        approachGlowDefaults.Add((renderer, i, emission, material.GetColor("_BaseColor")));
+                    }
+                }
+                approachCached = true;
+            }
+            foreach (var entry in approachLightDefaults)
+                if (entry.light)
+                {
+                    entry.light.intensity = entry.intensity * brightness;
+                    entry.light.enabled = brightness > 0 && entry.enabled;
+                }
+            approachBlock ??= new MaterialPropertyBlock();
+            foreach (var entry in approachGlowDefaults)
+            {
+                if (!entry.renderer) continue;
+                entry.renderer.GetPropertyBlock(approachBlock, entry.slot);
+                approachBlock.SetColor("_EmissionColor", entry.emission * brightness);
+                approachBlock.SetColor("_BaseColor", Color.Lerp(entry.color * .12f, entry.color, brightness));
+                entry.renderer.SetPropertyBlock(approachBlock, entry.slot);
+            }
         }
         private void OnDisable() { StopAllCoroutines(); RestoreMaterials(); }
         private void OnDestroy() => RestoreMaterials();
