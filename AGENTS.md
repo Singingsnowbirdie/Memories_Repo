@@ -19,6 +19,7 @@ The user explicitly requires that gameplay state changes be initiated explicitly
 - Do not replace polling with subscriptions to progress changes. Graph nodes must explicitly invoke the required action or `CustomReaction.Execute` where the change originates.
 - Refresh dependent presentation (readiness, highlights, doors, windows, equipment) explicitly from the relevant graph actions. Do not hide polling in getters called every frame.
 - Existing built-in graph actions for inventory, object activity, variables, and hints remain explicit actions; use custom reactions for component-specific behavior.
+- Graph conditions must check custom variables, never inventory contents. Set acquisition flags explicitly in pickup graphs and keep them after items are consumed. Represent a grouped handoff by one result/stage variable, not a consumed flag for each item; use that result to prevent repeat handoffs.
 - Restore already-completed progress once when binding a loaded location. Keep restoration separate from live gameplay transitions.
 - Frame-based movement, rendering, input, animation interpolation, and spatial detection are not quest-state observers. They must not contain hidden progress-dependent consequences. Its continuation must be an explicit graph action, not a call from one custom reaction into another.
 - UI bindings and persistence may observe changes only to display or save them, never to advance gameplay. Do not claim that all `Update` methods or all event subscriptions have been removed when only gameplay observers were audited.

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: "\u041D\u0430\u0447\u0430\u043B\u043E"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionStartNode
   graph: {fileID: 11400000}
-  position: {x: 0, y: 0}
+  position: {x: 0, y: -210}
   ports:
     keys:
     - next
@@ -23,7 +23,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: previous
-        node: {fileID: 1377142905533169699}
+        node: {fileID: -5489639761245163328}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
   graph: {fileID: 11400000}
-  position: {x: 680, y: -8}
+  position: {x: 840, y: -210}
   ports:
     keys:
     - previous
@@ -54,8 +54,8 @@ MonoBehaviour:
       _node: {fileID: -6361477852245990624}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
-      - fieldName: next
-        node: {fileID: 1377142905533169699}
+      - fieldName: branch_1
+        node: {fileID: -5489639761245163328}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -66,7 +66,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: previous
-        node: {fileID: 6426516892257722}
+        node: {fileID: -1881380530974241797}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -106,6 +106,77 @@ MonoBehaviour:
   hintTimeout: 60
   repeatHint: 1
   playTextInBackground: 0
+--- !u!114 &-5489639761245163328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97a0edf40c9243f09b439458c31f20bd, type: 3}
+  m_Name: "\u0425\u0430\u0431"
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionHubNode
+  graph: {fileID: 11400000}
+  position: {x: 420, y: -190}
+  ports:
+    keys:
+    - previous
+    - branch_0
+    - branch_1
+    - branch_2
+    values:
+    - _fieldName: previous
+      _node: {fileID: -5489639761245163328}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: next
+        node: {fileID: -9050790164523978499}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: branch_0
+      _node: {fileID: -5489639761245163328}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: 1377142905533169699}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: branch_1
+      _node: {fileID: -5489639761245163328}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: -6361477852245990624}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: branch_2
+      _node: {fileID: -5489639761245163328}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: 6426516892257722}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+  previous: {fileID: 0}
+  branches:
+  - branch_0
+  - branch_1
+  - branch_2
+  nextPortId: 3
 --- !u!114 &-4909270940456411435
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119,7 +190,7 @@ MonoBehaviour:
   m_Name: "\u041A\u043E\u043D\u0435\u0446"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionEndNode
   graph: {fileID: 11400000}
-  position: {x: 2088, y: 8}
+  position: {x: 2100, y: -75}
   ports:
     keys:
     - previous
@@ -149,7 +220,7 @@ MonoBehaviour:
   m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
   graph: {fileID: 11400000}
-  position: {x: 1352, y: -8}
+  position: {x: 1260, y: -210}
   ports:
     keys:
     - previous
@@ -160,7 +231,13 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: next
+        node: {fileID: -6361477852245990624}
+        reroutePoints: []
+      - fieldName: next
         node: {fileID: 6426516892257722}
+        reroutePoints: []
+      - fieldName: next
+        node: {fileID: 3522039927514139017}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -231,6 +308,8 @@ MonoBehaviour:
   - {fileID: 6426516892257722}
   - {fileID: -1881380530974241797}
   - {fileID: 5655914607716583655}
+  - {fileID: -5489639761245163328}
+  - {fileID: 3522039927514139017}
   objectKeys:
   - refresh_supplies
   - item
@@ -247,7 +326,7 @@ MonoBehaviour:
   m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
   graph: {fileID: 11400000}
-  position: {x: 1016, y: -8}
+  position: {x: 840, y: 210}
   ports:
     keys:
     - previous
@@ -257,8 +336,8 @@ MonoBehaviour:
       _node: {fileID: 6426516892257722}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
-      - fieldName: next
-        node: {fileID: -6361477852245990624}
+      - fieldName: branch_2
+        node: {fileID: -5489639761245163328}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -322,7 +401,7 @@ MonoBehaviour:
   m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
   graph: {fileID: 11400000}
-  position: {x: 344, y: -8}
+  position: {x: 840, y: -630}
   ports:
     keys:
     - previous
@@ -332,8 +411,8 @@ MonoBehaviour:
       _node: {fileID: 1377142905533169699}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
-      - fieldName: next
-        node: {fileID: -9050790164523978499}
+      - fieldName: branch_0
+        node: {fileID: -5489639761245163328}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -344,7 +423,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: previous
-        node: {fileID: -6361477852245990624}
+        node: {fileID: 3522039927514139017}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -384,6 +463,81 @@ MonoBehaviour:
   hintTimeout: 60
   repeatHint: 1
   playTextInBackground: 0
+--- !u!114 &3522039927514139017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd260b234eb14d4cbcafbe381aa00ee1, type: 3}
+  m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
+  graph: {fileID: 11400000}
+  position: {x: 1190, y: -630}
+  ports:
+    keys:
+    - previous
+    - next
+    values:
+    - _fieldName: previous
+      _node: {fileID: 3522039927514139017}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: next
+        node: {fileID: 1377142905533169699}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: next
+      _node: {fileID: 3522039927514139017}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: -1881380530974241797}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  previous: {fileID: 0}
+  next: {fileID: 0}
+  kind: 4
+  pauseDuration: 1
+  reactionGraph: {fileID: 0}
+  textGraph: {fileID: 0}
+  memoryGraph: {fileID: 0}
+  memoryId: 
+  firstCompletionText: {fileID: 0}
+  memoryStartedReactionKey: 
+  locationScenePath: 
+  arrivalMarker: 
+  variableBank: {fileID: 11400000, guid: e60a1bfed5e93444eb00e33b43faeeac, type: 2}
+  variableId: tissue_box_found
+  variableValue: 1
+  variableIntValue: 0
+  addToIntValue: 0
+  objectKey: 
+  lightingBrightness: 1
+  lightingDuration: 4
+  waitForLighting: 0
+  lookDuration: 1.2
+  lookMaxSpeed: 60
+  active: 1
+  revealDuration: 0
+  revealDelay: 0
+  revealShader: {fileID: 0}
+  interactionEnabled: 0
+  item: {fileID: 0}
+  hintId: 
+  hintGraph: {fileID: 0}
+  hintTimeout: 60
+  repeatHint: 1
+  playTextInBackground: 0
 --- !u!114 &5655914607716583655
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -397,7 +551,7 @@ MonoBehaviour:
   m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
   graph: {fileID: 11400000}
-  position: {x: 1704, y: -8}
+  position: {x: 1680, y: -210}
   ports:
     keys:
     - previous

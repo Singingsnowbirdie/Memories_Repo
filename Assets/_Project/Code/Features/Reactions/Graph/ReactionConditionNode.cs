@@ -12,7 +12,7 @@ namespace Memories.Gameplay.Reactions
     public sealed class ReactionConditionNode : Node
     {
         [SerializeField, Input(ShowBackingValue.Never, ConnectionType.Multiple)] private Node previous;
-        [SerializeField] private ReactionConditionKind kind;
+        [SerializeField] private ReactionConditionKind kind = ReactionConditionKind.CustomVariable;
         [SerializeField] private QuestItem item;
         [SerializeField] private CustomVariableBank variableBank;
         [SerializeField] private string variableId;
@@ -23,7 +23,6 @@ namespace Memories.Gameplay.Reactions
 
         public QuestItem Item => item;
         public ReactionConditionKind Kind => kind;
-        public bool RequiresInventory => kind != ReactionConditionKind.CustomVariable;
 
         public bool Validate(out string error)
         {
@@ -40,8 +39,7 @@ namespace Memories.Gameplay.Reactions
                     error = "Выберите существующую переменную из банка.";
                     return false;
                 case ReactionConditionKind.InventoryItem:
-                    if (item != null && item.IsValid) return true;
-                    error = "Назначьте предмет для проверки инвентаря.";
+                    error = "Проверки инвентаря больше не поддерживаются. Назначьте кастомную переменную прогресса.";
                     return false;
                 default:
                     error = "Неизвестный тип проверки.";
@@ -49,7 +47,7 @@ namespace Memories.Gameplay.Reactions
             }
         }
 
-        public string SelectOutput(QuestInventory inventory, CustomVariableStore variables = null)
+        public string SelectOutput(CustomVariableStore variables)
         {
             bool result;
             switch (kind)
@@ -71,9 +69,6 @@ namespace Memories.Gameplay.Reactions
                         };
                     }
                     else result = variables.Get(variableBank, variableId);
-                    break;
-                case ReactionConditionKind.InventoryItem:
-                    result = inventory.Contains(item.Id);
                     break;
                 default:
                     throw new System.InvalidOperationException("Неизвестный тип проверки.");

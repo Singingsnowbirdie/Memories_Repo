@@ -61,8 +61,8 @@ namespace Memories.Gameplay.Reactions
                 .Concat(actions.Where(action => action.Kind == ReactionKind.RunGraph).Select(action => action.ReactionGraph))
                 .Append(graph).Distinct()
                 .SelectMany(value => value.nodes).OfType<ReactionConditionNode>().ToArray();
-            if (inventory == null && (conditions.Any(condition => condition.RequiresInventory) || actions.Any(action => action.Kind == ReactionKind.AddInventoryItem || action.Kind == ReactionKind.ConsumeInventoryItem)))
-            { Debug.LogWarning("Для проверки предмета нужен инвентарь игрока.", owner); return false; }
+            if (inventory == null && actions.Any(action => action.Kind == ReactionKind.AddInventoryItem || action.Kind == ReactionKind.ConsumeInventoryItem))
+            { Debug.LogWarning("Для добавления или передачи предмета нужен инвентарь игрока.", owner); return false; }
             if (variables == null && (conditions.Any(condition => condition.Kind == ReactionConditionKind.CustomVariable) ||
                 actions.Any(action => action.Kind == ReactionKind.SetCustomVariable)))
             { Debug.LogWarning("Хранилище кастомных переменных не подключено.", owner); return false; }
@@ -240,7 +240,7 @@ namespace Memories.Gameplay.Reactions
                     if (node is ReactionConditionNode condition)
                     {
                         if (condition.Kind == ReactionConditionKind.CustomVariable) checkedCustomCondition = true;
-                        node = ReactionGraph.Next(condition, condition.SelectOutput(inventory, variables));
+                        node = ReactionGraph.Next(condition, condition.SelectOutput(variables));
                         continue;
                     }
                     var action = (ReactionNode)node;
@@ -326,10 +326,7 @@ namespace Memories.Gameplay.Reactions
                     {
                         // Background text belongs to the presenter/location lifetime, not this graph run.
                         // The interactable is released immediately, so another item can be handed over.
-                        if (action.PlayTextInBackground)
-                            texts.ShowAsync(action.TextGraph).Forget();
-                        else
-                            await texts.ShowAsync(action.TextGraph, source.Token);
+                        texts.ShowAsync(action.TextGraph).Forget();
                     }
                     else if (action.Kind == ReactionKind.LoadSegment)
                     {

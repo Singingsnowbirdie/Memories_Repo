@@ -73,8 +73,6 @@ namespace Memories.Gameplay.Reactions
         public bool VariableValue => variableValue;
         public ReactionKind Kind => kind;
         public StoryTextGraph TextGraph => textGraph;
-        [SerializeField] private bool playTextInBackground;
-        public bool PlayTextInBackground => playTextInBackground;
         public MemoryGraph MemoryGraph => memoryGraph;
         public string MemoryId => memoryId;
         public string LocationScenePath => locationScenePath;

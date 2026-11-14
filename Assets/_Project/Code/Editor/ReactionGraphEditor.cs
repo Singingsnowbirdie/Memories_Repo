@@ -239,10 +239,6 @@ namespace Memories.Editor
             {
                 EditorGUILayout.LabelField("Граф текста");
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("textGraph"), GUIContent.none);
-                var playTextInBackground = serializedObject.FindProperty("playTextInBackground");
-                playTextInBackground.boolValue = EditorGUILayout.ToggleLeft(
-                    new GUIContent("Не ждать окончания текста", "Граф продолжится сразу; текст не удерживает интерактивный объект."),
-                    playTextInBackground.boolValue);
             }
             else if (kind.enumValueIndex == 1)
             {
@@ -460,13 +456,13 @@ namespace Memories.Editor
             var kind = serializedObject.FindProperty("kind");
             EditorGUILayout.Space(8);
             EditorGUILayout.LabelField("Тип проверки");
-            kind.enumValueIndex = EditorGUILayout.Popup(kind.enumValueIndex,
-                new[] { "Предмет в инвентаре", "Значение кастомной переменной" });
+            EditorGUILayout.LabelField("Значение кастомной переменной");
             EditorGUILayout.Space(8);
             if (kind.intValue != (int)ReactionConditionKind.CustomVariable)
             {
-                EditorGUILayout.LabelField("Предмет");
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("item"), GUIContent.none);
+                EditorGUILayout.HelpBox("Устаревшая проверка инвентаря. Замените её проверкой переменной прогресса.", MessageType.Error);
+                if (GUILayout.Button("Использовать кастомную переменную"))
+                    kind.intValue = (int)ReactionConditionKind.CustomVariable;
             }
             else if (kind.intValue == (int)ReactionConditionKind.CustomVariable)
             {
