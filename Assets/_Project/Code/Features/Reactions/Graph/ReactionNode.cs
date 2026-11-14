@@ -6,7 +6,7 @@ using XNode;
 
 namespace Memories.Gameplay.Reactions
 {
-    public enum ReactionKind { StoryText, Memory, ChangeLocation, CustomReaction, SetCustomVariable, ObjectActivity, AddInventoryItem, StartHints, StopHints, ConsumeInventoryItem, ObjectInteractivity, RunGraph, LookAtObject, ChangeLighting, LoadSegment }
+    public enum ReactionKind { StoryText, Memory, ChangeLocation, CustomReaction, SetCustomVariable, ObjectActivity, AddInventoryItem, StartHints, StopHints, ConsumeInventoryItem, ObjectInteractivity, RunGraph, LookAtObject, ChangeLighting, LoadSegment, Pause }
 
     [Node.CreateNodeMenu("Реакция"), Node.NodeWidth(320), Node.NodeTint("#284C53")]
     [MovedFrom(true, sourceNamespace: "Memories.Gameplay.Triggers", sourceAssembly: "Memories.Gameplay", sourceClassName: "TriggerActionNode")]
@@ -15,6 +15,8 @@ namespace Memories.Gameplay.Reactions
         [SerializeField, Input(ShowBackingValue.Never, ConnectionType.Multiple)] private Node previous;
         [SerializeField, Output(ShowBackingValue.Never, ConnectionType.Override)] private Node next;
         [SerializeField] private ReactionKind kind;
+        [SerializeField, Min(0)] private float pauseDuration = 1f;
+        public float PauseDuration => pauseDuration;
         [SerializeField] private ReactionGraph reactionGraph;
         public ReactionGraph ReactionGraph => reactionGraph;
         [SerializeField] private StoryTextGraph textGraph;
@@ -82,6 +84,13 @@ namespace Memories.Gameplay.Reactions
         public bool Validate(out string error)
         {
             error = null;
+            if (kind == ReactionKind.Pause)
+            {
+                if (float.IsNaN(pauseDuration) || float.IsInfinity(pauseDuration) ||
+                    pauseDuration < 0 || pauseDuration > int.MaxValue / 1000d)
+                { error = "Задайте длительность паузы от 0 до 2147483 секунд."; return false; }
+                return true;
+            }
             if (kind == ReactionKind.LoadSegment)
             {
                 if (string.IsNullOrWhiteSpace(locationScenePath) || !locationScenePath.EndsWith(".unity") ||

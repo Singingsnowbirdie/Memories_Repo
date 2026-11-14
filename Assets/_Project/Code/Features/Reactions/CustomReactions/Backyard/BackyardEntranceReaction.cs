@@ -13,7 +13,7 @@ namespace Memories.Gameplay.Reactions
     /// </summary>
     public sealed class BackyardEntranceReaction : CustomReaction
     {
-        [SerializeField] private global::Memories.Gameplay.Triggers.SceneTrigger entranceTrigger;
+        [SerializeField] private Triggers.SceneTrigger entranceTrigger;
         [SerializeField] private Light[] lights;
         [SerializeField] private Renderer[] lanterns;
         [SerializeField] private Material litGlass;
@@ -22,7 +22,7 @@ namespace Memories.Gameplay.Reactions
         private Func<UniTask> replaceHouse;
         private bool completed;
         public bool IsRunning { get; private set; }
-        public global::Memories.Gameplay.Triggers.SceneTrigger EntranceTrigger => entranceTrigger;
+        public Triggers.SceneTrigger EntranceTrigger => entranceTrigger;
 
         public void Initialize(GameplayModeState mode,
             Func<UniTask> replacement, bool alreadyEntered)

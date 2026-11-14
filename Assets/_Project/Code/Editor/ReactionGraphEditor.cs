@@ -177,11 +177,16 @@ namespace Memories.Editor
                 ? (int)ReactionKind.AddInventoryItem : kind.intValue;
             EditorGUI.BeginChangeCheck();
             int chosenKind = EditorGUILayout.IntPopup(displayedKind,
-                new[] { "Показать текст", "Показать воспоминание", "Перейти в локацию", "Запустить реакцию объекта", "Установить кастомную переменную", "Активность объекта", "Инвентарный предмет", "Запустить подсказки", "Остановить подсказки", "Интерактивность предмета", "Запустить граф реакций", "Посмотреть на объект", "Изменить освещение", "Подгрузить сегмент локации" },
-                new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14 });
+                new[] { "Показать текст", "Показать воспоминание", "Перейти в локацию", "Запустить реакцию объекта", "Установить кастомную переменную", "Активность объекта", "Инвентарный предмет", "Запустить подсказки", "Остановить подсказки", "Интерактивность предмета", "Запустить граф реакций", "Посмотреть на объект", "Изменить освещение", "Подгрузить сегмент локации", "Пауза" },
+                new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15 });
             if (EditorGUI.EndChangeCheck()) kind.intValue = chosenKind;
             EditorGUILayout.Space(8);
-            if (kind.intValue == (int)ReactionKind.RunGraph)
+            if (kind.intValue == (int)ReactionKind.Pause)
+            {
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("pauseDuration"), new GUIContent("Длительность, сек."));
+                EditorGUILayout.HelpBox("Ожидание по игровому времени. После паузы граф продолжится; остановка графа отменяет ожидание.", MessageType.Info);
+            }
+            else if (kind.intValue == (int)ReactionKind.RunGraph)
             {
                 EditorGUILayout.LabelField("Граф реакций");
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("reactionGraph"), GUIContent.none);

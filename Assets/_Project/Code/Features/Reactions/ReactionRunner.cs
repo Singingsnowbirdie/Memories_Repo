@@ -229,7 +229,12 @@ namespace Memories.Gameplay.Reactions
                         node = ReactionGraph.Next(node);
                         continue;
                     }
-                    if (action.Kind == ReactionKind.ChangeLighting)
+                    if (action.Kind == ReactionKind.Pause)
+                    {
+                        if (action.PauseDuration > 0)
+                            await UniTask.Delay(TimeSpan.FromSeconds(action.PauseDuration), cancellationToken: source.Token);
+                    }
+                    else if (action.Kind == ReactionKind.ChangeLighting)
                     {
                         if (!ReactionObjectBinding.TryResolve(objectBindings, action.ObjectKey, out var lightingTarget) ||
                             !lightingTarget.TryGetComponent<LightingGroup>(out var lighting) || !lighting.isActiveAndEnabled)
