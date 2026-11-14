@@ -21,10 +21,10 @@ namespace Memories.Gameplay.Reactions
         }
         public string StateKey => "school-first-aid";
 
-        public void Initialize(StoryTextPresenter texts, MemoryPresenter memories, QuestInventory inventory)
+        public void Initialize(StoryTextPresenter texts, MemoryPresenter memories, QuestInventory inventory, CustomVariableStore variables)
         {
             runner?.Dispose();
-            runner = new ReactionRunner(texts, memories, this, inventory: inventory);
+            runner = new ReactionRunner(texts, memories, this, inventory: inventory, variables: variables);
         }
 
         public void Begin()
@@ -37,7 +37,7 @@ namespace Memories.Gameplay.Reactions
         public override void Execute()
         {
             if (!started || returned || runner == null) return;
-            // Подбор предметов явно перезапускает один таймер. Его граф подсказки выбирает актуальный текст.
+            // Подбор предметов явно запускает таймер, если он ещё не запущен. Его граф подсказки выбирает актуальный текст.
             if (!runner.TryRun(refreshGraph, allowDuringMemory: true))
                 throw new InvalidOperationException("School first-aid reminder graph could not run.");
             GetComponent<ObjectStateTracker>()?.Capture();
@@ -46,7 +46,6 @@ namespace Memories.Gameplay.Reactions
         public void ReturnToCoach()
         {
             returned = true;
-            runner?.StopHint(HintId);
             GetComponent<ObjectStateTracker>()?.Capture();
         }
 
@@ -59,7 +58,7 @@ namespace Memories.Gameplay.Reactions
             var state = JsonUtility.FromJson<State>(value);
             started = state.started;
             returned = state.returned;
-            if (started && !returned && !string.IsNullOrEmpty(state.hints))
+            if (started && !string.IsNullOrEmpty(state.hints))
             {
                 // В старых сохранениях для каждого запрошенного предмета использовался отдельный ID таймера.
                 // Восстанавливаем активное напоминание без повторного запуска графа обновления.

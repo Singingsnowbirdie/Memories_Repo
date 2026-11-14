@@ -17,7 +17,6 @@ namespace Memories.Gameplay.Reactions
         {
             opened = true;
             OpenDoors();
-            coach.StopHint("school.call-ambulance");
             GetComponent<ReactionInteractable>().SetInteractionEnabled(false);
             ambulance.SetInteractionEnabled(true);
             ambulance.gameObject.SetActive(true);

@@ -48,11 +48,6 @@ namespace Memories.Gameplay.Interaction
         public string Prompt => prompt;
         public bool CanInteract => isActiveAndEnabled && interactionEnabled && runner != null && runner.CanRun(graph);
         public bool IsRunning => runner != null && runner.IsRunning;
-        public void StopHint(string id)
-        {
-            runner?.StopHint(id);
-            GetComponent<ObjectStateTracker>()?.Capture();
-        }
 
         public void Configure(ReactionGraph reactionGraph, string interactionPrompt)
         {

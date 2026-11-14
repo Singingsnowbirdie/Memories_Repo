@@ -26,6 +26,7 @@ namespace Memories.Gameplay.Reactions
         private CancellationTokenSource playback;
         private bool fired;
         private ReactionRunner hintOwner;
+        private string currentHintId;
         private readonly Dictionary<string, CancellationTokenSource> hintTimers = new Dictionary<string, CancellationTokenSource>();
         private readonly HashSet<string> activeHints = new HashSet<string>();
         [Serializable] private sealed class HintState { public List<string> active = new List<string>(); }
@@ -67,6 +68,9 @@ namespace Memories.Gameplay.Reactions
             { Debug.LogWarning("Хранилище кастомных переменных не подключено.", owner); return false; }
             foreach (var action in actions)
             {
+                if (action.Kind == ReactionKind.StopHints &&
+                    (hintOwner == this || action.graph != graph || action.HintId != currentHintId))
+                { Debug.LogWarning("Остановить подсказку можно только из её собственного графа.", owner); return false; }
                 if (action.Kind == ReactionKind.LookAtObject && (playerLook == null ||
                     !ReactionObjectBinding.TryResolve(objectBindings, action.ObjectKey, out _)))
                 { Debug.LogWarning("Не назначены исполнитель поворота или объект взгляда: " + action.ObjectKey, owner); return false; }
@@ -115,9 +119,10 @@ namespace Memories.Gameplay.Reactions
         }
         public void Dispose() => Stop();
 
-        public void StopHint(string id)
+        private void StopHint(string id)
         {
             activeHints.Remove(id);
+            if (owner is Component component) component.GetComponent<ObjectStateTracker>()?.Capture();
             if (!hintTimers.TryGetValue(id, out var timer)) return;
             hintTimers.Remove(id);
             timer.Cancel();
@@ -148,7 +153,8 @@ namespace Memories.Gameplay.Reactions
                     timer.Token.ThrowIfCancellationRequested();
                     child = new ReactionRunner(texts, memories, owner, locations, inventory, variables, objectBindings, customReactions, playerLook);
                     child.hintOwner = this;
-                    // При каждом проходе условия графа проверяют текущее содержимое инвентаря.
+                    child.currentHintId = id;
+                    // Условия самого графа выбирают текст и завершают подсказку по кастомной переменной.
                     if (!child.TryRun(graph)) return;
                     await UniTask.WaitUntil(() => !child.IsRunning, cancellationToken: timer.Token);
                     child.Dispose();
@@ -168,6 +174,7 @@ namespace Memories.Gameplay.Reactions
         private async UniTask RunAsync(ReactionGraph graph, CancellationTokenSource source)
         {
             bool ownsMemory = false;
+            bool checkedCustomCondition = false;
             try
             {
                 var node = ReactionGraph.Next(graph.nodes.OfType<ReactionStartNode>().Single());
@@ -188,6 +195,7 @@ namespace Memories.Gameplay.Reactions
                     }
                     if (node is ReactionConditionNode condition)
                     {
+                        if (condition.Kind == ReactionConditionKind.CustomVariable) checkedCustomCondition = true;
                         node = ReactionGraph.Next(condition, condition.SelectOutput(inventory, variables));
                         continue;
                     }
@@ -229,7 +237,11 @@ namespace Memories.Gameplay.Reactions
                     else if (action.Kind == ReactionKind.StartHints)
                         hintOwner.StartHint(action);
                     else if (action.Kind == ReactionKind.StopHints)
-                        hintOwner.StopHint(action.HintId);
+                    {
+                        if (!checkedCustomCondition || hintOwner == this || action.HintId != currentHintId)
+                            throw new InvalidOperationException("Завершение подсказки требует проверки кастомной переменной в её графе.");
+                        hintOwner.StopHint(currentHintId);
+                    }
                     else if (action.Kind == ReactionKind.CustomReaction)
                     {
                         if (!TryGetCustomReaction(action, out var customReaction))

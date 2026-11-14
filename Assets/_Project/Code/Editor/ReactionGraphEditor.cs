@@ -324,10 +324,11 @@ namespace Memories.Editor
                     EditorGUILayout.LabelField("Повторять");
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("repeatHint"), GUIContent.none);
                     EditorGUILayout.Space(8);
-                    EditorGUILayout.HelpBox("Первый запуск после таймаута; повтор — после завершения графа и нового таймаута. Проверки предметов задаются в графе подсказки. Пауза останавливает отсчёт. Повторный запуск того же ID не сбрасывает таймер.", MessageType.Info);
+                    EditorGUILayout.HelpBox("Первый запуск после таймаута; повтор — после завершения графа и нового таймаута. Условие завершения задаётся проверкой кастомной переменной внутри графа подсказки. Пауза останавливает отсчёт. Повторный запуск того же ID не сбрасывает таймер.", MessageType.Info);
                 }
                 if (kind.enumValueIndex == 8)
                 {
+                    EditorGUILayout.HelpBox("Допустимо только внутри графа самой подсказки, после проверки кастомной переменной. ID должен совпадать с ID запущенной подсказки.", MessageType.Info);
                     EditorGUILayout.Space(8);
                     string hintId = serializedObject.FindProperty("hintId").stringValue;
                     using (new EditorGUI.DisabledScope(string.IsNullOrWhiteSpace(hintId)))

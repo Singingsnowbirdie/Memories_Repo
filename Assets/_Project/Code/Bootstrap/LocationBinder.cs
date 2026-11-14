@@ -31,7 +31,7 @@ namespace Memories.Bootstrap
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var supplies in root.GetComponentsInChildren<SchoolFirstAidProgressReaction>(true))
                     supplies.Initialize(scope.Container.Resolve<Memories.Gameplay.UI.StoryTextPresenter>(),
-                        scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>(), scope.Container.Resolve<QuestInventory>());
+                        scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>(), scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<CustomVariableStore>());
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var connection in root.GetComponentsInChildren<GarageSchoolConnection>(true))
                     connection.Initialize(transitions.LoadGarageSchoolAsync);
@@ -87,6 +87,8 @@ namespace Memories.Bootstrap
                     door.Initialize(
                         path => transitions.LoadConnectedSceneAsync(path, door),
                         scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
+            HintProgressRestoration.Restore(scope.Container.Resolve<QuestInventory>(),
+                scope.Container.Resolve<CustomVariableStore>(), scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
             scope.Container.Resolve<ObjectStateStore>().RestoreScene(scene);
             if (isCurrentLocation)
                 foreach (var root in scene.GetRootGameObjects())
