@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
   graph: {fileID: 11400000}
-  position: {x: 900, y: 0}
+  position: {x: 1260, y: 0}
   ports:
     keys:
     - previous
@@ -24,7 +24,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: next
-        node: {fileID: 2413925584787921892}
+        node: {fileID: -6317693983302371962}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -57,6 +57,9 @@ MonoBehaviour:
   variableIntValue: 0
   addToIntValue: 0
   objectKey: "\u041F\u0435\u0440\u0435\u0434\u0430\u0442\u044C \u0431\u0443\u043A\u0435\u0442"
+  lightingBrightness: 1
+  lightingDuration: 4
+  waitForLighting: 0
   lookDuration: 1.2
   lookMaxSpeed: 60
   active: 1
@@ -82,7 +85,7 @@ MonoBehaviour:
   m_Name: "\u041A\u043E\u043D\u0435\u0446"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionEndNode
   graph: {fileID: 11400000}
-  position: {x: 1260, y: 0}
+  position: {x: 1620, y: 0}
   ports:
     keys:
     - previous
@@ -102,6 +105,79 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   previous: {fileID: 0}
+--- !u!114 &-6317693983302371962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd260b234eb14d4cbcafbe381aa00ee1, type: 3}
+  m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
+  graph: {fileID: 11400000}
+  position: {x: 900, y: 0}
+  ports:
+    keys:
+    - previous
+    - next
+    values:
+    - _fieldName: previous
+      _node: {fileID: -6317693983302371962}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: next
+        node: {fileID: 2413925584787921892}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: next
+      _node: {fileID: -6317693983302371962}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: -6842872724025423846}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  previous: {fileID: 0}
+  next: {fileID: 0}
+  kind: 13
+  reactionGraph: {fileID: 0}
+  textGraph: {fileID: 0}
+  memoryGraph: {fileID: 0}
+  memoryId: 
+  firstCompletionText: {fileID: 0}
+  memoryStartedReactionKey: 
+  locationScenePath: 
+  variableBank: {fileID: 0}
+  variableId: 
+  variableValue: 1
+  variableIntValue: 0
+  addToIntValue: 0
+  objectKey: "\u041E\u0441\u0432\u0435\u0449\u0435\u043D\u0438\u0435 \u0430\u043B\u043B\u0435\u0438
+    \u0438 \u0432\u043E\u0440\u043E\u0442"
+  lightingBrightness: 0
+  lightingDuration: 4
+  waitForLighting: 0
+  lookDuration: 1.2
+  lookMaxSpeed: 60
+  active: 1
+  revealDuration: 0
+  revealDelay: 0
+  revealShader: {fileID: 0}
+  interactionEnabled: 0
+  item: {fileID: 0}
+  hintId: 
+  hintGraph: {fileID: 0}
+  hintTimeout: 60
+  repeatHint: 1
 --- !u!114 &-3284875864492770448
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -115,7 +191,7 @@ MonoBehaviour:
   m_Name: "\u0423\u0441\u043B\u043E\u0432\u0438\u0435"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionConditionNode
   graph: {fileID: 11400000}
-  position: {x: 1080, y: 0}
+  position: {x: 1440, y: 0}
   ports:
     keys:
     - previous
@@ -255,6 +331,9 @@ MonoBehaviour:
   variableIntValue: 0
   addToIntValue: 0
   objectKey: "\u0412\u0437\u0433\u043B\u044F\u0434 \u043D\u0430 \u041B\u0438\u043B\u0438"
+  lightingBrightness: 1
+  lightingDuration: 4
+  waitForLighting: 0
   lookDuration: 0.8
   lookMaxSpeed: 65
   active: 1
@@ -289,9 +368,12 @@ MonoBehaviour:
   - {fileID: -6538252151609854825}
   - {fileID: 5364998885244321673}
   - {fileID: 7849928747098411479}
+  - {fileID: -6317693983302371962}
   objectKeys:
   - "\u0412\u0437\u0433\u043B\u044F\u0434 \u043D\u0430 \u041B\u0438\u043B\u0438"
   - "\u041F\u0435\u0440\u0435\u0434\u0430\u0442\u044C \u0431\u0443\u043A\u0435\u0442"
+  - "\u041E\u0441\u0432\u0435\u0449\u0435\u043D\u0438\u0435 \u0430\u043B\u043B\u0435\u0438
+    \u0438 \u0432\u043E\u0440\u043E\u0442"
 --- !u!114 &2413925584787921892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -327,7 +409,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: previous
-        node: {fileID: -6842872724025423846}
+        node: {fileID: -6317693983302371962}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -349,6 +431,9 @@ MonoBehaviour:
   variableIntValue: 0
   addToIntValue: 0
   objectKey: 
+  lightingBrightness: 1
+  lightingDuration: 4
+  waitForLighting: 0
   lookDuration: 1.2
   lookMaxSpeed: 60
   active: 1
@@ -374,7 +459,7 @@ MonoBehaviour:
   m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
   graph: {fileID: 11400000}
-  position: {x: 1440, y: 0}
+  position: {x: 1800, y: 0}
   ports:
     keys:
     - previous
@@ -418,6 +503,9 @@ MonoBehaviour:
   variableIntValue: 0
   addToIntValue: 0
   objectKey: 
+  lightingBrightness: 1
+  lightingDuration: 4
+  waitForLighting: 0
   lookDuration: 1.2
   lookMaxSpeed: 60
   active: 1
@@ -443,7 +531,7 @@ MonoBehaviour:
   m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
   graph: {fileID: 11400000}
-  position: {x: 1620, y: 0}
+  position: {x: 1980, y: 0}
   ports:
     keys:
     - previous
@@ -487,6 +575,9 @@ MonoBehaviour:
   variableIntValue: 0
   addToIntValue: 0
   objectKey: 
+  lightingBrightness: 1
+  lightingDuration: 4
+  waitForLighting: 0
   lookDuration: 1.2
   lookMaxSpeed: 60
   active: 1

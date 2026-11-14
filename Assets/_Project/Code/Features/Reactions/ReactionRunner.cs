@@ -68,6 +68,10 @@ namespace Memories.Gameplay.Reactions
             { Debug.LogWarning("Хранилище кастомных переменных не подключено.", owner); return false; }
             foreach (var action in actions)
             {
+                if (action.Kind == ReactionKind.ChangeLighting &&
+                    (!ReactionObjectBinding.TryResolve(objectBindings, action.ObjectKey, out var lightingTarget) ||
+                     !lightingTarget.TryGetComponent<LightingGroup>(out var lighting) || !lighting.isActiveAndEnabled))
+                { Debug.LogWarning("Назначьте активный объект с LightingGroup: " + action.ObjectKey, owner); return false; }
                 if (action.Kind == ReactionKind.StopHints &&
                     (hintOwner == this || action.graph != graph || action.HintId != currentHintId))
                 { Debug.LogWarning("Остановить подсказку можно только из её собственного графа.", owner); return false; }
@@ -222,7 +226,17 @@ namespace Memories.Gameplay.Reactions
                         node = ReactionGraph.Next(node);
                         continue;
                     }
-                    if (action.Kind == ReactionKind.LookAtObject)
+                    if (action.Kind == ReactionKind.ChangeLighting)
+                    {
+                        if (!ReactionObjectBinding.TryResolve(objectBindings, action.ObjectKey, out var lightingTarget) ||
+                            !lightingTarget.TryGetComponent<LightingGroup>(out var lighting) || !lighting.isActiveAndEnabled)
+                            throw new InvalidOperationException("Группа освещения недоступна: " + action.ObjectKey);
+                        lighting.Change(action.LightingBrightness, action.LightingDuration);
+                        if (action.WaitForLighting)
+                            await UniTask.WaitUntil(() => lighting == null || !lighting.IsTransitioning,
+                                cancellationToken: source.Token);
+                    }
+                    else if (action.Kind == ReactionKind.LookAtObject)
                     {
                         if (!ReactionObjectBinding.TryResolve(objectBindings, action.ObjectKey, out var lookTarget))
                             throw new InvalidOperationException("Look target is unavailable: " + action.ObjectKey);

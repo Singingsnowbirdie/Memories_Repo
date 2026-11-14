@@ -176,8 +176,8 @@ namespace Memories.Editor
                 ? (int)ReactionKind.AddInventoryItem : kind.intValue;
             EditorGUI.BeginChangeCheck();
             int chosenKind = EditorGUILayout.IntPopup(displayedKind,
-                new[] { "Показать текст", "Показать воспоминание", "Перейти в локацию", "Запустить реакцию объекта", "Установить кастомную переменную", "Активность объекта", "Инвентарный предмет", "Запустить подсказки", "Остановить подсказки", "Интерактивность предмета", "Запустить граф реакций", "Посмотреть на объект" },
-                new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12 });
+                new[] { "Показать текст", "Показать воспоминание", "Перейти в локацию", "Запустить реакцию объекта", "Установить кастомную переменную", "Активность объекта", "Инвентарный предмет", "Запустить подсказки", "Остановить подсказки", "Интерактивность предмета", "Запустить граф реакций", "Посмотреть на объект", "Изменить освещение" },
+                new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13 });
             if (EditorGUI.EndChangeCheck()) kind.intValue = chosenKind;
             EditorGUILayout.Space(8);
             if (kind.intValue == (int)ReactionKind.RunGraph)
@@ -259,7 +259,7 @@ namespace Memories.Editor
             {
                 DrawCustomReaction((ReactionGraph)target.graph, serializedObject.FindProperty("objectKey"));
             }
-            else if (kind.enumValueIndex == 5 || kind.enumValueIndex == 10 || kind.intValue == (int)ReactionKind.LookAtObject)
+            else if (kind.enumValueIndex == 5 || kind.enumValueIndex == 10 || kind.intValue == (int)ReactionKind.LookAtObject || kind.intValue == (int)ReactionKind.ChangeLighting)
             {
                 bool lookAt = kind.intValue == (int)ReactionKind.LookAtObject;
                 bool interactivity = kind.enumValueIndex == 10;
@@ -280,7 +280,14 @@ namespace Memories.Editor
                         key.stringValue = interactivity && chosen == 0 ? "" : names[chosen];
                 }
                 EditorGUILayout.Space(8);
-                if (lookAt)
+                if (kind.intValue == (int)ReactionKind.ChangeLighting)
+                {
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("lightingBrightness"), new GUIContent("Яркость (1 — исходная)"));
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("lightingDuration"), new GUIContent("Переход, сек."));
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("waitForLighting"), new GUIContent("Ждать завершения"));
+                    EditorGUILayout.HelpBox("Объект должен иметь LightingGroup. 0 — погасить, 1 — исходная яркость. Без ожидания следующая нода запускается сразу. Перегоревшие лампы не включаются.", MessageType.Info);
+                }
+                else if (lookAt)
                 {
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("lookDuration"), new GUIContent("Длительность, сек."));
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("lookMaxSpeed"), new GUIContent("Макс. скорость, °/сек."));

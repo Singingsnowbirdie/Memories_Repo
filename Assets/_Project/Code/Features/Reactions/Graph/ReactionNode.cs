@@ -6,7 +6,7 @@ using XNode;
 
 namespace Memories.Gameplay.Reactions
 {
-    public enum ReactionKind { StoryText, Memory, ChangeLocation, CustomReaction, SetCustomVariable, ObjectActivity, AddInventoryItem, StartHints, StopHints, ConsumeInventoryItem, ObjectInteractivity, RunGraph, LookAtObject }
+    public enum ReactionKind { StoryText, Memory, ChangeLocation, CustomReaction, SetCustomVariable, ObjectActivity, AddInventoryItem, StartHints, StopHints, ConsumeInventoryItem, ObjectInteractivity, RunGraph, LookAtObject, ChangeLighting }
 
     [Node.CreateNodeMenu("Реакция"), Node.NodeWidth(320), Node.NodeTint("#284C53")]
     [MovedFrom(true, sourceNamespace: "Memories.Gameplay.Triggers", sourceAssembly: "Memories.Gameplay", sourceClassName: "TriggerActionNode")]
@@ -33,6 +33,12 @@ namespace Memories.Gameplay.Reactions
         [SerializeField] private bool addToIntValue;
         public bool AddToIntValue => addToIntValue;
         [SerializeField] private string objectKey;
+        [SerializeField, Min(0)] private float lightingBrightness = 1;
+        [SerializeField, Min(0)] private float lightingDuration = 4;
+        [SerializeField] private bool waitForLighting;
+        public float LightingBrightness => lightingBrightness;
+        public float LightingDuration => lightingDuration;
+        public bool WaitForLighting => waitForLighting;
         [SerializeField, Min(.01f)] private float lookDuration = 1.2f;
         [SerializeField, Min(.01f)] private float lookMaxSpeed = 60f;
         public float LookDuration => lookDuration;
@@ -72,6 +78,15 @@ namespace Memories.Gameplay.Reactions
         public bool Validate(out string error)
         {
             error = null;
+            if (kind == ReactionKind.ChangeLighting)
+            {
+                if (!(graph is ReactionGraph lightingGraph) || !lightingGraph.HasObjectKey(objectKey))
+                { error = "Выберите объект с компонентом LightingGroup."; return false; }
+                if (float.IsNaN(lightingBrightness) || float.IsInfinity(lightingBrightness) || lightingBrightness < 0 ||
+                    float.IsNaN(lightingDuration) || float.IsInfinity(lightingDuration) || lightingDuration < 0)
+                { error = "Яркость и длительность должны быть конечными неотрицательными числами."; return false; }
+                return true;
+            }
             if (kind == ReactionKind.LookAtObject)
             {
                 if (!(graph is ReactionGraph lookGraph) || !lookGraph.HasObjectKey(objectKey))

@@ -27,7 +27,7 @@ namespace Memories.Editor
                     {
                         var names = graphSettings.FindProperty("objectKeys");
                         bool oldNameUsedByObject = graph.nodes.Exists(node => node is ReactionNode action &&
-                            (action.Kind == ReactionKind.ObjectActivity || action.Kind == ReactionKind.ObjectInteractivity || action.Kind == ReactionKind.LookAtObject) &&
+                            (action.Kind == ReactionKind.ObjectActivity || action.Kind == ReactionKind.ObjectInteractivity || action.Kind == ReactionKind.LookAtObject || action.Kind == ReactionKind.ChangeLighting) &&
                             action.ObjectKey == oldName);
                         if (!oldNameUsedByObject && oldName != key.stringValue)
                             for (int i = names.arraySize - 1; i >= 0; i--)
@@ -114,7 +114,7 @@ namespace Memories.Editor
             foreach (var node in graph.nodes)
             {
                 if (!(node is ReactionNode action) || action.ObjectKey != oldName ||
-                    (action.Kind != ReactionKind.ObjectActivity && action.Kind != ReactionKind.ObjectInteractivity && action.Kind != ReactionKind.LookAtObject)) continue;
+                    (action.Kind != ReactionKind.ObjectActivity && action.Kind != ReactionKind.ObjectInteractivity && action.Kind != ReactionKind.LookAtObject && action.Kind != ReactionKind.ChangeLighting)) continue;
                 using (var settings = new SerializedObject(action))
                 {
                     settings.FindProperty("objectKey").stringValue = newName;

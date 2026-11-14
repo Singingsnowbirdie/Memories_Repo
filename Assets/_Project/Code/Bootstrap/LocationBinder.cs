@@ -104,6 +104,15 @@ namespace Memories.Bootstrap
                 foreach (var visibility in root.GetComponentsInChildren<SavedObjectVisibility>(true))
                     visibility.Restore(scope.Container.Resolve<CustomVariableStore>());
             if (testerCheckpoint.HasValue) checkpointCatalog.ApplyScene(testerCheckpoint.Value, scene);
+            // House lighting is initialized once; completion of the highway animation runs its graph.
+            if (scene.path == "Assets/_Project/Locations/House/House.unity")
+                foreach (var root in scene.GetRootGameObjects())
+                    foreach (var group in root.GetComponentsInChildren<LightingGroup>(true))
+                    {
+                        var highway = UnityEngine.Object.FindFirstObjectByType<Memories.Gameplay.HighwayLights>();
+                        if (highway != null) highway.RegisterHouse(group);
+                        else group.RestoreBrightness(1);
+                    }
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var cinema in root.GetComponentsInChildren<ParkCinemaSequence>(true))
                     cinema.Bind(scope.Container.Resolve<QuestInventory>());

@@ -62278,7 +62278,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1531510894}
-  - component: {fileID: 900000000001}
   m_Layer: 0
   m_Name: "\u0414\u043E\u043C \u2014 \u0434\u0432\u0430 \u044D\u0442\u0430\u0436\u0430"
   m_TagString: Untagged
@@ -88251,18 +88250,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6639067316963449473, guid: 990d222e83d13d247aee1566fd8cac7b, type: 3}
   m_PrefabInstance: {fileID: 1245958791}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &900000000001
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1531510893}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 862981b5625b47eb95f31f6b877ee6a3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &17213383309258655
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -95786,6 +95773,101 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6131893869326922222}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!108 &441098864 stripped
+Light:
+  m_CorrespondingSourceObject: {fileID: -6722085885383957590, guid: be13b8002265cbf4a9b10290d2cb8ba3, type: 3}
+  m_PrefabInstance: {fileID: 441098863}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1936102301
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1936102304}
+  - component: {fileID: 1936102303}
+  - component: {fileID: 1936102302}
+  m_Layer: 0
+  m_Name: "\u041E\u0441\u0432\u0435\u0449\u0435\u043D\u0438\u0435 \u0434\u043E\u043C\u0430"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1936102302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1936102301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: house.lighting
+--- !u!114 &1936102303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1936102301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24f84c55c5be4065a0d5e10248eb25da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.LightingGroup
+  lights:
+  - {fileID: 928464790}
+  - {fileID: 864050464}
+  - {fileID: 75555940}
+  - {fileID: 65028780}
+  - {fileID: 641551621}
+  - {fileID: 724539328}
+  - {fileID: 790011711}
+  - {fileID: 119702734}
+  - {fileID: 1994426662}
+  - {fileID: 444024448}
+  - {fileID: 209694196}
+  - {fileID: 953796605}
+  - {fileID: 1721584358}
+  - {fileID: 987970651}
+  - {fileID: 1986323616}
+  - {fileID: 961644865}
+  - {fileID: 1674992732}
+  - {fileID: 511989444}
+  - {fileID: 901312336}
+  - {fileID: 650514496}
+  - {fileID: 1765216851}
+  - {fileID: 768357095}
+  - {fileID: 1284412917}
+  - {fileID: 441098864}
+  - {fileID: 2003100088}
+  - {fileID: 924872925}
+  - {fileID: 615763411}
+  - {fileID: 1360175367}
+  glowingRenderers: []
+  sourceIntensities: []
+  initialBrightness: 0
+--- !u!4 &1936102304
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1936102301}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -95798,6 +95880,7 @@ SceneRoots:
   - {fileID: 1993246558}
   - {fileID: 679105680}
   - {fileID: 617518572}
+  - {fileID: 1936102304}
 --- !u!1 &990900000
 GameObject:
   m_ObjectHideFlags: 0

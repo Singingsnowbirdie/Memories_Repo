@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Memories.Gameplay.Reactions;
 
 namespace Memories.Gameplay
 {
@@ -37,15 +38,24 @@ namespace Memories.Gameplay
             public float Delay;
         }
         private readonly List<Lamp> lamps = new List<Lamp>();
-        private readonly List<HouseLights> houses = new List<HouseLights>();
+        [SerializeField] private ReactionGraph houseLightingGraph;
+        private readonly Dictionary<LightingGroup, ReactionRunner> houses = new();
         private GhostCosmosSky sky;
 
-        public void RegisterHouse(HouseLights house)
+        public void RegisterHouse(LightingGroup house)
         {
-            if (houses.Contains(house)) return;
-            houses.Add(house);
-            house.Prepare(FadeDuration);
-            if (IsFullyLit) house.Execute();
+            if (houses.ContainsKey(house)) return;
+            var runner = new ReactionRunner(null, null, this,
+                objectBindings: new[] { new ReactionObjectBinding("Освещение дома", house.gameObject) });
+            houses.Add(house, runner);
+            house.RestoreBrightness(0);
+            if (IsFullyLit) RunHouseLighting(runner);
+        }
+
+        private void RunHouseLighting(ReactionRunner runner)
+        {
+            if (!runner.TryRun(houseLightingGraph))
+                throw new System.InvalidOperationException("Не удалось запустить граф освещения дома.");
         }
 
         public void RegisterSky(GhostCosmosSky target)
@@ -134,7 +144,7 @@ namespace Memories.Gameplay
             elapsed = 0;
             SkyBrightness = 0;
             IsFullyLit = false;
-            foreach (var house in houses) if (house != null) house.Prepare(FadeDuration);
+            foreach (var house in houses) if (house.Key != null) house.Key.RestoreBrightness(0);
             if (sky != null) sky.Prepare();
         }
 
@@ -159,7 +169,7 @@ namespace Memories.Gameplay
             {
                 IsFullyLit = true;
                 // Явное продолжение этой анимационной последовательности без наблюдения за прогрессом.
-                foreach (var house in houses) if (house != null) house.Execute();
+                foreach (var house in houses) if (house.Key != null) RunHouseLighting(house.Value);
                 if (sky != null) sky.Execute();
             }
             foreach (var headlight in headlights)
@@ -211,7 +221,10 @@ namespace Memories.Gameplay
 
         private void OnDestroy()
         {
-            foreach (var house in houses) if (house != null) house.ShowImmediately();
+            foreach (var house in houses)
+            {
+                house.Value.Dispose();
+            }
             if (sky != null) sky.ShowImmediately();
         }
     }
