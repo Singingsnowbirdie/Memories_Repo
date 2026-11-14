@@ -6,7 +6,7 @@ using XNode;
 
 namespace Memories.Gameplay.Reactions
 {
-    public enum ReactionKind { StoryText, Memory, ChangeLocation, CustomReaction, SetCustomVariable, ObjectActivity, AddInventoryItem, StartHints, StopHints, ConsumeInventoryItem, ObjectInteractivity, RunGraph, LookAtObject, ChangeLighting }
+    public enum ReactionKind { StoryText, Memory, ChangeLocation, CustomReaction, SetCustomVariable, ObjectActivity, AddInventoryItem, StartHints, StopHints, ConsumeInventoryItem, ObjectInteractivity, RunGraph, LookAtObject, ChangeLighting, LoadSegment }
 
     [Node.CreateNodeMenu("Реакция"), Node.NodeWidth(320), Node.NodeTint("#284C53")]
     [MovedFrom(true, sourceNamespace: "Memories.Gameplay.Triggers", sourceAssembly: "Memories.Gameplay", sourceClassName: "TriggerActionNode")]
@@ -25,6 +25,8 @@ namespace Memories.Gameplay.Reactions
         [SerializeField] private string memoryStartedReactionKey;
         public string MemoryStartedReactionKey => memoryStartedReactionKey;
         [SerializeField] private string locationScenePath;
+        [SerializeField] private string arrivalMarker;
+        public string ArrivalMarker => arrivalMarker;
         [SerializeField] private CustomVariableBank variableBank;
         [SerializeField] private string variableId;
         [SerializeField] private bool variableValue = true;
@@ -69,6 +71,8 @@ namespace Memories.Gameplay.Reactions
         public bool VariableValue => variableValue;
         public ReactionKind Kind => kind;
         public StoryTextGraph TextGraph => textGraph;
+        [SerializeField] private bool playTextInBackground;
+        public bool PlayTextInBackground => playTextInBackground;
         public MemoryGraph MemoryGraph => memoryGraph;
         public string MemoryId => memoryId;
         public string LocationScenePath => locationScenePath;
@@ -78,6 +82,14 @@ namespace Memories.Gameplay.Reactions
         public bool Validate(out string error)
         {
             error = null;
+            if (kind == ReactionKind.LoadSegment)
+            {
+                if (string.IsNullOrWhiteSpace(locationScenePath) || !locationScenePath.EndsWith(".unity") ||
+                    string.IsNullOrWhiteSpace(arrivalMarker) || !(graph is ReactionGraph segmentGraph) ||
+                    !segmentGraph.HasObjectKey(objectKey))
+                { error = "Назначьте сцену сегмента, точку соединения и имя входного маркера."; return false; }
+                return true;
+            }
             if (kind == ReactionKind.ChangeLighting)
             {
                 if (!(graph is ReactionGraph lightingGraph) || !lightingGraph.HasObjectKey(objectKey))
@@ -117,7 +129,7 @@ namespace Memories.Gameplay.Reactions
                     float.IsNaN(hintTimeout) || float.IsInfinity(hintTimeout))
                 { error = "Назначьте отдельный граф подсказки и положительный таймаут в секундах."; return false; }
                 foreach (var node in hintGraph.nodes)
-                    if (node is ReactionNode action && (action.Kind == ReactionKind.StartHints || action.Kind == ReactionKind.ChangeLocation))
+                    if (node is ReactionNode action && (action.Kind == ReactionKind.StartHints || action.Kind == ReactionKind.ChangeLocation || action.Kind == ReactionKind.LoadSegment))
                     { error = "Граф подсказки не должен запускать таймеры или менять локацию."; return false; }
                 return hintGraph.TryGetSequence(out _, out error);
             }

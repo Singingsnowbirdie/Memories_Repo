@@ -184,6 +184,10 @@ namespace Memories.Bootstrap
             finally { busy = false; }
         }
 
+        public bool CanLoadSegment(string scenePath) => transitions.CanLoadSegment(scenePath);
+        public async UniTask LoadSegmentAsync(string scenePath, Transform connection, string arrivalMarker) =>
+            await transitions.LoadConnectedSceneAsync(scenePath, connection, arrivalMarker);
+
         public bool CanChangeLocation(string scenePath) => transitions.CanChangeLocation(scenePath);
 
         private static void PrepareHouseStart(Scene scene)

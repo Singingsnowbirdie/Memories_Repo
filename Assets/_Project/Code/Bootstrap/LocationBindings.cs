@@ -10,7 +10,7 @@ namespace Memories.Bootstrap
     [AddComponentMenu("Memories/Locations/Конфигурация связей локации")]
     public sealed class LocationBindings : MonoBehaviour
     {
-        [SerializeField, InspectorName("Дом: дверь во двор")] private OpenCourtyardDoorReaction courtyardDoor;
+        [SerializeField, InspectorName("Дом: загрузка двора")] private Transform courtyardConnection;
         [SerializeField, InspectorName("Двор: вход")] private BackyardEntranceReaction backyardEntrance;
         [SerializeField, InspectorName("Двор: соединение с гаражом")] private BackyardGarageAttachment garageAttachment;
         [SerializeField, InspectorName("Гараж: соединение со школой")] private GarageSchoolConnection schoolConnection;
@@ -20,7 +20,7 @@ namespace Memories.Bootstrap
         private static readonly Dictionary<int, HashSet<LocationBindings>> registered = new Dictionary<int, HashSet<LocationBindings>>();
         private int registeredScene;
 
-        public OpenCourtyardDoorReaction CourtyardDoor => Require(courtyardDoor, "дверь во двор");
+        public Transform CourtyardConnection => Require(courtyardConnection, "дверь во двор");
         public BackyardEntranceReaction BackyardEntrance => Require(backyardEntrance, "вход во двор");
         public BackyardGarageAttachment GarageAttachment => Require(garageAttachment, "соединение с гаражом");
         public GarageSchoolConnection SchoolConnection => Require(schoolConnection, "соединение со школой");

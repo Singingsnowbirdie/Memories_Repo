@@ -97,8 +97,8 @@ namespace Memories.Bootstrap
                 await startSession(checkpointScene);
                 if (checkpoint == TesterCheckpoint.HouseMemoryComplete)
                 {
-                    var door = FindComponent<OpenCourtyardDoorReaction>(getCurrentScene());
-                    await UniTask.WaitUntil(() => door != null && door.IsOpen, cancellationToken: shutdownToken).Timeout(TimeSpan.FromSeconds(30));
+                    await UniTask.WaitUntil(() => SceneManager.GetSceneByPath(TestLocationLauncher.BackyardPath).isLoaded,
+                        cancellationToken: shutdownToken).Timeout(TimeSpan.FromSeconds(30));
                 }
                 else if (checkpoint == TesterCheckpoint.BackyardMemoryComplete)
                 {

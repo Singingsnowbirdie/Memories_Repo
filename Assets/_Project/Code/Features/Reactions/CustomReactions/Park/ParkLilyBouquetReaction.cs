@@ -8,11 +8,9 @@ namespace Memories.Gameplay.Reactions
     // Started explicitly by the bouquet handover graph. Restoration never replays the animation.
     public sealed class ParkLilyBouquetReaction : CustomReaction, IObjectStateParticipant
     {
-        [SerializeField] private GameObject cinemaLily;
         [SerializeField] private GameObject bouquet;
         [SerializeField] private Shader dissolveShader;
         [SerializeField] private float duration = 4f;
-        [SerializeField] private ParkCinemaSequence cinemaSequence;
         [SerializeField] private LightingGroup approachLighting;
         private bool completed;
         public bool Completed => completed;
@@ -49,8 +47,6 @@ namespace Memories.Gameplay.Reactions
                 }
                 renderer.sharedMaterials = replacement;
             }
-            if (cinemaSequence != null) cinemaSequence.RevealCinema();
-            else ObjectReveal.Play(cinemaLily, dissolveShader, duration, 0);
             for (float elapsed = 0; elapsed < duration; elapsed += Time.deltaTime)
             {
                 foreach (var material in temporary)
@@ -71,7 +67,6 @@ namespace Memories.Gameplay.Reactions
             else
             {
                 bouquet.SetActive(false);
-                cinemaLily.SetActive(false);
                 foreach (var renderer in GetComponentsInChildren<Renderer>(true)) renderer.enabled = true;
                 foreach (var collider in GetComponentsInChildren<Collider>(true)) collider.enabled = true;
             }
@@ -83,7 +78,6 @@ namespace Memories.Gameplay.Reactions
             foreach (var renderer in GetComponentsInChildren<Renderer>(true)) renderer.enabled = false;
             foreach (var collider in GetComponentsInChildren<Collider>(true)) collider.enabled = false;
             bouquet.SetActive(false);
-            if (cinemaSequence == null) cinemaLily.SetActive(true);
             GetComponent<ReactionInteractable>().SetInteractionEnabled(false);
         }
 

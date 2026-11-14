@@ -108,6 +108,9 @@ namespace Memories.Bootstrap
             connectionCovers.Clear();
         }
 
+        public bool CanLoadSegment(string scenePath) => !disposed && !busy && IsRunning &&
+            !string.IsNullOrWhiteSpace(scenePath) && Application.CanStreamedLevelBeLoaded(scenePath);
+
         public bool CanChangeLocation(string scenePath) => !disposed && !busy && IsRunning &&
             !string.IsNullOrWhiteSpace(scenePath) && Application.CanStreamedLevelBeLoaded(scenePath) &&
             !SceneManager.GetSceneByPath(scenePath).isLoaded;
@@ -274,8 +277,10 @@ namespace Memories.Bootstrap
             finally { busy = false; }
         }
 
-        public async UniTask<Scene> LoadConnectedSceneAsync(string path, OpenCourtyardDoorReaction door)
+        public async UniTask<Scene> LoadConnectedSceneAsync(string path, Transform connection, string arrivalMarker)
         {
+            if (connection == null || string.IsNullOrWhiteSpace(arrivalMarker))
+                throw new ArgumentException("Segment connection and arrival marker are required.");
             var existing = SceneManager.GetSceneByPath(path);
             if (existing.isLoaded) return existing;
             if (disposed || busy || !Application.CanStreamedLevelBeLoaded(path))
@@ -288,9 +293,9 @@ namespace Memories.Bootstrap
                 await SceneManager.LoadSceneAsync(path, LoadSceneMode.Additive);
                 scene = SceneManager.GetSceneByPath(path);
                 cancellation.Token.ThrowIfCancellationRequested();
-                var arrival = FindMarker(scene, door.ArrivalMarker);
-                if (arrival == null) throw new InvalidOperationException("Missing entrance marker: " + door.ArrivalMarker);
-                ValidateConnection(arrival, door.transform);
+                var arrival = FindMarker(scene, arrivalMarker);
+                if (arrival == null) throw new InvalidOperationException("Missing entrance marker: " + arrivalMarker);
+                ValidateConnection(arrival, connection);
                 DisableLocationCameras(scene);
                 BindDoors(scene, LocationScope);
                 additionalScenes.Add(scene);
@@ -314,13 +319,13 @@ namespace Memories.Bootstrap
                                 {
                                     if (!collider.enabled) continue;
                                     var bounds = collider.bounds;
-                                    var forward = door.transform.forward;
+                                    var forward = connection.forward;
                                     float extent = Vector3.Dot(bounds.extents,
                                         new Vector3(Mathf.Abs(forward.x), Mathf.Abs(forward.y), Mathf.Abs(forward.z)));
-                                    if (bounds.max.y > door.transform.position.y + controller.radius &&
-                                        bounds.min.y < door.transform.position.y + controller.height - controller.radius)
+                                    if (bounds.max.y > connection.position.y + controller.radius &&
+                                        bounds.min.y < connection.position.y + controller.height - controller.radius)
                                         clearance = Mathf.Max(clearance,
-                                            Vector3.Dot(bounds.center - door.transform.position, forward) + extent +
+                                            Vector3.Dot(bounds.center - connection.position, forward) + extent +
                                             controller.radius + controller.skinWidth + .05f);
                                     cover.Colliders.Add(collider);
                                     collider.enabled = false;
@@ -335,8 +340,8 @@ namespace Memories.Bootstrap
                     // Контакт с триггером начинается только после того, как капсула игрока минует старый фасад.
                     var trigger = backyardEntrance.EntranceTrigger;
                     trigger.transform.SetPositionAndRotation(
-                        door.transform.position + door.transform.forward * (clearance + controller.radius + .2f),
-                        door.transform.rotation);
+                        connection.position + connection.forward * (clearance + controller.radius + .2f),
+                        connection.rotation);
                 }
                 return scene;
             }

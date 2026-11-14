@@ -87,6 +87,9 @@ namespace Memories.Gameplay.Reactions
                     !CustomReactionBinding.TryResolve(customReactions, action.MemoryStartedReactionKey, out _)) return false;
                 if (action.Kind == ReactionKind.CustomReaction && !TryGetCustomReaction(action, out _))
                 { Debug.LogWarning("Назначьте включённый компонент CustomReaction в привязках реакций: " + action.ObjectKey, owner); return false; }
+                if (action.Kind == ReactionKind.LoadSegment &&
+                    (locations == null || !locations.CanLoadSegment(action.LocationScenePath) ||
+                     !ReactionObjectBinding.TryResolve(objectBindings, action.ObjectKey, out _))) return false;
                 if (action.Kind == ReactionKind.ChangeLocation &&
                     (locations == null || !locations.CanChangeLocation(action.LocationScenePath))) return false;
             }
@@ -278,7 +281,21 @@ namespace Memories.Gameplay.Reactions
                         else variables.Set(action.VariableBank, action.VariableId, action.VariableValue);
                     }
                     else if (action.Kind == ReactionKind.StoryText)
-                        await texts.ShowAsync(action.TextGraph, source.Token);
+                    {
+                        // Background text belongs to the presenter/location lifetime, not this graph run.
+                        // The interactable is released immediately, so another item can be handed over.
+                        if (action.PlayTextInBackground)
+                            texts.ShowAsync(action.TextGraph).Forget();
+                        else
+                            await texts.ShowAsync(action.TextGraph, source.Token);
+                    }
+                    else if (action.Kind == ReactionKind.LoadSegment)
+                    {
+                        if (!ReactionObjectBinding.TryResolve(objectBindings, action.ObjectKey, out var connection))
+                            throw new InvalidOperationException("Точка соединения недоступна: " + action.ObjectKey);
+                        await locations.LoadSegmentAsync(action.LocationScenePath, connection.transform, action.ArrivalMarker)
+                            .AttachExternalCancellation(source.Token);
+                    }
                     else if (action.Kind == ReactionKind.ChangeLocation)
                     {
                         await locations.ChangeLocationAsync(action.LocationScenePath);

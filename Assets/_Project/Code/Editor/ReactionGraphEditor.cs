@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Memories.Gameplay.Triggers;
 using Memories.Gameplay.Reactions;
 using Memories.Gameplay.Interaction;
@@ -176,8 +177,8 @@ namespace Memories.Editor
                 ? (int)ReactionKind.AddInventoryItem : kind.intValue;
             EditorGUI.BeginChangeCheck();
             int chosenKind = EditorGUILayout.IntPopup(displayedKind,
-                new[] { "Показать текст", "Показать воспоминание", "Перейти в локацию", "Запустить реакцию объекта", "Установить кастомную переменную", "Активность объекта", "Инвентарный предмет", "Запустить подсказки", "Остановить подсказки", "Интерактивность предмета", "Запустить граф реакций", "Посмотреть на объект", "Изменить освещение" },
-                new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13 });
+                new[] { "Показать текст", "Показать воспоминание", "Перейти в локацию", "Запустить реакцию объекта", "Установить кастомную переменную", "Активность объекта", "Инвентарный предмет", "Запустить подсказки", "Остановить подсказки", "Интерактивность предмета", "Запустить граф реакций", "Посмотреть на объект", "Изменить освещение", "Подгрузить сегмент локации" },
+                new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14 });
             if (EditorGUI.EndChangeCheck()) kind.intValue = chosenKind;
             EditorGUILayout.Space(8);
             if (kind.intValue == (int)ReactionKind.RunGraph)
@@ -191,6 +192,8 @@ namespace Memories.Editor
             {
                 EditorGUILayout.LabelField("Граф текста");
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("textGraph"), GUIContent.none);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("playTextInBackground"),
+                    new GUIContent("Не ждать окончания текста", "Граф продолжится сразу; текст не удерживает интерактивный объект."));
             }
             else if (kind.enumValueIndex == 1)
             {
@@ -205,6 +208,21 @@ namespace Memories.Editor
                 EditorGUILayout.LabelField("Реакция при начале воспоминания");
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("memoryStartedReactionKey"), GUIContent.none);
                 EditorGUILayout.Space(8);
+            }
+            else if (kind.intValue == (int)ReactionKind.LoadSegment)
+            {
+                var path = serializedObject.FindProperty("locationScenePath");
+                var current = AssetDatabase.LoadAssetAtPath<SceneAsset>(path.stringValue);
+                EditorGUI.BeginChangeCheck();
+                var scene = (SceneAsset)EditorGUILayout.ObjectField("Сцена сегмента", current, typeof(SceneAsset), false);
+                if (EditorGUI.EndChangeCheck()) path.stringValue = scene == null ? "" : AssetDatabase.GetAssetPath(scene);
+                var key = serializedObject.FindProperty("objectKey");
+                var names = ((ReactionGraph)target.graph).ObjectKeys.ToArray();
+                EditorGUI.BeginChangeCheck();
+                int chosen = EditorGUILayout.Popup("Точка соединения", System.Array.IndexOf(names, key.stringValue), names);
+                if (EditorGUI.EndChangeCheck() && chosen >= 0) key.stringValue = names[chosen];
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("arrivalMarker"), new GUIContent("Входной маркер"));
+                EditorGUILayout.HelpBox("Подгружает сцену без переноса игрока. Следующее действие выполняется после готовности сегмента.", MessageType.Info);
             }
             else if (kind.enumValueIndex == 2)
             {

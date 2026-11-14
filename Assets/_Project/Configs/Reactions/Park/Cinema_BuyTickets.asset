@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: "\u041A\u043E\u043D\u0435\u0446"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionEndNode
   graph: {fileID: 11400000}
-  position: {x: 1400, y: 0}
+  position: {x: 1360, y: 0}
   ports:
     keys:
     - previous
@@ -49,7 +49,7 @@ MonoBehaviour:
   - {fileID: 3815386297593963794}
   - {fileID: -6098952343598173245}
   objectKeys:
-  - "\u0411\u0438\u043B\u0435\u0442\u044B \u043A\u0443\u043F\u043B\u0435\u043D\u044B"
+  - "\u041A\u0430\u0441\u0441\u0438\u0440"
 --- !u!114 &46661090138588433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63,7 +63,7 @@ MonoBehaviour:
   m_Name: "\u0423\u0441\u043B\u043E\u0432\u0438\u0435"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionConditionNode
   graph: {fileID: 11400000}
-  position: {x: 320, y: 0}
+  position: {x: 340, y: 0}
   ports:
     keys:
     - previous
@@ -156,7 +156,7 @@ MonoBehaviour:
   m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
   graph: {fileID: 11400000}
-  position: {x: 660, y: 160}
+  position: {x: 680, y: 0}
   ports:
     keys:
     - previous
@@ -215,6 +215,7 @@ MonoBehaviour:
   hintGraph: {fileID: 0}
   hintTimeout: 60
   repeatHint: 1
+  playTextInBackground: 0
 --- !u!114 &3815386297593963794
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -261,7 +262,7 @@ MonoBehaviour:
       _dynamic: 0
   previous: {fileID: 0}
   next: {fileID: 0}
-  kind: 3
+  kind: 10
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 0}
   memoryGraph: {fileID: 0}
@@ -274,7 +275,7 @@ MonoBehaviour:
   variableValue: 1
   variableIntValue: 0
   addToIntValue: 0
-  objectKey: "\u0411\u0438\u043B\u0435\u0442\u044B \u043A\u0443\u043F\u043B\u0435\u043D\u044B"
+  objectKey: "\u041A\u0430\u0441\u0441\u0438\u0440"
   lightingBrightness: 1
   lightingDuration: 4
   waitForLighting: 0
@@ -290,3 +291,4 @@ MonoBehaviour:
   hintGraph: {fileID: 0}
   hintTimeout: 60
   repeatHint: 1
+  playTextInBackground: 0
