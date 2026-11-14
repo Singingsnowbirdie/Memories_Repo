@@ -181,8 +181,8 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &6992312923315208380
-MeshCollider:
+--- !u!136 &6992312923315208380
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -199,10 +199,11 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: b0e4b1ba79d61d346a067d4a64130db1, type: 2}
+  serializedVersion: 2
+  m_Radius: 0.36
+  m_Height: 2.3
+  m_Direction: 1
+  m_Center: {x: -0.12, y: 0.95, z: 0.1}
 --- !u!1 &6822139874382426580
 GameObject:
   m_ObjectHideFlags: 0
