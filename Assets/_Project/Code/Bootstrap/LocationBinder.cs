@@ -148,6 +148,9 @@ namespace Memories.Bootstrap
                 foreach (var mimes in root.GetComponentsInChildren<ParkMimeReaction>(true))
                     mimes.RestoreAfterLoad(scope.Container.Resolve<QuestInventory>());
             foreach (var root in scene.GetRootGameObjects())
+                foreach (var cafe in root.GetComponentsInChildren<ParkCafeDissolveReaction>(true))
+                    cafe.RestoreAfterLoad(scope.Container.Resolve<CustomVariableStore>(), scope.Container.Resolve<QuestInventory>());
+            foreach (var root in scene.GetRootGameObjects())
                 foreach (var reaction in root.GetComponentsInChildren<GarageOpenHoodFatherReaction>(true))
                     reaction.Restore(scope.Container.Resolve<CustomVariableStore>(),
                         scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());

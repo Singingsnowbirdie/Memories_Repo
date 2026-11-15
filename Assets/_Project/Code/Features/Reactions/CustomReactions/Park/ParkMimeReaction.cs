@@ -1,4 +1,5 @@
-using System.Collections;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using Memories.Gameplay.Interaction;
 using UnityEngine;
@@ -13,6 +14,8 @@ namespace Memories.Gameplay.Reactions
         [SerializeField] private QuestItem pendants, tickets;
         [SerializeField] private Shader dissolveShader;
         [SerializeField] private LightingGroup lighting;
+        [SerializeField] private LightingGroup cafeLighting;
+        [SerializeField] private GameObject cafeLily;
         [SerializeField] private float fadeDuration = 4f;
         private bool finished;
         private int legacyStage;
@@ -37,17 +40,23 @@ namespace Memories.Gameplay.Reactions
             if (!suitcase.GetComponent<ObjectStateTracker>().HasRestoredState || bought || finished)
                 suitcase.SetInteractionEnabled(legacyStage == 2 && !bought && !finished);
             lighting.RestoreBrightness(arrived && !finished ? 1 : 0);
+            if (cafeLighting) cafeLighting.RestoreBrightness(finished ? 1 : 0);
+            if (cafeLily) cafeLily.SetActive(finished);
         }
 
-        public override void Execute()
+        public override void Execute() => ExecuteAsync(destroyCancellationToken).Forget();
+
+        public override async UniTask ExecuteAsync(CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             if (finished) return;
             finished = true;
             GetComponent<ObjectStateTracker>().Capture();
-            StartCoroutine(Dissolve());
+            try { await Dissolve(cancellationToken); }
+            finally { RestoreMaterials(); }
         }
 
-        private IEnumerator Dissolve()
+        private async UniTask Dissolve(CancellationToken cancellationToken)
         {
             foreach (var renderer in lily.GetComponentsInChildren<Renderer>(true))
             {
@@ -68,10 +77,11 @@ namespace Memories.Gameplay.Reactions
             {
                 float value = 1 - Mathf.SmoothStep(0, 1, elapsed / fadeDuration);
                 foreach (var material in temporary) material.SetFloat("_Reveal", value);
-                yield return null;
+                await UniTask.Yield(PlayerLoopTiming.Update, cancellationToken);
             }
-            lily.SetActive(false);
-            RestoreMaterials();
+            // The following graph action hides Lily, then reveals the cafe encounter.
+            foreach (var material in temporary) material.SetFloat("_Reveal", 0);
+            foreach (var entry in originals) if (entry.renderer) entry.renderer.enabled = false;
         }
 
         private void RestoreMaterials()
