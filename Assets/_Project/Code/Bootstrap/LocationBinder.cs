@@ -26,7 +26,8 @@ namespace Memories.Bootstrap
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var departure in root.GetComponentsInChildren<SchoolAmbulanceDepartureReaction>(true))
                     departure.Initialize(scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>(),
-                        () => locations.ChangeLocationAsync("Assets/_Project/Locations/Park/Park.unity"));
+                        () => locations.ChangeLocationAsync("Assets/_Project/Locations/Park/Park.unity"),
+                        scope.Container.Resolve<PlayerMotor>(), scope.Container.Resolve<PlayerMovementModel>());
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var phone in root.GetComponentsInChildren<RevealSchoolPhoneReaction>(true))
                     phone.Initialize(scope.Container.Resolve<QuestInventory>());

@@ -203,12 +203,12 @@ namespace Memories.Gameplay.Reactions
             }
         }
 
-        private async UniTask RunPathAsync(XNode.Node node, CancellationTokenSource source, bool checkedCustomCondition = false, XNode.Node stopBefore = null)
+        private async UniTask RunPathAsync(XNode.Node node, CancellationTokenSource source, bool checkedCustomCondition = false, XNode.Node stopBefore = null, Stack<XNode.Node> continuationReturns = null)
         {
             bool ownsMemory = false;
             try
             {
-                var returns = new Stack<XNode.Node>();
+                var returns = continuationReturns ?? new Stack<XNode.Node>();
                 while (true)
                 {
                     source.Token.ThrowIfCancellationRequested();
@@ -343,10 +343,13 @@ namespace Memories.Gameplay.Reactions
                     else
                     {
                         // Другие триггеры уже могут показывать воспоминание; сохраняем порядок последовательности.
-                        await UniTask.WaitUntil(() => memories.CanOpen(action.MemoryId, true), cancellationToken: source.Token);
+                        if (!memories.CanOpen(action.MemoryId, true))
+                            await UniTask.WaitUntil(() => memories.CanOpen(action.MemoryId, true), cancellationToken: source.Token);
                         bool alreadyCollected = memories.HasCollected(action.MemoryId);
                         if (!memories.Open(action.MemoryId, action.MemoryGraph, true)) return;
                         ownsMemory = true;
+                        var memoryFinished = memories.WaitForCompletionAsync(source.Token);
+                        await memories.WaitForFirstFrameAsync(source.Token);
                         if (!string.IsNullOrEmpty(action.MemoryStartedReactionKey))
                         {
                             if (!CustomReactionBinding.TryResolve(customReactions, action.MemoryStartedReactionKey, out var started))
@@ -361,10 +364,17 @@ namespace Memories.Gameplay.Reactions
                                 return;
                             }
                         }
-                        await UniTask.WaitUntil(() => !memories.IsPlaying, cancellationToken: source.Token);
-                        ownsMemory = false;
+                        // Continue the explicit graph behind the visible comic, without holding its last frame.
+                        async UniTask ReleaseMemoryAsync()
+                        {
+                            await memoryFinished;
+                            ownsMemory = false;
+                        }
+                        await UniTask.WhenAll(ReleaseMemoryAsync(),
+                            RunPathAsync(ReactionGraph.Next(node), source, checkedCustomCondition, stopBefore, returns));
                         if (!alreadyCollected && memories.HasCollected(action.MemoryId) && action.FirstCompletionText != null)
                             await texts.ShowAsync(action.FirstCompletionText, source.Token);
+                        return;
                     }
                     node = ReactionGraph.Next(node);
                 }

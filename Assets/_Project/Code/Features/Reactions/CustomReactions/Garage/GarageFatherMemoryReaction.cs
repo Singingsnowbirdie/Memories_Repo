@@ -1,5 +1,7 @@
 using Memories.Gameplay.Memories;
 using UnityEngine;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 
 namespace Memories.Gameplay.Reactions
 {
@@ -20,11 +22,14 @@ namespace Memories.Gameplay.Reactions
             kneelingFather.SetActive(completed);
         }
 
-        public override void Execute()
+        public override void Execute() => ExecuteAsync(this.GetCancellationTokenOnDestroy()).Forget();
+
+        public override async UniTask ExecuteAsync(CancellationToken cancellationToken)
         {
             // Open показывает полноэкранный комикс до изменения сцены за ним.
             // Реакция находится вне объекта отца, поэтому его скрытие не прерывает воспроизведение.
             if (presenter == null || !presenter.Open(MemoryId, memory, true)) return;
+            await presenter.WaitForFirstFrameAsync(cancellationToken);
             kneelingFather.SetActive(true);
             standingFather.SetActive(false);
         }

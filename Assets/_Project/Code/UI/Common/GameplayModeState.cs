@@ -24,7 +24,8 @@ namespace Memories.Gameplay.UI
             previousTimeScale = Time.timeScale;
             previousAudioPause = AudioListener.pause;
             Mode = mode;
-            Time.timeScale = 0;
+            // The comic blocks player input, while explicitly launched scene actions keep running.
+            if (mode != GameplayMode.Reading) Time.timeScale = 0;
             AudioListener.pause = true;
             input.SetPaused(true);
             return true;

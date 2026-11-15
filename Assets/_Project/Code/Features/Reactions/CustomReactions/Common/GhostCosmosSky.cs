@@ -74,6 +74,7 @@ namespace Memories.Gameplay
         private void OnActiveSceneChanged(Scene previous, Scene current)
         {
             if (instance != null) RenderSettings.skybox = instance;
+            Apply();
         }
 
         private void LateUpdate()
@@ -101,6 +102,18 @@ namespace Memories.Gameplay
             instance.SetFloat("_D2I", starIntensity * stars);
             instance.SetFloat("_BlueIntensity", blueIntensity * nebula);
             instance.SetFloat("_RedIntensity", redIntensity * nebula);
+            if (SceneManager.GetActiveScene().name == "Highway")
+            {
+                float ambient = !sequenceActive ? 1 : Mathf.SmoothStep(0, 1,
+                    Mathf.Clamp01(revealElapsed / (starsDuration + Mathf.Max(0.1f, nebulaFadeDuration))));
+                Color ambientColor = new Color(0.25f, 0.28f, 0.33f) * ambient;
+                RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Flat;
+                RenderSettings.ambientIntensity = 1;
+                RenderSettings.ambientLight = ambientColor;
+                var probe = new UnityEngine.Rendering.SphericalHarmonicsL2();
+                probe.AddAmbientLight(ambientColor.linear);
+                RenderSettings.ambientProbe = probe;
+            }
         }
 
         private void OnDisable() => revealElapsed = 0;

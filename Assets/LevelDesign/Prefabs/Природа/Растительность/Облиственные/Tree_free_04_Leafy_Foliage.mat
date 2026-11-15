@@ -12,14 +12,16 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
-  m_InvalidKeywords: []
+  m_InvalidKeywords:
+  - _USEGRADIENT_ON
+  - _WINDENABLED_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: 2450
   stringTagMap: {}
   disabledShaderPasses: []
-  m_LockedProperties:
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -86,6 +88,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _AlphaCutoff: 0.5
+    - _AmbientStrength: 0.55
     - _BumpScale: 1
     - _CUSTOMCOLORSTINTING: 1
     - _CUSTOMWIND: 1
@@ -100,16 +103,19 @@ Material:
     - _Gradient: 0.123
     - _GradientPower: 1.74
     - _LeavesThickness: 0.5
-    - _LightLimit: 0.45
+    - _LightLimit: 0.65
+    - _LightWrap: 0.25
     - _MaskClipValue: 0.5
     - _Metallic: 0
     - _Mode: 3
+    - _NeutralTexture: 1
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _QueueControl: -1
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _SNOWONOFF: 0
+    - _Saturation: 0.25
     - _Smoothness: 0
     - _SmoothnessTextureChannel: 0
     - _SnowAmount: 1
@@ -118,6 +124,7 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _TRANSLUCENCYONOFF: 1
+    - _TextureLuminanceScale: 5.151286
     - _TransAmbient: 0.7
     - _TransDirect: 1
     - _TransNormal: 0.5
@@ -127,7 +134,7 @@ Material:
     - _TransStrength: 1
     - _Translucency: 10
     - _UVSec: 0
-    - _UseGradient: 1
+    - _UseGradient: 0
     - _WINDMASKONOFF: 0
     - _WindDensity: 3.3
     - _WindEnabled: 1
@@ -137,7 +144,7 @@ Material:
     - _ZWrite: 0
     - __dirty: 0
     m_Colors:
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _BaseColor: {r: 0.32, g: 0.39, b: 0.33, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _GroundColor: {r: 0.17173234, g: 0.509434, b: 0.12255251, a: 1}

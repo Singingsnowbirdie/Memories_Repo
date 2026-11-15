@@ -10,7 +10,9 @@ Shader "Memories/Night Vegetation"
   _Gradient("Gradient",Float)=1
   _Cutoff("Alpha cutoff",Range(0,1))=0.5
   [Enum(UnityEngine.Rendering.CullMode)] _Cull("Cull",Float)=0
-  _LightLimit("Maximum direct light",Range(0.05,2))=0.45
+  [Toggle] _NeutralTexture("Neutral texture, separate tint",Float)=0
+  _TextureLuminanceScale("Texture detail normalization",Float)=1
+  _CanopyOcclusion("Leaf underside shading",Range(0,1))=0.65
   [Toggle] _WindEnabled("Wind",Float)=0
   _WindMovement("Wind movement",Float)=0.5
   _WindDensity("Wind density",Float)=3.3
@@ -27,7 +29,7 @@ Shader "Memories/Night Vegetation"
   TEXTURE2D(_BaseMap); SAMPLER(sampler_BaseMap);
   CBUFFER_START(UnityPerMaterial)
   float4 _BaseMap_ST, _BaseColor, _GroundColor, _TopColor;
-  float _UseGradient,_Gradient,_Cutoff,_Cull,_LightLimit;
+  float _UseGradient,_Gradient,_Cutoff,_Cull,_NeutralTexture,_TextureLuminanceScale,_CanopyOcclusion;
   float _WindEnabled,_WindMovement,_WindDensity,_WindStrength,_WindMask;
   CBUFFER_END
   struct Attributes {float4 positionOS:POSITION;float3 normalOS:NORMAL;float2 uv:TEXCOORD0;UNITY_VERTEX_INPUT_INSTANCE_ID};
@@ -48,7 +50,7 @@ Shader "Memories/Night Vegetation"
   float3 Position(Attributes v){float3 p=v.positionOS.xyz;float mask=lerp(p.y,(1-v.uv.y)*5,_WindMask);p.x+=Noise((p.xy+_Time.y*_WindMovement)*_WindDensity)*.05*_WindStrength*mask*_WindEnabled;return p;}
   Varyings Vert(Attributes v){Varyings o=(Varyings)0;UNITY_SETUP_INSTANCE_ID(v);UNITY_TRANSFER_INSTANCE_ID(v,o);UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
    VertexPositionInputs p=GetVertexPositionInputs(Position(v));o.positionCS=p.positionCS;o.positionWS=p.positionWS;o.normalWS=TransformObjectToWorldNormal(v.normalOS);o.uv=TRANSFORM_TEX(v.uv,_BaseMap);o.height=v.positionOS.y;o.fog=ComputeFogFactor(p.positionCS.z);return o;}
-  half4 Surface(Varyings i){half4 t=SAMPLE_TEXTURE2D(_BaseMap,sampler_BaseMap,i.uv);clip(t.a*_BaseColor.a-_Cutoff);half3 gradient=lerp(_GroundColor.rgb,_TopColor.rgb,clamp((.5+i.height*1.5)*_Gradient,-1,1));return half4(lerp(t.rgb*_BaseColor.rgb,saturate(gradient),_UseGradient),1);}
+  half4 Surface(Varyings i){half4 t=SAMPLE_TEXTURE2D(_BaseMap,sampler_BaseMap,i.uv);clip(t.a*_BaseColor.a-_Cutoff);half3 gradient=lerp(_GroundColor.rgb,_TopColor.rgb,clamp((.5+i.height*1.5)*_Gradient,-1,1));half detail=saturate(dot(t.rgb,half3(.2126,.7152,.0722))*_TextureLuminanceScale); half3 tint=lerp(_BaseColor.rgb,saturate(gradient),_UseGradient); half3 original=lerp(t.rgb*_BaseColor.rgb,saturate(gradient),_UseGradient); return half4(lerp(original,detail*tint,_NeutralTexture),1);}
   half3 Diffuse(Light l,half3 n){return l.color*(l.distanceAttenuation*l.shadowAttenuation*saturate(dot(n,l.direction)));}
   ENDHLSL
   Pass
@@ -77,11 +79,12 @@ Shader "Memories/Night Vegetation"
     LIGHT_LOOP_BEGIN(count)
      illumination+=Diffuse(GetAdditionalLight(lightIndex,i.positionWS,half4(1,1,1,1)),n);
     LIGHT_LOOP_END
-    // No ambient, probes, emission, specular or translucency. Preserve light hue
-    // while smoothly limiting brightness even when several lamps overlap.
-    half peak=max(illumination.r,max(illumination.g,illumination.b));
-    illumination*=_LightLimit/(_LightLimit+peak);
-    return half4(MixFog(albedo*illumination,i.fog),1);
+    // Use the scene's diffuse probes and lights without vegetation-only exposure limits.
+    // Approximate sky visibility from the surface orientation, not renderer bounds.
+    // Bounds change across LODs and static batches; material shading must not.
+    half skyVisibility=lerp(1-_CanopyOcclusion,1,saturate(n.y*.5+.5));
+    half3 sky=max(SampleSH(n),0)*lerp(1,skyVisibility,_NeutralTexture);
+    return half4(MixFog(albedo*(illumination+sky),i.fog),1);
    }
    ENDHLSL
   }

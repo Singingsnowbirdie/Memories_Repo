@@ -1,5 +1,7 @@
 using Memories.Gameplay.Memories;
 using UnityEngine;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 
 namespace Memories.Gameplay.Reactions
 {
@@ -19,10 +21,13 @@ namespace Memories.Gameplay.Reactions
             if (collection.Contains(MemoryId)) ShowHoodFather();
         }
 
-        public override void Execute()
+        public override void Execute() => ExecuteAsync(this.GetCancellationTokenOnDestroy()).Forget();
+
+        public override async UniTask ExecuteAsync(CancellationToken cancellationToken)
         {
             // Комикс скрывает переключение. Компонент находится вне обоих объектов отца.
             if (presenter == null || !presenter.Open(MemoryId, memory, true)) return;
+            await presenter.WaitForFirstFrameAsync(cancellationToken);
             ShowHoodFather();
         }
 

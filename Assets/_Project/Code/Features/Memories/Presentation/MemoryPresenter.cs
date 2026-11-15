@@ -25,9 +25,13 @@ namespace Memories.Gameplay.Memories
         public event Action Closed;
         private bool disposed;
         private bool showingFrame, advanceRequested;
-        private UniTask completionBarrier;
+        private UniTaskCompletionSource firstFrame;
+        private UniTaskCompletionSource finished;
 
-        public void DeferCompletion(UniTask operation) => completionBarrier = operation;
+        public UniTask WaitForFirstFrameAsync(CancellationToken token) =>
+            (firstFrame?.Task ?? UniTask.CompletedTask).AttachExternalCancellation(token);
+        public UniTask WaitForCompletionAsync(CancellationToken token) =>
+            (finished?.Task ?? UniTask.CompletedTask).AttachExternalCancellation(token);
         public bool IsPlaying => playback != null;
         public bool HasCollected(string id) => collection.Contains(id);
         public bool CanStartPlayback => !disposed && state.Mode == GameplayMode.Playing;
@@ -74,13 +78,16 @@ namespace Memories.Gameplay.Memories
             currentGraph = graph;
             returnToPause = fromPause;
             playback = new CancellationTokenSource();
-            completionBarrier = UniTask.CompletedTask;
+            firstFrame = new UniTaskCompletionSource();
+            finished = new UniTaskCompletionSource();
             PlayAsync(frames, playback).Forget();
             return true;
         }
 
         private async UniTask PlayAsync(List<Node> frames, CancellationTokenSource source)
         {
+            var visible = firstFrame;
+            var completion = finished;
             bool completed = false;
             try
             {
@@ -104,6 +111,12 @@ namespace Memories.Gameplay.Memories
                     advanceRequested = false;
                     showingFrame = true;
                     await view.ShowFrameAsync(frame, source.Token);
+                    // Let the completed first-frame transition reach the screen before scene work starts.
+                    if (visible.Task.Status == UniTaskStatus.Pending)
+                    {
+                        await UniTask.NextFrame(cancellationToken: source.Token);
+                        visible.TrySetResult();
+                    }
                     float elapsed = 0;
                     while (!advanceRequested && elapsed < frame.DisplayDuration)
                     {
@@ -112,8 +125,6 @@ namespace Memories.Gameplay.Memories
                     }
                     showingFrame = false;
                 }
-                // Сохраняем последний кадр и блокировку ввода до завершения явно запущенной загрузки сцены.
-                await completionBarrier;
                 source.Token.ThrowIfCancellationRequested();
                 completed = true;
             }
@@ -121,6 +132,7 @@ namespace Memories.Gameplay.Memories
             catch (Exception exception) { Debug.LogException(exception); }
             finally
             {
+                visible.TrySetCanceled();
                 showingFrame = false;
                 if (playback == source)
                 {
@@ -135,6 +147,7 @@ namespace Memories.Gameplay.Memories
                     Closed?.Invoke();
                 }
                 source.Dispose();
+                completion.TrySetResult();
             }
         }
 

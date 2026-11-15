@@ -23,11 +23,8 @@ MonoBehaviour:
       _node: {fileID: -8617761360365530121}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
-      - fieldName: next
-        node: {fileID: 3042208682259399729}
-        reroutePoints: []
-      - fieldName: next
-        node: {fileID: -3981326513546266561}
+      - fieldName: ifPresent
+        node: {fileID: 5712820429813848401}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -38,7 +35,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: previous
-        node: {fileID: 801123227045197614}
+        node: {fileID: 4105097971741500403}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -143,7 +140,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: previous
-        node: {fileID: -8617761360365530121}
+        node: {fileID: 801123227045197614}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -305,11 +302,14 @@ MonoBehaviour:
       - fieldName: next
         node: {fileID: -1576067767429117251}
         reroutePoints: []
-      - fieldName: next
-        node: {fileID: -8617761360365530121}
-        reroutePoints: []
       - fieldName: ifPresent
         node: {fileID: 3379985159173422363}
+        reroutePoints: []
+      - fieldName: next
+        node: {fileID: 3042208682259399729}
+        reroutePoints: []
+      - fieldName: next
+        node: {fileID: -3981326513546266561}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -351,7 +351,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: previous
-        node: {fileID: -8617761360365530121}
+        node: {fileID: 801123227045197614}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -476,8 +476,8 @@ MonoBehaviour:
       _node: {fileID: 4105097971741500403}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
-      - fieldName: ifPresent
-        node: {fileID: 5712820429813848401}
+      - fieldName: next
+        node: {fileID: -8617761360365530121}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -546,7 +546,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: previous
-        node: {fileID: 4105097971741500403}
+        node: {fileID: -8617761360365530121}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
