@@ -18,6 +18,8 @@ namespace Memories.Gameplay.Reactions
         [SerializeField] private ReactionInteractable lily, truck, coffeeOne, coffeeTwo, napkin;
         [SerializeField] private GameObject order;
         [SerializeField] private LightingGroup lighting;
+        [SerializeField] private CustomVariableBank dockVariables;
+        [SerializeField] private ReactionInteractable dockLily, dockBoat;
 
         public void RestoreAfterLoad(CustomVariableStore state, QuestInventory inventory)
         {
@@ -38,6 +40,13 @@ namespace Memories.Gameplay.Reactions
             coffeeTwo.SetInteractionEnabled(!complete && !coffeeRead);
             napkin.SetInteractionEnabled(!complete && !napkinRead);
             lighting.RestoreBrightness((arrived || bought) && !complete ? 1 : 0);
+            if (dockLily != null && dockBoat != null && dockVariables != null)
+            {
+                bool talked = state.Get(dockVariables, "lily_spoken");
+                dockLily.gameObject.SetActive(complete);
+                dockLily.SetInteractionEnabled(complete && !talked);
+                dockBoat.SetInteractionEnabled(complete && talked);
+            }
         }
 
         public override void Execute() => ExecuteAsync(destroyCancellationToken).Forget();
