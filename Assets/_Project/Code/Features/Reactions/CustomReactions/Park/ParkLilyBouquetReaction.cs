@@ -31,7 +31,6 @@ namespace Memories.Gameplay.Reactions
 
         private IEnumerator Transition()
         {
-            yield return new WaitForSeconds(.6f);
             foreach (var renderer in GetComponentsInChildren<Renderer>(true))
             {
                 var source = renderer.sharedMaterials;

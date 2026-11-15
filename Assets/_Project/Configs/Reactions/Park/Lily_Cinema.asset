@@ -186,6 +186,8 @@ MonoBehaviour:
     - previous
     - branch_0
     - branch_1
+    - branch_2
+    - branch_3
     values:
     - _fieldName: previous
       _node: {fileID: -7021009832023768848}
@@ -220,11 +222,35 @@ MonoBehaviour:
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 1
+    - _fieldName: branch_2
+      _node: {fileID: -7021009832023768848}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: 910800114}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: branch_3
+      _node: {fileID: -7021009832023768848}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: 910800116}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
   previous: {fileID: 0}
   branches:
   - branch_0
   - branch_1
-  nextPortId: 2
+  - branch_2
+  - branch_3
+  nextPortId: 4
 --- !u!114 &-6398673779454369355
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -817,8 +843,8 @@ MonoBehaviour:
       _node: {fileID: 910800114}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
-      - fieldName: branch_0
-        node: {fileID: 3212221880048297184}
+      - fieldName: branch_2
+        node: {fileID: -7021009832023768848}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -903,7 +929,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: previous
-        node: {fileID: 4784875109911667477}
+        node: {fileID: 3212221880048297184}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -965,8 +991,8 @@ MonoBehaviour:
       _node: {fileID: 910800116}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
-      - fieldName: branch_1
-        node: {fileID: 3212221880048297184}
+      - fieldName: branch_3
+        node: {fileID: -7021009832023768848}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -977,7 +1003,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: previous
-        node: {fileID: 4784875109911667477}
+        node: {fileID: 3212221880048297184}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -1252,8 +1278,6 @@ MonoBehaviour:
   ports:
     keys:
     - previous
-    - branch_0
-    - branch_1
     - branch_2
     - branch_3
     values:
@@ -1267,32 +1291,16 @@ MonoBehaviour:
       - fieldName: next
         node: {fileID: 3889806290767102215}
         reroutePoints: []
+      - fieldName: next
+        node: {fileID: 910800115}
+        reroutePoints: []
+      - fieldName: next
+        node: {fileID: 910800116}
+        reroutePoints: []
       _direction: 0
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-    - _fieldName: branch_0
-      _node: {fileID: 3212221880048297184}
-      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: previous
-        node: {fileID: 910800114}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 1
-    - _fieldName: branch_1
-      _node: {fileID: 3212221880048297184}
-      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: previous
-        node: {fileID: 910800116}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 1
     - _fieldName: branch_2
       _node: {fileID: 3212221880048297184}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
@@ -1317,8 +1325,6 @@ MonoBehaviour:
       _dynamic: 1
   previous: {fileID: 0}
   branches:
-  - branch_0
-  - branch_1
   - branch_2
   - branch_3
   nextPortId: 4
@@ -1420,12 +1426,6 @@ MonoBehaviour:
       connections:
       - fieldName: next
         node: {fileID: 6655179288092925734}
-        reroutePoints: []
-      - fieldName: next
-        node: {fileID: 910800115}
-        reroutePoints: []
-      - fieldName: next
-        node: {fileID: 910800116}
         reroutePoints: []
       - fieldName: next
         node: {fileID: 910800117}

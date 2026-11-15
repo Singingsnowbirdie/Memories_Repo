@@ -29,7 +29,7 @@ MonoBehaviour:
         node: {fileID: -5857145753687158921}
         reroutePoints: []
       - fieldName: next
-        node: {fileID: -2864439858035923271}
+        node: {fileID: -3146171891235123506}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -131,6 +131,7 @@ MonoBehaviour:
     - branch_1
     - branch_2
     - branch_3
+    - branch_4
     values:
     - _fieldName: previous
       _node: {fileID: -7649446824452375751}
@@ -187,13 +188,25 @@ MonoBehaviour:
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 1
+    - _fieldName: branch_4
+      _node: {fileID: -7649446824452375751}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: 910900201}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
   previous: {fileID: 0}
   branches:
   - branch_0
   - branch_1
   - branch_2
   - branch_3
-  nextPortId: 4
+  - branch_4
+  nextPortId: 5
 --- !u!114 &-5857145753687158921
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -291,6 +304,9 @@ MonoBehaviour:
       - fieldName: next
         node: {fileID: 2468954061366543913}
         reroutePoints: []
+      - fieldName: next
+        node: {fileID: -2864439858035923271}
+        reroutePoints: []
       _direction: 0
       _connectionType: 0
       _typeConstraint: 0
@@ -300,7 +316,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: previous
-        node: {fileID: 6642484215882812036}
+        node: {fileID: -8865894839926612513}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -363,7 +379,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: next
-        node: {fileID: 910900201}
+        node: {fileID: 6642484215882812036}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -374,7 +390,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: previous
-        node: {fileID: -8865894839926612513}
+        node: {fileID: -3146171891235123506}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -760,8 +776,8 @@ MonoBehaviour:
       _node: {fileID: 910900201}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
-      - fieldName: next
-        node: {fileID: 6642484215882812036}
+      - fieldName: branch_4
+        node: {fileID: -7649446824452375751}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -772,7 +788,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: previous
-        node: {fileID: -2864439858035923271}
+        node: {fileID: 6642484215882812036}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -1224,7 +1240,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: next
-        node: {fileID: -3146171891235123506}
+        node: {fileID: 910900201}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -1235,7 +1251,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: previous
-        node: {fileID: 910900201}
+        node: {fileID: -2864439858035923271}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -1265,9 +1281,9 @@ MonoBehaviour:
   lookDuration: 1.2
   lookMaxSpeed: 60
   active: 1
-  revealDuration: 0
+  revealDuration: 4
   revealDelay: 0
-  revealShader: {fileID: 0}
+  revealShader: {fileID: 4800000, guid: 0420a32a1c6f438fa03008fd3c81f551, type: 3}
   interactionEnabled: 0
   item: {fileID: 0}
   hintId: 
