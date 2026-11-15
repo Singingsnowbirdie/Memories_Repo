@@ -30,12 +30,13 @@ namespace Memories.Gameplay.Reactions
             if (bought) state.Set(variables, "ordered", true);
             if (complete) state.Set(variables, "completed", true);
             lily.gameObject.SetActive(arrived && !bought);
-            lily.SetInteractionEnabled(arrived && !bought && !state.Get(variables, "unlocked"));
-            truck.SetInteractionEnabled(arrived && !bought && state.Get(variables, "unlocked"));
+            // Hidden objects stay ready for their explicit reveal graph; progress controls interaction.
+            lily.SetInteractionEnabled(!bought && !complete && !state.Get(variables, "unlocked"));
+            truck.SetInteractionEnabled(!bought && !complete && state.Get(variables, "unlocked"));
             order.SetActive(bought && !complete);
-            coffeeOne.SetInteractionEnabled(bought && !complete && !coffeeRead);
-            coffeeTwo.SetInteractionEnabled(bought && !complete && !coffeeRead);
-            napkin.SetInteractionEnabled(bought && !complete && !napkinRead);
+            coffeeOne.SetInteractionEnabled(!complete && !coffeeRead);
+            coffeeTwo.SetInteractionEnabled(!complete && !coffeeRead);
+            napkin.SetInteractionEnabled(!complete && !napkinRead);
             lighting.RestoreBrightness((arrived || bought) && !complete ? 1 : 0);
         }
 

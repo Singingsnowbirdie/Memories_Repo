@@ -36,13 +36,13 @@ namespace Memories.Gameplay.Reactions
             if (!lily.GetComponent<ObjectStateTracker>().HasRestoredState || finished)
             {
                 lily.SetActive(arrived && !finished);
-                lily.GetComponent<ReactionInteractable>().SetInteractionEnabled(arrived && !finished);
+                lily.GetComponent<ReactionInteractable>().SetInteractionEnabled(!finished);
             }
             if (!cashier.GetComponent<ObjectStateTracker>().HasRestoredState || finished)
             {
                 bool revealed = legacyStage >= 2 || bought;
                 cashier.SetActive(revealed && !finished);
-                cashier.GetComponent<ReactionInteractable>().SetInteractionEnabled(revealed && !bought && !finished);
+                cashier.GetComponent<ReactionInteractable>().SetInteractionEnabled(!bought && !finished);
             }
             cinemaLighting.RestoreBrightness(arrived && !finished ? 1 : 0);
             benchLighting.RestoreBrightness(finished ? 0 : 1);

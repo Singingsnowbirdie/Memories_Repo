@@ -36,7 +36,7 @@ namespace Memories.Gameplay.Reactions
             bool arrived = legacyStage > 0 || inventory.IsConsumed(tickets.Id);
             // A save during the cinema fade has consumed tickets before the reveal node runs.
             lily.SetActive(arrived && !finished);
-            lily.GetComponent<ReactionInteractable>().SetInteractionEnabled(arrived && !finished);
+            lily.GetComponent<ReactionInteractable>().SetInteractionEnabled(!finished);
             if (!suitcase.GetComponent<ObjectStateTracker>().HasRestoredState || bought || finished)
                 suitcase.SetInteractionEnabled(legacyStage == 2 && !bought && !finished);
             lighting.RestoreBrightness(arrived && !finished ? 1 : 0);
