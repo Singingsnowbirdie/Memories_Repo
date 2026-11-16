@@ -66,7 +66,7 @@ namespace Memories.Bootstrap
             }
             else if (Selected == TesterCheckpoint.GarageCorridorOpen)
             {
-                var exit = FindComponent<GarageSchoolConnection>(scene).transform;
+                var exit = LocationBindings.For(scene).SchoolConnection;
                 FindMarker(scene, "PlayerSpawn").SetPositionAndRotation(
                     exit.position - exit.forward * 1.5f + Vector3.up * .05f, exit.rotation);
             }
@@ -107,8 +107,6 @@ namespace Memories.Bootstrap
                 }
                 else if (checkpoint == TesterCheckpoint.GarageCorridorOpen)
                 {
-                    var connection = FindComponent<GarageSchoolConnection>(getCurrentScene());
-                    await connection.EnsureReadyAsync();
                     var gate = FindComponent<OpenGarageGateReaction>(getCurrentScene());
                     await UniTask.WaitUntil(() => gate != null && gate.IsOpen, cancellationToken: shutdownToken).Timeout(TimeSpan.FromSeconds(30));
                 }

@@ -256,9 +256,6 @@ MonoBehaviour:
       - fieldName: next
         node: {fileID: -4916842061129799310}
         reroutePoints: []
-      - fieldName: ifPresent
-        node: {fileID: 1366314821188759499}
-        reroutePoints: []
       _direction: 0
       _connectionType: 0
       _typeConstraint: 0
@@ -522,8 +519,8 @@ MonoBehaviour:
       _node: {fileID: -3373752971905862835}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
-      - fieldName: ifAbsent
-        node: {fileID: 1366314821188759499}
+      - fieldName: next
+        node: {fileID: 4399527183562058087}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -756,7 +753,6 @@ MonoBehaviour:
   - {fileID: 3009316781784763082}
   - {fileID: -3645427885437384231}
   - {fileID: 1411627235754524038}
-  - {fileID: 1366314821188759499}
   objectKeys:
   - coach
   - return_supplies
@@ -1036,68 +1032,6 @@ MonoBehaviour:
   hintGraph: {fileID: 0}
   hintTimeout: 60
   repeatHint: 1
---- !u!114 &1366314821188759499
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a549a313236a40fa9098ece4b48729d8, type: 3}
-  m_Name: "\u0423\u0441\u043B\u043E\u0432\u0438\u0435"
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionConditionNode
-  graph: {fileID: 11400000}
-  position: {x: 350, y: -560}
-  ports:
-    keys:
-    - previous
-    - ifPresent
-    - ifAbsent
-    values:
-    - _fieldName: previous
-      _node: {fileID: 1366314821188759499}
-      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: next
-        node: {fileID: 4399527183562058087}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: ifPresent
-      _node: {fileID: 1366314821188759499}
-      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: previous
-        node: {fileID: -8233906552728251884}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: ifAbsent
-      _node: {fileID: 1366314821188759499}
-      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: previous
-        node: {fileID: -3373752971905862835}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 0
-  previous: {fileID: 0}
-  kind: 2
-  item: {fileID: 0}
-  variableBank: {fileID: 11400000, guid: e60a1bfed5e93444eb00e33b43faeeac, type: 2}
-  variableId: school_supplies_returned
-  integerComparison: 0
-  integerValue: 0
-  ifPresent: {fileID: 0}
-  ifAbsent: {fileID: 0}
 --- !u!114 &1411627235754524038
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1521,7 +1455,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: previous
-        node: {fileID: 1366314821188759499}
+        node: {fileID: -3373752971905862835}
         reroutePoints: []
       _direction: 1
       _connectionType: 1

@@ -201,7 +201,8 @@ namespace Memories.Bootstrap
                 if (section != null) section.SetActive(false);
         }
 
-        public async UniTask<Scene> LoadGarageSchoolAsync(GarageSchoolConnection connection)
+        // Restore the saved passage once, without replaying gameplay graphs.
+        public async UniTask RestoreGarageSchoolAsync(Transform connection, OpenGarageGateReaction gate)
         {
             using var cancellation = CancellationTokenSource.CreateLinkedTokenSource(applicationToken,
                 shutdownToken, connection.GetCancellationTokenOnDestroy());
@@ -209,40 +210,9 @@ namespace Memories.Bootstrap
                 cancellationToken: cancellation.Token);
             cancellation.Token.ThrowIfCancellationRequested();
             if (disposed) throw new OperationCanceledException();
-            const string path = TestLocationLauncher.SchoolPath;
-            if (!Application.CanStreamedLevelBeLoaded(path))
-                throw new InvalidOperationException("School must be enabled in Build Settings.");
-            var existing = SceneManager.GetSceneByPath(path);
-            if (existing.isLoaded)
-            {
-                if (additionalScenes.Contains(existing)) return existing;
-                throw new InvalidOperationException("School is already loaded outside this session.");
-            }
-            busy = true;
-            Scene school = default;
-            try
-            {
-                await SceneManager.LoadSceneAsync(path, LoadSceneMode.Additive);
-                school = SceneManager.GetSceneByPath(path);
-                cancellation.Token.ThrowIfCancellationRequested();
-                var entrance = FindComponent<SchoolGymEntranceReaction>(school);
-                if (entrance == null || entrance.CorridorEntrance == null)
-                    throw new InvalidOperationException("Gym corridor entrance is not configured.");
-                ValidateConnection(entrance.CorridorEntrance, connection.transform);
-                DisableLocationCameras(school);
-                BindDoors(school, LocationScope);
-                entrance.PrepareArrival();
-                additionalScenes.Add(school);
-                Physics.SyncTransforms();
-                return school;
-            }
-            catch
-            {
-                if (school.IsValid() && school.isLoaded) await SceneManager.UnloadSceneAsync(school);
-                if (disposed) await CleanupAsync();
-                throw;
-            }
-            finally { busy = false; }
+            await LoadConnectedSceneAsync(TestLocationLauncher.SchoolPath, connection, "Garage corridor entrance");
+            cancellation.Token.ThrowIfCancellationRequested();
+            gate.RestoreOpen();
         }
 
         public async UniTask<Scene> LoadConnectedSceneAsync(string path, Transform connection, string arrivalMarker)

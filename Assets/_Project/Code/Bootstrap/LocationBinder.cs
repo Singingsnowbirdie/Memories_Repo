@@ -39,9 +39,6 @@ namespace Memories.Bootstrap
                     supplies.Initialize(scope.Container.Resolve<Memories.Gameplay.UI.StoryTextPresenter>(),
                         scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>(), scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<CustomVariableStore>());
             foreach (var root in scene.GetRootGameObjects())
-                foreach (var connection in root.GetComponentsInChildren<GarageSchoolConnection>(true))
-                    connection.Initialize(transitions.LoadGarageSchoolAsync);
-            foreach (var root in scene.GetRootGameObjects())
                 foreach (var entrance in root.GetComponentsInChildren<SchoolGymEntranceReaction>(true))
                     entrance.Initialize(scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>(), () => transitions.EnterConnectedSceneAsync(scene));
             if (scene.path == TestLocationLauncher.GaragePath)
@@ -194,7 +191,7 @@ namespace Memories.Bootstrap
                 {
                     variables.Set(bindings.GarageVariables, "father_final_items_delivered", true);
                     bindings.WorkingGarageFather.SetActive(false);
-                    bindings.GarageGate.RestoreOpen();
+                    transitions.RestoreGarageSchoolAsync(bindings.SchoolConnection, bindings.GarageGate).Forget();
                 }
             }
             if (scene.path == TestLocationLauncher.BackyardPath)

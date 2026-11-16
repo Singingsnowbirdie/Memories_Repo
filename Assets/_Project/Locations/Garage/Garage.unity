@@ -21608,7 +21608,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 880300002}
-  - component: {fileID: 880300003}
   m_Layer: 0
   m_Name: "\u0412\u044B\u0445\u043E\u0434 \u0432 \u0448\u043A\u043E\u043B\u0443"
   m_TagString: Untagged
@@ -21631,19 +21630,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1402361887}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &880300003
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 880300001}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ea451b09a88131aef8794b378b9d6c0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.GarageSchoolConnection
-  gate: {fileID: 1402361889}
 --- !u!1001 &883620389
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -31885,7 +31871,9 @@ MonoBehaviour:
   initiallyVisible: 1
   prompt: "\u041F\u043E\u0434\u043D\u044F\u0442\u044C \u0433\u0430\u0440\u0430\u0436\u043D\u044B\u0435
     \u0432\u043E\u0440\u043E\u0442\u0430"
-  objectBindings: []
+  objectBindings:
+  - key: school_connection
+    target: {fileID: 880300001}
   customReactions:
   - key: "\u041F\u043E\u0434\u043D\u044F\u0442\u044C \u0433\u0430\u0440\u0430\u0436\u043D\u044B\u0435
       \u0432\u043E\u0440\u043E\u0442\u0430"
@@ -47776,7 +47764,7 @@ MonoBehaviour:
   courtyardDoor: {fileID: 0}
   backyardEntrance: {fileID: 0}
   garageAttachment: {fileID: 0}
-  schoolConnection: {fileID: 880300003}
+  schoolConnection: {fileID: 880300002}
   garageGate: {fileID: 1402361889}
   gymEntrance: {fileID: 0}
   garageEntrance: {fileID: 2032875913}

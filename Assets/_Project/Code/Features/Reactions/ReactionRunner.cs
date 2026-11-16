@@ -207,9 +207,9 @@ namespace Memories.Gameplay.Reactions
             }
         }
 
-        private async UniTask<Exception> RunHubBranchAsync(XNode.Node node, XNode.Node join, CancellationTokenSource source, bool checkedCustomCondition)
+        private async UniTask<Exception> RunHubBranchAsync(XNode.Node node, CancellationTokenSource source, bool checkedCustomCondition)
         {
-            try { await RunPathAsync(node, source, checkedCustomCondition, join); return null; }
+            try { await RunPathAsync(node, source, checkedCustomCondition); return null; }
             catch (Exception exception)
             {
                 source.Cancel();
@@ -217,7 +217,7 @@ namespace Memories.Gameplay.Reactions
             }
         }
 
-        private async UniTask RunPathAsync(XNode.Node node, CancellationTokenSource source, bool checkedCustomCondition = false, XNode.Node stopBefore = null, Stack<XNode.Node> continuationReturns = null)
+        private async UniTask RunPathAsync(XNode.Node node, CancellationTokenSource source, bool checkedCustomCondition = false, Stack<XNode.Node> continuationReturns = null)
         {
             bool ownsMemory = false;
             try
@@ -226,7 +226,6 @@ namespace Memories.Gameplay.Reactions
                 while (true)
                 {
                     source.Token.ThrowIfCancellationRequested();
-                    if (node == stopBefore && returns.Count == 0) return;
                     if (node is ReactionEndNode)
                     {
                         if (returns.Count == 0) break;
@@ -235,15 +234,15 @@ namespace Memories.Gameplay.Reactions
                     }
                     if (node is ReactionHubNode hub)
                     {
-                        var join = ReactionGraph.HubJoin(hub);
                         var tasks = new UniTask<Exception>[hub.Branches.Count];
                         for (int i = 0; i < tasks.Length; i++)
-                            tasks[i] = RunHubBranchAsync(ReactionGraph.Next(hub, hub.Branches[i]), join, source, checkedCustomCondition);
+                            tasks[i] = RunHubBranchAsync(ReactionGraph.Next(hub, hub.Branches[i]), source, checkedCustomCondition);
                         var errors = await UniTask.WhenAll(tasks);
                         var failure = errors.FirstOrDefault(e => e != null && !(e is OperationCanceledException));
                         if (failure != null) throw failure;
                         source.Token.ThrowIfCancellationRequested();
-                        node = join;
+                        if (returns.Count == 0) return;
+                        node = returns.Pop();
                         continue;
                     }
                     if (node is ReactionRandomNode random)
@@ -403,7 +402,7 @@ namespace Memories.Gameplay.Reactions
                             ownsMemory = false;
                         }
                         await UniTask.WhenAll(ReleaseMemoryAsync(),
-                            RunPathAsync(ReactionGraph.Next(node), source, checkedCustomCondition, stopBefore, returns));
+                            RunPathAsync(ReactionGraph.Next(node), source, checkedCustomCondition, returns));
                         if (!alreadyCollected && memories.HasCollected(action.MemoryId) && action.FirstCompletionText != null)
                             await texts.ShowAsync(action.FirstCompletionText, source.Token);
                         return;

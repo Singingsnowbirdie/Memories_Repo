@@ -36,15 +36,12 @@ namespace Memories.Gameplay.Reactions
             if (!Visit(nodes.OfType<ReactionStartNode>().Single(), visited, active, actions, out error)) return false;
             foreach (var hub in nodes.OfType<ReactionHubNode>())
             {
-                var join = HubJoin(hub);
-                if (join == null)
-                { error = "Все ветки хаба должны сходиться в общую ноду."; return false; }
-                var occupied = CollectPath(join);
+                var occupied = new HashSet<Node>();
                 foreach (var port in hub.Branches)
                 {
-                    var branch = CollectPath(Next(hub, port), join);
+                    var branch = CollectPath(Next(hub, port));
                     if (branch.Overlaps(occupied))
-                    { error = "Ветки хаба не должны пересекаться до общей ноды продолжения."; return false; }
+                    { error = "????? ???? ?????? ???? ????????????: ????? ???????? ????? ??????? ?????????."; return false; }
                     occupied.UnionWith(branch);
                     foreach (var action in branch.OfType<ReactionNode>())
                     {
@@ -67,38 +64,7 @@ namespace Memories.Gameplay.Reactions
         public static Node Next(Node node, string outputName = "next") =>
             node.GetOutputPort(outputName)?.GetConnection(0)?.node;
 
-        // Called after structural validation: the graph is acyclic and all outputs are connected.
-        public static Node HubJoin(ReactionHubNode hub)
-        {
-            var cache = new Dictionary<Node, HashSet<Node>>();
-            HashSet<Node> Required(Node node)
-            {
-                if (node == null) return new HashSet<Node>();
-                if (cache.TryGetValue(node, out var known)) return known;
-                HashSet<Node> required = null;
-                foreach (var output in node.Outputs)
-                {
-                    var child = Required(output.GetConnection(0)?.node);
-                    if (required == null) required = new HashSet<Node>(child);
-                    else required.IntersectWith(child);
-                }
-                required ??= new HashSet<Node>();
-                required.Add(node);
-                cache[node] = required;
-                return required;
-            }
-            HashSet<Node> common = null;
-            foreach (var port in hub.Branches)
-            {
-                var required = Required(Next(hub, port));
-                if (common == null) common = new HashSet<Node>(required);
-                else common.IntersectWith(required);
-            }
-            // The nearest common node has all later common nodes in its required set.
-            return common?.OrderByDescending(node => Required(node).Count).FirstOrDefault();
-        }
-
-        private static HashSet<Node> CollectPath(Node start, Node stopBefore = null)
+        private static HashSet<Node> CollectPath(Node start)
         {
             var result = new HashSet<Node>();
             var pending = new Stack<Node>();
@@ -106,7 +72,7 @@ namespace Memories.Gameplay.Reactions
             while (pending.Count > 0)
             {
                 var node = pending.Pop();
-                if (node == null || node == stopBefore || node is ReactionEndNode || !result.Add(node)) continue;
+                if (node == null || node is ReactionEndNode || !result.Add(node)) continue;
                 foreach (var output in node.Outputs)
                     foreach (var input in output.GetConnections()) pending.Push(input.node);
             }

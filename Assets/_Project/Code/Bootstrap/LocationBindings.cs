@@ -15,7 +15,7 @@ namespace Memories.Bootstrap
         [SerializeField, InspectorName("Двор: освещение входа")] private Transform backyardEntranceLighting;
         [SerializeField, InspectorName("Двор: соединение с гаражом")] private Transform garageAttachment;
         [SerializeField, InspectorName("Двор: секции забора перед гаражом")] private GameObject[] garageFenceSections;
-        [SerializeField, InspectorName("Гараж: соединение со школой")] private GarageSchoolConnection schoolConnection;
+        [SerializeField, InspectorName("Гараж: соединение со школой")] private Transform schoolConnection;
         [SerializeField, InspectorName("Гараж: ворота")] private OpenGarageGateReaction garageGate;
         [SerializeField, InspectorName("Школа: вход в спортзал")] private SchoolGymEntranceReaction gymEntrance;
 
@@ -61,7 +61,7 @@ namespace Memories.Bootstrap
         public Transform BackyardEntranceLighting => Require(backyardEntranceLighting, "освещение входа во двор");
         public Transform GarageAttachment => Require(garageAttachment, "соединение с гаражом");
         public GameObject[] GarageFenceSections => garageFenceSections;
-        public GarageSchoolConnection SchoolConnection => Require(schoolConnection, "соединение со школой");
+        public Transform SchoolConnection => Require(schoolConnection, "соединение со школой");
         public OpenGarageGateReaction GarageGate => Require(garageGate, "ворота гаража");
         public SchoolGymEntranceReaction GymEntrance => Require(gymEntrance, "вход в спортзал");
 
