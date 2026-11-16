@@ -11,7 +11,7 @@ namespace Memories.Gameplay.Reactions
 
         public override void Execute()
         {
-            if (coach != null && coach.InteractionEnabled) return;
+            if (coach != null && coach.gameObject.activeSelf) return;
             giles.SetInteractionEnabled(true);
             giles.gameObject.SetActive(true);
             giles.GetComponent<ObjectStateTracker>()?.Capture();

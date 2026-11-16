@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Memories.Gameplay.Reactions
 {
-    // Задачу продвигают только действия графов начала воспоминания и подбора предметов.
+    // Задачу продвигают только действия графа начала воспоминания.
     public sealed class SchoolFirstAidProgressReaction : CustomReaction, IObjectStateParticipant
     {
         private const string HintId = "school.first-aid-kit";
@@ -27,17 +27,11 @@ namespace Memories.Gameplay.Reactions
             runner = new ReactionRunner(texts, memories, this, inventory: inventory, variables: variables);
         }
 
-        public void Begin()
-        {
-            if (started) return;
-            started = true;
-            Execute();
-        }
-
         public override void Execute()
         {
-            if (!started || runner == null) return;
-            // Подбор предметов явно запускает таймер, если он ещё не запущен. Его граф подсказки выбирает актуальный текст.
+            if (started || runner == null) return;
+            started = true;
+            // Граф воспоминания явно запускает напоминание один раз.
             if (!runner.TryRun(refreshGraph, allowDuringMemory: true))
                 throw new InvalidOperationException("School first-aid reminder graph could not run.");
             GetComponent<ObjectStateTracker>()?.Capture();

@@ -57142,9 +57142,7 @@ MonoBehaviour:
   objectBindings:
   - key: item
     target: {fileID: 0}
-  customReactions:
-  - key: refresh_supplies
-    reaction: {fileID: 880320004}
+  customReactions: []
 --- !u!1 &991000130
 GameObject:
   m_ObjectHideFlags: 0
@@ -60426,9 +60424,7 @@ MonoBehaviour:
     target: {fileID: 992300001}
   - key: item
     target: {fileID: 992300001}
-  customReactions:
-  - key: refresh_supplies
-    reaction: {fileID: 880320004}
+  customReactions: []
 --- !u!114 &992300004
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61544,9 +61540,7 @@ MonoBehaviour:
     target: {fileID: 993000001}
   - key: item
     target: {fileID: 993000001}
-  customReactions:
-  - key: refresh_supplies
-    reaction: {fileID: 880320004}
+  customReactions: []
 --- !u!114 &993000004
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70816,9 +70810,7 @@ MonoBehaviour:
   objectBindings:
   - key: item
     target: {fileID: 993100001}
-  customReactions:
-  - key: refresh_supplies
-    reaction: {fileID: 880320004}
+  customReactions: []
 --- !u!65 &993100004
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -91670,17 +91662,29 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3815247265442631581, guid: 39c765075c1ba8640850dcfcb5256284, type: 3}
+      propertyPath: objectBindings.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3815247265442631581, guid: 39c765075c1ba8640850dcfcb5256284, type: 3}
+      propertyPath: objectBindings.Array.data[0].key
+      value: coach
+      objectReference: {fileID: 0}
+    - target: {fileID: 3815247265442631581, guid: 39c765075c1ba8640850dcfcb5256284, type: 3}
+      propertyPath: objectBindings.Array.data[0].target
+      value:
+      objectReference: {fileID: 2041208586}
+    - target: {fileID: 3815247265442631581, guid: 39c765075c1ba8640850dcfcb5256284, type: 3}
       propertyPath: customReactions.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3815247265442631581, guid: 39c765075c1ba8640850dcfcb5256284, type: 3}
       propertyPath: customReactions.Array.data[0].key
-      value: reveal_coach
+      value: start_supplies
       objectReference: {fileID: 0}
     - target: {fileID: 3815247265442631581, guid: 39c765075c1ba8640850dcfcb5256284, type: 3}
       propertyPath: customReactions.Array.data[0].reaction
       value: 
-      objectReference: {fileID: 1657148734}
+      objectReference: {fileID: 880320004}
     m_RemovedComponents:
     - {fileID: 4428626960114599975, guid: 39c765075c1ba8640850dcfcb5256284, type: 3}
     m_RemovedGameObjects: []
@@ -91701,9 +91705,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1387179320816990326, guid: 39c765075c1ba8640850dcfcb5256284, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1657148733}
-    - targetCorrespondingSourceObject: {fileID: 1387179320816990326, guid: 39c765075c1ba8640850dcfcb5256284, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1657148734}
   m_SourcePrefab: {fileID: 100100000, guid: 39c765075c1ba8640850dcfcb5256284, type: 3}
 --- !u!4 &1085297422 stripped
 Transform:
@@ -113341,22 +113342,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: school.giles
---- !u!114 &1657148734
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1657148728}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e52fb8cb19f5cf418c52a65fa65c87d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.RevealCoachReaction
-  giles: {fileID: 1657148729}
-  coach: {fileID: 2041208587}
-  entrance: {fileID: 880320002}
-  supplies: {fileID: 880320004}
 --- !u!1001 &1658327006
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -129262,6 +129247,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1390491424}
     m_Modifications:
+    - target: {fileID: 9200431368797393190, guid: d237bb1ecd8f85147b8f7cba04757d92, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5555175540274730139, guid: d237bb1ecd8f85147b8f7cba04757d92, type: 3}
       propertyPath: m_LocalPosition.x
       value: -14.495
@@ -129343,8 +129332,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Interaction.ReactionInteractable
   graph: {fileID: 11400000, guid: cb9b5ec30bab5164e8dc0148dffa79ec, type: 2}
-  initiallyInteractable: 0
-  initiallyVisible: 0
+  initiallyInteractable: 1
+  initiallyVisible: 1
   prompt: "\u0422\u0440\u0435\u043D\u0435\u0440"
   objectBindings:
   - key: coach
