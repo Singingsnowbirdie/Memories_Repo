@@ -28834,10 +28834,12 @@ MonoBehaviour:
   initiallyInteractable: 1
   initiallyVisible: 1
   prompt: "\u041E\u0442\u0435\u0446"
-  objectBindings: []
-  customReactions:
-  - key: show_kneeling_father
-    reaction: {fileID: 1414625740}
+  objectBindings:
+  - key: standing_father
+    target: {fileID: 1205745552}
+  - key: kneeling_father
+    target: {fileID: 79438513}
+  customReactions: []
 --- !u!114 &1205745557
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32298,7 +32300,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1414625741}
-  - component: {fileID: 1414625740}
   - component: {fileID: 1414625742}
   m_Layer: 0
   m_Name: "\u041F\u0435\u0440\u0432\u043E\u0435 \u0432\u043E\u0441\u043F\u043E\u043C\u0438\u043D\u0430\u043D\u0438\u0435
@@ -32308,21 +32309,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4
   m_IsActive: 1
---- !u!114 &1414625740
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1414625739}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afae4ec8a9ea13740931099ad519a2a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.GarageFatherMemoryReaction
-  memory: {fileID: 11400000, guid: fce895d7fc535c941af05251ba415a8a, type: 2}
-  standingFather: {fileID: 1205745552}
-  kneelingFather: {fileID: 79438513}
 --- !u!4 &1414625741
 Transform:
   m_ObjectHideFlags: 0
@@ -48004,3 +47990,5 @@ MonoBehaviour:
   gymEntrance: {fileID: 0}
   garageEntrance: {fileID: 2032875913}
   garageSideDoor: {fileID: 342514627}
+  standingGarageFather: {fileID: 1205745552}
+  kneelingGarageFather: {fileID: 79438513}

@@ -84,6 +84,7 @@ MonoBehaviour:
   memoryStartedReactionKey: 
   locationScenePath: 
   arrivalMarker: 
+  holdControlsUntilGraphEnd: 0
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -191,6 +192,7 @@ MonoBehaviour:
   memoryStartedReactionKey: 
   locationScenePath: 
   arrivalMarker: 
+  holdControlsUntilGraphEnd: 0
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -265,6 +267,7 @@ MonoBehaviour:
   memoryStartedReactionKey: 
   locationScenePath: 
   arrivalMarker: 
+  holdControlsUntilGraphEnd: 0
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -339,6 +342,7 @@ MonoBehaviour:
   memoryStartedReactionKey: 
   locationScenePath: 
   arrivalMarker: 
+  holdControlsUntilGraphEnd: 0
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -413,6 +417,7 @@ MonoBehaviour:
   memoryStartedReactionKey: 
   locationScenePath: 
   arrivalMarker: 
+  holdControlsUntilGraphEnd: 0
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -487,6 +492,7 @@ MonoBehaviour:
   memoryStartedReactionKey: 
   locationScenePath: 
   arrivalMarker: 
+  holdControlsUntilGraphEnd: 0
   variableBank: {fileID: 11400000, guid: ab17b0cadc75c9c4e852e852c4f0a3b3, type: 2}
   variableId: completed
   variableValue: 1
@@ -623,6 +629,7 @@ MonoBehaviour:
   memoryStartedReactionKey: 
   locationScenePath: 
   arrivalMarker: 
+  holdControlsUntilGraphEnd: 0
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -697,6 +704,7 @@ MonoBehaviour:
   memoryStartedReactionKey: 
   locationScenePath: 
   arrivalMarker: 
+  holdControlsUntilGraphEnd: 0
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -745,7 +753,7 @@ MonoBehaviour:
   - {fileID: -103570504390874608}
   - {fileID: 2800001000}
   objectKeys:
-  - "Фонари озера"
+  - "\u0424\u043E\u043D\u0430\u0440\u0438 \u043E\u0437\u0435\u0440\u0430"
   - "\u041B\u0438\u043B\u0438 \u0432 \u043A\u0430\u0444\u0435"
   - "\u0424\u0443\u0440\u0433\u043E\u043D"
   - "\u0417\u0430\u043A\u0430\u0437"
@@ -756,6 +764,81 @@ MonoBehaviour:
   - "\u0420\u0430\u0441\u0442\u0432\u043E\u0440\u0438\u0442\u044C \u041B\u0438\u043B\u0438"
   - "\u0420\u0430\u0441\u0442\u0432\u043E\u0440\u0438\u0442\u044C \u0437\u0430\u043A\u0430\u0437"
   - "\u041B\u0438\u043B\u0438 \u043D\u0430 \u043F\u0440\u0438\u0447\u0430\u043B\u0435"
+--- !u!114 &2800001000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd260b234eb14d4cbcafbe381aa00ee1, type: 3}
+  m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
+  graph: {fileID: 11400000}
+  position: {x: 2035, y: 220}
+  ports:
+    keys:
+    - previous
+    - next
+    values:
+    - _fieldName: previous
+      _node: {fileID: 2800001000}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: next
+        node: {fileID: 7061577811378528304}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: next
+      _node: {fileID: 2800001000}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: -2252293868259143092}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  previous: {fileID: 0}
+  next: {fileID: 0}
+  kind: 13
+  pauseDuration: 1
+  reactionGraph: {fileID: 0}
+  textGraph: {fileID: 0}
+  memoryGraph: {fileID: 0}
+  memoryId: 
+  firstCompletionText: {fileID: 0}
+  memoryStartedReactionKey: 
+  locationScenePath: 
+  arrivalMarker: 
+  holdControlsUntilGraphEnd: 0
+  variableBank: {fileID: 0}
+  variableId: 
+  variableValue: 1
+  variableIntValue: 0
+  addToIntValue: 0
+  objectKey: "\u0424\u043E\u043D\u0430\u0440\u0438 \u043E\u0437\u0435\u0440\u0430"
+  lightingBrightness: 1
+  lightingDuration: 4
+  waitForLighting: 0
+  lookDuration: 1.2
+  lookMaxSpeed: 60
+  active: 1
+  revealDuration: 0
+  revealDelay: 0
+  revealShader: {fileID: 0}
+  interactionEnabled: 1
+  item: {fileID: 0}
+  hintId: 
+  hintGraph: {fileID: 0}
+  hintTimeout: 60
+  repeatHint: 1
 --- !u!114 &7061577811378528304
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -809,6 +892,7 @@ MonoBehaviour:
   memoryStartedReactionKey: 
   locationScenePath: 
   arrivalMarker: 
+  holdControlsUntilGraphEnd: 0
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -827,80 +911,6 @@ MonoBehaviour:
   interactionEnabled: 1
   item: {fileID: 0}
   hintId: 
-  hintGraph: {fileID: 0}
-  hintTimeout: 60
-  repeatHint: 1
---- !u!114 &2800001000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd260b234eb14d4cbcafbe381aa00ee1, type: 3}
-  m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
-  graph: {fileID: 11400000}
-  position: {x: 2035, y: 220}
-  ports:
-    keys:
-    - previous
-    - next
-    values:
-    - _fieldName: previous
-      _node: {fileID: 2800001000}
-      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: next
-        node: {fileID: 7061577811378528304}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: next
-      _node: {fileID: 2800001000}
-      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: previous
-        node: {fileID: -2252293868259143092}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 0
-  previous: {fileID: 0}
-  next: {fileID: 0}
-  kind: 13
-  pauseDuration: 1
-  reactionGraph: {fileID: 0}
-  textGraph: {fileID: 0}
-  memoryGraph: {fileID: 0}
-  memoryId:
-  firstCompletionText: {fileID: 0}
-  memoryStartedReactionKey:
-  locationScenePath:
-  arrivalMarker:
-  variableBank: {fileID: 0}
-  variableId:
-  variableValue: 1
-  variableIntValue: 0
-  addToIntValue: 0
-  objectKey: "Фонари озера"
-  lightingBrightness: 1
-  lightingDuration: 4
-  waitForLighting: 0
-  lookDuration: 1.2
-  lookMaxSpeed: 60
-  active: 1
-  revealDuration: 0
-  revealDelay: 0
-  revealShader: {fileID: 0}
-  interactionEnabled: 1
-  item: {fileID: 0}
-  hintId:
   hintGraph: {fileID: 0}
   hintTimeout: 60
   repeatHint: 1

@@ -1,4 +1,5 @@
 using UnityEngine;
+using Memories.Gameplay.UI;
 using System.Collections.Generic;
 using Memories.Gameplay.Reactions;
 
@@ -71,6 +72,31 @@ namespace Memories.Gameplay
         public float FadeDuration => Mathf.Max(0.01f, fadeDuration);
         public float SkyBrightness { get; private set; }
         private float lastLampDelay;
+        private float secondPairDelay = float.PositiveInfinity;
+        private GameplayModeState gameplayMode;
+        private bool controlsHeld;
+
+        public void InitializeControls(GameplayModeState mode)
+        {
+            ReleaseControls();
+            gameplayMode = mode;
+            HoldIntroControls();
+        }
+
+        private void HoldIntroControls()
+        {
+            if (gameplayMode == null || !isActiveAndEnabled || float.IsPositiveInfinity(secondPairDelay) ||
+                elapsed >= startDelay + secondPairDelay) return;
+            gameplayMode.BlockControls(this);
+            controlsHeld = true;
+        }
+
+        private void ReleaseControls()
+        {
+            if (!controlsHeld) return;
+            gameplayMode.ReleaseControls(this);
+            controlsHeld = false;
+        }
         private static readonly int EmissionColor = Shader.PropertyToID("_EmissionColor");
 
         private void Awake()
@@ -93,6 +119,7 @@ namespace Memories.Gameplay
             {
                 lamp.Delay = Mathf.Round((lamp.Distance - firstDistance) / Mathf.Max(0.01f, pairSpacing)) * pairInterval;
                 lastLampDelay = Mathf.Max(lastLampDelay, lamp.Delay);
+                if (lamp.Delay > 0) secondPairDelay = Mathf.Min(secondPairDelay, lamp.Delay);
             }
             foreach (var light in additionalLights)
             {
@@ -142,6 +169,7 @@ namespace Memories.Gameplay
         private void OnEnable()
         {
             elapsed = 0;
+            HoldIntroControls();
             SkyBrightness = 0;
             IsFullyLit = false;
             foreach (var house in houses) if (house.Key != null) house.Key.RestoreBrightness(0);
@@ -151,6 +179,8 @@ namespace Memories.Gameplay
         private void Update()
         {
             elapsed += Time.deltaTime;
+            // Возвращаем ввод на отметке анимации: начинает разгораться вторая пара.
+            if (controlsHeld && elapsed >= startDelay + secondPairDelay) ReleaseControls();
             SkyBrightness = Mathf.SmoothStep(0, 1,
                 Mathf.Clamp01((elapsed - startDelay) / (lastLampDelay + FadeDuration)));
             bool complete = lamps.Count > 0;

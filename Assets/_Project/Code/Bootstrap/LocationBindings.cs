@@ -37,6 +37,10 @@ namespace Memories.Bootstrap
         public Memories.Gameplay.Triggers.SceneTrigger GarageEntrance => Require(garageEntrance, "вход в гараж");
         public GameObject GarageSideDoor => Require(garageSideDoor, "боковая створка гаража");
 
+        [SerializeField] private GameObject standingGarageFather, kneelingGarageFather;
+        public GameObject StandingGarageFather => Require(standingGarageFather, "стоящий отец в гараже");
+        public GameObject KneelingGarageFather => Require(kneelingGarageFather, "отец на коленях в гараже");
+
         private static readonly Dictionary<int, HashSet<LocationBindings>> registered = new Dictionary<int, HashSet<LocationBindings>>();
         private int registeredScene;
 

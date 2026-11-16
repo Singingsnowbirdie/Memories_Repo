@@ -24,6 +24,9 @@ namespace Memories.Bootstrap
             TesterCheckpoint? testerCheckpoint, TesterCheckpointCatalog checkpointCatalog)
         {
             foreach (var root in scene.GetRootGameObjects())
+                foreach (var highway in root.GetComponentsInChildren<Memories.Gameplay.HighwayLights>(true))
+                    highway.InitializeControls(scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>());
+            foreach (var root in scene.GetRootGameObjects())
                 foreach (var departure in root.GetComponentsInChildren<SchoolAmbulanceDepartureReaction>(true))
                     departure.Initialize(scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>(),
                         () => locations.ChangeLocationAsync("Assets/_Project/Locations/Park/Park.unity"),
@@ -41,10 +44,14 @@ namespace Memories.Bootstrap
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var entrance in root.GetComponentsInChildren<SchoolGymEntranceReaction>(true))
                     entrance.Initialize(scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>(), () => transitions.EnterConnectedSceneAsync(scene));
-            foreach (var root in scene.GetRootGameObjects())
-                foreach (var reaction in root.GetComponentsInChildren<GarageFatherMemoryReaction>(true))
-                    reaction.Initialize(scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>(),
-                        scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
+            if (scene.path == TestLocationLauncher.GaragePath)
+            {
+                var bindings = LocationBindings.For(scene);
+                bool completed = scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>()
+                    .Contains("garage_first_memory");
+                bindings.StandingGarageFather.SetActive(!completed);
+                bindings.KneelingGarageFather.SetActive(completed);
+            }
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var reaction in root.GetComponentsInChildren<GarageHoodFatherMemoryReaction>(true))
                     reaction.Initialize(scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>());
