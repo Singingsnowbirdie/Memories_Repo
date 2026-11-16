@@ -14,7 +14,8 @@ namespace Memories.Gameplay.Reactions
         [SerializeField] private GameObject corridor;
         [SerializeField] private GameObject[] garageOpening;
         [SerializeField] private Transform gym;
-        [SerializeField] private Transform doorHinge;
+        [SerializeField] private GameObject closedDoor;
+        [SerializeField] private GameObject openDoor;
         [SerializeField, Min(0)] private float holdDuration = 1.5f;
         private readonly List<Renderer> hiddenRenderers = new List<Renderer>();
         private readonly List<Collider> hiddenColliders = new List<Collider>();
@@ -43,7 +44,8 @@ namespace Memories.Gameplay.Reactions
             completed = false;
             prepared = true;
             SetGarageOpeningActive(true);
-            doorHinge.localRotation = Quaternion.Euler(0, 100, 0);
+            closedDoor.SetActive(false);
+            openDoor.SetActive(true);
             // Временная видимость компонентов не сохраняется: временно скрытую школу нельзя записывать как неактивные объекты.
             foreach (var root in gameObject.scene.GetRootGameObjects())
             {
@@ -64,6 +66,7 @@ namespace Memories.Gameplay.Reactions
 
         public void RestoreForDirectLoad()
         {
+            corridorOpened |= openDoor.GetComponent<ObjectStateTracker>().HasRestoredState && openDoor.activeSelf;
             entranceTrigger.enabled = false;
             completed = true;
             prepared = false;
@@ -106,7 +109,8 @@ namespace Memories.Gameplay.Reactions
 
         private void ShowSchoolAndSealDoor()
         {
-            doorHinge.localRotation = Quaternion.Euler(0, corridorOpened ? 100 : 0, 0);
+            closedDoor.SetActive(!corridorOpened);
+            openDoor.SetActive(corridorOpened);
             SetGarageOpeningActive(false);
             foreach (var renderer in hiddenRenderers) if (renderer != null) renderer.enabled = true;
             foreach (var collider in hiddenColliders) if (collider != null) collider.enabled = true;
@@ -123,15 +127,9 @@ namespace Memories.Gameplay.Reactions
             foreach (var part in garageOpening)
                 if (part != null) part.SetActive(active);
         }
-        public void OpenCorridor()
-        {
-            corridorOpened = true;
-            doorHinge.localRotation = Quaternion.Euler(0, 100, 0);
-            Physics.SyncTransforms();
-            GetComponent<ObjectStateTracker>()?.Capture();
-        }
-
-        public string CaptureState() => corridorOpened ? "corridor-open" : completed ? "complete" : "waiting";
+        // Object activity is saved separately; retain the legacy entry state for older saves.
+        public string CaptureState() => completed && openDoor.activeSelf
+                ? "corridor-open" : completed ? "complete" : "waiting";
         public void RestoreState(string value)
         {
             completed = value == "complete" || value == "corridor-open";
