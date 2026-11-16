@@ -91406,6 +91406,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1390491424}
     m_Modifications:
     - target: {fileID: 1387179320816990326, guid: 39c765075c1ba8640850dcfcb5256284, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1387179320816990326, guid: 39c765075c1ba8640850dcfcb5256284, type: 3}
       propertyPath: m_Name
       value: Male 4 Gray Gym Laying
       objectReference: {fileID: 0}
@@ -91655,11 +91659,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3815247265442631581, guid: 39c765075c1ba8640850dcfcb5256284, type: 3}
       propertyPath: initiallyVisible
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3815247265442631581, guid: 39c765075c1ba8640850dcfcb5256284, type: 3}
       propertyPath: initiallyInteractable
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3815247265442631581, guid: 39c765075c1ba8640850dcfcb5256284, type: 3}
       propertyPath: objectBindings.Array.size
@@ -120173,9 +120177,6 @@ PrefabInstance:
       addedObject: {fileID: 1787801124}
     - targetCorrespondingSourceObject: {fileID: 668707884062323259, guid: 261034b42cfcd1249ac9e6de82a2538c, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1787801125}
-    - targetCorrespondingSourceObject: {fileID: 668707884062323259, guid: 261034b42cfcd1249ac9e6de82a2538c, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 8700000000023}
   m_SourcePrefab: {fileID: 100100000, guid: 261034b42cfcd1249ac9e6de82a2538c, type: 3}
 --- !u!4 &1787801119 stripped
@@ -120207,9 +120208,9 @@ MonoBehaviour:
   objectBindings:
   - key: lily
     target: {fileID: 1249460130}
-  customReactions:
-  - key: reveal_giles
-    reaction: {fileID: 1787801125}
+  - key: giles
+    target: {fileID: 1657148728}
+  customReactions: []
 --- !u!136 &1787801124
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -120233,20 +120234,6 @@ CapsuleCollider:
   m_Height: 1.240789
   m_Direction: 1
   m_Center: {x: 0, y: 0.6203945, z: 0}
---- !u!114 &1787801125
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1787801120}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64d35ac78c10bc0408fdd93ed0a94187, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.RevealGilesReaction
-  giles: {fileID: 1657148729}
-  coach: {fileID: 2041208587}
 --- !u!1 &1787937630
 GameObject:
   m_ObjectHideFlags: 0

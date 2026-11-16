@@ -86,6 +86,12 @@ namespace Memories.Bootstrap
             HintProgressRestoration.Restore(scope.Container.Resolve<QuestInventory>(),
                 scope.Container.Resolve<CustomVariableStore>(), scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
             scope.Container.Resolve<ObjectStateStore>().RestoreScene(scene);
+            // До первого школьного воспоминания Джайлз скрыт, но готов к взаимодействию после появления.
+            if (!scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>().Contains("school_commentator_memory"))
+                foreach (var root in scene.GetRootGameObjects())
+                    foreach (var tracker in root.GetComponentsInChildren<ObjectStateTracker>(true))
+                        if (tracker.PersistentId == "school.giles" && tracker.HasRestoredState)
+                            tracker.GetComponent<ReactionInteractable>().SetInteractionEnabled(true);
             // Старые сохранения до появления тренера содержат лишнее отключение интерактивности.
             if (!scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>().Contains("school_giles_second_memory"))
                 foreach (var root in scene.GetRootGameObjects())
