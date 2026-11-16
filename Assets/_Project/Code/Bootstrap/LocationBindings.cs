@@ -66,6 +66,17 @@ namespace Memories.Bootstrap
         public ParkCinemaBindings ParkCinema => parkCinema;
 
         [Serializable]
+        public sealed class ParkMimeBindings
+        {
+            public GameObject lily, cafeLily;
+            public Memories.Gameplay.Interaction.ReactionInteractable suitcase;
+            public Memories.Gameplay.Interaction.QuestItem pendants, tickets;
+            public LightingGroup lighting, cafeLighting;
+        }
+        [SerializeField] private ParkMimeBindings parkMimes;
+        public ParkMimeBindings ParkMimes => parkMimes;
+
+        [Serializable]
         public sealed class ParkCafeBindings
         {
             public CustomVariableBank variables;

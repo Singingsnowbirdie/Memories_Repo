@@ -8901,10 +8901,7 @@ MonoBehaviour:
     target: {fileID: 1692745134}
   - key: "\u041B\u0438\u043B\u0438 \u0432 \u043A\u0430\u0444\u0435"
     target: {fileID: 1118195131}
-  customReactions:
-  - key: "\u0417\u0430\u0432\u0435\u0440\u0448\u0438\u0442\u044C \u044D\u0442\u0430\u043F
-      \u043C\u0438\u043C\u043E\u0432"
-    reaction: {fileID: 349937435}
+  customReactions: []
 --- !u!4 &174189524 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4057129680048577019, guid: a812745671a6399408d523b720f1362b, type: 3}
@@ -16875,74 +16872,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 349084131}
   m_Mesh: {fileID: 4300000, guid: 5f9b041fae35b014c802ac870dd970dc, type: 2}
---- !u!1 &349937428
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 349937434}
-  - component: {fileID: 349937432}
-  - component: {fileID: 349937435}
-  m_Layer: 0
-  m_Name: "\u0421\u044E\u0436\u0435\u0442 \u2014 \u043C\u0438\u043C\u044B \u0438
-    \u043F\u0430\u0440\u043D\u044B\u0439 \u043A\u0443\u043B\u043E\u043D"
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &349937432
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 349937428}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
-  persistentId: park.mimes.sequence
---- !u!4 &349937434
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 349937428}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1341184426}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &349937435
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 349937428}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2feeeaf7221fa654bb712728fc406877, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ParkMimeReaction
-  lily: {fileID: 173667734}
-  suitcase: {fileID: 770636421}
-  pendants: {fileID: 11400000, guid: 81de52372d4640e468f0f2ece1fe7d04, type: 2}
-  tickets: {fileID: 11400000, guid: 33626510add7f9d41ad24458f97fa8f4, type: 2}
-  dissolveShader: {fileID: 4800000, guid: 0420a32a1c6f438fa03008fd3c81f551, type: 3}
-  lighting: {fileID: 837291121}
-  cafeLighting: {fileID: 1692745137}
-  cafeLily: {fileID: 1118195131}
-  fadeDuration: 4
 --- !u!23 &350314684 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 6554567887935982491, guid: aec398a15fb5e474faf9349715b1fbaa, type: 3}
@@ -64802,7 +64731,6 @@ Transform:
   - {fileID: 1345502916}
   - {fileID: 837291120}
   - {fileID: 770636419}
-  - {fileID: 349937434}
   - {fileID: 2300000001}
   - {fileID: 1479798341}
   - {fileID: 1704766150}
@@ -104526,6 +104454,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8094193f27f546838e99a1b9a63b063e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Memories.Bootstrap::Memories.Bootstrap.LocationBindings
+  parkMimes:
+    lily: {fileID: 173667734}
+    suitcase: {fileID: 770636421}
+    pendants: {fileID: 11400000, guid: 81de52372d4640e468f0f2ece1fe7d04, type: 2}
+    tickets: {fileID: 11400000, guid: 33626510add7f9d41ad24458f97fa8f4, type: 2}
+    lighting: {fileID: 837291121}
+    cafeLighting: {fileID: 1692745137}
+    cafeLily: {fileID: 1118195131}
   parkCinema:
     entranceLily: {fileID: 41300943}
     approachLighting: {fileID: 1908726678}

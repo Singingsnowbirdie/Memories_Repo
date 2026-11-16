@@ -230,9 +230,9 @@ namespace Memories.Bootstrap
             if (scene.path == "Assets/_Project/Locations/Park/Park.unity")
                 RestoreParkCinema(LocationBindings.For(scene).ParkCinema,
                     scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<ObjectStateStore>());
-            foreach (var root in scene.GetRootGameObjects())
-                foreach (var mimes in root.GetComponentsInChildren<ParkMimeReaction>(true))
-                    mimes.RestoreAfterLoad(scope.Container.Resolve<QuestInventory>());
+            if (scene.path == "Assets/_Project/Locations/Park/Park.unity")
+                RestoreParkMimes(LocationBindings.For(scene).ParkMimes,
+                    scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<ObjectStateStore>());
             if (scene.path == "Assets/_Project/Locations/Park/Park.unity")
                 RestoreParkCafe(LocationBindings.For(scene).ParkCafe,
                     scope.Container.Resolve<CustomVariableStore>(), scope.Container.Resolve<QuestInventory>());
@@ -335,6 +335,23 @@ namespace Memories.Bootstrap
                 bindings.dockBoat.SetInteractionEnabled(complete && talked);
             }
         }
+        private static void RestoreParkMimes(LocationBindings.ParkMimeBindings bindings,
+            QuestInventory inventory, ObjectStateStore states)
+        {
+            int.TryParse(states.GetSavedPart("park.mimes.sequence", "park.mimes.sequence"), out int legacyStage);
+            bool bought = inventory.WasCollected(bindings.pendants.Id);
+            bool finished = legacyStage >= 4 || inventory.IsConsumed(bindings.pendants.Id);
+            bool arrived = legacyStage > 0 || inventory.IsConsumed(bindings.tickets.Id);
+            // Also completes restoration when a save was made during the preceding dissolve.
+            bindings.lily.SetActive(arrived && !finished);
+            bindings.lily.GetComponent<ReactionInteractable>().SetInteractionEnabled(!finished);
+            if (!bindings.suitcase.GetComponent<ObjectStateTracker>().HasRestoredState || bought || finished)
+                bindings.suitcase.SetInteractionEnabled(legacyStage == 2 && !bought && !finished);
+            bindings.lighting.RestoreBrightness(arrived && !finished ? 1 : 0);
+            if (bindings.cafeLighting) bindings.cafeLighting.RestoreBrightness(finished ? 1 : 0);
+            if (bindings.cafeLily) bindings.cafeLily.SetActive(finished);
+        }
+
         private static void RestoreParkCinema(LocationBindings.ParkCinemaBindings bindings,
             QuestInventory inventory, ObjectStateStore states)
         {
