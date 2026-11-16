@@ -25992,9 +25992,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4272476880722932699, guid: e778a23bbe795fc42827494e5d635524, type: 3}
       insertIndex: -1
       addedObject: {fileID: 405212549}
-    - targetCorrespondingSourceObject: {fileID: 4272476880722932699, guid: e778a23bbe795fc42827494e5d635524, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 405212548}
   m_SourcePrefab: {fileID: 100100000, guid: e778a23bbe795fc42827494e5d635524, type: 3}
 --- !u!4 &405212546 stripped
 Transform:
@@ -26012,12 +26009,12 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 405212547}
+  m_GameObject: {fileID: 1420997698}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 41e5e08964d533a4fb5b46e00bfac874, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.SchoolAmbulanceBeacon
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.SchoolAmbulanceBeacon
   lamps:
   - {fileID: 166906982}
   - {fileID: 836806411}
@@ -72952,6 +72949,8 @@ MonoBehaviour:
   initiallyVisible: 1
   prompt: "\u041F\u043E\u0437\u0432\u043E\u043D\u0438\u0442\u044C"
   objectBindings:
+  - key: ambulance_beacons
+    target: {fileID: 1420997698}
   - key: courtyard_left_closed
     target: {fileID: 2140673067}
   - key: courtyard_left_open
@@ -103878,13 +103877,15 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1420997699}
+  - component: {fileID: 405212548}
+  - component: {fileID: 9918200001}
   m_Layer: 0
   m_Name: "\u041C\u0438\u0433\u0430\u043B\u043A\u0430 \u043D\u0430 \u043A\u0440\u044B\u0448\u0435"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1420997699
 Transform:
   m_ObjectHideFlags: 0
@@ -183820,3 +183821,16 @@ MonoBehaviour:
   m_Name:
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: school.courtyard_right_closed
+--- !u!114 &9918200001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1420997698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: school.ambulance_beacons

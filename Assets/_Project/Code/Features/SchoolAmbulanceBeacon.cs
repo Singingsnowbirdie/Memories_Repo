@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Memories.Gameplay.Reactions
+namespace Memories.Gameplay
 {
     public sealed class SchoolAmbulanceBeacon : MonoBehaviour
     {

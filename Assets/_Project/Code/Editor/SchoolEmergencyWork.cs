@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEditor.SceneManagement;
 using Memories.Gameplay.Reactions;
+using Memories.Gameplay;
 using Memories.Gameplay.Interaction;
 using Memories.Gameplay.Memories;
 using Memories.Gameplay.Story;
@@ -102,7 +103,7 @@ internal static class SchoolEmergencyWork
             var missing=Text("PayphoneMissingCoin","Где бы взять монетку?");
             var reminder=Text("CallAmbulanceReminder","Нужно вызвать “скорую.”");
             var hint=Graph(R+"Hints/CallAmbulanceReminder.asset");var hintText=Action(hint,ReactionKind.StoryText);Set(hintText,"textGraph",reminder);Link(hint.nodes[0],hintText);
-            var pg=Graph(R+"CallAmbulance.asset");Keys(pg,"courtyard_left_closed","courtyard_left_open","courtyard_right_closed","courtyard_right_open");
+            var pg=Graph(R+"CallAmbulance.asset");Keys(pg,"ambulance_beacons","courtyard_left_closed","courtyard_left_open","courtyard_right_closed","courtyard_right_open");
             var condition=Node<ReactionConditionNode>(pg);Set(condition,"item",coinItem);Link(pg.nodes[0],condition);
             var absent=Action(pg,ReactionKind.StoryText);Set(absent,"textGraph",missing);Link(condition,absent,"ifAbsent");
             var consume=Action(pg,ReactionKind.ConsumeInventoryItem);Set(consume,"item",coinItem);Link(condition,consume,"ifPresent");
@@ -135,9 +136,12 @@ internal static class SchoolEmergencyWork
             }
             Link(doorsHub,memory,doorsHub.AddBranch());
             var departure=car.AddComponent<SchoolAmbulanceDepartureReaction>();Set(departure,"doctor",doctor);Custom(ai,"depart",departure);
-            var beacon=car.AddComponent<SchoolAmbulanceBeacon>();var bs=new SerializedObject(beacon);var lamps=bs.FindProperty("lamps");lamps.arraySize=2;
+            var beaconRoot=new GameObject("Мигалки");beaconRoot.transform.SetParent(car.transform,false);beaconRoot.SetActive(false);
+            Track(beaconRoot,"school.ambulance_beacons");BindObject(pi,"ambulance_beacons",beaconRoot);
+            var showBeacons=Action(pg,ReactionKind.ObjectActivity);Set(showBeacons,"objectKey","ambulance_beacons");Set(showBeacons,"active",true);Link(doorsHub,showBeacons,doorsHub.AddBranch());
+            var beacon=beaconRoot.AddComponent<SchoolAmbulanceBeacon>();var bs=new SerializedObject(beacon);var lamps=bs.FindProperty("lamps");lamps.arraySize=2;
             var bounds=car.GetComponent<Renderer>().bounds;
-            for(int i=0;i<2;i++){var l=new GameObject(i==0?"Blue emergency beacon":"Red emergency beacon").AddComponent<Light>();l.transform.SetParent(car.transform);l.transform.position=new Vector3(bounds.center.x+(i==0?-.4f:.4f),bounds.max.y+.08f,bounds.center.z);l.type=LightType.Point;l.color=i==0?new Color(.08f,.25f,1):Color.red;l.range=7;l.intensity=5;l.shadows=LightShadows.None;lamps.GetArrayElementAtIndex(i).objectReferenceValue=l;}
+            for(int i=0;i<2;i++){var l=new GameObject(i==0?"Blue emergency beacon":"Red emergency beacon").AddComponent<Light>();l.transform.SetParent(beaconRoot.transform);l.transform.position=new Vector3(bounds.center.x+(i==0?-.4f:.4f),bounds.max.y+.08f,bounds.center.z);l.type=LightType.Point;l.color=i==0?new Color(.08f,.25f,1):Color.red;l.range=7;l.intensity=5;l.shadows=LightShadows.None;lamps.GetArrayElementAtIndex(i).objectReferenceValue=l;}
             bs.ApplyModifiedPropertiesWithoutUndo();
             var cg=Asset<ReactionGraph>(R+"InspectCoach.asset");
             var ret=cg.nodes.OfType<ReactionNode>().Single(n=>n.Kind==ReactionKind.CustomReaction && n.ObjectKey=="return_supplies");

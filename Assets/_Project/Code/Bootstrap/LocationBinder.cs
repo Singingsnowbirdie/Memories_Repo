@@ -88,6 +88,8 @@ namespace Memories.Bootstrap
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var tracker in root.GetComponentsInChildren<ObjectStateTracker>(true))
                 {
+                    if (tracker.PersistentId == "school.ambulance_beacons" && !tracker.HasRestoredState)
+                        tracker.gameObject.SetActive(courtyardWasOpened);
                     if (tracker.PersistentId.StartsWith("school.courtyard_") && !tracker.HasRestoredState)
                         tracker.gameObject.SetActive(courtyardWasOpened == tracker.PersistentId.EndsWith("_open"));
                     if (tracker.PersistentId == "school.ambulance" && !courtyardWasOpened)

@@ -95,6 +95,7 @@ namespace Memories.Bootstrap
             State("school.vending_coin", false, false);
             State("school.payphone", true, false);
             State("school.ambulance", true, true);
+            State("school.ambulance_beacons", true, false);
             State("school.ambulance_doctor", true, false);
             State("school.classroom_102_door", true, false);
             var door = trackers["school.classroom_102_door"];
