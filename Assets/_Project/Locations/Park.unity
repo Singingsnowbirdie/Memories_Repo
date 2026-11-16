@@ -19170,7 +19170,7 @@ GameObject:
   - component: {fileID: 402940318}
   - component: {fileID: 402940317}
   m_Layer: 0
-  m_Name: "07 \u2014 \u0412\u043E\u0441\u0442\u043E\u0447\u043D\u044B\u0439 \u043E\u0441\u0442\u0440\u043E\u0432"
+  m_Name: "\u041E\u0441\u0442\u0440\u043E\u0432 \u0441 \u0432\u044B\u0445\u043E\u0434\u043E\u043C"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27922,6 +27922,39 @@ MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 4353079507408115538, guid: aec398a15fb5e474faf9349715b1fbaa, type: 3}
   m_PrefabInstance: {fileID: 329787770}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &567866475
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 567866476}
+  m_Layer: 0
+  m_Name: "\u041F\u0435\u0440\u0435\u0445\u043E\u0434 \u043D\u0430 \u043E\u0441\u0442\u0440\u043E\u0432
+    \u0441 \u0432\u044B\u0445\u043E\u0434\u043E\u043C"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &567866476
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 567866475}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.003940229, z: -0, w: 0.99999225}
+  m_LocalPosition: {x: 59.75, y: -1.5, z: 2.45}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1776087776}
+  m_Father: {fileID: 1773431130}
+  m_LocalEulerAnglesHint: {x: 0, y: -0.452, z: 0}
 --- !u!1 &567967332
 GameObject:
   m_ObjectHideFlags: 0
@@ -40195,22 +40228,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1ba68190f9594ee8b2fc0603419ed015, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Interaction.ReactionInteractable
   graph: {fileID: 11400000, guid: 0f1af56410ce9a54e825f0bb8d5fa349, type: 2}
   initiallyInteractable: 0
   initiallyVisible: 1
   prompt: "\u041B\u043E\u0434\u043A\u0430"
   objectBindings:
-  - key: "\u041b\u0438\u043b\u0438 \u043d\u0430 \u043f\u0440\u0438\u0447\u0430\u043b\u0435"
+  - key: "\u041B\u0438\u043B\u0438 \u043D\u0430 \u043F\u0440\u0438\u0447\u0430\u043B\u0435"
     target: {fileID: 924004006}
-  - key: "\u041b\u0438\u043b\u0438 \u0432 \u0431\u0435\u0441\u0435\u0434\u043a\u0435"
+  - key: "\u041B\u0438\u043B\u0438 \u0432 \u0431\u0435\u0441\u0435\u0434\u043A\u0435"
     target: {fileID: 2903001002}
-  - key: "\u0421\u0432\u0435\u0442 \u043e\u0437\u0435\u0440\u0430"
+  - key: "\u0421\u0432\u0435\u0442 \u043E\u0437\u0435\u0440\u0430"
     target: {fileID: 2800000000}
-  - key: "\u0421\u0432\u0435\u0442 \u0431\u0435\u0441\u0435\u0434\u043a\u0438"
+  - key: "\u0421\u0432\u0435\u0442 \u0431\u0435\u0441\u0435\u0434\u043A\u0438"
     target: {fileID: 2903000000}
-  - key: "\u041b\u043e\u0434\u043a\u0430"
+  - key: "\u041B\u043E\u0434\u043A\u0430"
     target: {fileID: 849925611}
   customReactions: []
 --- !u!1001 &850202596
@@ -83161,6 +83194,7 @@ Transform:
   - {fileID: 1780462737}
   - {fileID: 1415017589}
   - {fileID: 1265265425}
+  - {fileID: 567866476}
   - {fileID: 402940316}
   - {fileID: 2114765502}
   - {fileID: 1612996634}
@@ -83274,6 +83308,118 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.16, y: 3.4, z: 0.62995714}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1776087775
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1776087776}
+  - component: {fileID: 1776087779}
+  - component: {fileID: 1776087778}
+  - component: {fileID: 1776087777}
+  m_Layer: 0
+  m_Name: "\u041D\u0435\u0432\u0438\u0434\u0438\u043C\u044B\u0439 \u043A\u0443\u0431\u0438\u043A"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1776087776
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1776087775}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.15191735, z: -0, w: 0.9883932}
+  m_LocalPosition: {x: -1.3075, y: 0.97, z: 0.5692}
+  m_LocalScale: {x: 4.5816135, y: 1, z: 7.8876624}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 567866476}
+  m_LocalEulerAnglesHint: {x: 0, y: -17.476, z: 0}
+--- !u!65 &1776087777
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1776087775}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &1776087778
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1776087775}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1776087779
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1776087775}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1776506878
 GameObject:
   m_ObjectHideFlags: 0
@@ -104466,7 +104612,6 @@ Transform:
   m_Children:
   - {fileID: 2901000004}
   - {fileID: 2901000007}
-  - {fileID: 2901000010}
   - {fileID: 2901000013}
   - {fileID: 2901000016}
   - {fileID: 2901000019}
@@ -104580,60 +104725,6 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 0.18, y: 3, z: 4.263676}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!1 &2901000009
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2901000010}
-  - component: {fileID: 2901000011}
-  m_Layer: 0
-  m_Name: "\u041D\u0435\u0432\u0438\u0434\u0438\u043C\u0430\u044F \u0441\u0442\u0435\u043D\u0430
-    \u2014 \u0431\u0435\u0441\u0435\u0434\u043A\u0430 3"
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2901000010
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2901000009}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.5168431, z: 0, w: 0.8560802}
-  m_LocalPosition: {x: 2.94, y: 2.9, z: -4.62}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2901000001}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &2901000011
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2901000009}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.18, y: 3, z: 4.608891}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2901000012
 GameObject:
@@ -104994,108 +105085,6 @@ Transform:
   - {fileID: 2901000028}
   m_Father: {fileID: 1415017589}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &9919000000
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 9919000001}
-  - component: {fileID: 9919000002}
-  m_Layer: 0
-  m_Name: LocationBindings
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &9919000001
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9919000000}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9919000002
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9919000000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8094193f27f546838e99a1b9a63b063e, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: Memories.Bootstrap::Memories.Bootstrap.LocationBindings
-  courtyardConnection: {fileID: 0}
-  backyardEntrance: {fileID: 0}
-  backyardEntranceLighting: {fileID: 0}
-  garageAttachment: {fileID: 0}
-  garageFenceSections: []
-  schoolConnection: {fileID: 0}
-  garageGate: {fileID: 0}
-  gymEntrance: {fileID: 0}
-  backyardVariables: {fileID: 0}
-  baseballBat: {fileID: 0}
-  baseballAreaNormal: {fileID: 0}
-  baseballAreaReady: {fileID: 0}
-  intactBaseballWindow: {fileID: 0}
-  brokenBaseballWindow: {fileID: 0}
-  benPitcher: {fileID: 0}
-  seatedBen: {fileID: 0}
-  garageEntrance: {fileID: 0}
-  garageSideDoor: {fileID: 0}
-  standingGarageFather: {fileID: 0}
-  kneelingGarageFather: {fileID: 0}
-  garageVariables: {fileID: 0}
-  workingGarageFather: {fileID: 0}
-  finalGarageFather: {fileID: 0}
-  garageHood: {fileID: 0}
-  hoodGarageFather: {fileID: 0}
-  parkCinema:
-    lily: {fileID: 552258401}
-    cashier: {fileID: 1548556426}
-    entranceLily: {fileID: 41300943}
-    approachLighting: {fileID: 1908726678}
-    tickets: {fileID: 11400000, guid: 33626510add7f9d41ad24458f97fa8f4, type: 2}
-    bouquetItem: {fileID: 11400000, guid: aa5a843c7ddd3c948baa4c5104eaf886, type: 2}
-    cinemaLighting: {fileID: 750486532}
-    benchLighting: {fileID: 868774592}
-  parkMimes:
-    lily: {fileID: 173667734}
-    cafeLily: {fileID: 1118195131}
-    suitcase: {fileID: 770636421}
-    pendants: {fileID: 11400000, guid: 81de52372d4640e468f0f2ece1fe7d04, type: 2}
-    tickets: {fileID: 11400000, guid: 33626510add7f9d41ad24458f97fa8f4, type: 2}
-    lighting: {fileID: 837291121}
-    cafeLighting: {fileID: 1692745137}
-  parkCafe:
-    variables: {fileID: 11400000, guid: ab17b0cadc75c9c4e852e852c4f0a3b3, type: 2}
-    receipt: {fileID: 11400000, guid: f151613222b513f48a0a6819d5d52c6f, type: 2}
-    lily: {fileID: 1118195133}
-    truck: {fileID: 98740815}
-    coffeeOne: {fileID: 555673127}
-    coffeeTwo: {fileID: 555673124}
-    napkin: {fileID: 555673117}
-    order: {fileID: 555673110}
-    lighting: {fileID: 1692745137}
-    lakeLighting: {fileID: 2800000003}
-    dockVariables: {fileID: 11400000, guid: a1f2b1d2798eb89428af4d9666b24bde, type: 2}
-    dockLily: {fileID: 924004009}
-    dockBoat: {fileID: 849925614}
-    gazeboLily: {fileID: 2903001004}
-    gazeboLighting: {fileID: 2903000003}
 --- !u!1001 &2902000000
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -105117,20 +105106,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 100001, guid: fc69e8f454af497389764ed7814671c9, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.8063207
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: fc69e8f454af497389764ed7814671c9, type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 100001, guid: fc69e8f454af497389764ed7814671c9, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.5914785367564288
+      value: 0.5914785
       objectReference: {fileID: 0}
     - target: {fileID: 100001, guid: fc69e8f454af497389764ed7814671c9, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 100001, guid: fc69e8f454af497389764ed7814671c9, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.8063207429779256
       objectReference: {fileID: 0}
     - target: {fileID: 100001, guid: fc69e8f454af497389764ed7814671c9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
@@ -105158,7 +105147,8 @@ GameObject:
   - component: {fileID: 2903000002}
   - component: {fileID: 2903000003}
   m_Layer: 0
-  m_Name: "\u0424\u043e\u043d\u0430\u0440\u0438 \u2014 \u043e\u0441\u0442\u0440\u043e\u0432 \u0441 \u0431\u0435\u0441\u0435\u0434\u043a\u043e\u0439"
+  m_Name: "\u0424\u043E\u043D\u0430\u0440\u0438 \u2014 \u043E\u0441\u0442\u0440\u043E\u0432
+    \u0441 \u0431\u0435\u0441\u0435\u0434\u043A\u043E\u0439"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -105183,6 +105173,48 @@ Transform:
   - {fileID: 2903000161}
   m_Father: {fileID: 1265265425}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2903000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2903000000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: park.lighting.gazebo
+  initiallyActive: 1
+--- !u!114 &2903000003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2903000000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24f84c55c5be4065a0d5e10248eb25da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.LightingGroup
+  lights:
+  - {fileID: 2903000107}
+  - {fileID: 2903000127}
+  - {fileID: 2903000147}
+  - {fileID: 2903000167}
+  glowingRenderers:
+  - {fileID: 2903000102}
+  - {fileID: 2903000122}
+  - {fileID: 2903000142}
+  - {fileID: 2903000162}
+  sourceIntensities:
+  - 2
+  - 2
+  - 2
+  - 2
+  initialBrightness: 0
 --- !u!1 &2903000100
 GameObject:
   m_ObjectHideFlags: 0
@@ -105195,7 +105227,8 @@ GameObject:
   - component: {fileID: 2903000103}
   - component: {fileID: 2903000102}
   m_Layer: 0
-  m_Name: "\u0424\u043e\u043d\u0430\u0440\u044c \u0431\u0435\u0441\u0435\u0434\u043a\u0438 01"
+  m_Name: "\u0424\u043E\u043D\u0430\u0440\u044C \u0431\u0435\u0441\u0435\u0434\u043A\u0438
+    01"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -105318,7 +105351,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
@@ -105414,7 +105447,8 @@ GameObject:
   - component: {fileID: 2903000123}
   - component: {fileID: 2903000122}
   m_Layer: 0
-  m_Name: "\u0424\u043e\u043d\u0430\u0440\u044c \u0431\u0435\u0441\u0435\u0434\u043a\u0438 02"
+  m_Name: "\u0424\u043E\u043D\u0430\u0440\u044C \u0431\u0435\u0441\u0435\u0434\u043A\u0438
+    02"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -105537,7 +105571,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
@@ -105633,7 +105667,8 @@ GameObject:
   - component: {fileID: 2903000143}
   - component: {fileID: 2903000142}
   m_Layer: 0
-  m_Name: "\u0424\u043e\u043d\u0430\u0440\u044c \u0431\u0435\u0441\u0435\u0434\u043a\u0438 03"
+  m_Name: "\u0424\u043E\u043D\u0430\u0440\u044C \u0431\u0435\u0441\u0435\u0434\u043A\u0438
+    03"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -105756,7 +105791,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
@@ -105852,7 +105887,8 @@ GameObject:
   - component: {fileID: 2903000163}
   - component: {fileID: 2903000162}
   m_Layer: 0
-  m_Name: "\u0424\u043e\u043d\u0430\u0440\u044c \u0431\u0435\u0441\u0435\u0434\u043a\u0438 04"
+  m_Name: "\u0424\u043E\u043D\u0430\u0440\u044C \u0431\u0435\u0441\u0435\u0434\u043A\u0438
+    04"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -105975,7 +106011,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
@@ -106069,7 +106105,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5901050124769360344, guid: df449ca4490c02940b8d4360d9b8c6ff, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.7630742611407039
+      value: 0.7630743
       objectReference: {fileID: 0}
     - target: {fileID: 5901050124769360344, guid: df449ca4490c02940b8d4360d9b8c6ff, type: 3}
       propertyPath: m_LocalPosition.y
@@ -106077,7 +106113,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5901050124769360344, guid: df449ca4490c02940b8d4360d9b8c6ff, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.24024502489035826
+      value: 0.24024503
+      objectReference: {fileID: 0}
+    - target: {fileID: 5901050124769360344, guid: df449ca4490c02940b8d4360d9b8c6ff, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.5914785
       objectReference: {fileID: 0}
     - target: {fileID: 5901050124769360344, guid: df449ca4490c02940b8d4360d9b8c6ff, type: 3}
       propertyPath: m_LocalRotation.x
@@ -106085,15 +106125,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5901050124769360344, guid: df449ca4490c02940b8d4360d9b8c6ff, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.8063207429779257
+      value: 0.8063207
       objectReference: {fileID: 0}
     - target: {fileID: 5901050124769360344, guid: df449ca4490c02940b8d4360d9b8c6ff, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5901050124769360344, guid: df449ca4490c02940b8d4360d9b8c6ff, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: -0.5914785367564287
       objectReference: {fileID: 0}
     - target: {fileID: 5901050124769360344, guid: df449ca4490c02940b8d4360d9b8c6ff, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
@@ -106101,7 +106137,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6534561973648401250, guid: df449ca4490c02940b8d4360d9b8c6ff, type: 3}
       propertyPath: m_Name
-      value: "\u041b\u0438\u043b\u0438 \u0432 \u0431\u0435\u0441\u0435\u0434\u043a\u0435"
+      value: "\u041B\u0438\u043B\u0438 \u0432 \u0431\u0435\u0441\u0435\u0434\u043A\u0435"
       objectReference: {fileID: 0}
     - target: {fileID: 6534561973648401250, guid: df449ca4490c02940b8d4360d9b8c6ff, type: 3}
       propertyPath: m_IsActive
@@ -106154,62 +106190,6 @@ CapsuleCollider:
   m_Height: 1.8
   m_Direction: 1
   m_Center: {x: 0, y: 0.9, z: 0}
---- !u!114 &2903000002
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2903000000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
-  persistentId: park.lighting.gazebo
-  initiallyActive: 1
---- !u!114 &2903000003
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2903000000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24f84c55c5be4065a0d5e10248eb25da, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.LightingGroup
-  lights:
-  - {fileID: 2903000107}
-  - {fileID: 2903000127}
-  - {fileID: 2903000147}
-  - {fileID: 2903000167}
-  glowingRenderers:
-  - {fileID: 2903000102}
-  - {fileID: 2903000122}
-  - {fileID: 2903000142}
-  - {fileID: 2903000162}
-  sourceIntensities:
-  - 2
-  - 2
-  - 2
-  - 2
-  initialBrightness: 0
---- !u!114 &2903001005
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2903001002}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
-  persistentId: park.gazebo.lily
-  initiallyActive: 0
 --- !u!114 &2903001004
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -106220,7 +106200,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1ba68190f9594ee8b2fc0603419ed015, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Interaction.ReactionInteractable
   graph: {fileID: 11400000, guid: 4d243ad21a824eb7aa3a4777e3ec1fae, type: 2}
   initiallyInteractable: 1
@@ -106228,6 +106208,122 @@ MonoBehaviour:
   prompt: "\u041B\u0438\u043B\u0438"
   objectBindings: []
   customReactions: []
+--- !u!114 &2903001005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2903001002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: park.gazebo.lily
+  initiallyActive: 0
+--- !u!1 &9919000000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9919000001}
+  - component: {fileID: 9919000002}
+  m_Layer: 0
+  m_Name: LocationBindings
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9919000001
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9919000000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9919000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9919000000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8094193f27f546838e99a1b9a63b063e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Bootstrap::Memories.Bootstrap.LocationBindings
+  courtyardConnection: {fileID: 0}
+  backyardEntrance: {fileID: 0}
+  backyardEntranceLighting: {fileID: 0}
+  garageAttachment: {fileID: 0}
+  garageFenceSections: []
+  schoolConnection: {fileID: 0}
+  garageGate: {fileID: 0}
+  gymEntrance: {fileID: 0}
+  backyardVariables: {fileID: 0}
+  baseballBat: {fileID: 0}
+  baseballAreaNormal: {fileID: 0}
+  baseballAreaReady: {fileID: 0}
+  intactBaseballWindow: {fileID: 0}
+  brokenBaseballWindow: {fileID: 0}
+  benPitcher: {fileID: 0}
+  seatedBen: {fileID: 0}
+  garageEntrance: {fileID: 0}
+  garageSideDoor: {fileID: 0}
+  standingGarageFather: {fileID: 0}
+  kneelingGarageFather: {fileID: 0}
+  garageVariables: {fileID: 0}
+  workingGarageFather: {fileID: 0}
+  finalGarageFather: {fileID: 0}
+  garageHood: {fileID: 0}
+  hoodGarageFather: {fileID: 0}
+  parkCinema:
+    lily: {fileID: 552258401}
+    cashier: {fileID: 1548556426}
+    entranceLily: {fileID: 41300943}
+    approachLighting: {fileID: 1908726678}
+    tickets: {fileID: 11400000, guid: 33626510add7f9d41ad24458f97fa8f4, type: 2}
+    bouquetItem: {fileID: 11400000, guid: aa5a843c7ddd3c948baa4c5104eaf886, type: 2}
+    cinemaLighting: {fileID: 750486532}
+    benchLighting: {fileID: 868774592}
+  parkMimes:
+    lily: {fileID: 173667734}
+    cafeLily: {fileID: 1118195131}
+    suitcase: {fileID: 770636421}
+    pendants: {fileID: 11400000, guid: 81de52372d4640e468f0f2ece1fe7d04, type: 2}
+    tickets: {fileID: 11400000, guid: 33626510add7f9d41ad24458f97fa8f4, type: 2}
+    lighting: {fileID: 837291121}
+    cafeLighting: {fileID: 1692745137}
+  parkCafe:
+    variables: {fileID: 11400000, guid: ab17b0cadc75c9c4e852e852c4f0a3b3, type: 2}
+    receipt: {fileID: 11400000, guid: f151613222b513f48a0a6819d5d52c6f, type: 2}
+    lily: {fileID: 1118195133}
+    truck: {fileID: 98740815}
+    coffeeOne: {fileID: 555673127}
+    coffeeTwo: {fileID: 555673124}
+    napkin: {fileID: 555673117}
+    order: {fileID: 555673110}
+    lighting: {fileID: 1692745137}
+    lakeLighting: {fileID: 2800000003}
+    dockVariables: {fileID: 11400000, guid: a1f2b1d2798eb89428af4d9666b24bde, type: 2}
+    dockLily: {fileID: 924004009}
+    dockBoat: {fileID: 849925614}
+    gazeboLily: {fileID: 2903001004}
+    gazeboLighting: {fileID: 2903000003}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
