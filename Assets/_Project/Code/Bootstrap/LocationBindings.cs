@@ -54,6 +54,16 @@ namespace Memories.Bootstrap
         public GameObject HoodGarageFather => Require(hoodGarageFather, "отец у закрытого капота");
 
         [Serializable]
+        public sealed class ParkCinemaBindings
+        {
+            public GameObject lily, cashier;
+            public Memories.Gameplay.Interaction.QuestItem tickets, bouquetItem;
+            public LightingGroup cinemaLighting, benchLighting;
+        }
+        [SerializeField] private ParkCinemaBindings parkCinema;
+        public ParkCinemaBindings ParkCinema => parkCinema;
+
+        [Serializable]
         public sealed class ParkCafeBindings
         {
             public CustomVariableBank variables;

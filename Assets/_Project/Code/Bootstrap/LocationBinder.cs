@@ -223,9 +223,9 @@ namespace Memories.Bootstrap
                         if (highway != null) highway.RegisterHouse(group);
                         else group.RestoreBrightness(1);
                     }
-            foreach (var root in scene.GetRootGameObjects())
-                foreach (var cinema in root.GetComponentsInChildren<ParkCinemaReaction>(true))
-                    cinema.RestoreAfterLoad(scope.Container.Resolve<QuestInventory>());
+            if (scene.path == "Assets/_Project/Locations/Park/Park.unity")
+                RestoreParkCinema(LocationBindings.For(scene).ParkCinema,
+                    scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<ObjectStateStore>());
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var mimes in root.GetComponentsInChildren<ParkMimeReaction>(true))
                     mimes.RestoreAfterLoad(scope.Container.Resolve<QuestInventory>());
@@ -330,6 +330,28 @@ namespace Memories.Bootstrap
                 bindings.dockLily.SetInteractionEnabled(!talked);
                 bindings.dockBoat.SetInteractionEnabled(complete && talked);
             }
+        }
+        private static void RestoreParkCinema(LocationBindings.ParkCinemaBindings bindings,
+            QuestInventory inventory, ObjectStateStore states)
+        {
+            int.TryParse(states.GetSavedPart("park.lily.bouquet", "park.cinema.sequence"), out int legacyStage);
+            bool bought = inventory.WasCollected(bindings.tickets.Id);
+            bool finished = legacyStage >= 4 || inventory.IsConsumed(bindings.tickets.Id);
+            bool arrived = legacyStage > 0 || inventory.IsConsumed(bindings.bouquetItem.Id) || bought;
+            if (!bindings.lily.GetComponent<ObjectStateTracker>().HasRestoredState || finished)
+            {
+                bindings.lily.SetActive(arrived && !finished);
+            }
+            if (!bindings.cashier.GetComponent<ObjectStateTracker>().HasRestoredState || finished)
+            {
+                bool revealed = legacyStage >= 2 || bought;
+                bindings.cashier.SetActive(revealed && !finished);
+            }
+            // Hidden encounters are ready for their reveal, including old object snapshots.
+            bindings.lily.GetComponent<ReactionInteractable>().SetInteractionEnabled(!finished);
+            bindings.cashier.GetComponent<ReactionInteractable>().SetInteractionEnabled(!bought && !finished);
+            bindings.cinemaLighting.RestoreBrightness(arrived && !finished ? 1 : 0);
+            bindings.benchLighting.RestoreBrightness(finished ? 0 : 1);
         }
     }
 }
