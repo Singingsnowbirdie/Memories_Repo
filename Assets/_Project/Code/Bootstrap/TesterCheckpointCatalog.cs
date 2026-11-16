@@ -105,7 +105,10 @@ namespace Memories.Bootstrap
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var progress in root.GetComponentsInChildren<SchoolFirstAidProgressReaction>(true))
                     progress.RestoreState(@"{""started"":true,""hints"":""""}");
-            trackers["school.payphone"].GetComponent<SchoolAmbulanceArrivalReaction>().RestoreState("open");
+            State("school.courtyard_left_closed", false, false);
+            State("school.courtyard_left_open", true, false);
+            State("school.courtyard_right_closed", false, false);
+            State("school.courtyard_right_open", true, false);
             foreach (var tracker in trackers.Values) tracker.Capture();
             Physics.SyncTransforms();
         }

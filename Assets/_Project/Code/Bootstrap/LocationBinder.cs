@@ -83,6 +83,22 @@ namespace Memories.Bootstrap
             HintProgressRestoration.Restore(scope.Container.Resolve<QuestInventory>(),
                 scope.Container.Resolve<CustomVariableStore>(), scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
             scope.Container.Resolve<ObjectStateStore>().RestoreScene(scene);
+            // Новые створки восстанавливаются из собственных состояний; старые сохранения — по завершённому звонку.
+            bool courtyardWasOpened = scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>().Contains("school_call_ambulance");
+            foreach (var root in scene.GetRootGameObjects())
+                foreach (var tracker in root.GetComponentsInChildren<ObjectStateTracker>(true))
+                {
+                    if (tracker.PersistentId.StartsWith("school.courtyard_") && !tracker.HasRestoredState)
+                        tracker.gameObject.SetActive(courtyardWasOpened == tracker.PersistentId.EndsWith("_open"));
+                    if (tracker.PersistentId == "school.ambulance" && !courtyardWasOpened)
+                        tracker.GetComponent<ReactionInteractable>().SetInteractionEnabled(true);
+                }
+            // До вызова скорой старые сохранения могли скрывать уже ожидающие во дворе машину и врача.
+            if (!scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>().Contains("school_call_ambulance"))
+                foreach (var root in scene.GetRootGameObjects())
+                    foreach (var tracker in root.GetComponentsInChildren<ObjectStateTracker>(true))
+                        if ((tracker.PersistentId == "school.ambulance" || tracker.PersistentId == "school.ambulance_doctor") && tracker.HasRestoredState)
+                            tracker.gameObject.SetActive(true);
             // В старых сохранениях до появления телефона и монеты интерактивность была отключена отдельно.
             if (!scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>().Contains("school_coach_fourth_memory"))
                 foreach (var root in scene.GetRootGameObjects())

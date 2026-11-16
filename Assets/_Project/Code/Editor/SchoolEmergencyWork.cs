@@ -102,24 +102,38 @@ internal static class SchoolEmergencyWork
             var missing=Text("PayphoneMissingCoin","Где бы взять монетку?");
             var reminder=Text("CallAmbulanceReminder","Нужно вызвать “скорую.”");
             var hint=Graph(R+"Hints/CallAmbulanceReminder.asset");var hintText=Action(hint,ReactionKind.StoryText);Set(hintText,"textGraph",reminder);Link(hint.nodes[0],hintText);
-            var pg=Graph(R+"CallAmbulance.asset");Keys(pg,"arrive");
+            var pg=Graph(R+"CallAmbulance.asset");Keys(pg,"courtyard_left_closed","courtyard_left_open","courtyard_right_closed","courtyard_right_open");
             var condition=Node<ReactionConditionNode>(pg);Set(condition,"item",coinItem);Link(pg.nodes[0],condition);
             var absent=Action(pg,ReactionKind.StoryText);Set(absent,"textGraph",missing);Link(condition,absent,"ifAbsent");
             var consume=Action(pg,ReactionKind.ConsumeInventoryItem);Set(consume,"item",coinItem);Link(condition,consume,"ifPresent");
-            var memory=Action(pg,ReactionKind.Memory);Set(memory,"memoryGraph",call);Set(memory,"memoryId","school_call_ambulance");Set(memory,"memoryStartedReactionKey","arrive");Link(consume,memory);
+            var memory=Action(pg,ReactionKind.Memory);Set(memory,"memoryGraph",call);Set(memory,"memoryId","school_call_ambulance");var stopPhone=Action(pg,ReactionKind.ObjectInteractivity);Set(stopPhone,"interactionEnabled",false);Link(consume,stopPhone);
+            var doorsHub=Node<ReactionHubNode>(pg);Link(stopPhone,doorsHub);
 
             var dg=Graph(R+"EnterAmbulance.asset",true);Keys(dg,"depart");var disable=Action(dg,ReactionKind.ObjectInteractivity);Set(disable,"interactionEnabled",false);Link(dg.nodes[0],disable);
             var dm=Action(dg,ReactionKind.Memory);Set(dm,"memoryGraph",depart);Set(dm,"memoryId","school_ambulance_departure");Set(dm,"memoryStartedReactionKey","depart");Link(disable,dm);
             var pi=phone.AddComponent<ReactionInteractable>();pi.Configure(pg,"Позвонить");Set(pi,"initiallyInteractable",true);Set(pi,"initiallyVisible",true);Track(phone,"school.payphone");
             var pc=phone.AddComponent<BoxCollider>();pc.center=new Vector3(0,0,.15f);pc.size=new Vector3(.5f,.68f,.4f);
             var ci=coin.GetComponent<ReactionInteractable>();Set(ci,"initiallyInteractable",true);Set(ci,"initiallyVisible",true);Set(ci,"prompt","Взять монетку");
-            var ai=car.AddComponent<ReactionInteractable>();ai.Configure(dg,"В машину");Set(ai,"initiallyInteractable",false);Set(ai,"initiallyVisible",false);Track(car,"school.ambulance");Track(doctor,"school.ambulance_doctor");
+            var ai=car.AddComponent<ReactionInteractable>();ai.Configure(dg,"В машину");Set(ai,"initiallyInteractable",true);Set(ai,"initiallyVisible",true);Track(car,"school.ambulance");Track(doctor,"school.ambulance_doctor");
             BindObject(coach,"phone",phone);BindObject(coach,"coin",coin);
-            var arrival=phone.AddComponent<SchoolAmbulanceArrivalReaction>();Set(arrival,"ambulance",ai);Set(arrival,"doctor",doctor);Set(arrival,"coach",coach);Custom(pi,"arrive",arrival);
-            var hinges=new[]{Find("Открытая дверь во двор левая").transform.Find("Петля"),Find("Открытая дверь во двор правая").transform.Find("Петля")};
-            var so=new SerializedObject(arrival);so.FindProperty("hinges").arraySize=2;so.FindProperty("openAngles").arraySize=2;
-            for(int i=0;i<2;i++){so.FindProperty("hinges").GetArrayElementAtIndex(i).objectReferenceValue=hinges[i];so.FindProperty("openAngles").GetArrayElementAtIndex(i).vector3Value=hinges[i].localEulerAngles;hinges[i].localRotation=Quaternion.identity;}
-            so.ApplyModifiedPropertiesWithoutUndo();
+            var doorRoots=new[]{Find("Открытая дверь во двор левая").transform,Find("Открытая дверь во двор правая").transform};
+            for(int i=0;i<2;i++)
+            {
+                string side=i==0?"left":"right";
+                var closed=doorRoots[i].Find("Петля").gameObject;
+                var opened=UnityEngine.Object.Instantiate(closed,closed.transform.parent);
+                closed.name="Закрытая створка ("+side+")";opened.name="Открытая створка ("+side+")";
+                closed.transform.localRotation=Quaternion.identity;
+                opened.transform.localRotation=Quaternion.Euler(0,i==0?260:100,0);
+                closed.SetActive(true);opened.SetActive(false);
+                Track(closed,"school.courtyard_"+side+"_closed");Track(opened,"school.courtyard_"+side+"_open");
+                BindObject(pi,"courtyard_"+side+"_closed",closed);BindObject(pi,"courtyard_"+side+"_open",opened);
+                var hide=Action(pg,ReactionKind.ObjectActivity);Set(hide,"objectKey","courtyard_"+side+"_closed");Set(hide,"active",false);
+                var show=Action(pg,ReactionKind.ObjectActivity);Set(show,"objectKey","courtyard_"+side+"_open");Set(show,"active",true);
+                Link(doorsHub,hide,i==0?doorsHub.Branches[0]:doorsHub.AddBranch());
+                Link(doorsHub,show,i==0?doorsHub.Branches[1]:doorsHub.AddBranch());
+            }
+            Link(doorsHub,memory,doorsHub.AddBranch());
             var departure=car.AddComponent<SchoolAmbulanceDepartureReaction>();Set(departure,"doctor",doctor);Custom(ai,"depart",departure);
             var beacon=car.AddComponent<SchoolAmbulanceBeacon>();var bs=new SerializedObject(beacon);var lamps=bs.FindProperty("lamps");lamps.arraySize=2;
             var bounds=car.GetComponent<Renderer>().bounds;
@@ -138,7 +152,7 @@ internal static class SchoolEmergencyWork
             Link(revealHub,fourth,revealHub.AddBranch());
             var timer=Action(cg,ReactionKind.StartHints);Set(timer,"hintId","school.call-ambulance");Set(timer,"hintGraph",hint);Set(timer,"hintTimeout",60f);Set(timer,"repeatHint",true);Link(fourth,timer);
             Keys(cg,"return_supplies","open_corridor","phone","coin");
-            phone.SetActive(false);coin.SetActive(false);car.SetActive(false);doctor.SetActive(false);
+            phone.SetActive(false);coin.SetActive(false);car.SetActive(true);doctor.SetActive(true);
             foreach(var g in new[]{cg,pg,dg,hint})if(!g.TryGetSequence(out _,out var error))throw new Exception(g.name+": "+error);
             foreach(var g in new[]{call,depart,Asset<MemoryGraph>(M+"CoachFourthMemory.asset")})if(!g.TryGetSequence(out _,out var error))throw new Exception(g.name+": "+error);
             AssetDatabase.SaveAssets();EditorSceneManager.MarkSceneDirty(scene);EditorSceneManager.SaveScene(scene);
