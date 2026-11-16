@@ -48,10 +48,12 @@ namespace Memories.Bootstrap
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var reaction in root.GetComponentsInChildren<GarageHoodFatherMemoryReaction>(true))
                     reaction.Initialize(scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>());
-            foreach (var root in scene.GetRootGameObjects())
-                foreach (var entrance in root.GetComponentsInChildren<GarageEntranceReaction>(true))
-                    entrance.Initialize(scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>(),
-                        () => transitions.EnterGarageAsync(scene), isCurrentLocation);
+            if (scene.path == TestLocationLauncher.GaragePath)
+            {
+                var bindings = LocationBindings.For(scene);
+                bindings.GarageEntrance.enabled = !isCurrentLocation;
+                bindings.GarageSideDoor.SetActive(isCurrentLocation);
+            }
             if (scene.path == TestLocationLauncher.BackyardPath)
             {
                 var bindings = LocationBindings.For(scene);

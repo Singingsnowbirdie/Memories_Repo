@@ -35,7 +35,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: previous
-        node: {fileID: -3615171207620411365}
+        node: {fileID: 990830001}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -43,7 +43,7 @@ MonoBehaviour:
       _dynamic: 0
   previous: {fileID: 0}
   next: {fileID: 0}
-  kind: 3
+  kind: 5
   pauseDuration: 1
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 0}
@@ -58,7 +58,7 @@ MonoBehaviour:
   variableValue: 1
   variableIntValue: 0
   addToIntValue: 0
-  objectKey: enter_garage
+  objectKey: garage_side_door
   lightingBrightness: 1
   lightingDuration: 4
   waitForLighting: 0
@@ -87,7 +87,7 @@ MonoBehaviour:
   m_Name: "\u041A\u043E\u043D\u0435\u0446"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionEndNode
   graph: {fileID: 11400000}
-  position: {x: 1040, y: 0}
+  position: {x: 1400, y: 0}
   ports:
     keys:
     - previous
@@ -97,7 +97,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: next
-        node: {fileID: -3774899795682490377}
+        node: {fileID: 990830001}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -117,13 +117,14 @@ MonoBehaviour:
   m_Name: EnterGarage
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionGraph
   nodes:
+  - {fileID: 990830001}
   - {fileID: 910000000000000012}
   - {fileID: 7159442022250672894}
   - {fileID: -3774899795682490377}
   - {fileID: -3615171207620411365}
   objectKeys:
   - entrance_look_target
-  - enter_garage
+  - garage_side_door
 --- !u!114 &910000000000000012
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -229,3 +230,78 @@ MonoBehaviour:
       _dynamic: 0
   runOnce: 1
   next: {fileID: 0}
+--- !u!114 &990830001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd260b234eb14d4cbcafbe381aa00ee1, type: 3}
+  m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
+  graph: {fileID: 11400000}
+  position: {x: 1040, y: 0}
+  ports:
+    keys:
+    - previous
+    - next
+    values:
+    - _fieldName: previous
+      _node: {fileID: 990830001}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: next
+        node: {fileID: -3774899795682490377}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: next
+      _node: {fileID: 990830001}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: -3615171207620411365}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  previous: {fileID: 0}
+  next: {fileID: 0}
+  kind: 17
+  pauseDuration: 1
+  reactionGraph: {fileID: 0}
+  textGraph: {fileID: 0}
+  memoryGraph: {fileID: 0}
+  memoryId:
+  firstCompletionText: {fileID: 0}
+  memoryStartedReactionKey:
+  locationScenePath: Assets/_Project/Locations/Garage/Garage.unity
+  holdControlsUntilGraphEnd: 1
+  arrivalMarker:
+  variableBank: {fileID: 0}
+  variableId:
+  variableValue: 1
+  variableIntValue: 0
+  addToIntValue: 0
+  objectKey:
+  lightingBrightness: 1
+  lightingDuration: 4
+  waitForLighting: 0
+  lookDuration: 1.2
+  lookMaxSpeed: 60
+  active: 1
+  revealDuration: 0
+  revealDelay: 0
+  revealShader: {fileID: 0}
+  interactionEnabled: 0
+  item: {fileID: 0}
+  hintId:
+  hintGraph: {fileID: 0}
+  hintTimeout: 60
+  repeatHint: 1

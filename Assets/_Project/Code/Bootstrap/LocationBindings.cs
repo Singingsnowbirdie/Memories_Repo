@@ -32,6 +32,11 @@ namespace Memories.Bootstrap
         public GameObject IntactBaseballWindow => Require(intactBaseballWindow, "целое окно");
         public GameObject BrokenBaseballWindow => Require(brokenBaseballWindow, "разбитое окно");
 
+        [SerializeField] private Memories.Gameplay.Triggers.SceneTrigger garageEntrance;
+        [SerializeField] private GameObject garageSideDoor;
+        public Memories.Gameplay.Triggers.SceneTrigger GarageEntrance => Require(garageEntrance, "вход в гараж");
+        public GameObject GarageSideDoor => Require(garageSideDoor, "боковая створка гаража");
+
         private static readonly Dictionary<int, HashSet<LocationBindings>> registered = new Dictionary<int, HashSet<LocationBindings>>();
         private int registeredScene;
 

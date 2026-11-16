@@ -322,15 +322,6 @@ namespace Memories.Bootstrap
             finally { busy = false; }
         }
 
-        public async UniTask EnterGarageAsync(Scene scene)
-        {
-            if (disposed || busy || !additionalScenes.Contains(scene))
-                throw new InvalidOperationException("Cannot enter the attached garage.");
-            busy = true;
-            try { await ReplaceConnectedHouseAsync(scene); }
-            finally { busy = false; }
-        }
-
         public bool CanSwitchEnvironment(string scenePath)
         {
             var scene = SceneManager.GetSceneByPath(scenePath);

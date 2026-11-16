@@ -9327,7 +9327,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &342514628
 Transform:
   m_ObjectHideFlags: 0
@@ -9336,7 +9336,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 342514627}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.76604444, z: 0, w: 0.64278764}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 4.06, y: 0, z: 2.625}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -9344,7 +9344,7 @@ Transform:
   - {fileID: 389828433}
   - {fileID: 1997222370}
   m_Father: {fileID: 1405499456}
-  m_LocalEulerAnglesHint: {x: 0, y: 100, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &344143877 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5850006238298256030, guid: 638f439aaa19a6b4da8e807ae3f28eeb, type: 3}
@@ -44806,7 +44806,6 @@ GameObject:
   - component: {fileID: 2032875915}
   - component: {fileID: 2032875914}
   - component: {fileID: 2032875913}
-  - component: {fileID: 2032875912}
   m_Layer: 0
   m_Name: "\u0412\u0441\u0442\u0443\u043F\u043B\u0435\u043D\u0438\u0435 \u0432 \u0433\u0430\u0440\u0430\u0436"
   m_TagString: Untagged
@@ -44829,22 +44828,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 615026664}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2032875912
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2032875910}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df5d5cd5ee2289948a89205b164c1e2e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.GarageEntranceReaction
-  doorHinge: {fileID: 342514628}
-  closedDoorEuler: {x: 0, y: 0, z: 0}
-  closeDuration: 1.5
-  entranceTrigger: {fileID: 2032875913}
 --- !u!114 &2032875913
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44861,11 +44844,11 @@ MonoBehaviour:
   triggerEvent: {fileID: 0}
   triggerOnce: 1
   objectBindings:
+  - key: garage_side_door
+    target: {fileID: 342514627}
   - key: entrance_look_target
     target: {fileID: 1205745552}
-  customReactions:
-  - key: enter_garage
-    reaction: {fileID: 2032875912}
+  customReactions: []
 --- !u!54 &2032875914
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -48019,3 +48002,5 @@ MonoBehaviour:
   schoolConnection: {fileID: 880300003}
   garageGate: {fileID: 1402361889}
   gymEntrance: {fileID: 0}
+  garageEntrance: {fileID: 2032875913}
+  garageSideDoor: {fileID: 342514627}
