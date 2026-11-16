@@ -154,9 +154,6 @@ namespace Memories.Bootstrap
                 foreach (var reaction in root.GetComponentsInChildren<GarageFinalMemoryReaction>(true))
                     reaction.Restore(scope.Container.Resolve<QuestInventory>(),
                         scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
-            foreach (var root in scene.GetRootGameObjects())
-                foreach (var reaction in root.GetComponentsInChildren<ShowSeatedBenReaction>(true))
-                    reaction.Restore(scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
             if (scene.path == TestLocationLauncher.BackyardPath)
             {
                 // Однократное восстановление, включая старые сохранения без флага завершения игры.
@@ -176,6 +173,8 @@ namespace Memories.Bootstrap
                     variables.Get(bank, "ben_received_baseball") && variables.Get(bank, "baseball_bat_found");
                 bindings.IntactBaseballWindow.SetActive(!completed);
                 bindings.BrokenBaseballWindow.SetActive(completed);
+                if (completed) bindings.BenPitcher.SetActive(false);
+                bindings.SeatedBen.SetActive(completed);
                 // В старых снимках интерактивность этого объекта могла быть выключена.
                 bindings.BaseballAreaReady.GetComponent<ReactionInteractable>().SetInteractionEnabled(true);
                 bindings.BaseballAreaNormal.SetActive(!ready);

@@ -22,6 +22,9 @@ namespace Memories.Bootstrap
         [SerializeField] private CustomVariableBank backyardVariables;
         [SerializeField] private Memories.Gameplay.Interaction.QuestItem baseballBat;
         [SerializeField] private GameObject baseballAreaNormal, baseballAreaReady, intactBaseballWindow, brokenBaseballWindow;
+        [SerializeField] private GameObject benPitcher, seatedBen;
+        public GameObject BenPitcher => Require(benPitcher, "Бен-питчер");
+        public GameObject SeatedBen => Require(seatedBen, "сидящий Бен");
         public CustomVariableBank BackyardVariables => Require(backyardVariables, "переменные двора");
         public Memories.Gameplay.Interaction.QuestItem BaseballBat => Require(baseballBat, "бита");
         public GameObject BaseballAreaNormal => Require(baseballAreaNormal, "обычная площадка");
