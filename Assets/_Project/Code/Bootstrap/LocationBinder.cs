@@ -61,9 +61,6 @@ namespace Memories.Bootstrap
                         group.RestoreBrightness(1);
             }
             foreach (var root in scene.GetRootGameObjects())
-                foreach (var attachment in root.GetComponentsInChildren<BackyardGarageAttachment>(true))
-                    attachment.Initialize(scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>(), transitions.LoadBackyardGarageAsync);
-            foreach (var root in scene.GetRootGameObjects())
                 foreach (var photo in root.GetComponentsInChildren<RevealPhotoReaction>(true))
                     photo.Restore(scope.Container.Resolve<CustomVariableStore>(), scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>(),
                         scope.Container.Resolve<PlayerMotor>());

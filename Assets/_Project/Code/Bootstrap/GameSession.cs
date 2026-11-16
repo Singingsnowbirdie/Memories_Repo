@@ -175,6 +175,8 @@ namespace Memories.Bootstrap
                 BindLocation(locationScene, LocationScope);
                 foreach (var additional in transitions.AdditionalScenes) BindLocation(additional, LocationScope);
                 transitions.ActivateCurrentScene();
+                busy = false;
+                await transitions.RestoreBackyardGarageAsync();
             }
             catch
             {
@@ -189,7 +191,11 @@ namespace Memories.Bootstrap
             await transitions.LoadConnectedSceneAsync(scenePath, connection, arrivalMarker);
 
         public bool CanSwitchEnvironment(string scenePath) => transitions.CanSwitchEnvironment(scenePath);
-        public UniTask SwitchEnvironmentAsync(string scenePath) => transitions.SwitchEnvironmentAsync(scenePath);
+        public async UniTask SwitchEnvironmentAsync(string scenePath)
+        {
+            await transitions.SwitchEnvironmentAsync(scenePath);
+            await transitions.RestoreBackyardGarageAsync();
+        }
 
         public bool CanChangeLocation(string scenePath) => transitions.CanChangeLocation(scenePath);
 

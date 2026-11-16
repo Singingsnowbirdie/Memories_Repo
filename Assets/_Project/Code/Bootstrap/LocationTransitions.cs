@@ -188,49 +188,17 @@ namespace Memories.Bootstrap
             }
         }
 
-        public async UniTask LoadBackyardGarageAsync(BackyardGarageAttachment attachment)
+        // Однократное восстановление сохранённого прохода, отдельно от игровых графов.
+        public async UniTask RestoreBackyardGarageAsync()
         {
-            using var cancellation = CancellationTokenSource.CreateLinkedTokenSource(applicationToken,
-                shutdownToken, attachment.GetCancellationTokenOnDestroy());
-            // Восстановленный двор может оставаться присоединённым к дому, пока игрок не войдёт в него.
-            // Ждём завершения входа во двор, чтобы этот переход не выгрузил гараж.
-            await UniTask.WaitUntil(() => disposed || (!busy && attachment != null &&
-                locationScene == attachment.gameObject.scene), cancellationToken: cancellation.Token);
-            cancellation.Token.ThrowIfCancellationRequested();
-            if (disposed || attachment == null) throw new OperationCanceledException();
-            const string path = TestLocationLauncher.GaragePath;
-            if (!Application.CanStreamedLevelBeLoaded(path))
-                throw new InvalidOperationException("Garage must be enabled in Build Settings.");
-            if (SceneManager.GetSceneByPath(path).isLoaded)
-            {
-                if (additionalScenes.Contains(SceneManager.GetSceneByPath(path))) return;
-                throw new InvalidOperationException("Garage is already loaded outside this session.");
-            }
-            busy = true;
-            Scene garage = default;
-            try
-            {
-                await SceneManager.LoadSceneAsync(path, LoadSceneMode.Additive);
-                garage = SceneManager.GetSceneByPath(path);
-                cancellation.Token.ThrowIfCancellationRequested();
-                var entrance = FindMarker(garage, "Вход из двора");
-                var hinge = FindMarker(garage, "Петля боковой двери");
-                if (entrance == null || hinge == null)
-                    throw new InvalidOperationException("Garage side entrance is not configured.");
-                ValidateConnection(entrance, attachment.transform);
-                DisableLocationCameras(garage);
-                BindDoors(garage, LocationScope);
-                hinge.localRotation *= Quaternion.Euler(0, 100, 0);
-                Physics.SyncTransforms();
-                additionalScenes.Add(garage);
-                // Оставляем Backyard активной сценой, а игрока в Bootstrap — на месте.
-            }
-            catch
-            {
-                if (garage.IsValid() && garage.isLoaded) await SceneManager.UnloadSceneAsync(garage);
-                throw;
-            }
-            finally { busy = false; }
+            if (disposed || locationScene.path != TestLocationLauncher.BackyardPath ||
+                !SessionScope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>()
+                    .Contains("backyard_baseball_second_memory")) return;
+            var bindings = LocationBindings.For(locationScene);
+            await LoadConnectedSceneAsync(TestLocationLauncher.GaragePath, bindings.GarageAttachment, "Вход из двора");
+            if (bindings == null) return;
+            foreach (var section in bindings.GarageFenceSections)
+                if (section != null) section.SetActive(false);
         }
 
         public async UniTask<Scene> LoadGarageSchoolAsync(GarageSchoolConnection connection)

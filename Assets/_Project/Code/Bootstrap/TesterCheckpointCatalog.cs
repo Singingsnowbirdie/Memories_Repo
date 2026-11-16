@@ -42,7 +42,7 @@ namespace Memories.Bootstrap
             variables.Set(backyardVariables, "optional_interactives_inspected", 6);
             foreach (var item in backyardItems) inventory.RestoreConsumed(item.Id);
             memories.Collect("backyard_optional_memory", backyardFirstMemory);
-            memories.Collect(BackyardGarageAttachment.MemoryId, backyardSecondMemory);
+            memories.Collect("backyard_baseball_second_memory", backyardSecondMemory);
             if (checkpoint != TesterCheckpoint.GarageCorridorOpen && checkpoint != TesterCheckpoint.SchoolCourtyardOpen) return;
             foreach (string id in new[] { "father_compressor_requested", "father_hood_items_requested", "father_hood_items_delivered",
                 "father_compressor_delivered", "father_final_items_delivered", "compressor_found", "headlamp_found", "toolbox_found",

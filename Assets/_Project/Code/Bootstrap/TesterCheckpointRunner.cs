@@ -102,8 +102,8 @@ namespace Memories.Bootstrap
                 }
                 else if (checkpoint == TesterCheckpoint.BackyardMemoryComplete)
                 {
-                    var garage = FindComponent<BackyardGarageAttachment>(getCurrentScene());
-                    await UniTask.WaitUntil(() => garage != null && garage.IsOpen, cancellationToken: shutdownToken).Timeout(TimeSpan.FromSeconds(30));
+                    if (!SceneManager.GetSceneByPath(TestLocationLauncher.GaragePath).isLoaded)
+                        throw new InvalidOperationException("Гараж не восстановлен для контрольной точки двора.");
                 }
                 else if (checkpoint == TesterCheckpoint.GarageCorridorOpen)
                 {

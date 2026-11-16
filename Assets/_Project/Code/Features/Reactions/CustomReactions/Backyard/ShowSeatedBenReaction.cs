@@ -13,7 +13,7 @@ namespace Memories.Gameplay.Reactions
         [SerializeField] private GameObject seatedBen;
         public void Restore(MemoryCollection memories)
         {
-            if (memories.Contains(BackyardGarageAttachment.MemoryId)) Execute();
+            if (memories.Contains("backyard_baseball_second_memory")) Execute();
             else seatedBen.SetActive(false);
         }
         public override void Execute()
