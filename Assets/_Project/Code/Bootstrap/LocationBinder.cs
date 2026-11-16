@@ -89,6 +89,14 @@ namespace Memories.Bootstrap
             HintProgressRestoration.Restore(scope.Container.Resolve<QuestInventory>(),
                 scope.Container.Resolve<CustomVariableStore>(), scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
             scope.Container.Resolve<ObjectStateStore>().RestoreScene(scene);
+            if (scene.path == TestLocationLauncher.GaragePath)
+                foreach (var root in scene.GetRootGameObjects())
+                    foreach (var tracker in root.GetComponentsInChildren<ObjectStateTracker>(true))
+                        if (tracker.PersistentId == "garage.headlamp" || tracker.PersistentId == "garage.toolbox" ||
+                            tracker.PersistentId == "garage.compressor_pickup" || tracker.PersistentId == "garage.vacuum_hose" ||
+                            tracker.PersistentId == "garage.silicone_spray" || tracker.PersistentId == "garage.paper_wipes")
+                            // Older saves may contain the former disabled interaction state.
+                            tracker.GetComponent<ReactionInteractable>().SetInteractionEnabled(true);
             if (isCurrentLocation)
                 foreach (var root in scene.GetRootGameObjects())
                     foreach (var entrance in root.GetComponentsInChildren<SchoolGymEntranceReaction>(true))
@@ -162,10 +170,19 @@ namespace Memories.Bootstrap
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var cafe in root.GetComponentsInChildren<ParkCafeDissolveReaction>(true))
                     cafe.RestoreAfterLoad(scope.Container.Resolve<CustomVariableStore>(), scope.Container.Resolve<QuestInventory>());
-            foreach (var root in scene.GetRootGameObjects())
-                foreach (var reaction in root.GetComponentsInChildren<GarageOpenHoodFatherReaction>(true))
-                    reaction.Restore(scope.Container.Resolve<CustomVariableStore>(),
-                        scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
+            if (scene.path == TestLocationLauncher.GaragePath)
+            {
+                var bindings = LocationBindings.For(scene);
+                bool completed = scope.Container.Resolve<CustomVariableStore>()
+                    .Get(bindings.GarageVariables, "father_hood_items_delivered") ||
+                    scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>().Contains("garage_third_memory");
+                bindings.WorkingGarageFather.SetActive(completed);
+                if (completed)
+                {
+                    bindings.GarageHood.RestoreState("open");
+                    bindings.HoodGarageFather.SetActive(false);
+                }
+            }
             if (scene.path == TestLocationLauncher.GaragePath)
             {
                 var bindings = LocationBindings.For(scene);

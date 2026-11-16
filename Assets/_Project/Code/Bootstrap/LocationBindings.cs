@@ -47,6 +47,9 @@ namespace Memories.Bootstrap
         public GameObject WorkingGarageFather => Require(workingGarageFather, "работающий отец");
         public GameObject FinalGarageFather => Require(finalGarageFather, "отец после финального воспоминания");
 
+        [SerializeField] private SetCarHoodReaction garageHood;
+        public SetCarHoodReaction GarageHood => Require(garageHood, "car hood");
+
         [SerializeField] private GameObject hoodGarageFather;
         public GameObject HoodGarageFather => Require(hoodGarageFather, "отец у закрытого капота");
 

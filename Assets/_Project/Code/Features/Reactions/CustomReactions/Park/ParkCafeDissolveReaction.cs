@@ -46,7 +46,7 @@ namespace Memories.Gameplay.Reactions
             {
                 bool talked = state.Get(dockVariables, "lily_spoken");
                 dockLily.gameObject.SetActive(complete);
-                dockLily.SetInteractionEnabled(complete && !talked);
+                dockLily.SetInteractionEnabled(!talked);
                 dockBoat.SetInteractionEnabled(complete && talked);
             }
         }

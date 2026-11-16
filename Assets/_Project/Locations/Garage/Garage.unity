@@ -8040,55 +8040,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4476191157694973274, guid: f749868d26ed436469af44a43d3fc555, type: 3}
   m_PrefabInstance: {fileID: 262772550}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &263362227
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 263362229}
-  - component: {fileID: 263362228}
-  m_Layer: 0
-  m_Name: "\u0422\u0440\u0435\u0442\u044C\u0435 \u0432\u043E\u0441\u043F\u043E\u043C\u0438\u043D\u0430\u043D\u0438\u0435
-    \u2014 \u043E\u0442\u0435\u0446 \u043F\u043E\u0434 \u043A\u0430\u043F\u043E\u0442\u043E\u043C"
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4
-  m_IsActive: 1
---- !u!114 &263362228
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 263362227}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3561949f6d526d469c317fc06f6c88c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.GarageOpenHoodFatherReaction
-  waitingFather: {fileID: 1074503755}
-  workingFather: {fileID: 72671025}
-  hood: {fileID: 1121034354}
-  variables: {fileID: 11400000, guid: 481b44f16de901f4d9a22606581568cb, type: 2}
---- !u!4 &263362229
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 263362227}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 327.458}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &270995409
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10959,7 +10910,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Interaction.ReactionInteractable
   graph: {fileID: 11400000, guid: c0b887558a18af541bca0aa64339ca03, type: 2}
-  initiallyInteractable: 0
+  initiallyInteractable: 1
   initiallyVisible: 0
   prompt: "\u0412\u0437\u044F\u0442\u044C \u043D\u0430\u0431\u043E\u0440 \u0438\u043D\u0441\u0442\u0440\u0443\u043C\u0435\u043D\u0442\u043E\u0432"
   objectBindings:
@@ -26501,9 +26452,13 @@ MonoBehaviour:
     target: {fileID: 1280315322}
   - key: toolbox
     target: {fileID: 286626001}
+  - key: working_father
+    target: {fileID: 72671025}
+  - key: waiting_father
+    target: {fileID: 1074503755}
   customReactions:
-  - key: show_open_hood_father
-    reaction: {fileID: 263362228}
+  - key: open_hood
+    reaction: {fileID: 1121034354}
 --- !u!114 &1074503758
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -47767,7 +47722,6 @@ SceneRoots:
   - {fileID: 1074503754}
   - {fileID: 1280315321}
   - {fileID: 72671024}
-  - {fileID: 263362229}
   - {fileID: 91965149}
   - {fileID: 1040506261}
   - {fileID: 424232206}
@@ -47833,3 +47787,4 @@ MonoBehaviour:
   workingGarageFather: {fileID: 72671025}
   finalGarageFather: {fileID: 1952435883}
   hoodGarageFather: {fileID: 1074503755}
+  garageHood: {fileID: 1121034354}
