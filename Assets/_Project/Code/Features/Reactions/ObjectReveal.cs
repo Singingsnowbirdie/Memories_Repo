@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 using Memories.Gameplay.Interaction;
@@ -26,6 +28,44 @@ namespace Memories.Gameplay.Reactions
             // OnEnable может настроить интерактивный объект, поэтому блокируем ввод и после активации.
             foreach (var state in effect.interactions) if (state.item != null) state.item.enabled = false;
             effect.StartCoroutine(effect.Animate(Mathf.Max(.01f, duration), Mathf.Max(0, delay)));
+        }
+
+        public static async UniTask DissolveAsync(GameObject target, Shader dissolveShader, float duration, float delay, CancellationToken cancellationToken)
+        {
+            var originals = new List<(Renderer renderer, Material[] materials)>();
+            var temporary = new List<Material>();
+            try
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                if (delay > 0) await UniTask.Delay(System.TimeSpan.FromSeconds(delay), cancellationToken: cancellationToken);
+                foreach (var renderer in target.GetComponentsInChildren<Renderer>(true))
+                {
+                    var source = renderer.sharedMaterials;
+                    originals.Add((renderer, source));
+                    var replacements = new Material[source.Length];
+                    for (int i = 0; i < source.Length; i++)
+                    {
+                        if (!source[i]) continue;
+                        var material = new Material(source[i]) { shader = dissolveShader, hideFlags = HideFlags.HideAndDontSave };
+                        material.SetFloat("_Reveal", 1);
+                        replacements[i] = material;
+                        temporary.Add(material);
+                    }
+                    renderer.sharedMaterials = replacements;
+                }
+                for (float elapsed = 0; elapsed < duration; elapsed += Time.deltaTime)
+                {
+                    foreach (var material in temporary)
+                        material.SetFloat("_Reveal", 1 - Mathf.SmoothStep(0, 1, elapsed / duration));
+                    await UniTask.Yield(PlayerLoopTiming.Update, cancellationToken);
+                }
+                target.SetActive(false);
+            }
+            finally
+            {
+                foreach (var entry in originals) if (entry.renderer) entry.renderer.sharedMaterials = entry.materials;
+                foreach (var material in temporary) if (material) Destroy(material);
+            }
         }
 
         void Prepare(Shader shader)

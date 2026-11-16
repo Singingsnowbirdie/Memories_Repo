@@ -229,9 +229,9 @@ namespace Memories.Bootstrap
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var mimes in root.GetComponentsInChildren<ParkMimeReaction>(true))
                     mimes.RestoreAfterLoad(scope.Container.Resolve<QuestInventory>());
-            foreach (var root in scene.GetRootGameObjects())
-                foreach (var cafe in root.GetComponentsInChildren<ParkCafeDissolveReaction>(true))
-                    cafe.RestoreAfterLoad(scope.Container.Resolve<CustomVariableStore>(), scope.Container.Resolve<QuestInventory>());
+            if (scene.path == "Assets/_Project/Locations/Park/Park.unity")
+                RestoreParkCafe(LocationBindings.For(scene).ParkCafe,
+                    scope.Container.Resolve<CustomVariableStore>(), scope.Container.Resolve<QuestInventory>());
             if (scene.path == TestLocationLauncher.GaragePath)
             {
                 var bindings = LocationBindings.For(scene);
@@ -301,6 +301,34 @@ namespace Memories.Bootstrap
                 else if (tracker.PersistentId == "house.courtyard.closed" ||
                     tracker.PersistentId.StartsWith("house.courtyard.cover.", System.StringComparison.Ordinal))
                     tracker.gameObject.SetActive(false);
+            }
+        }
+        private static void RestoreParkCafe(LocationBindings.ParkCafeBindings bindings,
+            CustomVariableStore state, QuestInventory inventory)
+        {
+            bool arrived = bindings.lily.gameObject.activeSelf;
+            bool bought = state.Get(bindings.variables, "ordered") || inventory.WasCollected(bindings.receipt.Id);
+            bool coffeeRead = state.Get(bindings.variables, "coffee_read");
+            bool napkinRead = state.Get(bindings.variables, "napkin_read");
+            bool complete = state.Get(bindings.variables, "completed") || (coffeeRead && napkinRead);
+            if (bought) state.Set(bindings.variables, "ordered", true);
+            if (complete) state.Set(bindings.variables, "completed", true);
+            bindings.lily.gameObject.SetActive(arrived && !bought);
+            // Hidden objects stay ready for their explicit reveal graph; progress controls interaction.
+            bindings.lily.SetInteractionEnabled(!bought && !complete && !state.Get(bindings.variables, "unlocked"));
+            bindings.truck.SetInteractionEnabled(!bought && !complete && state.Get(bindings.variables, "unlocked"));
+            bindings.order.SetActive(bought && !complete);
+            bindings.coffeeOne.SetInteractionEnabled(!complete && !coffeeRead);
+            bindings.coffeeTwo.SetInteractionEnabled(!complete && !coffeeRead);
+            bindings.napkin.SetInteractionEnabled(!complete && !napkinRead);
+            bindings.lighting.RestoreBrightness((arrived || bought) && !complete ? 1 : 0);
+            if (bindings.lakeLighting != null) bindings.lakeLighting.RestoreBrightness(complete ? 1 : 0);
+            if (bindings.dockLily != null && bindings.dockBoat != null && bindings.dockVariables != null)
+            {
+                bool talked = state.Get(bindings.dockVariables, "lily_spoken");
+                bindings.dockLily.gameObject.SetActive(complete);
+                bindings.dockLily.SetInteractionEnabled(!talked);
+                bindings.dockBoat.SetInteractionEnabled(complete && talked);
             }
         }
     }

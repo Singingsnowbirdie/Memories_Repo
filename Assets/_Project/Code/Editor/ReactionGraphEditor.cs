@@ -383,10 +383,10 @@ namespace Memories.Editor
                     EditorGUILayout.LabelField(interactivity ? "Интерактивность" : "Активность");
                     var active = serializedObject.FindProperty(interactivity ? "interactionEnabled" : "active");
                     active.boolValue = EditorGUILayout.Popup(active.boolValue ? 0 : 1, new[] { "Включить", "Выключить" }) == 0;
-                    if (!interactivity && active.boolValue)
+                    if (!interactivity)
                     {
                         EditorGUILayout.Space(8);
-                        EditorGUILayout.LabelField("Проявление, сек. (0 — сразу)");
+                        EditorGUILayout.LabelField(active.boolValue ? "Проявление, сек. (0 — сразу)" : "Растворение, сек. (0 — сразу)");
                         EditorGUILayout.PropertyField(serializedObject.FindProperty("revealDuration"), GUIContent.none);
                         if (serializedObject.FindProperty("revealDuration").floatValue > 0)
                         {
@@ -394,7 +394,7 @@ namespace Memories.Editor
                             EditorGUILayout.LabelField("Задержка, сек.");
                             EditorGUILayout.PropertyField(serializedObject.FindProperty("revealDelay"), GUIContent.none);
                             EditorGUILayout.Space(8);
-                            EditorGUILayout.LabelField("Шейдер проявления");
+                            EditorGUILayout.LabelField(active.boolValue ? "Шейдер проявления" : "Шейдер растворения");
                             EditorGUILayout.PropertyField(serializedObject.FindProperty("revealShader"), GUIContent.none);
                         }
                     }

@@ -5737,11 +5737,7 @@ MonoBehaviour:
     target: {fileID: 1692745134}
   - key: "\u041B\u0438\u043B\u0438 \u043D\u0430 \u043F\u0440\u0438\u0447\u0430\u043B\u0435"
     target: {fileID: 924004006}
-  customReactions:
-  - key: "\u0420\u0430\u0441\u0442\u0432\u043E\u0440\u0438\u0442\u044C \u041B\u0438\u043B\u0438"
-    reaction: {fileID: 981525963}
-  - key: "\u0420\u0430\u0441\u0442\u0432\u043E\u0440\u0438\u0442\u044C \u0437\u0430\u043A\u0430\u0437"
-    reaction: {fileID: 1433498707}
+  customReactions: []
 --- !u!114 &98740816
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27376,11 +27372,7 @@ MonoBehaviour:
     target: {fileID: 1692745134}
   - key: "\u041B\u0438\u043B\u0438 \u043D\u0430 \u043F\u0440\u0438\u0447\u0430\u043B\u0435"
     target: {fileID: 924004006}
-  customReactions:
-  - key: "\u0420\u0430\u0441\u0442\u0432\u043E\u0440\u0438\u0442\u044C \u041B\u0438\u043B\u0438"
-    reaction: {fileID: 981525963}
-  - key: "\u0420\u0430\u0441\u0442\u0432\u043E\u0440\u0438\u0442\u044C \u0437\u0430\u043A\u0430\u0437"
-    reaction: {fileID: 1433498707}
+  customReactions: []
 --- !u!114 &555673124
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27416,11 +27408,7 @@ MonoBehaviour:
     target: {fileID: 1692745134}
   - key: "\u041B\u0438\u043B\u0438 \u043D\u0430 \u043F\u0440\u0438\u0447\u0430\u043B\u0435"
     target: {fileID: 924004006}
-  customReactions:
-  - key: "\u0420\u0430\u0441\u0442\u0432\u043E\u0440\u0438\u0442\u044C \u041B\u0438\u043B\u0438"
-    reaction: {fileID: 981525963}
-  - key: "\u0420\u0430\u0441\u0442\u0432\u043E\u0440\u0438\u0442\u044C \u0437\u0430\u043A\u0430\u0437"
-    reaction: {fileID: 1433498707}
+  customReactions: []
 --- !u!114 &555673125
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27490,11 +27478,7 @@ MonoBehaviour:
     target: {fileID: 1692745134}
   - key: "\u041B\u0438\u043B\u0438 \u043D\u0430 \u043F\u0440\u0438\u0447\u0430\u043B\u0435"
     target: {fileID: 924004006}
-  customReactions:
-  - key: "\u0420\u0430\u0441\u0442\u0432\u043E\u0440\u0438\u0442\u044C \u041B\u0438\u043B\u0438"
-    reaction: {fileID: 981525963}
-  - key: "\u0420\u0430\u0441\u0442\u0432\u043E\u0440\u0438\u0442\u044C \u0437\u0430\u043A\u0430\u0437"
-    reaction: {fileID: 1433498707}
+  customReactions: []
 --- !u!114 &555673128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -46642,7 +46626,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 981525962}
-  - component: {fileID: 981525963}
   m_Layer: 0
   m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u0438 \u043A\u0430\u0444\u0435"
   m_TagString: Untagged
@@ -46666,35 +46649,6 @@ Transform:
   - {fileID: 1433498706}
   m_Father: {fileID: 1482448884}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &981525963
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 981525961}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4971bf1984f053643b04f10ec31ab104, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ParkCafeDissolveReaction
-  target: {fileID: 1118195131}
-  dissolveShader: {fileID: 4800000, guid: 0420a32a1c6f438fa03008fd3c81f551, type: 3}
-  duration: 4
-  restoresCafe: 1
-  variables: {fileID: 11400000, guid: ab17b0cadc75c9c4e852e852c4f0a3b3, type: 2}
-  receipt: {fileID: 11400000, guid: f151613222b513f48a0a6819d5d52c6f, type: 2}
-  lily: {fileID: 1118195133}
-  truck: {fileID: 98740815}
-  coffeeOne: {fileID: 555673127}
-  coffeeTwo: {fileID: 555673124}
-  napkin: {fileID: 555673117}
-  order: {fileID: 555673110}
-  lighting: {fileID: 1692745137}
-  lakeLighting: {fileID: 2800000003}
-  dockVariables: {fileID: 11400000, guid: a1f2b1d2798eb89428af4d9666b24bde, type: 2}
-  dockLily: {fileID: 924004009}
-  dockBoat: {fileID: 849925614}
 --- !u!1 &981993177
 GameObject:
   m_ObjectHideFlags: 0
@@ -53719,11 +53673,7 @@ MonoBehaviour:
     target: {fileID: 1692745134}
   - key: "\u041B\u0438\u043B\u0438 \u043D\u0430 \u043F\u0440\u0438\u0447\u0430\u043B\u0435"
     target: {fileID: 924004006}
-  customReactions:
-  - key: "\u0420\u0430\u0441\u0442\u0432\u043E\u0440\u0438\u0442\u044C \u041B\u0438\u043B\u0438"
-    reaction: {fileID: 981525963}
-  - key: "\u0420\u0430\u0441\u0442\u0432\u043E\u0440\u0438\u0442\u044C \u0437\u0430\u043A\u0430\u0437"
-    reaction: {fileID: 1433498707}
+  customReactions: []
 --- !u!114 &1118195134
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68832,7 +68782,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1433498706}
-  - component: {fileID: 1433498707}
   m_Layer: 0
   m_Name: "\u0420\u0430\u0441\u0442\u0432\u043E\u0440\u0435\u043D\u0438\u0435 \u0437\u0430\u043A\u0430\u0437\u0430"
   m_TagString: Untagged
@@ -68855,34 +68804,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 981525962}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1433498707
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1433498705}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4971bf1984f053643b04f10ec31ab104, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ParkCafeDissolveReaction
-  target: {fileID: 555673110}
-  dissolveShader: {fileID: 4800000, guid: 0420a32a1c6f438fa03008fd3c81f551, type: 3}
-  duration: 4
-  restoresCafe: 0
-  variables: {fileID: 0}
-  receipt: {fileID: 0}
-  lily: {fileID: 0}
-  truck: {fileID: 0}
-  coffeeOne: {fileID: 0}
-  coffeeTwo: {fileID: 0}
-  napkin: {fileID: 0}
-  order: {fileID: 0}
-  lighting: {fileID: 0}
-  dockVariables: {fileID: 0}
-  dockLily: {fileID: 0}
-  dockBoat: {fileID: 0}
 --- !u!1001 &1433519483
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -102907,6 +102828,7 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 9919000001}
   - {fileID: 2600000001}
   - {fileID: 2500000001}
   - {fileID: 201}
@@ -104758,3 +104680,61 @@ MonoBehaviour:
   - 15
   - 15
   initialBrightness: 0
+--- !u!1 &9919000000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9919000001}
+  - component: {fileID: 9919000002}
+  m_Layer: 0
+  m_Name: LocationBindings
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9919000001
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9919000000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9919000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9919000000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8094193f27f546838e99a1b9a63b063e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Bootstrap::Memories.Bootstrap.LocationBindings
+  parkCafe:
+    variables: {fileID: 11400000, guid: ab17b0cadc75c9c4e852e852c4f0a3b3, type: 2}
+    receipt: {fileID: 11400000, guid: f151613222b513f48a0a6819d5d52c6f, type: 2}
+    lily: {fileID: 1118195133}
+    truck: {fileID: 98740815}
+    coffeeOne: {fileID: 555673127}
+    coffeeTwo: {fileID: 555673124}
+    napkin: {fileID: 555673117}
+    order: {fileID: 555673110}
+    lighting: {fileID: 1692745137}
+    lakeLighting: {fileID: 2800000003}
+    dockVariables: {fileID: 11400000, guid: a1f2b1d2798eb89428af4d9666b24bde, type: 2}
+    dockLily: {fileID: 924004009}
+    dockBoat: {fileID: 849925614}

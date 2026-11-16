@@ -53,6 +53,21 @@ namespace Memories.Bootstrap
         [SerializeField] private GameObject hoodGarageFather;
         public GameObject HoodGarageFather => Require(hoodGarageFather, "отец у закрытого капота");
 
+        [Serializable]
+        public sealed class ParkCafeBindings
+        {
+            public CustomVariableBank variables;
+            public Memories.Gameplay.Interaction.QuestItem receipt;
+            public Memories.Gameplay.Interaction.ReactionInteractable lily, truck, coffeeOne, coffeeTwo, napkin;
+            public GameObject order;
+            public LightingGroup lighting;
+            public LightingGroup lakeLighting;
+            public CustomVariableBank dockVariables;
+            public Memories.Gameplay.Interaction.ReactionInteractable dockLily, dockBoat;
+        }
+        [SerializeField] private ParkCafeBindings parkCafe;
+        public ParkCafeBindings ParkCafe => parkCafe;
+
         private static readonly Dictionary<int, HashSet<LocationBindings>> registered = new Dictionary<int, HashSet<LocationBindings>>();
         private int registeredScene;
 

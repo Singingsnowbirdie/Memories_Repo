@@ -273,6 +273,8 @@ namespace Memories.Gameplay.Reactions
                         {
                             if (action.Active && !target.activeSelf && action.RevealDuration > 0 && action.RevealShader != null)
                                 ObjectReveal.Play(target, action.RevealShader, action.RevealDuration, action.RevealDelay);
+                            else if (!action.Active && target.activeInHierarchy && action.RevealDuration > 0 && action.RevealShader != null)
+                                await ObjectReveal.DissolveAsync(target, action.RevealShader, action.RevealDuration, action.RevealDelay, source.Token);
                             else target.SetActive(action.Active);
                         }
                         finally { IsHidingOwner = false; }
