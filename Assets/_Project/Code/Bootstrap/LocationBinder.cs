@@ -32,9 +32,6 @@ namespace Memories.Bootstrap
                         () => locations.ChangeLocationAsync("Assets/_Project/Locations/Park/Park.unity"),
                         scope.Container.Resolve<PlayerMotor>(), scope.Container.Resolve<PlayerMovementModel>());
             foreach (var root in scene.GetRootGameObjects())
-                foreach (var phone in root.GetComponentsInChildren<RevealSchoolPhoneReaction>(true))
-                    phone.Initialize(scope.Container.Resolve<QuestInventory>());
-            foreach (var root in scene.GetRootGameObjects())
                 foreach (var supplies in root.GetComponentsInChildren<SchoolFirstAidProgressReaction>(true))
                     supplies.Initialize(scope.Container.Resolve<Memories.Gameplay.UI.StoryTextPresenter>(),
                         scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>(), scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<CustomVariableStore>());
@@ -86,6 +83,12 @@ namespace Memories.Bootstrap
             HintProgressRestoration.Restore(scope.Container.Resolve<QuestInventory>(),
                 scope.Container.Resolve<CustomVariableStore>(), scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
             scope.Container.Resolve<ObjectStateStore>().RestoreScene(scene);
+            // В старых сохранениях до появления телефона и монеты интерактивность была отключена отдельно.
+            if (!scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>().Contains("school_coach_fourth_memory"))
+                foreach (var root in scene.GetRootGameObjects())
+                    foreach (var tracker in root.GetComponentsInChildren<ObjectStateTracker>(true))
+                        if ((tracker.PersistentId == "school.payphone" || tracker.PersistentId == "school.vending_coin") && tracker.HasRestoredState)
+                            tracker.GetComponent<ReactionInteractable>().SetInteractionEnabled(true);
             // До первого школьного воспоминания Джайлз скрыт, но готов к взаимодействию после появления.
             if (!scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>().Contains("school_commentator_memory"))
                 foreach (var root in scene.GetRootGameObjects())

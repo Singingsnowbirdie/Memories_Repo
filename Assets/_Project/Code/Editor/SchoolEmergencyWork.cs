@@ -68,6 +68,8 @@ internal static class SchoolEmergencyWork
     {var so=new SerializedObject(g);var a=so.FindProperty("objectKeys");a.arraySize=keys.Length;for(int i=0;i<keys.Length;i++)a.GetArrayElementAtIndex(i).stringValue=keys[i];so.ApplyModifiedPropertiesWithoutUndo();}
     private static void Custom(ReactionInteractable owner,string key,CustomReaction reaction)
     {var so=new SerializedObject(owner);var a=so.FindProperty("customReactions");int n=a.arraySize;a.InsertArrayElementAtIndex(n);var p=a.GetArrayElementAtIndex(n);p.FindPropertyRelative("key").stringValue=key;p.FindPropertyRelative("reaction").objectReferenceValue=reaction;so.ApplyModifiedPropertiesWithoutUndo();}
+    private static void BindObject(ReactionInteractable owner,string key,GameObject target)
+    {var so=new SerializedObject(owner);var a=so.FindProperty("objectBindings");int n=a.arraySize;a.InsertArrayElementAtIndex(n);var p=a.GetArrayElementAtIndex(n);p.FindPropertyRelative("key").stringValue=key;p.FindPropertyRelative("target").objectReferenceValue=target;so.ApplyModifiedPropertiesWithoutUndo();}
     private static void Track(GameObject go,string id)
     {var t=go.GetComponent<ObjectStateTracker>() ?? go.AddComponent<ObjectStateTracker>();Set(t,"persistentId",id);}
     private static StoryTextGraph Text(string name,string text)
@@ -108,11 +110,11 @@ internal static class SchoolEmergencyWork
 
             var dg=Graph(R+"EnterAmbulance.asset",true);Keys(dg,"depart");var disable=Action(dg,ReactionKind.ObjectInteractivity);Set(disable,"interactionEnabled",false);Link(dg.nodes[0],disable);
             var dm=Action(dg,ReactionKind.Memory);Set(dm,"memoryGraph",depart);Set(dm,"memoryId","school_ambulance_departure");Set(dm,"memoryStartedReactionKey","depart");Link(disable,dm);
-            var pi=phone.AddComponent<ReactionInteractable>();pi.Configure(pg,"Позвонить");Set(pi,"initiallyInteractable",false);Set(pi,"initiallyVisible",false);Track(phone,"school.payphone");
+            var pi=phone.AddComponent<ReactionInteractable>();pi.Configure(pg,"Позвонить");Set(pi,"initiallyInteractable",true);Set(pi,"initiallyVisible",true);Track(phone,"school.payphone");
             var pc=phone.AddComponent<BoxCollider>();pc.center=new Vector3(0,0,.15f);pc.size=new Vector3(.5f,.68f,.4f);
-            var ci=coin.GetComponent<ReactionInteractable>();Set(ci,"initiallyInteractable",false);Set(ci,"initiallyVisible",false);Set(ci,"prompt","Взять монетку");
+            var ci=coin.GetComponent<ReactionInteractable>();Set(ci,"initiallyInteractable",true);Set(ci,"initiallyVisible",true);Set(ci,"prompt","Взять монетку");
             var ai=car.AddComponent<ReactionInteractable>();ai.Configure(dg,"В машину");Set(ai,"initiallyInteractable",false);Set(ai,"initiallyVisible",false);Track(car,"school.ambulance");Track(doctor,"school.ambulance_doctor");
-            var reveal=coach.gameObject.AddComponent<RevealSchoolPhoneReaction>();Set(reveal,"phone",pi);Set(reveal,"coin",ci);Set(reveal,"coinItem",coinItem);Custom(coach,"reveal_phone",reveal);
+            BindObject(coach,"phone",phone);BindObject(coach,"coin",coin);
             var arrival=phone.AddComponent<SchoolAmbulanceArrivalReaction>();Set(arrival,"ambulance",ai);Set(arrival,"doctor",doctor);Set(arrival,"coach",coach);Custom(pi,"arrive",arrival);
             var hinges=new[]{Find("Открытая дверь во двор левая").transform.Find("Петля"),Find("Открытая дверь во двор правая").transform.Find("Петля")};
             var so=new SerializedObject(arrival);so.FindProperty("hinges").arraySize=2;so.FindProperty("openAngles").arraySize=2;
@@ -130,9 +132,12 @@ internal static class SchoolEmergencyWork
             foreach(var item in cg.nodes.OfType<ReactionConditionNode>().Where(n=>n.Kind==ReactionConditionKind.InventoryItem).Select(n=>n.Item).ToArray())
             {var a=Action(cg,ReactionKind.ConsumeInventoryItem);Set(a,"item",item);Link(previous,a);previous=a;}
             var stopCoach=Action(cg,ReactionKind.ObjectInteractivity);Set(stopCoach,"interactionEnabled",false);Link(previous,stopCoach);
-            var fourth=Action(cg,ReactionKind.Memory);Set(fourth,"memoryGraph",Asset<MemoryGraph>(M+"CoachFourthMemory.asset"));Set(fourth,"memoryId","school_coach_fourth_memory");Set(fourth,"memoryStartedReactionKey","reveal_phone");Link(stopCoach,fourth);
+            var fourth=Action(cg,ReactionKind.Memory);Set(fourth,"memoryGraph",Asset<MemoryGraph>(M+"CoachFourthMemory.asset"));Set(fourth,"memoryId","school_coach_fourth_memory");var revealHub=Node<ReactionHubNode>(cg);Link(stopCoach,revealHub);
+            var showPhone=Action(cg,ReactionKind.ObjectActivity);Set(showPhone,"objectKey","phone");Set(showPhone,"active",true);Link(revealHub,showPhone,revealHub.Branches[0]);
+            var showCoin=Action(cg,ReactionKind.ObjectActivity);Set(showCoin,"objectKey","coin");Set(showCoin,"active",true);Link(revealHub,showCoin,revealHub.Branches[1]);
+            Link(revealHub,fourth,revealHub.AddBranch());
             var timer=Action(cg,ReactionKind.StartHints);Set(timer,"hintId","school.call-ambulance");Set(timer,"hintGraph",hint);Set(timer,"hintTimeout",60f);Set(timer,"repeatHint",true);Link(fourth,timer);
-            Keys(cg,"return_supplies","open_corridor","reveal_phone");
+            Keys(cg,"return_supplies","open_corridor","phone","coin");
             phone.SetActive(false);coin.SetActive(false);car.SetActive(false);doctor.SetActive(false);
             foreach(var g in new[]{cg,pg,dg,hint})if(!g.TryGetSequence(out _,out var error))throw new Exception(g.name+": "+error);
             foreach(var g in new[]{call,depart,Asset<MemoryGraph>(M+"CoachFourthMemory.asset")})if(!g.TryGetSequence(out _,out var error))throw new Exception(g.name+": "+error);

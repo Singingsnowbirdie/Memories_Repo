@@ -178,7 +178,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!33 &7168
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -72831,8 +72831,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Interaction.ReactionInteractable
   graph: {fileID: 11400000, guid: d95c0b091a86486eb939b517b1b4da27, type: 2}
-  initiallyInteractable: 0
-  initiallyVisible: 0
+  initiallyInteractable: 1
+  initiallyVisible: 1
   prompt: "\u0412\u0437\u044F\u0442\u044C \u043C\u043E\u043D\u0435\u0442\u043A\u0443"
   objectBindings:
   - key: "\u041F\u0440\u0435\u0434\u043C\u0435\u0442"
@@ -72970,8 +72970,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Interaction.ReactionInteractable
   graph: {fileID: 11400000, guid: 6035da3951279fc4f877c61c2b3edd01, type: 2}
-  initiallyInteractable: 0
-  initiallyVisible: 0
+  initiallyInteractable: 1
+  initiallyVisible: 1
   prompt: "\u041F\u043E\u0437\u0432\u043E\u043D\u0438\u0442\u044C"
   objectBindings: []
   customReactions:
@@ -129292,9 +129292,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 9200431368797393190, guid: d237bb1ecd8f85147b8f7cba04757d92, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2041208591}
-    - targetCorrespondingSourceObject: {fileID: 9200431368797393190, guid: d237bb1ecd8f85147b8f7cba04757d92, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2041208595}
   m_SourcePrefab: {fileID: 100100000, guid: d237bb1ecd8f85147b8f7cba04757d92, type: 3}
 --- !u!4 &2041208585 stripped
 Transform:
@@ -129329,9 +129326,11 @@ MonoBehaviour:
     target: {fileID: 880321018}
   - key: gym_door_open
     target: {fileID: 9906600000}
-  customReactions:
-  - key: reveal_phone
-    reaction: {fileID: 2041208595}
+  - key: phone
+    target: {fileID: 11}
+  - key: coin
+    target: {fileID: 993202000}
+  customReactions: []
 --- !u!114 &2041208591
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129345,21 +129344,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: school.coach
---- !u!114 &2041208595
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2041208586}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ded8552d681eae4c96feaf6d8ee5ce2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.RevealSchoolPhoneReaction
-  phone: {fileID: 993300016}
-  coin: {fileID: 993202002}
-  coinItem: {fileID: 11400000, guid: ad1b570a1eef40e1a53a6bf70c4d9a90, type: 2}
 --- !u!1 &2041468142
 GameObject:
   m_ObjectHideFlags: 0
