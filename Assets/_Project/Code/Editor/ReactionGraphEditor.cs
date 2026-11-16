@@ -214,7 +214,7 @@ namespace Memories.Editor
                 ? (int)ReactionKind.AddInventoryItem : kind.intValue;
             EditorGUI.BeginChangeCheck();
             int chosenKind = EditorGUILayout.IntPopup(displayedKind,
-                new[] { "Показать текст", "Показать воспоминание", "Перейти в локацию", "Запустить реакцию объекта", "Установить кастомную переменную", "Активность объекта", "Инвентарный предмет", "Запустить подсказки", "Остановить подсказки", "Интерактивность предмета", "Запустить граф реакций", "Посмотреть на объект", "Изменить освещение", "Подгрузить сегмент локации", "Пауза", "Остановить анимацию", "Переключить окружение" },
+                new[] { "Показать текст", "Показать воспоминание", "Сменить сцену локации", "Запустить реакцию объекта", "Установить кастомную переменную", "Активность объекта", "Инвентарный предмет", "Запустить подсказки", "Остановить подсказки", "Интерактивность предмета", "Запустить граф реакций", "Посмотреть на объект", "Изменить освещение", "Подгрузить сегмент локации", "Пауза", "Остановить анимацию", "Переключить окружение" },
                 new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17 });
             if (EditorGUI.EndChangeCheck()) kind.intValue = chosenKind;
             EditorGUILayout.Space(8);
@@ -277,7 +277,8 @@ namespace Memories.Editor
                 var path = serializedObject.FindProperty("locationScenePath");
                 var current = AssetDatabase.LoadAssetAtPath<SceneAsset>(path.stringValue);
                 EditorGUI.BeginChangeCheck();
-                var scene = (SceneAsset)EditorGUILayout.ObjectField("Сцена локации", current, typeof(SceneAsset), false);
+                EditorGUILayout.LabelField("Сцена локации");
+                var scene = (SceneAsset)EditorGUILayout.ObjectField(GUIContent.none, current, typeof(SceneAsset), false);
                 if (EditorGUI.EndChangeCheck()) path.stringValue = scene == null ? "" : AssetDatabase.GetAssetPath(scene);
                 if (kind.intValue == (int)ReactionKind.SwitchEnvironment)
                 {

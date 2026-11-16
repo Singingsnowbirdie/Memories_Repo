@@ -392,6 +392,7 @@ namespace Memories.Gameplay.Reactions
                             if (started.TransfersMemoryOwnership)
                             {
                                 ownsMemory = false;
+                                await RunPathAsync(ReactionGraph.Next(node), source, checkedCustomCondition, returns);
                                 return;
                             }
                         }

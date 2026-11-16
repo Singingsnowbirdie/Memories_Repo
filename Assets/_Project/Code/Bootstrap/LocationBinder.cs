@@ -27,10 +27,8 @@ namespace Memories.Bootstrap
                 foreach (var highway in root.GetComponentsInChildren<Memories.Gameplay.HighwayLights>(true))
                     highway.InitializeControls(scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>());
             foreach (var root in scene.GetRootGameObjects())
-                foreach (var departure in root.GetComponentsInChildren<SchoolAmbulanceDepartureReaction>(true))
-                    departure.Initialize(scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>(),
-                        () => locations.ChangeLocationAsync("Assets/_Project/Locations/Park/Park.unity"),
-                        scope.Container.Resolve<PlayerMotor>(), scope.Container.Resolve<PlayerMovementModel>());
+                foreach (var teleport in root.GetComponentsInChildren<TeleportPlayerReaction>(true))
+                    teleport.Initialize(scope.Container.Resolve<PlayerMotor>(), scope.Container.Resolve<PlayerMovementModel>());
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var supplies in root.GetComponentsInChildren<SchoolFirstAidProgressReaction>(true))
                     supplies.Initialize(scope.Container.Resolve<Memories.Gameplay.UI.StoryTextPresenter>(),
