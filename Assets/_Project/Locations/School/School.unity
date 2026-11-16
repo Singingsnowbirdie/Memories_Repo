@@ -45427,7 +45427,6 @@ GameObject:
   m_Component:
   - component: {fileID: 880320001}
   - component: {fileID: 880320003}
-  - component: {fileID: 880320004}
   m_Layer: 0
   m_Name: Gym arrival transition
   m_TagString: Untagged
@@ -45467,19 +45466,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: school.gym_entrance
---- !u!114 &880320004
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 880320000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: efe5082be78978f4191492b0eb3588f3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.SchoolFirstAidProgressReaction
-  refreshGraph: {fileID: 11400000, guid: 2ae247d00e03407488fabc8ef49c97bb, type: 2}
 --- !u!1 &880320010
 GameObject:
   m_ObjectHideFlags: 0
@@ -91650,16 +91636,8 @@ PrefabInstance:
       objectReference: {fileID: 2041208586}
     - target: {fileID: 3815247265442631581, guid: 39c765075c1ba8640850dcfcb5256284, type: 3}
       propertyPath: customReactions.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3815247265442631581, guid: 39c765075c1ba8640850dcfcb5256284, type: 3}
-      propertyPath: customReactions.Array.data[0].key
-      value: start_supplies
-      objectReference: {fileID: 0}
-    - target: {fileID: 3815247265442631581, guid: 39c765075c1ba8640850dcfcb5256284, type: 3}
-      propertyPath: customReactions.Array.data[0].reaction
-      value: 
-      objectReference: {fileID: 880320004}
     m_RemovedComponents:
     - {fileID: 4428626960114599975, guid: 39c765075c1ba8640850dcfcb5256284, type: 3}
     m_RemovedGameObjects: []

@@ -12,6 +12,13 @@ namespace Memories.Bootstrap
     // Подключает компоненты загруженной локации и восстанавливает их состояние в установленном порядке.
     internal sealed class LocationBinder
     {
+        [System.Serializable] private sealed class LegacyFirstAidState
+        {
+            public bool started = false;
+            public string hints = null;
+        }
+        [System.Serializable] private sealed class LegacyFirstAidHints { public string[] active = null; }
+
         private readonly LocationTransitions transitions;
         private readonly ILocationTransition locations;
 
@@ -29,10 +36,6 @@ namespace Memories.Bootstrap
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var teleport in root.GetComponentsInChildren<TeleportPlayerReaction>(true))
                     teleport.Initialize(scope.Container.Resolve<PlayerMotor>(), scope.Container.Resolve<PlayerMovementModel>());
-            foreach (var root in scene.GetRootGameObjects())
-                foreach (var supplies in root.GetComponentsInChildren<SchoolFirstAidProgressReaction>(true))
-                    supplies.Initialize(scope.Container.Resolve<Memories.Gameplay.UI.StoryTextPresenter>(),
-                        scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>(), scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<CustomVariableStore>());
             if (scene.path == TestLocationLauncher.GaragePath)
             {
                 var bindings = LocationBindings.For(scene);
@@ -105,6 +108,23 @@ namespace Memories.Bootstrap
                 }
             var schoolTrackers = scene.GetRootGameObjects()
                 .SelectMany(root => root.GetComponentsInChildren<ObjectStateTracker>(true)).ToArray();
+            var giles = schoolTrackers.FirstOrDefault(tracker => tracker.PersistentId == "school.giles");
+            if (giles != null)
+            {
+                var store = scope.Container.Resolve<ObjectStateStore>();
+                string legacy = store.GetSavedPart("school.gym_entrance", "school-first-aid");
+                if (!string.IsNullOrEmpty(legacy))
+                {
+                    var state = UnityEngine.JsonUtility.FromJson<LegacyFirstAidState>(legacy);
+                    var hints = string.IsNullOrEmpty(state.hints) ? null : UnityEngine.JsonUtility.FromJson<LegacyFirstAidHints>(state.hints);
+                    if (state.started && hints?.active != null && System.Array.Exists(hints.active, id =>
+                        id == "school.first-aid-kit" || id == "school.ice-pack" || id == "school.ruler" ||
+                        id == "school.tissues" || id == "school.return-to-coach"))
+                        giles.GetComponent<ReactionInteractable>().RestoreState("{\"active\":[\"school.first-aid-kit\"]}");
+                    giles.Capture();
+                    store.RemoveSavedPart("school.gym_entrance", "school-first-aid");
+                }
+            }
             var interiorAnimation = schoolTrackers.FirstOrDefault(tracker => tracker.PersistentId == "school.interior_animation");
             if (interiorAnimation != null && !interiorAnimation.HasRestoredState)
                 interiorAnimation.gameObject.SetActive(schoolTrackers.Any(tracker =>

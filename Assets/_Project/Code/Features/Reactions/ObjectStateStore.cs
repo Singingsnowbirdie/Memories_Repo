@@ -49,7 +49,12 @@ namespace Memories.Gameplay.Reactions
         }
 
         [Serializable] private sealed class SavedPart { public string key = null; public string value = null; }
-        [Serializable] private sealed class SavedParts { public List<SavedPart> parts = new List<SavedPart>(); }
+        [Serializable] private sealed class SavedParts
+        {
+            public bool active = false;
+            public bool interactionEnabled = false;
+            public List<SavedPart> parts = new List<SavedPart>();
+        }
 
         public string GetSavedPart(string id, string key)
         {
@@ -59,6 +64,14 @@ namespace Memories.Gameplay.Reactions
                 foreach (var part in parts)
                     if (part.key == key) return part.value;
             return null;
+        }
+
+        public void RemoveSavedPart(string id, string key)
+        {
+            if (!states.TryGetValue(id, out var saved) || string.IsNullOrEmpty(saved)) return;
+            var state = JsonUtility.FromJson<SavedParts>(saved);
+            if (state?.parts != null && state.parts.RemoveAll(part => part.key == key) > 0)
+                Write(id, JsonUtility.ToJson(state));
         }
 
         public void RestoreScene(Scene scene)

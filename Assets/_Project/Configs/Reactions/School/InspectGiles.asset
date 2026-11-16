@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
   graph: {fileID: 11400000}
-  position: {x: 990, y: 0}
+  position: {x: 1320, y: 0}
   ports:
     keys:
     - previous
@@ -24,7 +24,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: next
-        node: {fileID: 9907700003}
+        node: {fileID: 9918900001}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -47,7 +47,7 @@ MonoBehaviour:
   memoryGraph: {fileID: 11400000, guid: 086fd8587ac9a9c40901d66dff7c4855, type: 2}
   memoryId: school_giles_second_memory
   firstCompletionText: {fileID: 11400000, guid: c7f51d9705432bb4c972c52e3306b8d2, type: 2}
-  memoryStartedReactionKey: start_supplies
+  memoryStartedReactionKey:
   locationScenePath: 
   arrivalMarker: 
   holdControlsUntilGraphEnd: 0
@@ -89,9 +89,9 @@ MonoBehaviour:
   - {fileID: -7923027972642622716}
   - {fileID: 9907700001}
   - {fileID: 9907700003}
+  - {fileID: 9918900001}
   objectKeys:
   - coach
-  - start_supplies
 --- !u!114 &9907700001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -202,7 +202,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: previous
-        node: {fileID: -7923027972642622716}
+        node: {fileID: 9918900001}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -273,3 +273,78 @@ MonoBehaviour:
       _dynamic: 0
   runOnce: 0
   next: {fileID: 0}
+--- !u!114 &9918900001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd260b234eb14d4cbcafbe381aa00ee1, type: 3}
+  m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
+  graph: {fileID: 11400000}
+  position: {x: 990, y: 0}
+  ports:
+    keys:
+    - previous
+    - next
+    values:
+    - _fieldName: previous
+      _node: {fileID: 9918900001}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: next
+        node: {fileID: 9907700003}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: next
+      _node: {fileID: 9918900001}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: -7923027972642622716}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  previous: {fileID: 0}
+  next: {fileID: 0}
+  kind: 7
+  pauseDuration: 1
+  reactionGraph: {fileID: 0}
+  textGraph: {fileID: 0}
+  memoryGraph: {fileID: 0}
+  memoryId: 
+  firstCompletionText: {fileID: 0}
+  memoryStartedReactionKey: 
+  locationScenePath: 
+  arrivalMarker: 
+  holdControlsUntilGraphEnd: 0
+  variableBank: {fileID: 0}
+  variableId: 
+  variableValue: 1
+  variableIntValue: 0
+  addToIntValue: 0
+  objectKey: 
+  lightingBrightness: 1
+  lightingDuration: 4
+  waitForLighting: 0
+  lookDuration: 1.2
+  lookMaxSpeed: 60
+  active: 1
+  revealDuration: 0
+  revealDelay: 0
+  revealShader: {fileID: 0}
+  interactionEnabled: 0
+  item: {fileID: 0}
+  hintId: school.first-aid-kit
+  hintGraph: {fileID: 11400000, guid: b0d3198e79cabd14fbaa785bc78ea5c8, type: 2}
+  hintTimeout: 60
+  repeatHint: 1

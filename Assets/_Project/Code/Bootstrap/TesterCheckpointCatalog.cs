@@ -110,9 +110,6 @@ namespace Memories.Bootstrap
             State("school.gym_door_open", true, false);
             State("school.interior_animation", true, false);
             LocationBindings.For(scene).GymEntrance.enabled = false;
-            foreach (var root in scene.GetRootGameObjects())
-                foreach (var progress in root.GetComponentsInChildren<SchoolFirstAidProgressReaction>(true))
-                    progress.RestoreState(@"{""started"":true,""hints"":""""}");
             State("school.courtyard_left_closed", false, false);
             State("school.courtyard_left_open", true, false);
             State("school.courtyard_right_closed", false, false);
