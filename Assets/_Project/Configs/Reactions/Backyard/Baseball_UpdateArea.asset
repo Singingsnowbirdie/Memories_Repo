@@ -1,31 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7d56b4c55d746e4b55417c18fee0cf0, type: 3}
-  m_Name: Baseball_UpdateArea
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionGraph
-  nodes:
-  - {fileID: 100}
-  - {fileID: 101}
-  - {fileID: 102}
-  - {fileID: 103}
-  - {fileID: 104}
-  - {fileID: 105}
-  - {fileID: 106}
-  - {fileID: 107}
-  - {fileID: 108}
-  - {fileID: 109}
-  objectKeys:
-  - baseball_area_normal
-  - baseball_area_ready
 --- !u!114 &100
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -353,13 +327,14 @@ MonoBehaviour:
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 0}
   memoryGraph: {fileID: 0}
-  memoryId:
+  memoryId: 
   firstCompletionText: {fileID: 0}
-  memoryStartedReactionKey:
-  locationScenePath:
-  arrivalMarker:
+  memoryStartedReactionKey: 
+  locationScenePath: 
+  arrivalMarker: 
+  holdControlsUntilGraphEnd: 0
   variableBank: {fileID: 0}
-  variableId:
+  variableId: 
   variableValue: 1
   variableIntValue: 0
   addToIntValue: 0
@@ -375,7 +350,7 @@ MonoBehaviour:
   revealShader: {fileID: 0}
   interactionEnabled: 0
   item: {fileID: 0}
-  hintId:
+  hintId: 
   hintGraph: {fileID: 0}
   hintTimeout: 60
   repeatHint: 1
@@ -427,13 +402,14 @@ MonoBehaviour:
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 0}
   memoryGraph: {fileID: 0}
-  memoryId:
+  memoryId: 
   firstCompletionText: {fileID: 0}
-  memoryStartedReactionKey:
-  locationScenePath:
-  arrivalMarker:
+  memoryStartedReactionKey: 
+  locationScenePath: 
+  arrivalMarker: 
+  holdControlsUntilGraphEnd: 0
   variableBank: {fileID: 0}
-  variableId:
+  variableId: 
   variableValue: 1
   variableIntValue: 0
   addToIntValue: 0
@@ -449,7 +425,7 @@ MonoBehaviour:
   revealShader: {fileID: 0}
   interactionEnabled: 0
   item: {fileID: 0}
-  hintId:
+  hintId: 
   hintGraph: {fileID: 0}
   hintTimeout: 60
   repeatHint: 1
@@ -510,13 +486,14 @@ MonoBehaviour:
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 0}
   memoryGraph: {fileID: 0}
-  memoryId:
+  memoryId: 
   firstCompletionText: {fileID: 0}
-  memoryStartedReactionKey:
-  locationScenePath:
-  arrivalMarker:
+  memoryStartedReactionKey: 
+  locationScenePath: 
+  arrivalMarker: 
+  holdControlsUntilGraphEnd: 0
   variableBank: {fileID: 0}
-  variableId:
+  variableId: 
   variableValue: 1
   variableIntValue: 0
   addToIntValue: 0
@@ -532,7 +509,7 @@ MonoBehaviour:
   revealShader: {fileID: 0}
   interactionEnabled: 0
   item: {fileID: 0}
-  hintId:
+  hintId: 
   hintGraph: {fileID: 0}
   hintTimeout: 60
   repeatHint: 1
@@ -584,13 +561,14 @@ MonoBehaviour:
   reactionGraph: {fileID: 0}
   textGraph: {fileID: 0}
   memoryGraph: {fileID: 0}
-  memoryId:
+  memoryId: 
   firstCompletionText: {fileID: 0}
-  memoryStartedReactionKey:
-  locationScenePath:
-  arrivalMarker:
+  memoryStartedReactionKey: 
+  locationScenePath: 
+  arrivalMarker: 
+  holdControlsUntilGraphEnd: 0
   variableBank: {fileID: 0}
-  variableId:
+  variableId: 
   variableValue: 1
   variableIntValue: 0
   addToIntValue: 0
@@ -606,7 +584,7 @@ MonoBehaviour:
   revealShader: {fileID: 0}
   interactionEnabled: 0
   item: {fileID: 0}
-  hintId:
+  hintId: 
   hintGraph: {fileID: 0}
   hintTimeout: 60
   repeatHint: 1
@@ -643,3 +621,29 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   previous: {fileID: 0}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7d56b4c55d746e4b55417c18fee0cf0, type: 3}
+  m_Name: Baseball_UpdateArea
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionGraph
+  nodes:
+  - {fileID: 100}
+  - {fileID: 101}
+  - {fileID: 102}
+  - {fileID: 103}
+  - {fileID: 104}
+  - {fileID: 105}
+  - {fileID: 106}
+  - {fileID: 107}
+  - {fileID: 108}
+  - {fileID: 109}
+  objectKeys:
+  - baseball_area_normal
+  - baseball_area_ready

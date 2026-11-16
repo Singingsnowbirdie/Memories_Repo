@@ -232,6 +232,7 @@ MonoBehaviour:
   memoryStartedReactionKey: 
   locationScenePath: 
   arrivalMarker: 
+  holdControlsUntilGraphEnd: 0
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -306,6 +307,7 @@ MonoBehaviour:
   memoryStartedReactionKey: 
   locationScenePath: 
   arrivalMarker: 
+  holdControlsUntilGraphEnd: 0
   variableBank: {fileID: 11400000, guid: 481b44f16de901f4d9a22606581568cb, type: 2}
   variableId: father_final_items_delivered
   variableValue: 1
@@ -380,6 +382,7 @@ MonoBehaviour:
   memoryStartedReactionKey: 
   locationScenePath: 
   arrivalMarker: 
+  holdControlsUntilGraphEnd: 0
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -469,6 +472,7 @@ MonoBehaviour:
   memoryStartedReactionKey: 
   locationScenePath: 
   arrivalMarker: 
+  holdControlsUntilGraphEnd: 0
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -654,6 +658,7 @@ MonoBehaviour:
   memoryStartedReactionKey: 
   locationScenePath: 
   arrivalMarker: 
+  holdControlsUntilGraphEnd: 0
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -790,6 +795,7 @@ MonoBehaviour:
   memoryStartedReactionKey: 
   locationScenePath: 
   arrivalMarker: 
+  holdControlsUntilGraphEnd: 0
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -926,6 +932,7 @@ MonoBehaviour:
   memoryStartedReactionKey: 
   locationScenePath: 
   arrivalMarker: 
+  holdControlsUntilGraphEnd: 0
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -940,6 +947,231 @@ MonoBehaviour:
   active: 1
   revealDuration: 1
   revealDelay: 0.16
+  revealShader: {fileID: 4800000, guid: 0420a32a1c6f438fa03008fd3c81f551, type: 3}
+  interactionEnabled: 1
+  item: {fileID: 0}
+  hintId: 
+  hintGraph: {fileID: 0}
+  hintTimeout: 60
+  repeatHint: 1
+--- !u!114 &860130000000020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd260b234eb14d4cbcafbe381aa00ee1, type: 3}
+  m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
+  graph: {fileID: 11400000}
+  position: {x: 2940, y: -840}
+  ports:
+    keys:
+    - previous
+    - next
+    values:
+    - _fieldName: previous
+      _node: {fileID: 860130000000020}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: next
+        node: {fileID: 72922141649459176}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: next
+      _node: {fileID: 860130000000020}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: 860130000000021}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  previous: {fileID: 0}
+  next: {fileID: 0}
+  kind: 5
+  pauseDuration: 1
+  reactionGraph: {fileID: 0}
+  textGraph: {fileID: 0}
+  memoryGraph: {fileID: 0}
+  memoryId: 
+  firstCompletionText: {fileID: 0}
+  memoryStartedReactionKey: 
+  locationScenePath: 
+  arrivalMarker: 
+  holdControlsUntilGraphEnd: 0
+  variableBank: {fileID: 0}
+  variableId: 
+  variableValue: 1
+  variableIntValue: 0
+  addToIntValue: 0
+  objectKey: final_father
+  lightingBrightness: 1
+  lightingDuration: 4
+  waitForLighting: 0
+  lookDuration: 1.2
+  lookMaxSpeed: 60
+  active: 1
+  revealDuration: 1
+  revealDelay: 0
+  revealShader: {fileID: 4800000, guid: 0420a32a1c6f438fa03008fd3c81f551, type: 3}
+  interactionEnabled: 1
+  item: {fileID: 0}
+  hintId: 
+  hintGraph: {fileID: 0}
+  hintTimeout: 60
+  repeatHint: 1
+--- !u!114 &860130000000021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd260b234eb14d4cbcafbe381aa00ee1, type: 3}
+  m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
+  graph: {fileID: 11400000}
+  position: {x: 3360, y: -840}
+  ports:
+    keys:
+    - previous
+    - next
+    values:
+    - _fieldName: previous
+      _node: {fileID: 860130000000021}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: next
+        node: {fileID: 860130000000020}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: next
+      _node: {fileID: 860130000000021}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: 860130000000022}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  previous: {fileID: 0}
+  next: {fileID: 0}
+  kind: 5
+  pauseDuration: 1
+  reactionGraph: {fileID: 0}
+  textGraph: {fileID: 0}
+  memoryGraph: {fileID: 0}
+  memoryId: 
+  firstCompletionText: {fileID: 0}
+  memoryStartedReactionKey: 
+  locationScenePath: 
+  arrivalMarker: 
+  holdControlsUntilGraphEnd: 0
+  variableBank: {fileID: 0}
+  variableId: 
+  variableValue: 1
+  variableIntValue: 0
+  addToIntValue: 0
+  objectKey: working_father
+  lightingBrightness: 1
+  lightingDuration: 4
+  waitForLighting: 0
+  lookDuration: 1.2
+  lookMaxSpeed: 60
+  active: 0
+  revealDuration: 1
+  revealDelay: 0
+  revealShader: {fileID: 4800000, guid: 0420a32a1c6f438fa03008fd3c81f551, type: 3}
+  interactionEnabled: 1
+  item: {fileID: 0}
+  hintId: 
+  hintGraph: {fileID: 0}
+  hintTimeout: 60
+  repeatHint: 1
+--- !u!114 &860130000000022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd260b234eb14d4cbcafbe381aa00ee1, type: 3}
+  m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
+  graph: {fileID: 11400000}
+  position: {x: 3780, y: -840}
+  ports:
+    keys:
+    - previous
+    - next
+    values:
+    - _fieldName: previous
+      _node: {fileID: 860130000000022}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: next
+        node: {fileID: 860130000000021}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: next
+      _node: {fileID: 860130000000022}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: 2228033306138918607}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  previous: {fileID: 0}
+  next: {fileID: 0}
+  kind: 14
+  pauseDuration: 1
+  reactionGraph: {fileID: 0}
+  textGraph: {fileID: 0}
+  memoryGraph: {fileID: 0}
+  memoryId: 
+  firstCompletionText: {fileID: 0}
+  memoryStartedReactionKey: 
+  locationScenePath: Assets/_Project/Locations/School/School.unity
+  arrivalMarker: Garage corridor entrance
+  holdControlsUntilGraphEnd: 0
+  variableBank: {fileID: 0}
+  variableId: 
+  variableValue: 1
+  variableIntValue: 0
+  addToIntValue: 0
+  objectKey: school_connection
+  lightingBrightness: 1
+  lightingDuration: 4
+  waitForLighting: 0
+  lookDuration: 1.2
+  lookMaxSpeed: 60
+  active: 1
+  revealDuration: 1
+  revealDelay: 0
   revealShader: {fileID: 4800000, guid: 0420a32a1c6f438fa03008fd3c81f551, type: 3}
   interactionEnabled: 1
   item: {fileID: 0}
@@ -997,9 +1229,10 @@ MonoBehaviour:
   memoryGraph: {fileID: 11400000, guid: d95a23aa5abad91459b03c1a0b2a6a04, type: 2}
   memoryId: garage_final_memory
   firstCompletionText: {fileID: 0}
-  memoryStartedReactionKey:
+  memoryStartedReactionKey: 
   locationScenePath: 
   arrivalMarker: 
+  holdControlsUntilGraphEnd: 0
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -1234,6 +1467,7 @@ MonoBehaviour:
   memoryStartedReactionKey: 
   locationScenePath: 
   arrivalMarker: 
+  holdControlsUntilGraphEnd: 0
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -1392,6 +1626,7 @@ MonoBehaviour:
   memoryStartedReactionKey: 
   locationScenePath: 
   arrivalMarker: 
+  holdControlsUntilGraphEnd: 0
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -1466,6 +1701,7 @@ MonoBehaviour:
   memoryStartedReactionKey: 
   locationScenePath: 
   arrivalMarker: 
+  holdControlsUntilGraphEnd: 0
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -1602,6 +1838,7 @@ MonoBehaviour:
   memoryStartedReactionKey: 
   locationScenePath: 
   arrivalMarker: 
+  holdControlsUntilGraphEnd: 0
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -1676,6 +1913,7 @@ MonoBehaviour:
   memoryStartedReactionKey: 
   locationScenePath: 
   arrivalMarker: 
+  holdControlsUntilGraphEnd: 0
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -1750,6 +1988,7 @@ MonoBehaviour:
   memoryStartedReactionKey: 
   locationScenePath: 
   arrivalMarker: 
+  holdControlsUntilGraphEnd: 0
   variableBank: {fileID: 0}
   variableId: 
   variableValue: 1
@@ -1768,228 +2007,6 @@ MonoBehaviour:
   interactionEnabled: 1
   item: {fileID: 0}
   hintId: 
-  hintGraph: {fileID: 0}
-  hintTimeout: 60
-  repeatHint: 1
---- !u!114 &860130000000020
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd260b234eb14d4cbcafbe381aa00ee1, type: 3}
-  m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
-  graph: {fileID: 11400000}
-  position: {x: 2940, y: -840}
-  ports:
-    keys:
-    - previous
-    - next
-    values:
-    - _fieldName: previous
-      _node: {fileID: 860130000000020}
-      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: next
-        node: {fileID: 72922141649459176}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: next
-      _node: {fileID: 860130000000020}
-      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: previous
-        node: {fileID: 860130000000021}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 0
-  previous: {fileID: 0}
-  next: {fileID: 0}
-  kind: 5
-  pauseDuration: 1
-  reactionGraph: {fileID: 0}
-  textGraph: {fileID: 0}
-  memoryGraph: {fileID: 0}
-  memoryId:
-  firstCompletionText: {fileID: 0}
-  memoryStartedReactionKey:
-  locationScenePath:
-  arrivalMarker:
-  variableBank: {fileID: 0}
-  variableId:
-  variableValue: 1
-  variableIntValue: 0
-  addToIntValue: 0
-  objectKey: final_father
-  lightingBrightness: 1
-  lightingDuration: 4
-  waitForLighting: 0
-  lookDuration: 1.2
-  lookMaxSpeed: 60
-  active: 1
-  revealDuration: 1
-  revealDelay: 0
-  revealShader: {fileID: 4800000, guid: 0420a32a1c6f438fa03008fd3c81f551, type: 3}
-  interactionEnabled: 1
-  item: {fileID: 0}
-  hintId:
-  hintGraph: {fileID: 0}
-  hintTimeout: 60
-  repeatHint: 1
---- !u!114 &860130000000021
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd260b234eb14d4cbcafbe381aa00ee1, type: 3}
-  m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
-  graph: {fileID: 11400000}
-  position: {x: 3360, y: -840}
-  ports:
-    keys:
-    - previous
-    - next
-    values:
-    - _fieldName: previous
-      _node: {fileID: 860130000000021}
-      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: next
-        node: {fileID: 860130000000020}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: next
-      _node: {fileID: 860130000000021}
-      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: previous
-        node: {fileID: 860130000000022}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 0
-  previous: {fileID: 0}
-  next: {fileID: 0}
-  kind: 5
-  pauseDuration: 1
-  reactionGraph: {fileID: 0}
-  textGraph: {fileID: 0}
-  memoryGraph: {fileID: 0}
-  memoryId:
-  firstCompletionText: {fileID: 0}
-  memoryStartedReactionKey:
-  locationScenePath:
-  arrivalMarker:
-  variableBank: {fileID: 0}
-  variableId:
-  variableValue: 1
-  variableIntValue: 0
-  addToIntValue: 0
-  objectKey: working_father
-  lightingBrightness: 1
-  lightingDuration: 4
-  waitForLighting: 0
-  lookDuration: 1.2
-  lookMaxSpeed: 60
-  active: 0
-  revealDuration: 1
-  revealDelay: 0
-  revealShader: {fileID: 4800000, guid: 0420a32a1c6f438fa03008fd3c81f551, type: 3}
-  interactionEnabled: 1
-  item: {fileID: 0}
-  hintId:
-  hintGraph: {fileID: 0}
-  hintTimeout: 60
-  repeatHint: 1
---- !u!114 &860130000000022
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd260b234eb14d4cbcafbe381aa00ee1, type: 3}
-  m_Name: "\u0420\u0435\u0430\u043A\u0446\u0438\u044F"
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionNode
-  graph: {fileID: 11400000}
-  position: {x: 3780, y: -840}
-  ports:
-    keys:
-    - previous
-    - next
-    values:
-    - _fieldName: previous
-      _node: {fileID: 860130000000022}
-      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: next
-        node: {fileID: 860130000000021}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: next
-      _node: {fileID: 860130000000022}
-      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: previous
-        node: {fileID: 2228033306138918607}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 0
-  previous: {fileID: 0}
-  next: {fileID: 0}
-  kind: 14
-  pauseDuration: 1
-  reactionGraph: {fileID: 0}
-  textGraph: {fileID: 0}
-  memoryGraph: {fileID: 0}
-  memoryId:
-  firstCompletionText: {fileID: 0}
-  memoryStartedReactionKey:
-  locationScenePath: Assets/_Project/Locations/School/School.unity
-  arrivalMarker: Garage corridor entrance
-  variableBank: {fileID: 0}
-  variableId:
-  variableValue: 1
-  variableIntValue: 0
-  addToIntValue: 0
-  objectKey: school_connection
-  lightingBrightness: 1
-  lightingDuration: 4
-  waitForLighting: 0
-  lookDuration: 1.2
-  lookMaxSpeed: 60
-  active: 1
-  revealDuration: 1
-  revealDelay: 0
-  revealShader: {fileID: 4800000, guid: 0420a32a1c6f438fa03008fd3c81f551, type: 3}
-  interactionEnabled: 1
-  item: {fileID: 0}
-  hintId:
   hintGraph: {fileID: 0}
   hintTimeout: 60
   repeatHint: 1

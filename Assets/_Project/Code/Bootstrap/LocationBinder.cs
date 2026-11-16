@@ -52,9 +52,6 @@ namespace Memories.Bootstrap
                 bindings.StandingGarageFather.SetActive(!completed);
                 bindings.KneelingGarageFather.SetActive(completed);
             }
-            foreach (var root in scene.GetRootGameObjects())
-                foreach (var reaction in root.GetComponentsInChildren<GarageHoodFatherMemoryReaction>(true))
-                    reaction.Initialize(scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>());
             if (scene.path == TestLocationLauncher.GaragePath)
             {
                 var bindings = LocationBindings.For(scene);
@@ -99,9 +96,19 @@ namespace Memories.Bootstrap
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var interactable in root.GetComponentsInChildren<ReactionInteractable>(true))
                     interactable.RestoreInitialVisibility(scope.Container.Resolve<QuestInventory>());
-            foreach (var root in scene.GetRootGameObjects())
-                foreach (var reaction in root.GetComponentsInChildren<GarageHoodFatherMemoryReaction>(true))
-                    reaction.Restore(scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
+            if (scene.path == TestLocationLauncher.GaragePath)
+            {
+                var bindings = LocationBindings.For(scene);
+                var memories = scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>();
+                var variables = scope.Container.Resolve<CustomVariableStore>();
+                bool completed = memories.Contains("garage_second_memory") ||
+                    variables.Get(bindings.GarageVariables, "father_compressor_delivered");
+                bool laterStage = memories.Contains("garage_third_memory") || memories.Contains("garage_final_memory") ||
+                    variables.Get(bindings.GarageVariables, "father_hood_items_delivered") ||
+                    variables.Get(bindings.GarageVariables, "father_final_items_delivered");
+                bindings.HoodGarageFather.SetActive(completed && !laterStage);
+                if (completed || laterStage) bindings.KneelingGarageFather.SetActive(false);
+            }
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var visibility in root.GetComponentsInChildren<SavedObjectVisibility>(true))
                     visibility.Restore(scope.Container.Resolve<CustomVariableStore>());
