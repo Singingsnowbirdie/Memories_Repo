@@ -235,7 +235,8 @@ namespace Memories.Bootstrap
                     scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<ObjectStateStore>());
             if (scene.path == "Assets/_Project/Locations/Park.unity")
                 RestoreParkCafe(LocationBindings.For(scene).ParkCafe,
-                    scope.Container.Resolve<CustomVariableStore>(), scope.Container.Resolve<QuestInventory>());
+                    scope.Container.Resolve<CustomVariableStore>(), scope.Container.Resolve<QuestInventory>(),
+                    scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
             if (scene.path == TestLocationLauncher.GaragePath)
             {
                 var bindings = LocationBindings.For(scene);
@@ -308,7 +309,7 @@ namespace Memories.Bootstrap
             }
         }
         private static void RestoreParkCafe(LocationBindings.ParkCafeBindings bindings,
-            CustomVariableStore state, QuestInventory inventory)
+            CustomVariableStore state, QuestInventory inventory, Memories.Gameplay.Memories.MemoryCollection memories)
         {
             bool arrived = bindings.lily.gameObject.activeSelf;
             bool bought = state.Get(bindings.variables, "ordered") || inventory.WasCollected(bindings.receipt.Id);
@@ -326,13 +327,22 @@ namespace Memories.Bootstrap
             bindings.coffeeTwo.SetInteractionEnabled(!complete && !coffeeRead);
             bindings.napkin.SetInteractionEnabled(!complete && !napkinRead);
             bindings.lighting.RestoreBrightness((arrived || bought) && !complete ? 1 : 0);
-            if (bindings.lakeLighting != null) bindings.lakeLighting.RestoreBrightness(complete ? 1 : 0);
+            bool gazeboReached = state.Get(bindings.dockVariables, "gazebo_reached") ||
+                memories.Contains("park-boat-conversation");
+            if (gazeboReached) state.Set(bindings.dockVariables, "gazebo_reached", true);
+            if (bindings.lakeLighting != null) bindings.lakeLighting.RestoreBrightness(complete && !gazeboReached ? 1 : 0);
+            if (bindings.gazeboLighting != null) bindings.gazeboLighting.RestoreBrightness(gazeboReached ? 1 : 0);
+            if (bindings.gazeboLily != null)
+            {
+                bindings.gazeboLily.gameObject.SetActive(gazeboReached);
+                bindings.gazeboLily.SetInteractionEnabled(true);
+            }
             if (bindings.dockLily != null && bindings.dockBoat != null && bindings.dockVariables != null)
             {
                 bool talked = state.Get(bindings.dockVariables, "lily_spoken");
-                bindings.dockLily.gameObject.SetActive(complete);
-                bindings.dockLily.SetInteractionEnabled(!talked);
-                bindings.dockBoat.SetInteractionEnabled(complete && talked);
+                bindings.dockLily.gameObject.SetActive(complete && !gazeboReached);
+                bindings.dockLily.SetInteractionEnabled(!talked && !gazeboReached);
+                bindings.dockBoat.SetInteractionEnabled(complete && talked && !gazeboReached);
             }
         }
         private static void RestoreParkMimes(LocationBindings.ParkMimeBindings bindings,

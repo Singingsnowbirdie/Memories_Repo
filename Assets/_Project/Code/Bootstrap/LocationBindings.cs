@@ -87,6 +87,8 @@ namespace Memories.Bootstrap
             public LightingGroup lakeLighting;
             public CustomVariableBank dockVariables;
             public Memories.Gameplay.Interaction.ReactionInteractable dockLily, dockBoat;
+            public Memories.Gameplay.Interaction.ReactionInteractable gazeboLily;
+            public LightingGroup gazeboLighting;
         }
         [SerializeField] private ParkCafeBindings parkCafe;
         public ParkCafeBindings ParkCafe => parkCafe;

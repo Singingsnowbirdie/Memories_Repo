@@ -1,0 +1,470 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &7300000000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cb78828a6564a689b17b4f15f764da1, type: 3}
+  m_Name: "\u041D\u0430\u0447\u0430\u043B\u043E"
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Memories.MemoryStartNode
+  graph: {fileID: 11400000}
+  position: {x: 0, y: 0}
+  ports:
+    keys:
+    - next
+    values:
+    - _fieldName: next
+      _node: {fileID: 7300000000}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: 7300000001}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  next: {fileID: 0}
+--- !u!114 &7300000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f3a98641dda4ae98821253afd85c048, type: 3}
+  m_Name: "\u041A\u0430\u0434\u0440"
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Memories.MemoryFrameNode
+  graph: {fileID: 11400000}
+  position: {x: 350, y: 0}
+  ports:
+    keys:
+    - previous
+    - next
+    values:
+    - _fieldName: previous
+      _node: {fileID: 7300000001}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: next
+        node: {fileID: 7300000000}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: next
+      _node: {fileID: 7300000001}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: 7300000002}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  previous: {fileID: 0}
+  next: {fileID: 0}
+  image: {fileID: 2800000, guid: f87fb2739d59400dbe56bbf1011ae169, type: 3}
+  text: "\u0414\u0443\u043c\u0430\u044e, \u043d\u0430\u043c \u043e\u0431\u043e\u0438\u043c \u043d\u0430\u0434\u043e \u0432\u0437\u044f\u0442\u044c \u043f\u0430\u0443\u0437\u0443, \u0447\u0442\u043e\u0431\u044b \u043b\u0443\u0447\u0448\u0435 \u043f\u043e\u043d\u044f\u0442\u044c \u0441\u0435\u0431\u044f."
+  transition: 2
+  transitionDuration: 0.4
+  displayDuration: 7
+--- !u!114 &7300000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f3a98641dda4ae98821253afd85c048, type: 3}
+  m_Name: "\u041A\u0430\u0434\u0440"
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Memories.MemoryFrameNode
+  graph: {fileID: 11400000}
+  position: {x: 700, y: 0}
+  ports:
+    keys:
+    - previous
+    - next
+    values:
+    - _fieldName: previous
+      _node: {fileID: 7300000002}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: next
+        node: {fileID: 7300000001}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: next
+      _node: {fileID: 7300000002}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: 7300000003}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  previous: {fileID: 0}
+  next: {fileID: 0}
+  image: {fileID: 2800000, guid: e3aedc8b699b42f19cd08a70a2c4a69f, type: 3}
+  text: "\u0422\u044b \u0431\u0440\u043e\u0441\u0430\u0435\u0448\u044c \u043c\u0435\u043d\u044f."
+  transition: 2
+  transitionDuration: 0.4
+  displayDuration: 4
+--- !u!114 &7300000003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f3a98641dda4ae98821253afd85c048, type: 3}
+  m_Name: "\u041A\u0430\u0434\u0440"
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Memories.MemoryFrameNode
+  graph: {fileID: 11400000}
+  position: {x: 1050, y: 0}
+  ports:
+    keys:
+    - previous
+    - next
+    values:
+    - _fieldName: previous
+      _node: {fileID: 7300000003}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: next
+        node: {fileID: 7300000002}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: next
+      _node: {fileID: 7300000003}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: 7300000004}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  previous: {fileID: 0}
+  next: {fileID: 0}
+  image: {fileID: 2800000, guid: d1bcf4f8709d4f15bca0bee99750c160, type: 3}
+  text: "\u041c\u044b \u0431\u0435\u0440\u0435\u043c \u043f\u0430\u0443\u0437\u0443."
+  transition: 2
+  transitionDuration: 0.4
+  displayDuration: 4
+--- !u!114 &7300000004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f3a98641dda4ae98821253afd85c048, type: 3}
+  m_Name: "\u041A\u0430\u0434\u0440"
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Memories.MemoryFrameNode
+  graph: {fileID: 11400000}
+  position: {x: 1400, y: 0}
+  ports:
+    keys:
+    - previous
+    - next
+    values:
+    - _fieldName: previous
+      _node: {fileID: 7300000004}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: next
+        node: {fileID: 7300000003}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: next
+      _node: {fileID: 7300000004}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: 7300000005}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  previous: {fileID: 0}
+  next: {fileID: 0}
+  image: {fileID: 2800000, guid: 74a1db0319234e379a873c662cbb3b33, type: 3}
+  text: "\u0418\u043c\u0435\u043d\u043d\u043e \u0441\u0435\u0439\u0447\u0430\u0441. \u041a\u043e\u0433\u0434\u0430... \u043c\u043d\u0435... \u0442\u0440\u0443\u0434\u043d\u043e. \u0420\u0430\u0437\u0432\u0435... \u0442\u044b \u043d\u0435 \u0434\u043e\u043b\u0436\u043d\u0430 \u043f\u043e\u0434\u0434\u0435\u0440\u0436\u0430\u0442\u044c \u043c\u0435\u043d\u044f?"
+  transition: 2
+  transitionDuration: 0.4
+  displayDuration: 9
+--- !u!114 &7300000005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f3a98641dda4ae98821253afd85c048, type: 3}
+  m_Name: "\u041A\u0430\u0434\u0440"
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Memories.MemoryFrameNode
+  graph: {fileID: 11400000}
+  position: {x: 1750, y: 0}
+  ports:
+    keys:
+    - previous
+    - next
+    values:
+    - _fieldName: previous
+      _node: {fileID: 7300000005}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: next
+        node: {fileID: 7300000004}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: next
+      _node: {fileID: 7300000005}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: 7300000006}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  previous: {fileID: 0}
+  next: {fileID: 0}
+  image: {fileID: 2800000, guid: b2baf6f003e047a188d03eaba24b7d59, type: 3}
+  text: "\u042f \u0442\u0435\u0431\u044f \u043f\u043e\u0434\u0434\u0435\u0440\u0436\u0438\u0432\u0430\u043b\u0430!"
+  transition: 2
+  transitionDuration: 0.4
+  displayDuration: 4
+--- !u!114 &7300000006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f3a98641dda4ae98821253afd85c048, type: 3}
+  m_Name: "\u041A\u0430\u0434\u0440"
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Memories.MemoryFrameNode
+  graph: {fileID: 11400000}
+  position: {x: 2100, y: 0}
+  ports:
+    keys:
+    - previous
+    - next
+    values:
+    - _fieldName: previous
+      _node: {fileID: 7300000006}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: next
+        node: {fileID: 7300000005}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: next
+      _node: {fileID: 7300000006}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: 7300000007}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  previous: {fileID: 0}
+  next: {fileID: 0}
+  image: {fileID: 2800000, guid: 6e4d7d0335c84b1fa0d37d346e9505d4, type: 3}
+  text: "\u0414\u0430. \u041a\u043e\u0433\u0434\u0430 \u044f \u0431\u044b\u043b \u043d\u0430 \u043a\u043e\u043d\u0435. \u0410 \u0442\u0435\u043f\u0435\u0440\u044c..."
+  transition: 2
+  transitionDuration: 0.4
+  displayDuration: 5
+--- !u!114 &7300000007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f3a98641dda4ae98821253afd85c048, type: 3}
+  m_Name: "\u041A\u0430\u0434\u0440"
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Memories.MemoryFrameNode
+  graph: {fileID: 11400000}
+  position: {x: 2450, y: 0}
+  ports:
+    keys:
+    - previous
+    - next
+    values:
+    - _fieldName: previous
+      _node: {fileID: 7300000007}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: next
+        node: {fileID: 7300000006}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: next
+      _node: {fileID: 7300000007}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: 7300000008}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  previous: {fileID: 0}
+  next: {fileID: 0}
+  image: {fileID: 2800000, guid: af0f77fcc3a941bc94687e237d3f0c86, type: 3}
+  text: "\u0412\u043e\u0442. \u041e\u0431 \u044d\u0442\u043e\u043c \u044f \u0438 \u0433\u043e\u0432\u043e\u0440\u044e. \u0420\u0430\u043d\u044c\u0448\u0435 \u0442\u044b \u043d\u0438\u043a\u043e\u0433\u0434\u0430 \u0431\u044b \u0442\u0430\u043a \u043d\u0435 \u0441\u043a\u0430\u0437\u0430\u043b!"
+  transition: 2
+  transitionDuration: 0.4
+  displayDuration: 7
+--- !u!114 &7300000008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f3a98641dda4ae98821253afd85c048, type: 3}
+  m_Name: "\u041A\u0430\u0434\u0440"
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Memories.MemoryFrameNode
+  graph: {fileID: 11400000}
+  position: {x: 2800, y: 0}
+  ports:
+    keys:
+    - previous
+    - next
+    values:
+    - _fieldName: previous
+      _node: {fileID: 7300000008}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: next
+        node: {fileID: 7300000007}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: next
+      _node: {fileID: 7300000008}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: 7300000009}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  previous: {fileID: 0}
+  next: {fileID: 0}
+  image: {fileID: 2800000, guid: 135a88659f7549b3a59525f14420ad8c, type: 3}
+  text: "\u0420\u0430\u043d\u044c\u0448\u0435, \u0442\u044b \u043d\u0438\u043a\u043e\u0433\u0434\u0430 \u0442\u0430\u043a \u043d\u0435 \u0434\u0435\u043b\u0430\u043b\u0430."
+  transition: 2
+  transitionDuration: 0.4
+  displayDuration: 5
+--- !u!114 &7300000009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b61c2445d714b03aa6f1582af63eb20, type: 3}
+  m_Name: "\u041A\u043E\u043D\u0435\u0446"
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Memories.MemoryEndNode
+  graph: {fileID: 11400000}
+  position: {x: 3150, y: 0}
+  ports:
+    keys:
+    - previous
+    values:
+    - _fieldName: previous
+      _node: {fileID: 7300000009}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: next
+        node: {fileID: 7300000008}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  previous: {fileID: 0}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d75983646f649fb8acc996123fa2989, type: 3}
+  m_Name: ParkGazeboMemory
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Memories.MemoryGraph
+  nodes:
+  - {fileID: 7300000000}
+  - {fileID: 7300000001}
+  - {fileID: 7300000002}
+  - {fileID: 7300000003}
+  - {fileID: 7300000004}
+  - {fileID: 7300000005}
+  - {fileID: 7300000006}
+  - {fileID: 7300000007}
+  - {fileID: 7300000008}
+  - {fileID: 7300000009}
+  displayTitle: "\u0420\u0430\u0437\u0433\u043e\u0432\u043e\u0440 \u0432 \u0431\u0435\u0441\u0435\u0434\u043a\u0435"
