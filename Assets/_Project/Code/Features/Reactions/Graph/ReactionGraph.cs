@@ -60,8 +60,11 @@ namespace Memories.Gameplay.Reactions
             return true;
         }
 
-        public static Node Next(Node node, string outputName = "next") =>
-            node.GetOutputPort(outputName)?.GetConnection(0)?.node;
+        public static Node Next(Node node, string outputName = "next")
+        {
+            var output = node.GetOutputPort(outputName);
+            return output != null && output.ConnectionCount > 0 ? output.GetConnection(0)?.node : null;
+        }
 
         private static HashSet<Node> CollectPath(Node start)
         {

@@ -5266,7 +5266,7 @@ GameObject:
   - component: {fileID: 91697022}
   - component: {fileID: 91697021}
   - component: {fileID: 91697020}
-  - component: {fileID: 91697019}
+  - component: {fileID: 1892906456}
   m_Layer: 0
   m_Name: "\u0422\u0440\u0438\u0433\u0433\u0435\u0440 \u2014 \u0432\u043E\u0441\u043F\u043E\u043C\u0438\u043D\u0430\u043D\u0438\u0435
     \u043F\u0435\u0440\u0435\u0434 \u0442\u0435\u043B\u0435\u0436\u043A\u0430\u043C\u0438"
@@ -5290,19 +5290,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1087431727}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &91697019
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 91697017}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27af4f0ed4190c54996687755b3e48cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ParkFlowerReminderReaction
-  reminder: {fileID: 1892906455}
 --- !u!114 &91697020
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5315,13 +5302,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd14158a76054520bd36bc41c4ab05ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Triggers.SceneTrigger
-  graph: {fileID: 11400000, guid: 625b800d1ff889d48ad46c95d66a0716, type: 2}
+  graph: {fileID: 11400000, guid: a84f25c286a53e34599068afec729914, type: 2}
   triggerEvent: {fileID: 0}
   triggerOnce: 1
   objectBindings: []
-  customReactions:
-  - key: "\u041D\u0430\u0447\u0430\u0442\u044C"
-    reaction: {fileID: 91697019}
+  customReactions: []
 --- !u!54 &91697021
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -51989,7 +51974,6 @@ Transform:
   - {fileID: 1725917776}
   - {fileID: 819367435}
   - {fileID: 117530524}
-  - {fileID: 1892906457}
   - {fileID: 91697018}
   - {fileID: 1073031411}
   m_Father: {fileID: 1773431130}
@@ -88480,71 +88464,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1891560454}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &1892906454
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1892906457}
-  - component: {fileID: 1892906455}
-  - component: {fileID: 1892906456}
-  m_Layer: 0
-  m_Name: "\u041D\u0430\u043F\u043E\u043C\u0438\u043D\u0430\u043D\u0438\u0435 \u2014
-    \u043A\u0443\u043F\u0438\u0442\u044C \u0446\u0432\u0435\u0442\u044B"
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1892906455
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1892906454}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ba68190f9594ee8b2fc0603419ed015, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Interaction.ReactionInteractable
-  graph: {fileID: 11400000, guid: a84f25c286a53e34599068afec729914, type: 2}
-  initiallyInteractable: 1
-  initiallyVisible: 1
-  prompt: 
-  objectBindings: []
-  customReactions: []
 --- !u!114 &1892906456
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1892906454}
+  m_GameObject: {fileID: 91697017}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: park.flowers.reminder
---- !u!4 &1892906457
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1892906454}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1087431727}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1893618730
 GameObject:
   m_ObjectHideFlags: 0
@@ -99769,7 +99701,7 @@ MonoBehaviour:
   prompt: "\u0426\u0432\u0435\u0442\u043E\u0447\u043D\u0430\u044F \u0442\u0435\u043B\u0435\u0436\u043A\u0430"
   objectBindings:
   - key: "\u041D\u0430\u043F\u043E\u043C\u0438\u043D\u0430\u043D\u0438\u0435"
-    target: {fileID: 1892906454}
+    target: {fileID: 91697017}
   customReactions: []
 --- !u!1 &2132786511
 GameObject:

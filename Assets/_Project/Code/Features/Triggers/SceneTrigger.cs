@@ -12,7 +12,7 @@ namespace Memories.Gameplay.Triggers
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Rigidbody))]
     [AddComponentMenu("Memories/Triggers/Scene Trigger")]
-    public sealed class SceneTrigger : MonoBehaviour
+    public sealed class SceneTrigger : MonoBehaviour, IConditionalObjectStateParticipant
     {
         [SerializeField] private ReactionGraph graph;
         [SerializeField, HideInInspector] private TriggerEvent triggerEvent;
@@ -22,6 +22,23 @@ namespace Memories.Gameplay.Triggers
         [SerializeField, InspectorName("Объекты графа")] private ReactionObjectBinding[] objectBindings = new ReactionObjectBinding[0];
         [SerializeField, InspectorName("Кастомные реакции")] private CustomReactionBinding[] customReactions = new CustomReactionBinding[0];
         private ReactionRunner runner;
+        [System.Serializable] private sealed class SavedState
+        {
+            public bool fired;
+            public string hints;
+        }
+        public string StateKey => "reactionHints";
+        public bool RequiresPersistence => graph != null && graph.nodes.Exists(node =>
+            node is ReactionNode action && action.Kind == ReactionKind.StartHints);
+        public string CaptureState() => JsonUtility.ToJson(new SavedState { fired = fired, hints = runner?.CaptureHints() });
+        public void RestoreState(string state)
+        {
+            if (string.IsNullOrEmpty(state)) return;
+            var saved = JsonUtility.FromJson<SavedState>(state);
+            // Older reminder objects stored only the active hint list after interaction.
+            fired = saved.hints == null || saved.fired;
+            runner?.RestoreHints(graph, saved.hints ?? state);
+        }
         public bool IsRunning => runner != null && runner.IsRunning;
         public void Initialize(StoryTextPresenter texts, MemoryPresenter memories, ILocationTransition locations = null, QuestInventory inventory = null, CustomVariableStore variables = null, PlayerLookAction playerLook = null, GameplayModeState gameplayMode = null)
         {
@@ -31,7 +48,15 @@ namespace Memories.Gameplay.Triggers
         public bool TryActivate()
         {
             if (!isActiveAndEnabled) return false;
-            if (graph != null) return runner != null && runner.TryRun(graph);
+            if (graph != null)
+            {
+                if (runner == null || (graph.RunOnce && fired)) return false;
+                bool wasFired = fired;
+                fired = true;
+                if (!runner.TryRun(graph)) { fired = wasFired; return false; }
+                GetComponent<ObjectStateTracker>()?.Capture();
+                return true;
+            }
             if (triggerOnce && fired) return false;
             if (triggerEvent == null || !triggerEvent.isActiveAndEnabled || !triggerEvent.TryExecute()) return false;
             fired = true;
