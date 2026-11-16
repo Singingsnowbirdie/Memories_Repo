@@ -18,6 +18,7 @@ namespace Memories.Gameplay.Reactions
         [SerializeField] private ReactionInteractable lily, truck, coffeeOne, coffeeTwo, napkin;
         [SerializeField] private GameObject order;
         [SerializeField] private LightingGroup lighting;
+        [SerializeField] private LightingGroup lakeLighting;
         [SerializeField] private CustomVariableBank dockVariables;
         [SerializeField] private ReactionInteractable dockLily, dockBoat;
 
@@ -40,6 +41,7 @@ namespace Memories.Gameplay.Reactions
             coffeeTwo.SetInteractionEnabled(!complete && !coffeeRead);
             napkin.SetInteractionEnabled(!complete && !napkinRead);
             lighting.RestoreBrightness((arrived || bought) && !complete ? 1 : 0);
+            if (lakeLighting != null) lakeLighting.RestoreBrightness(complete ? 1 : 0);
             if (dockLily != null && dockBoat != null && dockVariables != null)
             {
                 bool talked = state.Get(dockVariables, "lily_spoken");

@@ -68,6 +68,10 @@ namespace Memories.Gameplay.Reactions
             { Debug.LogWarning("Хранилище кастомных переменных не подключено.", owner); return false; }
             foreach (var action in actions)
             {
+                if (action.Kind == ReactionKind.StopAnimation &&
+                    (!ReactionObjectBinding.TryResolve(objectBindings, action.ObjectKey, out var animationTarget) ||
+                     animationTarget.GetComponent<IStoppableAnimation>() == null))
+                { Debug.LogWarning("Назначьте объект с компонентом анимации: " + action.ObjectKey, owner); return false; }
                 if (action.Kind == ReactionKind.ChangeLighting &&
                     (!ReactionObjectBinding.TryResolve(objectBindings, action.ObjectKey, out var lightingTarget) ||
                      !lightingTarget.TryGetComponent<LightingGroup>(out var lighting) || !lighting.isActiveAndEnabled))
@@ -270,6 +274,13 @@ namespace Memories.Gameplay.Reactions
                     {
                         if (action.PauseDuration > 0)
                             await UniTask.Delay(TimeSpan.FromSeconds(action.PauseDuration), cancellationToken: source.Token);
+                    }
+                    else if (action.Kind == ReactionKind.StopAnimation)
+                    {
+                        if (!ReactionObjectBinding.TryResolve(objectBindings, action.ObjectKey, out var animationTarget) ||
+                            !animationTarget.TryGetComponent<IStoppableAnimation>(out var animation))
+                            throw new InvalidOperationException("Анимация недоступна: " + action.ObjectKey);
+                        animation.StopAnimation();
                     }
                     else if (action.Kind == ReactionKind.ChangeLighting)
                     {

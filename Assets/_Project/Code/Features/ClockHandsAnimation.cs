@@ -1,10 +1,12 @@
 using UnityEngine;
+using UnityEngine.Scripting.APIUpdating;
 
 namespace Memories.Gameplay.Reactions
 {
-    /// <summary>Останавливает стрелки по явному действию графа и сохраняет состояние часов.</summary>
+    /// <summary>Управляет вращением и сохраняет состояние анимации.</summary>
+    [MovedFrom(true, sourceNamespace: "Memories.Gameplay.Reactions", sourceAssembly: "Memories.Gameplay", sourceClassName: "StopClockHandsReaction")]
     [DisallowMultipleComponent]
-    public sealed class StopClockHandsReaction : CustomReaction, IObjectStateParticipant
+    public sealed class ClockHandsAnimation : MonoBehaviour, IStoppableAnimation, IObjectStateParticipant
     {
         [SerializeField] private Transform minuteHand;
         [SerializeField] private Transform hourHand;
@@ -16,7 +18,11 @@ namespace Memories.Gameplay.Reactions
         public string CaptureState() => IsRunning ? "running" : "stopped";
         public void RestoreState(string state) => IsRunning = state != "stopped";
 
-        public override void Execute() => IsRunning = false;
+        public void StopAnimation()
+        {
+            IsRunning = false;
+            GetComponent<ObjectStateTracker>()?.Capture();
+        }
 
         private void Update()
         {

@@ -6,7 +6,7 @@ using XNode;
 
 namespace Memories.Gameplay.Reactions
 {
-    public enum ReactionKind { StoryText, Memory, ChangeLocation, CustomReaction, SetCustomVariable, ObjectActivity, AddInventoryItem, StartHints, StopHints, ConsumeInventoryItem, ObjectInteractivity, RunGraph, LookAtObject, ChangeLighting, LoadSegment, Pause }
+    public enum ReactionKind { StoryText, Memory, ChangeLocation, CustomReaction, SetCustomVariable, ObjectActivity, AddInventoryItem, StartHints, StopHints, ConsumeInventoryItem, ObjectInteractivity, RunGraph, LookAtObject, ChangeLighting, LoadSegment, Pause, StopAnimation }
 
     [Node.CreateNodeMenu("Реакция"), Node.NodeWidth(320), Node.NodeTint("#284C53")]
     [MovedFrom(true, sourceNamespace: "Memories.Gameplay.Triggers", sourceAssembly: "Memories.Gameplay", sourceClassName: "TriggerActionNode")]
@@ -146,7 +146,7 @@ namespace Memories.Gameplay.Reactions
                 error = "Назначьте предмет для добавления в инвентарь.";
                 return false;
             }
-            if (kind == ReactionKind.ObjectActivity || kind == ReactionKind.ObjectInteractivity || kind == ReactionKind.CustomReaction)
+            if (kind == ReactionKind.ObjectActivity || kind == ReactionKind.ObjectInteractivity || kind == ReactionKind.CustomReaction || kind == ReactionKind.StopAnimation)
             {
                 if (graph is ReactionGraph reaction && reaction.HasObjectKey(objectKey)) return true;
                 error = "Выберите объект из списка объектов графа.";

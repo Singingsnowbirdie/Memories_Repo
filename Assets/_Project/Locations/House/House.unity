@@ -80707,7 +80707,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e17096d854bb5384da31e6d3a6282d34, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.StopToyPlanePropellerReaction
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ToyPlanePropellerAnimation
   propeller: {fileID: 1275222869}
   degreesPerSecond: 720
 --- !u!114 &1885583385
@@ -80730,9 +80730,7 @@ MonoBehaviour:
   objectBindings:
   - key: "\u0421\u0430\u043C\u043E\u043B\u0451\u0442\u0438\u043A"
     target: {fileID: 1885583383}
-  customReactions:
-  - key: "\u041E\u0441\u0442\u0430\u043D\u043E\u0432\u0438\u0442\u044C \u043F\u0440\u043E\u043F\u0435\u043B\u043B\u0435\u0440"
-    reaction: {fileID: 1885583384}
+  customReactions: []
 --- !u!65 &1885583386
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -84288,7 +84286,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4cb880e00261af84abb078dcc89f253c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.StopClockHandsReaction
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ClockHandsAnimation
   minuteHand: {fileID: 1187403995}
   hourHand: {fileID: 1932009794}
   minuteDegreesPerSecond: 110
@@ -84313,9 +84311,7 @@ MonoBehaviour:
   objectBindings:
   - key: "\u0427\u0430\u0441\u044B"
     target: {fileID: 1978083514}
-  customReactions:
-  - key: "\u041E\u0441\u0442\u0430\u043D\u043E\u0432\u0438\u0442\u044C \u0441\u0442\u0440\u0435\u043B\u043A\u0438"
-    reaction: {fileID: 1978083517}
+  customReactions: []
 --- !u!65 &1978083519
 BoxCollider:
   m_ObjectHideFlags: 0

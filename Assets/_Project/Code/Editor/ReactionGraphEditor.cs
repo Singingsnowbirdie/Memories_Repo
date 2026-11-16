@@ -218,8 +218,8 @@ namespace Memories.Editor
                 ? (int)ReactionKind.AddInventoryItem : kind.intValue;
             EditorGUI.BeginChangeCheck();
             int chosenKind = EditorGUILayout.IntPopup(displayedKind,
-                new[] { "Показать текст", "Показать воспоминание", "Перейти в локацию", "Запустить реакцию объекта", "Установить кастомную переменную", "Активность объекта", "Инвентарный предмет", "Запустить подсказки", "Остановить подсказки", "Интерактивность предмета", "Запустить граф реакций", "Посмотреть на объект", "Изменить освещение", "Подгрузить сегмент локации", "Пауза" },
-                new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15 });
+                new[] { "Показать текст", "Показать воспоминание", "Перейти в локацию", "Запустить реакцию объекта", "Установить кастомную переменную", "Активность объекта", "Инвентарный предмет", "Запустить подсказки", "Остановить подсказки", "Интерактивность предмета", "Запустить граф реакций", "Посмотреть на объект", "Изменить освещение", "Подгрузить сегмент локации", "Пауза", "Остановить анимацию" },
+                new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16 });
             if (EditorGUI.EndChangeCheck()) kind.intValue = chosenKind;
             EditorGUILayout.Space(8);
             if (kind.intValue == (int)ReactionKind.Pause)
@@ -329,7 +329,7 @@ namespace Memories.Editor
             {
                 DrawCustomReaction((ReactionGraph)target.graph, serializedObject.FindProperty("objectKey"));
             }
-            else if (kind.enumValueIndex == 5 || kind.enumValueIndex == 10 || kind.intValue == (int)ReactionKind.LookAtObject || kind.intValue == (int)ReactionKind.ChangeLighting)
+            else if (kind.enumValueIndex == 5 || kind.enumValueIndex == 10 || kind.intValue == (int)ReactionKind.LookAtObject || kind.intValue == (int)ReactionKind.ChangeLighting || kind.intValue == (int)ReactionKind.StopAnimation)
             {
                 bool lookAt = kind.intValue == (int)ReactionKind.LookAtObject;
                 bool interactivity = kind.enumValueIndex == 10;
@@ -361,6 +361,10 @@ namespace Memories.Editor
                     var waitForLighting = serializedObject.FindProperty("waitForLighting");
                     waitForLighting.boolValue = EditorGUILayout.ToggleLeft("Ждать завершения", waitForLighting.boolValue);
                     EditorGUILayout.HelpBox("Объект должен иметь LightingGroup. 0 — погасить, 1 — исходная яркость. Без ожидания следующая нода запускается сразу. Перегоревшие лампы не включаются.", MessageType.Info);
+                }
+                else if (kind.intValue == (int)ReactionKind.StopAnimation)
+                {
+                    EditorGUILayout.HelpBox("Останавливает компонент анимации выбранного объекта. Следующая нода выполняется сразу.", MessageType.Info);
                 }
                 else if (lookAt)
                 {

@@ -1,10 +1,12 @@
 using UnityEngine;
+using UnityEngine.Scripting.APIUpdating;
 
 namespace Memories.Gameplay.Reactions
 {
-    /// <summary>Останавливает пропеллер по явному действию графа и сохраняет состояние вращения.</summary>
+    /// <summary>Управляет вращением и сохраняет состояние анимации.</summary>
+    [MovedFrom(true, sourceNamespace: "Memories.Gameplay.Reactions", sourceAssembly: "Memories.Gameplay", sourceClassName: "StopToyPlanePropellerReaction")]
     [DisallowMultipleComponent]
-    public sealed class StopToyPlanePropellerReaction : CustomReaction, IObjectStateParticipant
+    public sealed class ToyPlanePropellerAnimation : MonoBehaviour, IStoppableAnimation, IObjectStateParticipant
     {
         [SerializeField] private Transform propeller;
         [SerializeField] private float degreesPerSecond = 720f;
@@ -14,7 +16,11 @@ namespace Memories.Gameplay.Reactions
         public string CaptureState() => IsSpinning ? "spinning" : "stopped";
         public void RestoreState(string state) => IsSpinning = state != "stopped";
 
-        public override void Execute() => IsSpinning = false;
+        public void StopAnimation()
+        {
+            IsSpinning = false;
+            GetComponent<ObjectStateTracker>()?.Capture();
+        }
 
         private void Update()
         {
