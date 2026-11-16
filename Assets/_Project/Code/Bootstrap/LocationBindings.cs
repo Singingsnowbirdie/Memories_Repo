@@ -57,6 +57,8 @@ namespace Memories.Bootstrap
         public sealed class ParkCinemaBindings
         {
             public GameObject lily, cashier;
+            public GameObject entranceLily;
+            public LightingGroup approachLighting;
             public Memories.Gameplay.Interaction.QuestItem tickets, bouquetItem;
             public LightingGroup cinemaLighting, benchLighting;
         }

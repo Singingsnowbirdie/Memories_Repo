@@ -339,6 +339,15 @@ namespace Memories.Bootstrap
             QuestInventory inventory, ObjectStateStore states)
         {
             int.TryParse(states.GetSavedPart("park.lily.bouquet", "park.cinema.sequence"), out int legacyStage);
+            // Migrate the former custom reaction once, without replaying gameplay.
+            bool bouquetDelivered = states.GetSavedPart("park.lily.bouquet", "park.lily.bouquet") == "1" ||
+                inventory.IsConsumed(bindings.bouquetItem.Id);
+            if (bouquetDelivered)
+            {
+                bindings.entranceLily.GetComponent<ReactionInteractable>().SetInteractionEnabled(false);
+                bindings.entranceLily.SetActive(false);
+                bindings.approachLighting.RestoreBrightness(0);
+            }
             bool bought = inventory.WasCollected(bindings.tickets.Id);
             bool finished = legacyStage >= 4 || inventory.IsConsumed(bindings.tickets.Id);
             bool arrived = legacyStage > 0 || inventory.IsConsumed(bindings.bouquetItem.Id) || bought;
