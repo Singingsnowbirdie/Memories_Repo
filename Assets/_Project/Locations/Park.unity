@@ -2379,6 +2379,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: park.lily.bouquet
+  initiallyActive: 1
 --- !u!114 &41300949
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2405,7 +2406,7 @@ MonoBehaviour:
     target: {fileID: 552258401}
   - key: "\u041E\u0441\u0432\u0435\u0449\u0435\u043D\u0438\u0435 \u043A\u0438\u043D\u043E\u0442\u0435\u0430\u0442\u0440\u0430"
     target: {fileID: 750486531}
-  - key: "\u041b\u0438\u043b\u0438"
+  - key: "\u041B\u0438\u043B\u0438"
     target: {fileID: 41300943}
   customReactions: []
 --- !u!1001 &42565915
@@ -5668,7 +5669,7 @@ MonoBehaviour:
   initiallyVisible: 1
   prompt: "\u041A\u0443\u043F\u0438\u0442\u044C \u043A\u043E\u0444\u0435"
   objectBindings:
-  - key: "Фонари озера"
+  - key: "\u0424\u043E\u043D\u0430\u0440\u0438 \u043E\u0437\u0435\u0440\u0430"
     target: {fileID: 2800000000}
   - key: "\u041B\u0438\u043B\u0438 \u0432 \u043A\u0430\u0444\u0435"
     target: {fileID: 1118195131}
@@ -5700,6 +5701,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: park.cafe.truck
+  initiallyActive: 1
 --- !u!1 &100397701
 GameObject:
   m_ObjectHideFlags: 0
@@ -8619,8 +8621,6 @@ Transform:
   m_Children:
   - {fileID: 101319696}
   - {fileID: 2200000040}
-  - {fileID: 1482448884}
-  - {fileID: 518341982}
   m_Father: {fileID: 1773431130}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &167176478
@@ -21899,6 +21899,118 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 464700062}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &464827400
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 464827401}
+  - component: {fileID: 464827404}
+  - component: {fileID: 464827403}
+  - component: {fileID: 464827402}
+  m_Layer: 0
+  m_Name: "\u041D\u0435\u0432\u0438\u0434\u0438\u043C\u044B\u0439 \u043A\u0443\u0431\u0438\u043A"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &464827401
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 464827400}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.15191735, z: -0, w: 0.9883932}
+  m_LocalPosition: {x: -0.8004, y: 0.97, z: 0.7288}
+  m_LocalScale: {x: 3.5183642, y: 1, z: 7.8876624}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1415017589}
+  m_LocalEulerAnglesHint: {x: 0, y: -17.476, z: 0}
+--- !u!65 &464827402
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 464827400}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &464827403
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 464827400}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &464827404
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 464827400}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1001 &464918760
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25089,13 +25201,13 @@ Transform:
   m_GameObject: {fileID: 518341981}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5.9100037, y: 0, z: -12.21001}
+  m_LocalPosition: {x: 35.489998, y: -1.5, z: -0.76000977}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2054750764}
   - {fileID: 1503639155}
-  m_Father: {fileID: 167168991}
+  m_Father: {fileID: 1773431130}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &518353211 stripped
 MeshRenderer:
@@ -27201,6 +27313,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: park.cafe.order
+  initiallyActive: 1
 --- !u!114 &555673116
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27214,6 +27327,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: park.cafe.napkin
+  initiallyActive: 1
 --- !u!114 &555673117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27231,7 +27345,7 @@ MonoBehaviour:
   initiallyVisible: 1
   prompt: "\u0421\u043C\u044F\u0442\u0430\u044F \u0441\u0430\u043B\u0444\u0435\u0442\u043A\u0430"
   objectBindings:
-  - key: "Фонари озера"
+  - key: "\u0424\u043E\u043D\u0430\u0440\u0438 \u043E\u0437\u0435\u0440\u0430"
     target: {fileID: 2800000000}
   - key: "\u041B\u0438\u043B\u0438 \u0432 \u043A\u0430\u0444\u0435"
     target: {fileID: 1118195131}
@@ -27267,7 +27381,7 @@ MonoBehaviour:
   initiallyVisible: 1
   prompt: "\u041A\u043E\u0444\u0435"
   objectBindings:
-  - key: "Фонари озера"
+  - key: "\u0424\u043E\u043D\u0430\u0440\u0438 \u043E\u0437\u0435\u0440\u0430"
     target: {fileID: 2800000000}
   - key: "\u041B\u0438\u043B\u0438 \u0432 \u043A\u0430\u0444\u0435"
     target: {fileID: 1118195131}
@@ -27299,6 +27413,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: park.cafe.coffee.two
+  initiallyActive: 1
 --- !u!65 &555673126
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -27337,7 +27452,7 @@ MonoBehaviour:
   initiallyVisible: 1
   prompt: "\u041A\u043E\u0444\u0435"
   objectBindings:
-  - key: "Фонари озера"
+  - key: "\u0424\u043E\u043D\u0430\u0440\u0438 \u043E\u0437\u0435\u0440\u0430"
     target: {fileID: 2800000000}
   - key: "\u041B\u0438\u043B\u0438 \u0432 \u043A\u0430\u0444\u0435"
     target: {fileID: 1118195131}
@@ -27369,6 +27484,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: park.cafe.coffee.one
+  initiallyActive: 1
 --- !u!65 &555673129
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -35440,6 +35556,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: park.lighting.cinema
+  initiallyActive: 1
 --- !u!4 &750486534
 Transform:
   m_ObjectHideFlags: 0
@@ -36249,6 +36366,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: park.mimes.suitcase
+  initiallyActive: 1
 --- !u!1001 &771168090
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -39443,6 +39561,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: park.mimes.lighting
+  initiallyActive: 1
 --- !u!1 &841613414
 GameObject:
   m_ObjectHideFlags: 0
@@ -40156,6 +40275,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: park.dock.boat
+  initiallyActive: 1
 --- !u!114 &849925614
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41072,6 +41192,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: park.lighting.benches
+  initiallyActive: 1
 --- !u!114 &868774592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44758,6 +44879,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: park.hotdog_cart.inspect
+  initiallyActive: 1
 --- !u!114 &945207095
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -53451,7 +53573,7 @@ MonoBehaviour:
   initiallyVisible: 1
   prompt: "\u041B\u0438\u043B\u0438"
   objectBindings:
-  - key: "Фонари озера"
+  - key: "\u0424\u043E\u043D\u0430\u0440\u0438 \u043E\u0437\u0435\u0440\u0430"
     target: {fileID: 2800000000}
   - key: "\u041B\u0438\u043B\u0438 \u0432 \u043A\u0430\u0444\u0435"
     target: {fileID: 1118195131}
@@ -56222,6 +56344,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: park.balloon_cart.inspect
+  initiallyActive: 1
 --- !u!114 &1182294948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60313,8 +60436,7 @@ GameObject:
   - component: {fileID: 1265265427}
   - component: {fileID: 1265265426}
   m_Layer: 0
-  m_Name: "06 \u2014 \u0421\u0435\u0432\u0435\u0440\u043E-\u0432\u043E\u0441\u0442\u043E\u0447\u043D\u044B\u0439
-    \u043E\u0441\u0442\u0440\u043E\u0432"
+  m_Name: "\u041E\u0441\u0442\u0440\u043E\u0432 \u0441 \u0431\u0435\u0441\u0435\u0434\u043A\u043E\u0439"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -67941,6 +68063,39 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1411673086}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1415017588
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1415017589}
+  m_Layer: 0
+  m_Name: "\u041F\u0435\u0440\u0435\u0445\u043E\u0434 \u043D\u0430 \u043E\u0441\u0442\u0440\u043E\u0432
+    \u0441 \u0431\u0435\u0441\u0435\u0434\u043A\u043E\u0439"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1415017589
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1415017588}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 46.52, y: -1.5, z: 7.44}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 464827401}
+  m_Father: {fileID: 1773431130}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1001 &1415283354
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -70230,7 +70385,7 @@ Transform:
   m_GameObject: {fileID: 1482448883}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -7.8199997, y: 0, z: -8.615008}
+  m_LocalPosition: {x: 33.58, y: -1.5, z: 2.8349915}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -70246,7 +70401,7 @@ Transform:
   - {fileID: 114211}
   - {fileID: 730026408}
   - {fileID: 2116834590}
-  m_Father: {fileID: 167168991}
+  m_Father: {fileID: 1773431130}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!64 &1482448885
 MeshCollider:
@@ -78565,6 +78720,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: park.photo_booth.inspect
+  initiallyActive: 1
 --- !u!114 &1662383373
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79762,6 +79918,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: park.lighting.cafe
+  initiallyActive: 1
 --- !u!114 &1692745137
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -83076,7 +83233,10 @@ Transform:
   - {fileID: 958084857}
   - {fileID: 1341184426}
   - {fileID: 167168991}
+  - {fileID: 1482448884}
+  - {fileID: 518341982}
   - {fileID: 1780462737}
+  - {fileID: 1415017589}
   - {fileID: 1265265425}
   - {fileID: 402940316}
   - {fileID: 2114765502}
@@ -88300,6 +88460,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: park.flowers.reminder
+  initiallyActive: 1
 --- !u!1 &1893618730
 GameObject:
   m_ObjectHideFlags: 0
@@ -88921,6 +89082,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: park.lighting.approach
+  initiallyActive: 1
 --- !u!4 &1908726680
 Transform:
   m_ObjectHideFlags: 0
@@ -99506,6 +99668,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: park.flowers.cart
+  initiallyActive: 1
 --- !u!114 &2132769697
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -100326,7 +100489,6 @@ Transform:
   - {fileID: 2200000007}
   - {fileID: 2200000013}
   - {fileID: 2200000016}
-  - {fileID: 2200000019}
   - {fileID: 2200000022}
   - {fileID: 2200000025}
   - {fileID: 2200000028}
@@ -100549,60 +100711,6 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 0.18, y: 3, z: 7.749543}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!1 &2200000018
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2200000019}
-  - component: {fileID: 2200000020}
-  m_Layer: 0
-  m_Name: "\u041D\u0435\u0432\u0438\u0434\u0438\u043C\u0430\u044F \u0441\u0442\u0435\u043D\u0430
-    2200000018"
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2200000019
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2200000018}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0.02881023, z: 0, w: 0.9995849}
-  m_LocalPosition: {x: 10.535, y: 2.9, z: 4.445}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2200000001}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &2200000020
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2200000018}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.18, y: 3, z: 3.6860526}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2200000021
 GameObject:
@@ -102554,16 +102662,102 @@ Transform:
   - {fileID: 1692745135}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1660057539 &9223372036854775807
-SceneRoots:
+--- !u!1 &2800000000
+GameObject:
   m_ObjectHideFlags: 0
-  m_Roots:
-  - {fileID: 9919000001}
-  - {fileID: 2600000001}
-  - {fileID: 2500000001}
-  - {fileID: 201}
-  - {fileID: 301}
-  - {fileID: 1773431130}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2800000001}
+  - component: {fileID: 2800000003}
+  - component: {fileID: 2800000002}
+  m_Layer: 0
+  m_Name: "\u0424\u043E\u043D\u0430\u0440\u0438 \u2014 \u043E\u0441\u0442\u0440\u043E\u0432
+    \u0441 \u043E\u0437\u0435\u0440\u043E\u043C"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2800000001
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2800000000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2800000101}
+  - {fileID: 2800000121}
+  - {fileID: 2800000141}
+  - {fileID: 2800000161}
+  - {fileID: 2800000181}
+  - {fileID: 2800000201}
+  - {fileID: 2800000221}
+  - {fileID: 2800000241}
+  m_Father: {fileID: 1780462737}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2800000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2800000000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: park.lighting.lake
+  initiallyActive: 1
+--- !u!114 &2800000003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2800000000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24f84c55c5be4065a0d5e10248eb25da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.LightingGroup
+  lights:
+  - {fileID: 2800000107}
+  - {fileID: 2800000127}
+  - {fileID: 2800000147}
+  - {fileID: 2800000167}
+  - {fileID: 2800000187}
+  - {fileID: 2800000207}
+  - {fileID: 2800000227}
+  - {fileID: 2800000247}
+  glowingRenderers:
+  - {fileID: 2800000102}
+  - {fileID: 2800000122}
+  - {fileID: 2800000142}
+  - {fileID: 2800000162}
+  - {fileID: 2800000182}
+  - {fileID: 2800000202}
+  - {fileID: 2800000222}
+  - {fileID: 2800000242}
+  sourceIntensities:
+  - 15
+  - 15
+  - 15
+  - 15
+  - 15
+  - 15
+  - 15
+  - 15
+  initialBrightness: 0
 --- !u!1 &2800000100
 GameObject:
   m_ObjectHideFlags: 0
@@ -102576,7 +102770,7 @@ GameObject:
   - component: {fileID: 2800000103}
   - component: {fileID: 2800000102}
   m_Layer: 0
-  m_Name: "Фонарь озера 01"
+  m_Name: "\u0424\u043E\u043D\u0430\u0440\u044C \u043E\u0437\u0435\u0440\u0430 01"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -102699,7 +102893,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
@@ -102795,7 +102989,7 @@ GameObject:
   - component: {fileID: 2800000123}
   - component: {fileID: 2800000122}
   m_Layer: 0
-  m_Name: "Фонарь озера 02"
+  m_Name: "\u0424\u043E\u043D\u0430\u0440\u044C \u043E\u0437\u0435\u0440\u0430 02"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -102918,7 +103112,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
@@ -103014,7 +103208,7 @@ GameObject:
   - component: {fileID: 2800000143}
   - component: {fileID: 2800000142}
   m_Layer: 0
-  m_Name: "Фонарь озера 03"
+  m_Name: "\u0424\u043E\u043D\u0430\u0440\u044C \u043E\u0437\u0435\u0440\u0430 03"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -103137,7 +103331,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
@@ -103233,7 +103427,7 @@ GameObject:
   - component: {fileID: 2800000163}
   - component: {fileID: 2800000162}
   m_Layer: 0
-  m_Name: "Фонарь озера 04"
+  m_Name: "\u0424\u043E\u043D\u0430\u0440\u044C \u043E\u0437\u0435\u0440\u0430 04"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -103356,7 +103550,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
@@ -103452,7 +103646,7 @@ GameObject:
   - component: {fileID: 2800000183}
   - component: {fileID: 2800000182}
   m_Layer: 0
-  m_Name: "Фонарь озера 05"
+  m_Name: "\u0424\u043E\u043D\u0430\u0440\u044C \u043E\u0437\u0435\u0440\u0430 05"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -103575,7 +103769,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
@@ -103671,7 +103865,7 @@ GameObject:
   - component: {fileID: 2800000203}
   - component: {fileID: 2800000202}
   m_Layer: 0
-  m_Name: "Фонарь озера 06"
+  m_Name: "\u0424\u043E\u043D\u0430\u0440\u044C \u043E\u0437\u0435\u0440\u0430 06"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -103794,7 +103988,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
@@ -103890,7 +104084,7 @@ GameObject:
   - component: {fileID: 2800000223}
   - component: {fileID: 2800000222}
   m_Layer: 0
-  m_Name: "Фонарь озера 07"
+  m_Name: "\u0424\u043E\u043D\u0430\u0440\u044C \u043E\u0437\u0435\u0440\u0430 07"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -104013,7 +104207,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
@@ -104109,7 +104303,7 @@ GameObject:
   - component: {fileID: 2800000243}
   - component: {fileID: 2800000242}
   m_Layer: 0
-  m_Name: "Фонарь озера 08"
+  m_Name: "\u0424\u043E\u043D\u0430\u0440\u044C \u043E\u0437\u0435\u0440\u0430 08"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -104232,7 +104426,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
@@ -104316,100 +104510,6 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
---- !u!1 &2800000000
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2800000001}
-  - component: {fileID: 2800000003}
-  - component: {fileID: 2800000002}
-  m_Layer: 0
-  m_Name: "Фонари — остров с озером"
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2800000001
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2800000000}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 2800000101}
-  - {fileID: 2800000121}
-  - {fileID: 2800000141}
-  - {fileID: 2800000161}
-  - {fileID: 2800000181}
-  - {fileID: 2800000201}
-  - {fileID: 2800000221}
-  - {fileID: 2800000241}
-  m_Father: {fileID: 1780462737}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2800000002
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2800000000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
-  persistentId: park.lighting.lake
---- !u!114 &2800000003
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2800000000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24f84c55c5be4065a0d5e10248eb25da, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.LightingGroup
-  lights:
-  - {fileID: 2800000107}
-  - {fileID: 2800000127}
-  - {fileID: 2800000147}
-  - {fileID: 2800000167}
-  - {fileID: 2800000187}
-  - {fileID: 2800000207}
-  - {fileID: 2800000227}
-  - {fileID: 2800000247}
-  glowingRenderers:
-  - {fileID: 2800000102}
-  - {fileID: 2800000122}
-  - {fileID: 2800000142}
-  - {fileID: 2800000162}
-  - {fileID: 2800000182}
-  - {fileID: 2800000202}
-  - {fileID: 2800000222}
-  - {fileID: 2800000242}
-  sourceIntensities:
-  - 15
-  - 15
-  - 15
-  - 15
-  - 15
-  - 15
-  - 15
-  - 15
-  initialBrightness: 0
 --- !u!1 &9919000000
 GameObject:
   m_ObjectHideFlags: 0
@@ -104454,23 +104554,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8094193f27f546838e99a1b9a63b063e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Memories.Bootstrap::Memories.Bootstrap.LocationBindings
+  courtyardConnection: {fileID: 0}
+  backyardEntrance: {fileID: 0}
+  backyardEntranceLighting: {fileID: 0}
+  garageAttachment: {fileID: 0}
+  garageFenceSections: []
+  schoolConnection: {fileID: 0}
+  garageGate: {fileID: 0}
+  gymEntrance: {fileID: 0}
+  backyardVariables: {fileID: 0}
+  baseballBat: {fileID: 0}
+  baseballAreaNormal: {fileID: 0}
+  baseballAreaReady: {fileID: 0}
+  intactBaseballWindow: {fileID: 0}
+  brokenBaseballWindow: {fileID: 0}
+  benPitcher: {fileID: 0}
+  seatedBen: {fileID: 0}
+  garageEntrance: {fileID: 0}
+  garageSideDoor: {fileID: 0}
+  standingGarageFather: {fileID: 0}
+  kneelingGarageFather: {fileID: 0}
+  garageVariables: {fileID: 0}
+  workingGarageFather: {fileID: 0}
+  finalGarageFather: {fileID: 0}
+  garageHood: {fileID: 0}
+  hoodGarageFather: {fileID: 0}
+  parkCinema:
+    lily: {fileID: 552258401}
+    cashier: {fileID: 1548556426}
+    entranceLily: {fileID: 41300943}
+    approachLighting: {fileID: 1908726678}
+    tickets: {fileID: 11400000, guid: 33626510add7f9d41ad24458f97fa8f4, type: 2}
+    bouquetItem: {fileID: 11400000, guid: aa5a843c7ddd3c948baa4c5104eaf886, type: 2}
+    cinemaLighting: {fileID: 750486532}
+    benchLighting: {fileID: 868774592}
   parkMimes:
     lily: {fileID: 173667734}
+    cafeLily: {fileID: 1118195131}
     suitcase: {fileID: 770636421}
     pendants: {fileID: 11400000, guid: 81de52372d4640e468f0f2ece1fe7d04, type: 2}
     tickets: {fileID: 11400000, guid: 33626510add7f9d41ad24458f97fa8f4, type: 2}
     lighting: {fileID: 837291121}
     cafeLighting: {fileID: 1692745137}
-    cafeLily: {fileID: 1118195131}
-  parkCinema:
-    entranceLily: {fileID: 41300943}
-    approachLighting: {fileID: 1908726678}
-    lily: {fileID: 552258401}
-    cashier: {fileID: 1548556426}
-    tickets: {fileID: 11400000, guid: 33626510add7f9d41ad24458f97fa8f4, type: 2}
-    bouquetItem: {fileID: 11400000, guid: aa5a843c7ddd3c948baa4c5104eaf886, type: 2}
-    cinemaLighting: {fileID: 750486532}
-    benchLighting: {fileID: 868774592}
   parkCafe:
     variables: {fileID: 11400000, guid: ab17b0cadc75c9c4e852e852c4f0a3b3, type: 2}
     receipt: {fileID: 11400000, guid: f151613222b513f48a0a6819d5d52c6f, type: 2}
@@ -104485,3 +104610,13 @@ MonoBehaviour:
     dockVariables: {fileID: 11400000, guid: a1f2b1d2798eb89428af4d9666b24bde, type: 2}
     dockLily: {fileID: 924004009}
     dockBoat: {fileID: 849925614}
+--- !u!1660057539 &9223372036854775807
+SceneRoots:
+  m_ObjectHideFlags: 0
+  m_Roots:
+  - {fileID: 9919000001}
+  - {fileID: 2600000001}
+  - {fileID: 2500000001}
+  - {fileID: 201}
+  - {fileID: 301}
+  - {fileID: 1773431130}
