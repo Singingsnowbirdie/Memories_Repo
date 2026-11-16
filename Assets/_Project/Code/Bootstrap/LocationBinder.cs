@@ -157,10 +157,30 @@ namespace Memories.Bootstrap
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var reaction in root.GetComponentsInChildren<ShowSeatedBenReaction>(true))
                     reaction.Restore(scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
-            foreach (var root in scene.GetRootGameObjects())
-                foreach (var reaction in root.GetComponentsInChildren<RefreshBaseballAreaReaction>(true))
-                    reaction.Initialize(scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<CustomVariableStore>(),
-                        scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
+            if (scene.path == TestLocationLauncher.BackyardPath)
+            {
+                // Однократное восстановление, включая старые сохранения без флага завершения игры.
+                var bindings = LocationBindings.For(scene);
+                var variables = scope.Container.Resolve<CustomVariableStore>();
+                var inventory = scope.Container.Resolve<QuestInventory>();
+                var bank = bindings.BackyardVariables;
+                bool completed = variables.Get(bank, "baseball_game_completed") ||
+                    scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>()
+                        .Contains("backyard_baseball_second_memory");
+                if (completed)
+                {
+                    variables.Set(bank, "baseball_game_completed", true);
+                    if (inventory.Contains(bindings.BaseballBat.Id)) inventory.TryConsume(bindings.BaseballBat);
+                }
+                bool ready = !completed && variables.Get(bank, "ben_received_cap") &&
+                    variables.Get(bank, "ben_received_baseball") && variables.Get(bank, "baseball_bat_found");
+                bindings.IntactBaseballWindow.SetActive(!completed);
+                bindings.BrokenBaseballWindow.SetActive(completed);
+                // В старых снимках интерактивность этого объекта могла быть выключена.
+                bindings.BaseballAreaReady.GetComponent<ReactionInteractable>().SetInteractionEnabled(true);
+                bindings.BaseballAreaNormal.SetActive(!ready);
+                bindings.BaseballAreaReady.SetActive(ready);
+            }
         }
 
         private async UniTask RestoreCourtyardAsync(UnityEngine.Transform courtyard, ObjectStateTracker[] trackers)

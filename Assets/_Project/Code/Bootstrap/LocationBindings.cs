@@ -19,6 +19,16 @@ namespace Memories.Bootstrap
         [SerializeField, InspectorName("Гараж: ворота")] private OpenGarageGateReaction garageGate;
         [SerializeField, InspectorName("Школа: вход в спортзал")] private SchoolGymEntranceReaction gymEntrance;
 
+        [SerializeField] private CustomVariableBank backyardVariables;
+        [SerializeField] private Memories.Gameplay.Interaction.QuestItem baseballBat;
+        [SerializeField] private GameObject baseballAreaNormal, baseballAreaReady, intactBaseballWindow, brokenBaseballWindow;
+        public CustomVariableBank BackyardVariables => Require(backyardVariables, "переменные двора");
+        public Memories.Gameplay.Interaction.QuestItem BaseballBat => Require(baseballBat, "бита");
+        public GameObject BaseballAreaNormal => Require(baseballAreaNormal, "обычная площадка");
+        public GameObject BaseballAreaReady => Require(baseballAreaReady, "готовая площадка");
+        public GameObject IntactBaseballWindow => Require(intactBaseballWindow, "целое окно");
+        public GameObject BrokenBaseballWindow => Require(brokenBaseballWindow, "разбитое окно");
+
         private static readonly Dictionary<int, HashSet<LocationBindings>> registered = new Dictionary<int, HashSet<LocationBindings>>();
         private int registeredScene;
 
@@ -57,11 +67,12 @@ namespace Memories.Bootstrap
             throw new InvalidOperationException("Конфигурация локации недоступна: " + scene.name);
         }
 
-        private T Require<T>(T reference, string label) where T : Component
+        private T Require<T>(T reference, string label) where T : UnityEngine.Object
         {
             if (reference == null)
                 throw new InvalidOperationException("В конфигурации локации «" + gameObject.scene.name + "» не назначена ссылка: " + label);
-            if (reference.gameObject.scene != gameObject.scene)
+            var target = reference is Component component ? component.gameObject : reference as GameObject;
+            if (target != null && target.scene != gameObject.scene)
                 throw new InvalidOperationException("Ссылка «" + label + "» должна принадлежать сцене «" + gameObject.scene.name + "».");
             return reference;
         }
