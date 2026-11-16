@@ -334,11 +334,10 @@ namespace Memories.Bootstrap
                                     if (renderer.enabled) { cover.Renderers.Add(renderer); renderer.enabled = false; }
                             }
                 connectionCovers[scene.handle] = cover;
-                var backyardEntrance = FindComponent<BackyardEntranceReaction>(scene);
-                if (backyardEntrance != null)
+                if (path == TestLocationLauncher.BackyardPath)
                 {
                     // Контакт с триггером начинается только после того, как капсула игрока минует старый фасад.
-                    var trigger = backyardEntrance.EntranceTrigger;
+                    var trigger = LocationBindings.For(scene).BackyardEntrance;
                     trigger.transform.SetPositionAndRotation(
                         connection.position + connection.forward * (clearance + controller.radius + .2f),
                         connection.rotation);
@@ -361,6 +360,21 @@ namespace Memories.Bootstrap
                 throw new InvalidOperationException("Cannot enter the attached garage.");
             busy = true;
             try { await ReplaceConnectedHouseAsync(scene); }
+            finally { busy = false; }
+        }
+
+        public bool CanSwitchEnvironment(string scenePath)
+        {
+            var scene = SceneManager.GetSceneByPath(scenePath);
+            return !disposed && !busy && scene.IsValid() && scene.isLoaded && additionalScenes.Contains(scene);
+        }
+
+        public async UniTask SwitchEnvironmentAsync(string scenePath)
+        {
+            if (!CanSwitchEnvironment(scenePath))
+                throw new InvalidOperationException("Окружение должно быть заранее загружено как сегмент: " + scenePath);
+            busy = true;
+            try { await ReplaceConnectedHouseAsync(SceneManager.GetSceneByPath(scenePath)); }
             finally { busy = false; }
         }
 

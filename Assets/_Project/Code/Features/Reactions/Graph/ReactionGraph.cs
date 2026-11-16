@@ -54,7 +54,7 @@ namespace Memories.Gameplay.Reactions
                             if (!action.ReactionGraph.TryGetSequence(out var nested, out error)) return false;
                             branchActions.AddRange(nested);
                         }
-                        if (branchActions.Any(a => a.Kind == ReactionKind.ChangeLocation))
+                        if (branchActions.Any(a => a.Kind == ReactionKind.ChangeLocation || a.Kind == ReactionKind.SwitchEnvironment))
                         { error = "Переход в другую локацию разместите после объединения веток хаба."; return false; }
                     }
                 }

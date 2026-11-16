@@ -55,11 +55,11 @@ namespace Memories.Gameplay.Interaction
             prompt = interactionPrompt;
         }
 
-        public void Initialize(StoryTextPresenter texts, MemoryPresenter memories, ILocationTransition locations = null, QuestInventory inventory = null, CustomVariableStore variables = null, PlayerLookAction playerLook = null)
+        public void Initialize(StoryTextPresenter texts, MemoryPresenter memories, ILocationTransition locations = null, QuestInventory inventory = null, CustomVariableStore variables = null, PlayerLookAction playerLook = null, GameplayModeState gameplayMode = null)
         {
             SetInteractionEnabled(initiallyInteractable);
             runner?.Dispose();
-            runner = new ReactionRunner(texts, memories, this, locations, inventory, variables, objectBindings, customReactions, playerLook);
+            runner = new ReactionRunner(texts, memories, this, locations, inventory, variables, objectBindings, customReactions, playerLook, gameplayMode);
             if (!initiallyVisible) gameObject.SetActive(false);
             if (IsCollectedPickup(inventory)) gameObject.SetActive(false);
         }

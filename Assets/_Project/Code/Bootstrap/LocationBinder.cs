@@ -52,15 +52,14 @@ namespace Memories.Bootstrap
                 foreach (var entrance in root.GetComponentsInChildren<GarageEntranceReaction>(true))
                     entrance.Initialize(scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>(),
                         () => transitions.EnterGarageAsync(scene), isCurrentLocation);
-            foreach (var root in scene.GetRootGameObjects())
-                foreach (var entrance in root.GetComponentsInChildren<BackyardEntranceReaction>(true))
-                {
-                    entrance.Initialize(scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>(),
-                        () => transitions.EnterConnectedSceneAsync(scene), isCurrentLocation);
-                    if (isCurrentLocation)
-                        foreach (var group in entrance.GetComponentsInChildren<LightingGroup>(true))
-                            group.RestoreBrightness(1);
-                }
+            if (scene.path == TestLocationLauncher.BackyardPath)
+            {
+                var bindings = LocationBindings.For(scene);
+                bindings.BackyardEntrance.enabled = !isCurrentLocation;
+                if (isCurrentLocation)
+                    foreach (var group in bindings.BackyardEntranceLighting.GetComponentsInChildren<LightingGroup>(true))
+                        group.RestoreBrightness(1);
+            }
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var attachment in root.GetComponentsInChildren<BackyardGarageAttachment>(true))
                     attachment.Initialize(scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>(), transitions.LoadBackyardGarageAsync);
@@ -79,10 +78,10 @@ namespace Memories.Bootstrap
                 foreach (var trigger in root.GetComponentsInChildren<Memories.Gameplay.Triggers.SceneTrigger>(true))
                     trigger.Initialize(scope.Container.Resolve<Memories.Gameplay.UI.StoryTextPresenter>(),
                         scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>(), locations,
-                        scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<CustomVariableStore>(), scope.Container.Resolve<PlayerLookAction>());
+                        scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<CustomVariableStore>(), scope.Container.Resolve<PlayerLookAction>(), scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>());
                 foreach (var interactable in root.GetComponentsInChildren<ReactionInteractable>(true))
                     interactable.Initialize(scope.Container.Resolve<Memories.Gameplay.UI.StoryTextPresenter>(),
-                        scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>(), locations, scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<CustomVariableStore>(), scope.Container.Resolve<PlayerLookAction>());
+                        scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>(), locations, scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<CustomVariableStore>(), scope.Container.Resolve<PlayerLookAction>(), scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>());
             }
             HintProgressRestoration.Restore(scope.Container.Resolve<QuestInventory>(),
                 scope.Container.Resolve<CustomVariableStore>(), scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());

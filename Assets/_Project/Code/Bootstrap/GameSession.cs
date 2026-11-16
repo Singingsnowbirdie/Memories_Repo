@@ -188,6 +188,9 @@ namespace Memories.Bootstrap
         public async UniTask LoadSegmentAsync(string scenePath, Transform connection, string arrivalMarker) =>
             await transitions.LoadConnectedSceneAsync(scenePath, connection, arrivalMarker);
 
+        public bool CanSwitchEnvironment(string scenePath) => transitions.CanSwitchEnvironment(scenePath);
+        public UniTask SwitchEnvironmentAsync(string scenePath) => transitions.SwitchEnvironmentAsync(scenePath);
+
         public bool CanChangeLocation(string scenePath) => transitions.CanChangeLocation(scenePath);
 
         private static void PrepareHouseStart(Scene scene)

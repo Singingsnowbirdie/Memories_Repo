@@ -23,6 +23,8 @@ namespace Memories.Gameplay.Reactions
         private readonly ReactionObjectBinding[] objectBindings;
         private readonly CustomReactionBinding[] customReactions;
         private readonly PlayerLookAction playerLook;
+        private readonly GameplayModeState gameplayMode;
+        private bool controlsHeld;
         private CancellationTokenSource playback;
         private bool fired;
         private ReactionRunner hintOwner;
@@ -47,8 +49,8 @@ namespace Memories.Gameplay.Reactions
         public bool IsRunning => playback != null;
         public bool IsHidingOwner { get; private set; }
         public ReactionRunner(StoryTextPresenter texts, MemoryPresenter memories, UnityEngine.Object owner,
-            ILocationTransition locations = null, QuestInventory inventory = null, CustomVariableStore variables = null, ReactionObjectBinding[] objectBindings = null, CustomReactionBinding[] customReactions = null, PlayerLookAction playerLook = null)
-        { this.texts = texts; this.memories = memories; this.owner = owner; this.locations = locations; this.inventory = inventory; this.variables = variables; this.objectBindings = objectBindings; this.customReactions = customReactions; this.playerLook = playerLook; hintOwner = this; }
+            ILocationTransition locations = null, QuestInventory inventory = null, CustomVariableStore variables = null, ReactionObjectBinding[] objectBindings = null, CustomReactionBinding[] customReactions = null, PlayerLookAction playerLook = null, GameplayModeState gameplayMode = null)
+        { this.texts = texts; this.memories = memories; this.owner = owner; this.locations = locations; this.inventory = inventory; this.variables = variables; this.objectBindings = objectBindings; this.customReactions = customReactions; this.playerLook = playerLook; this.gameplayMode = gameplayMode; hintOwner = this; }
         public bool CanRun(ReactionGraph graph, bool allowDuringMemory = false) => graph != null && !IsRunning &&
             !(graph.RunOnce && fired) && (memories == null || memories.CanStartPlayback ||
                 (allowDuringMemory && memories.IsPlaying));
@@ -68,6 +70,9 @@ namespace Memories.Gameplay.Reactions
             { Debug.LogWarning("Хранилище кастомных переменных не подключено.", owner); return false; }
             foreach (var action in actions)
             {
+                if (action.Kind == ReactionKind.SwitchEnvironment &&
+                    (locations == null || (action.HoldControlsUntilGraphEnd && gameplayMode == null)))
+                { Debug.LogWarning("Не подключены переключение окружения или управление игроком.", owner); return false; }
                 if (action.Kind == ReactionKind.StopAnimation &&
                     (!ReactionObjectBinding.TryResolve(objectBindings, action.ObjectKey, out var animationTarget) ||
                      animationTarget.GetComponent<IStoppableAnimation>() == null))
@@ -162,7 +167,7 @@ namespace Memories.Gameplay.Reactions
                         (memories == null || memories.CanStartPlayback) && Time.timeScale > 0,
                         cancellationToken: timer.Token);
                     timer.Token.ThrowIfCancellationRequested();
-                    child = new ReactionRunner(texts, memories, owner, locations, inventory, variables, objectBindings, customReactions, playerLook);
+                    child = new ReactionRunner(texts, memories, owner, locations, inventory, variables, objectBindings, customReactions, playerLook, gameplayMode);
                     child.hintOwner = this;
                     child.currentHintId = id;
                     // Условия самого графа выбирают текст и завершают подсказку по кастомной переменной.
@@ -192,6 +197,11 @@ namespace Memories.Gameplay.Reactions
             catch (Exception exception) { Debug.LogException(exception, owner); }
             finally
             {
+                if (controlsHeld)
+                {
+                    gameplayMode.ReleaseControls(this);
+                    controlsHeld = false;
+                }
                 if (playback == source) playback = null;
                 source.Dispose();
             }
@@ -274,6 +284,17 @@ namespace Memories.Gameplay.Reactions
                     {
                         if (action.PauseDuration > 0)
                             await UniTask.Delay(TimeSpan.FromSeconds(action.PauseDuration), cancellationToken: source.Token);
+                    }
+                    else if (action.Kind == ReactionKind.SwitchEnvironment)
+                    {
+                        if (!locations.CanSwitchEnvironment(action.LocationScenePath))
+                            throw new InvalidOperationException("Окружение не загружено или переход недоступен: " + action.LocationScenePath);
+                        if (action.HoldControlsUntilGraphEnd && !controlsHeld)
+                        {
+                            gameplayMode.BlockControls(this);
+                            controlsHeld = true;
+                        }
+                        await locations.SwitchEnvironmentAsync(action.LocationScenePath);
                     }
                     else if (action.Kind == ReactionKind.StopAnimation)
                     {

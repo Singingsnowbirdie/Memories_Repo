@@ -6,7 +6,7 @@ using XNode;
 
 namespace Memories.Gameplay.Reactions
 {
-    public enum ReactionKind { StoryText, Memory, ChangeLocation, CustomReaction, SetCustomVariable, ObjectActivity, AddInventoryItem, StartHints, StopHints, ConsumeInventoryItem, ObjectInteractivity, RunGraph, LookAtObject, ChangeLighting, LoadSegment, Pause, StopAnimation }
+    public enum ReactionKind { StoryText, Memory, ChangeLocation, CustomReaction, SetCustomVariable, ObjectActivity, AddInventoryItem, StartHints, StopHints, ConsumeInventoryItem, ObjectInteractivity, RunGraph, LookAtObject, ChangeLighting, LoadSegment, Pause, StopAnimation, SwitchEnvironment }
 
     [Node.CreateNodeMenu("Реакция"), Node.NodeWidth(320), Node.NodeTint("#284C53")]
     [MovedFrom(true, sourceNamespace: "Memories.Gameplay.Triggers", sourceAssembly: "Memories.Gameplay", sourceClassName: "TriggerActionNode")]
@@ -29,6 +29,8 @@ namespace Memories.Gameplay.Reactions
         [SerializeField] private string locationScenePath;
         [SerializeField] private string arrivalMarker;
         public string ArrivalMarker => arrivalMarker;
+        [SerializeField] private bool holdControlsUntilGraphEnd;
+        public bool HoldControlsUntilGraphEnd => holdControlsUntilGraphEnd;
         [SerializeField] private CustomVariableBank variableBank;
         [SerializeField] private string variableId;
         [SerializeField] private bool variableValue = true;
@@ -82,6 +84,12 @@ namespace Memories.Gameplay.Reactions
         public bool Validate(out string error)
         {
             error = null;
+            if (kind == ReactionKind.SwitchEnvironment)
+            {
+                if (!string.IsNullOrWhiteSpace(locationScenePath) && locationScenePath.EndsWith(".unity")) return true;
+                error = "Назначьте сцену заранее загруженного окружения.";
+                return false;
+            }
             if (kind == ReactionKind.Pause)
             {
                 if (float.IsNaN(pauseDuration) || float.IsInfinity(pauseDuration) ||
@@ -136,7 +144,7 @@ namespace Memories.Gameplay.Reactions
                     float.IsNaN(hintTimeout) || float.IsInfinity(hintTimeout))
                 { error = "Назначьте отдельный граф подсказки и положительный таймаут в секундах."; return false; }
                 foreach (var node in hintGraph.nodes)
-                    if (node is ReactionNode action && (action.Kind == ReactionKind.StartHints || action.Kind == ReactionKind.ChangeLocation || action.Kind == ReactionKind.LoadSegment))
+                    if (node is ReactionNode action && (action.Kind == ReactionKind.StartHints || action.Kind == ReactionKind.ChangeLocation || action.Kind == ReactionKind.LoadSegment || action.Kind == ReactionKind.SwitchEnvironment))
                     { error = "Граф подсказки не должен запускать таймеры или менять локацию."; return false; }
                 return hintGraph.TryGetSequence(out _, out error);
             }

@@ -11,7 +11,8 @@ namespace Memories.Bootstrap
     public sealed class LocationBindings : MonoBehaviour
     {
         [SerializeField, InspectorName("Дом: загрузка двора")] private Transform courtyardConnection;
-        [SerializeField, InspectorName("Двор: вход")] private BackyardEntranceReaction backyardEntrance;
+        [SerializeField, InspectorName("Двор: вход")] private Memories.Gameplay.Triggers.SceneTrigger backyardEntrance;
+        [SerializeField, InspectorName("Двор: освещение входа")] private Transform backyardEntranceLighting;
         [SerializeField, InspectorName("Двор: соединение с гаражом")] private BackyardGarageAttachment garageAttachment;
         [SerializeField, InspectorName("Гараж: соединение со школой")] private GarageSchoolConnection schoolConnection;
         [SerializeField, InspectorName("Гараж: ворота")] private OpenGarageGateReaction garageGate;
@@ -21,7 +22,8 @@ namespace Memories.Bootstrap
         private int registeredScene;
 
         public Transform CourtyardConnection => Require(courtyardConnection, "дверь во двор");
-        public BackyardEntranceReaction BackyardEntrance => Require(backyardEntrance, "вход во двор");
+        public Memories.Gameplay.Triggers.SceneTrigger BackyardEntrance => Require(backyardEntrance, "вход во двор");
+        public Transform BackyardEntranceLighting => Require(backyardEntranceLighting, "освещение входа во двор");
         public BackyardGarageAttachment GarageAttachment => Require(garageAttachment, "соединение с гаражом");
         public GarageSchoolConnection SchoolConnection => Require(schoolConnection, "соединение со школой");
         public OpenGarageGateReaction GarageGate => Require(garageGate, "ворота гаража");

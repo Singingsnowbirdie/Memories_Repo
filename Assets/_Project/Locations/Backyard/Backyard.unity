@@ -34384,7 +34384,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1127370108}
-  - component: {fileID: 1127370107}
   m_Layer: 0
   m_Name: "\u0412\u0441\u0442\u0443\u043F\u043B\u0435\u043D\u0438\u0435 \u0432\u043E
     \u0434\u0432\u043E\u0440"
@@ -34393,19 +34392,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
---- !u!114 &1127370107
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1127370106}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8eab9fa3434a4f14b97091ecae659111, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.BackyardEntranceReaction
-  entranceTrigger: {fileID: 990800004}
 --- !u!4 &1127370108
 Transform:
   m_ObjectHideFlags: 0
@@ -66451,9 +66437,7 @@ MonoBehaviour:
     target: {fileID: 910800197}
   - key: "Фонари — пара 4"
     target: {fileID: 910800201}
-  customReactions:
-  - key: enter_backyard
-    reaction: {fileID: 1127370107}
+  customReactions: []
 --- !u!1 &990900000
 GameObject:
   m_ObjectHideFlags: 0
@@ -66499,7 +66483,8 @@ MonoBehaviour:
   m_Name:
   m_EditorClassIdentifier: Memories.Bootstrap::Memories.Bootstrap.LocationBindings
   courtyardDoor: {fileID: 0}
-  backyardEntrance: {fileID: 1127370107}
+  backyardEntrance: {fileID: 990800004}
+  backyardEntranceLighting: {fileID: 1127370108}
   garageAttachment: {fileID: 342514629}
   schoolConnection: {fileID: 0}
   garageGate: {fileID: 0}
