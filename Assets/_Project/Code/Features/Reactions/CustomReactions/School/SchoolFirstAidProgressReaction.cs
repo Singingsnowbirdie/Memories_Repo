@@ -12,11 +12,11 @@ namespace Memories.Gameplay.Reactions
         private const string HintId = "school.first-aid-kit";
         [SerializeField] private ReactionGraph refreshGraph;
         private ReactionRunner runner;
-        private bool started, returned;
+        private bool started;
         [Serializable] private sealed class SavedHints { public string[] active; }
         [Serializable] private sealed class State
         {
-            public bool started, returned;
+            public bool started;
             public string hints;
         }
         public string StateKey => "school-first-aid";
@@ -36,28 +36,21 @@ namespace Memories.Gameplay.Reactions
 
         public override void Execute()
         {
-            if (!started || returned || runner == null) return;
+            if (!started || runner == null) return;
             // Подбор предметов явно запускает таймер, если он ещё не запущен. Его граф подсказки выбирает актуальный текст.
             if (!runner.TryRun(refreshGraph, allowDuringMemory: true))
                 throw new InvalidOperationException("School first-aid reminder graph could not run.");
             GetComponent<ObjectStateTracker>()?.Capture();
         }
 
-        public void ReturnToCoach()
-        {
-            returned = true;
-            GetComponent<ObjectStateTracker>()?.Capture();
-        }
-
         public string CaptureState() => JsonUtility.ToJson(new State
-        { started = started, returned = returned, hints = runner?.CaptureHints() });
+        { started = started, hints = runner?.CaptureHints() });
 
         public void RestoreState(string value)
         {
             if (string.IsNullOrEmpty(value)) return;
             var state = JsonUtility.FromJson<State>(value);
             started = state.started;
-            returned = state.returned;
             if (started && !string.IsNullOrEmpty(state.hints))
             {
                 // В старых сохранениях для каждого запрошенного предмета использовался отдельный ID таймера.

@@ -104,7 +104,7 @@ namespace Memories.Bootstrap
             entrance.RestoreForDirectLoad();
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var progress in root.GetComponentsInChildren<SchoolFirstAidProgressReaction>(true))
-                    progress.RestoreState(@"{""started"":true,""returned"":true,""hints"":""""}");
+                    progress.RestoreState(@"{""started"":true,""hints"":""""}");
             trackers["school.payphone"].GetComponent<SchoolAmbulanceArrivalReaction>().RestoreState("open");
             foreach (var tracker in trackers.Values) tracker.Capture();
             Physics.SyncTransforms();

@@ -129318,9 +129318,6 @@ PrefabInstance:
       addedObject: {fileID: 2041208591}
     - targetCorrespondingSourceObject: {fileID: 9200431368797393190, guid: d237bb1ecd8f85147b8f7cba04757d92, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2041208594}
-    - targetCorrespondingSourceObject: {fileID: 9200431368797393190, guid: d237bb1ecd8f85147b8f7cba04757d92, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 2041208595}
   m_SourcePrefab: {fileID: 100100000, guid: d237bb1ecd8f85147b8f7cba04757d92, type: 3}
 --- !u!4 &2041208585 stripped
@@ -129357,8 +129354,6 @@ MonoBehaviour:
   - key: gym_door_open
     target: {fileID: 9906600000}
   customReactions:
-  - key: return_supplies
-    reaction: {fileID: 2041208594}
   - key: reveal_phone
     reaction: {fileID: 2041208595}
 --- !u!114 &2041208591
@@ -129374,19 +129369,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: school.coach
---- !u!114 &2041208594
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2041208586}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8fdb1ec01bd2a2948a6af02bd487698e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReturnSchoolSuppliesReaction
-  progress: {fileID: 880320004}
 --- !u!114 &2041208595
 MonoBehaviour:
   m_ObjectHideFlags: 0
