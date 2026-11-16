@@ -28,9 +28,8 @@ namespace Memories.Gameplay.Reactions
         {
             actions = new List<ReactionNode>();
             error = null;
-            if (nodes == null || nodes.Any(n => n == null) || nodes.OfType<ReactionStartNode>().Count() != 1 ||
-                !nodes.OfType<ReactionEndNode>().Any())
-            { error = "Нужны ровно одно «Начало» и хотя бы один «Конец»."; return false; }
+            if (nodes == null || nodes.Any(n => n == null) || nodes.OfType<ReactionStartNode>().Count() != 1)
+            { error = "Нужно ровно одно «Начало»."; return false; }
             var visited = new HashSet<Node>();
             var active = new HashSet<Node>();
             if (!Visit(nodes.OfType<ReactionStartNode>().Single(), visited, active, actions, out error)) return false;
@@ -41,7 +40,7 @@ namespace Memories.Gameplay.Reactions
                 {
                     var branch = CollectPath(Next(hub, port));
                     if (branch.Overlaps(occupied))
-                    { error = "????? ???? ?????? ???? ????????????: ????? ???????? ????? ??????? ?????????."; return false; }
+                    { error = "Ветки хаба должны быть независимыми: общие действия между ветками запрещены."; return false; }
                     occupied.UnionWith(branch);
                     foreach (var action in branch.OfType<ReactionNode>())
                     {
@@ -52,7 +51,7 @@ namespace Memories.Gameplay.Reactions
                             branchActions.AddRange(nested);
                         }
                         if (branchActions.Any(a => a.Kind == ReactionKind.ChangeLocation || a.Kind == ReactionKind.SwitchEnvironment))
-                        { error = "Переход в другую локацию разместите после объединения веток хаба."; return false; }
+                        { error = "Переход в другую локацию нельзя запускать параллельно другим веткам хаба."; return false; }
                     }
                 }
             }
@@ -72,7 +71,7 @@ namespace Memories.Gameplay.Reactions
             while (pending.Count > 0)
             {
                 var node = pending.Pop();
-                if (node == null || node is ReactionEndNode || !result.Add(node)) continue;
+                if (node == null || !result.Add(node)) continue;
                 foreach (var output in node.Outputs)
                     foreach (var input in output.GetConnections()) pending.Push(input.node);
             }
@@ -87,7 +86,6 @@ namespace Memories.Gameplay.Reactions
             { error = "В графе цикл или ссылка на чужую ноду."; return false; }
             if (!visited.Add(node)) return true;
             active.Add(node);
-            if (node is ReactionEndNode) { active.Remove(node); return true; }
             if (node is ReactionNode action)
             {
                 if (!action.Validate(out error)) return false;
@@ -120,12 +118,12 @@ namespace Memories.Gameplay.Reactions
             foreach (var field in outputs)
             {
                 var output = node.GetOutputPort(field);
+                if (output != null && output.ConnectionCount == 0) continue;
                 var input = output?.ConnectionCount == 1 ? output.GetConnection(0) : null;
                 if (input == null || input.fieldName != "previous" || !input.IsInput || !input.GetConnections().Contains(output))
-                { error = "Подключите каждый выход ко входу следующей ноды."; return false; }
-                if (node is ReactionNode transition && transition.Kind == ReactionKind.ChangeLocation &&
-                    !(input.node is ReactionEndNode))
-                { error = "Переход в локацию должен быть последней реакцией перед концом графа."; return false; }
+                { error = "Выход должен быть свободен или соединён со входом одной следующей ноды."; return false; }
+                if (node is ReactionNode transition && transition.Kind == ReactionKind.ChangeLocation)
+                { error = "Переход в локацию должен быть последней реакцией ветки."; return false; }
                 if (!Visit(input.node, visited, active, actions, out error)) return false;
             }
             active.Remove(node);

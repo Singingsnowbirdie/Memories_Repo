@@ -19,7 +19,6 @@ namespace Memories.Editor
             if (type == typeof(ReactionConditionNode)) return "Условие";
             if (type == typeof(ReactionRandomNode)) return "Случайный выбор";
             if (type == typeof(ReactionHubNode)) return "Хаб";
-            if (type == typeof(ReactionEndNode)) return "Конец";
             return null;
         }
 
@@ -31,12 +30,9 @@ namespace Memories.Editor
             var graph = ScriptableObject.CreateInstance<ReactionGraph>();
             var start = graph.AddNode<ReactionStartNode>();
             var action = graph.AddNode<ReactionNode>();
-            var end = graph.AddNode<ReactionEndNode>();
             start.position = Vector2.zero;
             action.position = new Vector2(300, 0);
-            end.position = new Vector2(700, 0);
             start.GetOutputPort("next").Connect(action.GetInputPort("previous"));
-            action.GetOutputPort("next").Connect(end.GetInputPort("previous"));
             AssetDatabase.CreateAsset(graph, path);
             foreach (var node in graph.nodes) AssetDatabase.AddObjectToAsset(node, graph);
             EditorUtility.SetDirty(graph);
@@ -54,7 +50,7 @@ namespace Memories.Editor
         {
             var hub = (ReactionHubNode)target;
             NodeEditorGUILayout.PortField(new GUIContent("Вход"), hub.GetInputPort("previous"));
-            EditorGUILayout.HelpBox("Ветки запускаются одновременно. Соедините их с общей нодой: она выполнится один раз после завершения всех веток. Действия без ожидания не задерживают ветку.", MessageType.Info);
+            EditorGUILayout.HelpBox("Ветки запускаются одновременно и независимо. Неподключённый выход завершает ветку. Зависимые действия соединяйте последовательно внутри одной ветки.", MessageType.Info);
             EditorGUILayout.Space(8);
             for (int i = 0; i < hub.Branches.Count; i++)
             {
@@ -521,13 +517,6 @@ namespace Memories.Editor
             }
             EditorGUILayout.Space(4);
         }
-    }
-
-    [CustomNodeEditor(typeof(ReactionEndNode))]
-    public sealed class ReactionEndNodeEditor : NodeEditor
-    {
-        public override void OnHeaderGUI() => GUILayout.Label("Конец", NodeEditorResources.styles.nodeHeader, GUILayout.Height(30));
-        public override void OnBodyGUI() => NodeEditorGUILayout.PortField(new GUIContent("Вход"), target.GetInputPort("previous"));
     }
 
     [CustomEditor(typeof(ReactionGraph))]

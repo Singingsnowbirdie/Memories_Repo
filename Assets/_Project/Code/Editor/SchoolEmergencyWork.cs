@@ -99,15 +99,15 @@ internal static class SchoolEmergencyWork
             var depart=Memory("AmbulanceDepartureMemory","AmbulanceDepartureMemory",1);
             var missing=Text("PayphoneMissingCoin","Где бы взять монетку?");
             var reminder=Text("CallAmbulanceReminder","Нужно вызвать “скорую.”");
-            var hint=Graph(R+"Hints/CallAmbulanceReminder.asset");var hintText=Action(hint,ReactionKind.StoryText);Set(hintText,"textGraph",reminder);Link(hint.nodes[0],hintText);Link(hintText,Node<ReactionEndNode>(hint));
+            var hint=Graph(R+"Hints/CallAmbulanceReminder.asset");var hintText=Action(hint,ReactionKind.StoryText);Set(hintText,"textGraph",reminder);Link(hint.nodes[0],hintText);
             var pg=Graph(R+"CallAmbulance.asset");Keys(pg,"arrive");
             var condition=Node<ReactionConditionNode>(pg);Set(condition,"item",coinItem);Link(pg.nodes[0],condition);
             var absent=Action(pg,ReactionKind.StoryText);Set(absent,"textGraph",missing);Link(condition,absent,"ifAbsent");
             var consume=Action(pg,ReactionKind.ConsumeInventoryItem);Set(consume,"item",coinItem);Link(condition,consume,"ifPresent");
             var memory=Action(pg,ReactionKind.Memory);Set(memory,"memoryGraph",call);Set(memory,"memoryId","school_call_ambulance");Set(memory,"memoryStartedReactionKey","arrive");Link(consume,memory);
-            var pe=Node<ReactionEndNode>(pg);Link(absent,pe);Link(memory,pe);
+
             var dg=Graph(R+"EnterAmbulance.asset",true);Keys(dg,"depart");var disable=Action(dg,ReactionKind.ObjectInteractivity);Set(disable,"interactionEnabled",false);Link(dg.nodes[0],disable);
-            var dm=Action(dg,ReactionKind.Memory);Set(dm,"memoryGraph",depart);Set(dm,"memoryId","school_ambulance_departure");Set(dm,"memoryStartedReactionKey","depart");Link(disable,dm);Link(dm,Node<ReactionEndNode>(dg));
+            var dm=Action(dg,ReactionKind.Memory);Set(dm,"memoryGraph",depart);Set(dm,"memoryId","school_ambulance_departure");Set(dm,"memoryStartedReactionKey","depart");Link(disable,dm);
             var pi=phone.AddComponent<ReactionInteractable>();pi.Configure(pg,"Позвонить");Set(pi,"initiallyInteractable",false);Set(pi,"initiallyVisible",false);Track(phone,"school.payphone");
             var pc=phone.AddComponent<BoxCollider>();pc.center=new Vector3(0,0,.15f);pc.size=new Vector3(.5f,.68f,.4f);
             var ci=coin.GetComponent<ReactionInteractable>();Set(ci,"initiallyInteractable",false);Set(ci,"initiallyVisible",false);Set(ci,"prompt","Взять монетку");
@@ -131,7 +131,7 @@ internal static class SchoolEmergencyWork
             {var a=Action(cg,ReactionKind.ConsumeInventoryItem);Set(a,"item",item);Link(previous,a);previous=a;}
             var stopCoach=Action(cg,ReactionKind.ObjectInteractivity);Set(stopCoach,"interactionEnabled",false);Link(previous,stopCoach);
             var fourth=Action(cg,ReactionKind.Memory);Set(fourth,"memoryGraph",Asset<MemoryGraph>(M+"CoachFourthMemory.asset"));Set(fourth,"memoryId","school_coach_fourth_memory");Set(fourth,"memoryStartedReactionKey","reveal_phone");Link(stopCoach,fourth);
-            var timer=Action(cg,ReactionKind.StartHints);Set(timer,"hintId","school.call-ambulance");Set(timer,"hintGraph",hint);Set(timer,"hintTimeout",60f);Set(timer,"repeatHint",true);Link(fourth,timer);Link(timer,end);
+            var timer=Action(cg,ReactionKind.StartHints);Set(timer,"hintId","school.call-ambulance");Set(timer,"hintGraph",hint);Set(timer,"hintTimeout",60f);Set(timer,"repeatHint",true);Link(fourth,timer);
             Keys(cg,"return_supplies","open_corridor","reveal_phone");
             phone.SetActive(false);coin.SetActive(false);car.SetActive(false);doctor.SetActive(false);
             foreach(var g in new[]{cg,pg,dg,hint})if(!g.TryGetSequence(out _,out var error))throw new Exception(g.name+": "+error);

@@ -33,10 +33,7 @@ MonoBehaviour:
     - _fieldName: next
       _node: {fileID: -8260680020868029791}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: previous
-        node: {fileID: 8314671639027844792}
-        reroutePoints: []
+      connections: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -75,36 +72,6 @@ MonoBehaviour:
   hintGraph: {fileID: 0}
   hintTimeout: 180
   repeatHint: 1
---- !u!114 &-8107708987802102520
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ddcb8ac0ad6e48ccb386abec87533848, type: 3}
-  m_Name: "\u041A\u043E\u043D\u0435\u0446"
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionEndNode
-  graph: {fileID: 11400000}
-  position: {x: 2100, y: -75}
-  ports:
-    keys:
-    - previous
-    values:
-    - _fieldName: previous
-      _node: {fileID: -8107708987802102520}
-      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: next
-        node: {fileID: 8314671639027844792}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  previous: {fileID: 0}
 --- !u!114 &-4751371750211635005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -138,10 +105,7 @@ MonoBehaviour:
     - _fieldName: next
       _node: {fileID: -4751371750211635005}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: previous
-        node: {fileID: 8314671639027844792}
-        reroutePoints: []
+      connections: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -244,10 +208,7 @@ MonoBehaviour:
     - _fieldName: next
       _node: {fileID: -2543313504245772746}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: previous
-        node: {fileID: 8314671639027844792}
-        reroutePoints: []
+      connections: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -319,10 +280,7 @@ MonoBehaviour:
     - _fieldName: next
       _node: {fileID: -1829517261137185039}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: previous
-        node: {fileID: 8314671639027844792}
-        reroutePoints: []
+      connections: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -394,10 +352,7 @@ MonoBehaviour:
     - _fieldName: next
       _node: {fileID: -1553311943373815301}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: previous
-        node: {fileID: 8314671639027844792}
-        reroutePoints: []
+      connections: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -469,10 +424,7 @@ MonoBehaviour:
     - _fieldName: next
       _node: {fileID: -1344454481713990880}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: previous
-        node: {fileID: 8314671639027844792}
-        reroutePoints: []
+      connections: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -544,10 +496,7 @@ MonoBehaviour:
     - _fieldName: next
       _node: {fileID: -473625053441552419}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: previous
-        node: {fileID: 8314671639027844792}
-        reroutePoints: []
+      connections: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -619,10 +568,7 @@ MonoBehaviour:
     - _fieldName: next
       _node: {fileID: -184716743723654925}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: previous
-        node: {fileID: 8314671639027844792}
-        reroutePoints: []
+      connections: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -685,7 +631,6 @@ MonoBehaviour:
   - {fileID: 8733297576258220195}
   - {fileID: -1829517261137185039}
   - {fileID: -184716743723654925}
-  - {fileID: -8107708987802102520}
   - {fileID: -4751371750211635005}
   - {fileID: -8260680020868029791}
   - {fileID: -2543313504245772746}
@@ -729,10 +674,7 @@ MonoBehaviour:
     - _fieldName: next
       _node: {fileID: 910000001}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: previous
-        node: {fileID: 8314671639027844792}
-        reroutePoints: []
+      connections: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -879,10 +821,7 @@ MonoBehaviour:
     - _fieldName: next
       _node: {fileID: 1209019670909760100}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: previous
-        node: {fileID: 8314671639027844792}
-        reroutePoints: []
+      connections: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -949,6 +888,7 @@ MonoBehaviour:
     - branch_8
     - branch_9
     - branch_10
+    - branch_11
     values:
     - _fieldName: previous
       _node: {fileID: 3236448338907714496}
@@ -1082,6 +1022,17 @@ MonoBehaviour:
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 1
+    - _fieldName: branch_11
+      _node: {fileID: 3236448338907714496}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: previous
+        node: {fileID: 8314671639027844792}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
   previous: {fileID: 0}
   branches:
   - branch_0
@@ -1095,7 +1046,8 @@ MonoBehaviour:
   - branch_8
   - branch_9
   - branch_10
-  nextPortId: 11
+  - branch_11
+  nextPortId: 12
 --- !u!114 &8314671639027844792
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1119,38 +1071,8 @@ MonoBehaviour:
       _node: {fileID: 8314671639027844792}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
-      - fieldName: next
-        node: {fileID: 910000001}
-        reroutePoints: []
-      - fieldName: next
-        node: {fileID: -1344454481713990880}
-        reroutePoints: []
-      - fieldName: next
-        node: {fileID: -473625053441552419}
-        reroutePoints: []
-      - fieldName: next
-        node: {fileID: 1209019670909760100}
-        reroutePoints: []
-      - fieldName: next
-        node: {fileID: -1553311943373815301}
-        reroutePoints: []
-      - fieldName: next
-        node: {fileID: 8733297576258220195}
-        reroutePoints: []
-      - fieldName: next
-        node: {fileID: -1829517261137185039}
-        reroutePoints: []
-      - fieldName: next
-        node: {fileID: -184716743723654925}
-        reroutePoints: []
-      - fieldName: next
-        node: {fileID: -4751371750211635005}
-        reroutePoints: []
-      - fieldName: next
-        node: {fileID: -8260680020868029791}
-        reroutePoints: []
-      - fieldName: next
-        node: {fileID: -2543313504245772746}
+      - fieldName: branch_11
+        node: {fileID: 3236448338907714496}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -1159,10 +1081,7 @@ MonoBehaviour:
     - _fieldName: next
       _node: {fileID: 8314671639027844792}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: previous
-        node: {fileID: -8107708987802102520}
-        reroutePoints: []
+      connections: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -1234,10 +1153,7 @@ MonoBehaviour:
     - _fieldName: next
       _node: {fileID: 8733297576258220195}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: previous
-        node: {fileID: 8314671639027844792}
-        reroutePoints: []
+      connections: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0

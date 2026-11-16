@@ -58,39 +58,6 @@ MonoBehaviour:
   - branch_0
   - branch_1
   nextPortId: 2
---- !u!114 &-3000964554475803113
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ddcb8ac0ad6e48ccb386abec87533848, type: 3}
-  m_Name: "\u041A\u043E\u043D\u0435\u0446"
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionEndNode
-  graph: {fileID: 11400000}
-  position: {x: 1260, y: -75}
-  ports:
-    keys:
-    - previous
-    values:
-    - _fieldName: previous
-      _node: {fileID: -3000964554475803113}
-      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: next
-        node: {fileID: 5969753831079860786}
-        reroutePoints: []
-      - fieldName: next
-        node: {fileID: 401442510907924824}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  previous: {fileID: 0}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -107,7 +74,6 @@ MonoBehaviour:
   - {fileID: 6797486074632133306}
   - {fileID: 5969753831079860786}
   - {fileID: 401442510907924824}
-  - {fileID: -3000964554475803113}
   - {fileID: -6647886280685089571}
   objectKeys: []
 --- !u!114 &401442510907924824
@@ -143,10 +109,7 @@ MonoBehaviour:
     - _fieldName: next
       _node: {fileID: 401442510907924824}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: previous
-        node: {fileID: -3000964554475803113}
-        reroutePoints: []
+      connections: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -218,10 +181,7 @@ MonoBehaviour:
     - _fieldName: next
       _node: {fileID: 5969753831079860786}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: previous
-        node: {fileID: -3000964554475803113}
-        reroutePoints: []
+      connections: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0

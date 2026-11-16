@@ -1,44 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-7255068601544228749
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ddcb8ac0ad6e48ccb386abec87533848, type: 3}
-  m_Name: "\u041A\u043E\u043D\u0435\u0446"
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionEndNode
-  graph: {fileID: 11400000}
-  position: {x: 1260, y: -75}
-  ports:
-    keys:
-    - previous
-    values:
-    - _fieldName: previous
-      _node: {fileID: -7255068601544228749}
-      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: next
-        node: {fileID: -2374970939807066858}
-        reroutePoints: []
-      - fieldName: next
-        node: {fileID: 5424079238687995393}
-        reroutePoints: []
-      - fieldName: next
-        node: {fileID: 6098548458128567896}
-        reroutePoints: []
-      - fieldName: next
-        node: {fileID: 100283263388506103}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  previous: {fileID: 0}
 --- !u!114 &-6289528571387097160
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -156,10 +117,7 @@ MonoBehaviour:
     - _fieldName: next
       _node: {fileID: -2374970939807066858}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: previous
-        node: {fileID: -7255068601544228749}
-        reroutePoints: []
+      connections: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -246,7 +204,6 @@ MonoBehaviour:
   - {fileID: -2374970939807066858}
   - {fileID: 6098548458128567896}
   - {fileID: 100283263388506103}
-  - {fileID: -7255068601544228749}
   - {fileID: 5424079238687995393}
   - {fileID: -6289528571387097160}
   objectKeys:
@@ -284,10 +241,7 @@ MonoBehaviour:
     - _fieldName: next
       _node: {fileID: 100283263388506103}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: previous
-        node: {fileID: -7255068601544228749}
-        reroutePoints: []
+      connections: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -359,10 +313,7 @@ MonoBehaviour:
     - _fieldName: next
       _node: {fileID: 5424079238687995393}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: previous
-        node: {fileID: -7255068601544228749}
-        reroutePoints: []
+      connections: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -434,10 +385,7 @@ MonoBehaviour:
     - _fieldName: next
       _node: {fileID: 6098548458128567896}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: previous
-        node: {fileID: -7255068601544228749}
-        reroutePoints: []
+      connections: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0

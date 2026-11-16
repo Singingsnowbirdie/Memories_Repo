@@ -226,7 +226,7 @@ namespace Memories.Gameplay.Reactions
                 while (true)
                 {
                     source.Token.ThrowIfCancellationRequested();
-                    if (node is ReactionEndNode)
+                    if (node == null)
                     {
                         if (returns.Count == 0) break;
                         node = returns.Pop();
