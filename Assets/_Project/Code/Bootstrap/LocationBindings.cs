@@ -17,7 +17,7 @@ namespace Memories.Bootstrap
         [SerializeField, InspectorName("Двор: секции забора перед гаражом")] private GameObject[] garageFenceSections;
         [SerializeField, InspectorName("Гараж: соединение со школой")] private Transform schoolConnection;
         [SerializeField, InspectorName("Гараж: ворота")] private OpenGarageGateReaction garageGate;
-        [SerializeField, InspectorName("Школа: вход в спортзал")] private SchoolGymEntranceReaction gymEntrance;
+        [SerializeField, InspectorName("Школа: вход в спортзал")] private Memories.Gameplay.Triggers.SceneTrigger gymEntrance;
 
         [SerializeField] private CustomVariableBank backyardVariables;
         [SerializeField] private Memories.Gameplay.Interaction.QuestItem baseballBat;
@@ -63,7 +63,7 @@ namespace Memories.Bootstrap
         public GameObject[] GarageFenceSections => garageFenceSections;
         public Transform SchoolConnection => Require(schoolConnection, "соединение со школой");
         public OpenGarageGateReaction GarageGate => Require(garageGate, "ворота гаража");
-        public SchoolGymEntranceReaction GymEntrance => Require(gymEntrance, "вход в спортзал");
+        public Memories.Gameplay.Triggers.SceneTrigger GymEntrance => Require(gymEntrance, "вход в спортзал");
 
         private void OnEnable()
         {

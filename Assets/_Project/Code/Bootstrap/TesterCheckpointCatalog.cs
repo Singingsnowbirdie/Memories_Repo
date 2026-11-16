@@ -96,13 +96,20 @@ namespace Memories.Bootstrap
             State("school.payphone", true, false);
             State("school.ambulance", true, true);
             State("school.ambulance_beacons", true, false);
+            State("school.yard_animation", true, false);
             State("school.ambulance_doctor", true, false);
             State("school.classroom_102_door", true, false);
             var door = trackers["school.classroom_102_door"];
             door.GetComponentsInChildren<Transform>(true).Single(t => t.name == "Петля").localRotation *= Quaternion.Euler(0, 100, 0);
-            var entrance = trackers["school.gym_entrance"].GetComponent<SchoolGymEntranceReaction>();
-            entrance.RestoreState("corridor-open");
-            entrance.RestoreForDirectLoad();
+            State("school.environment_corridor", true, false);
+            State("school.environment_locker_rooms", true, false);
+            State("school.garage_corridor", false, false);
+            State("school.garage_opening_left", false, false);
+            State("school.garage_opening_right", false, false);
+            State("school.gym_door_closed", false, false);
+            State("school.gym_door_open", true, false);
+            State("school.interior_animation", true, false);
+            LocationBindings.For(scene).GymEntrance.enabled = false;
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var progress in root.GetComponentsInChildren<SchoolFirstAidProgressReaction>(true))
                     progress.RestoreState(@"{""started"":true,""hints"":""""}");

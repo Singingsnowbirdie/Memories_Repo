@@ -48,6 +48,19 @@ namespace Memories.Gameplay.Reactions
             catch (ArgumentException) { Debug.LogWarning("Не удалось прочитать состояния объектов."); }
         }
 
+        [Serializable] private sealed class SavedPart { public string key = null; public string value = null; }
+        [Serializable] private sealed class SavedParts { public List<SavedPart> parts = new List<SavedPart>(); }
+
+        public string GetSavedPart(string id, string key)
+        {
+            if (!states.TryGetValue(id, out var saved) || string.IsNullOrEmpty(saved)) return null;
+            var parts = JsonUtility.FromJson<SavedParts>(saved)?.parts;
+            if (parts != null)
+                foreach (var part in parts)
+                    if (part.key == key) return part.value;
+            return null;
+        }
+
         public void RestoreScene(Scene scene)
         {
             var identities = new Dictionary<string, ObjectStateTracker>(StringComparer.Ordinal);

@@ -236,8 +236,6 @@ namespace Memories.Bootstrap
                 ValidateConnection(arrival, connection);
                 DisableLocationCameras(scene);
                 BindDoors(scene, LocationScope);
-                if (path == TestLocationLauncher.SchoolPath)
-                    LocationBindings.For(scene).GymEntrance.PrepareArrival();
                 additionalScenes.Add(scene);
                 var controller = LocationScope.Container.Resolve<PlayerMotor>().GetComponent<CharacterController>();
                 float clearance = controller.radius + controller.skinWidth + .05f;

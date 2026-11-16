@@ -32,6 +32,7 @@ Shader "Memories/Night Vegetation"
   float _UseGradient,_Gradient,_Cutoff,_Cull,_NeutralTexture,_TextureLuminanceScale,_CanopyOcclusion;
   float _WindEnabled,_WindMovement,_WindDensity,_WindStrength,_WindMask;
   CBUFFER_END
+  float _MemoriesVegetationWindPaused;
   struct Attributes {float4 positionOS:POSITION;float3 normalOS:NORMAL;float2 uv:TEXCOORD0;UNITY_VERTEX_INPUT_INSTANCE_ID};
   struct Varyings {float4 positionCS:SV_POSITION;float3 positionWS:TEXCOORD0;half3 normalWS:TEXCOORD1;float2 uv:TEXCOORD2;float height:TEXCOORD3;half fog:TEXCOORD4;UNITY_VERTEX_INPUT_INSTANCE_ID UNITY_VERTEX_OUTPUT_STEREO};
   // Same simplex noise and displacement used by the source vegetation shader.
@@ -47,7 +48,9 @@ Shader "Memories/Night Vegetation"
    float3 x=2*frac(p*C.www)-1;float3 h=abs(x)-.5;float3 a=x-floor(x+.5);m*=1.79284291400159-.85373472095314*(a*a+h*h);
    float3 g;g.x=a.x*x0.x+h.x*x0.y;g.yz=a.yz*x12.xz+h.yz*x12.yw;return 130*dot(m,g);
   }
-  float3 Position(Attributes v){float3 p=v.positionOS.xyz;float mask=lerp(p.y,(1-v.uv.y)*5,_WindMask);p.x+=Noise((p.xy+_Time.y*_WindMovement)*_WindDensity)*.05*_WindStrength*mask*_WindEnabled;return p;}
+  float3 Position(Attributes v){float3 p=v.positionOS.xyz;
+   [branch] if (_MemoriesVegetationWindPaused > 0.5 || _WindEnabled < 0.5) return p;
+   float mask=lerp(p.y,(1-v.uv.y)*5,_WindMask);p.x+=Noise((p.xy+_Time.y*_WindMovement)*_WindDensity)*.05*_WindStrength*mask*_WindEnabled;return p;}
   Varyings Vert(Attributes v){Varyings o=(Varyings)0;UNITY_SETUP_INSTANCE_ID(v);UNITY_TRANSFER_INSTANCE_ID(v,o);UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
    VertexPositionInputs p=GetVertexPositionInputs(Position(v));o.positionCS=p.positionCS;o.positionWS=p.positionWS;o.normalWS=TransformObjectToWorldNormal(v.normalOS);o.uv=TRANSFORM_TEX(v.uv,_BaseMap);o.height=v.positionOS.y;o.fog=ComputeFogFactor(p.positionCS.z);return o;}
   half4 Surface(Varyings i){half4 t=SAMPLE_TEXTURE2D(_BaseMap,sampler_BaseMap,i.uv);clip(t.a*_BaseColor.a-_Cutoff);half3 gradient=lerp(_GroundColor.rgb,_TopColor.rgb,clamp((.5+i.height*1.5)*_Gradient,-1,1));half detail=saturate(dot(t.rgb,half3(.2126,.7152,.0722))*_TextureLuminanceScale); half3 tint=lerp(_BaseColor.rgb,saturate(gradient),_UseGradient); half3 original=lerp(t.rgb*_BaseColor.rgb,saturate(gradient),_UseGradient); return half4(lerp(original,detail*tint,_NeutralTexture),1);}

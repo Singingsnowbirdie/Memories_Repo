@@ -5,9 +5,10 @@ using UnityEngine.SceneManagement;
 
 namespace Memories.Gameplay
 {
-    // Создаётся только для дома; также приостанавливает траву шоссе, пока игрок внутри.
+    // Создаётся только для дома; также приостанавливает траву и шейдерный ветер листвы, пока игрок внутри.
     public sealed class HouseAnimationProximity : MonoBehaviour
     {
+        private static readonly int VegetationWindPaused = Shader.PropertyToID("_MemoriesVegetationWindPaused");
         private const float EnterDistance = 15f;
         private const float ExitDistance = 20f;
         private readonly List<FloatingScenery> animations = new List<FloatingScenery>();
@@ -20,6 +21,7 @@ namespace Memories.Gameplay
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void Install()
         {
+            Shader.SetGlobalFloat(VegetationWindPaused, 0);
             SceneManager.sceneLoaded -= OnSceneLoaded;
             SceneManager.sceneLoaded += OnSceneLoaded;
             for (int i = 0; i < SceneManager.sceneCount; i++)
@@ -77,6 +79,7 @@ namespace Memories.Gameplay
                 float distance = nearby ? ExitDistance : EnterDistance;
                 shouldRun = houseBounds.SqrDistance(position) <= distance * distance;
             }
+            Shader.SetGlobalFloat(VegetationWindPaused, insideHouse ? 1 : 0);
             nearby = shouldRun;
             if (highwayGrass == null) highwayGrass = FindFirstObjectByType<HighwayGrassWind>();
             if (highwayGrass != null) highwayGrass.PausedInsideHouse = insideHouse;
@@ -86,6 +89,7 @@ namespace Memories.Gameplay
 
         private void OnDisable()
         {
+            Shader.SetGlobalFloat(VegetationWindPaused, 0);
             if (highwayGrass != null) highwayGrass.PausedInsideHouse = false;
             foreach (var animation in animations)
                 if (animation != null) animation.DistancePaused = false;

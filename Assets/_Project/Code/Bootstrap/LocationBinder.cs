@@ -33,9 +33,6 @@ namespace Memories.Bootstrap
                 foreach (var supplies in root.GetComponentsInChildren<SchoolFirstAidProgressReaction>(true))
                     supplies.Initialize(scope.Container.Resolve<Memories.Gameplay.UI.StoryTextPresenter>(),
                         scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>(), scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<CustomVariableStore>());
-            foreach (var root in scene.GetRootGameObjects())
-                foreach (var entrance in root.GetComponentsInChildren<SchoolGymEntranceReaction>(true))
-                    entrance.Initialize(scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>(), () => transitions.EnterConnectedSceneAsync(scene));
             if (scene.path == TestLocationLauncher.GaragePath)
             {
                 var bindings = LocationBindings.For(scene);
@@ -81,18 +78,37 @@ namespace Memories.Bootstrap
             HintProgressRestoration.Restore(scope.Container.Resolve<QuestInventory>(),
                 scope.Container.Resolve<CustomVariableStore>(), scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
             scope.Container.Resolve<ObjectStateStore>().RestoreScene(scene);
+            bool legacyGymDoorOpen = scope.Container.Resolve<ObjectStateStore>()
+                .GetSavedPart("school.gym_entrance", "school-gym-entry") == "corridor-open";
             // Новые створки восстанавливаются из собственных состояний; старые сохранения — по завершённому звонку.
             bool courtyardWasOpened = scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>().Contains("school_call_ambulance");
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var tracker in root.GetComponentsInChildren<ObjectStateTracker>(true))
                 {
-                    if (tracker.PersistentId == "school.ambulance_beacons" && !tracker.HasRestoredState)
+                    if (isCurrentLocation && !tracker.HasRestoredState &&
+                        (tracker.PersistentId == "school.gym_door_closed" || tracker.PersistentId == "school.gym_door_open"))
+                        tracker.gameObject.SetActive(legacyGymDoorOpen == (tracker.PersistentId == "school.gym_door_open"));
+                    if (tracker.PersistentId.StartsWith("school.environment_") && !tracker.HasRestoredState && isCurrentLocation)
+                        tracker.gameObject.SetActive(true);
+                    // Older school saves have no separate entrance object states.
+                    if ((tracker.PersistentId == "school.garage_corridor" ||
+                         tracker.PersistentId == "school.garage_opening_left" ||
+                         tracker.PersistentId == "school.garage_opening_right") && !tracker.HasRestoredState && isCurrentLocation)
+                        tracker.gameObject.SetActive(false);
+                    if ((tracker.PersistentId == "school.ambulance_beacons" ||
+                         tracker.PersistentId == "school.yard_animation") && !tracker.HasRestoredState)
                         tracker.gameObject.SetActive(courtyardWasOpened);
                     if (tracker.PersistentId.StartsWith("school.courtyard_") && !tracker.HasRestoredState)
                         tracker.gameObject.SetActive(courtyardWasOpened == tracker.PersistentId.EndsWith("_open"));
                     if (tracker.PersistentId == "school.ambulance" && !courtyardWasOpened)
                         tracker.GetComponent<ReactionInteractable>().SetInteractionEnabled(true);
                 }
+            var schoolTrackers = scene.GetRootGameObjects()
+                .SelectMany(root => root.GetComponentsInChildren<ObjectStateTracker>(true)).ToArray();
+            var interiorAnimation = schoolTrackers.FirstOrDefault(tracker => tracker.PersistentId == "school.interior_animation");
+            if (interiorAnimation != null && !interiorAnimation.HasRestoredState)
+                interiorAnimation.gameObject.SetActive(schoolTrackers.Any(tracker =>
+                    tracker.PersistentId == "school.gym_door_open" && tracker.gameObject.activeSelf));
             // До вызова скорой старые сохранения могли скрывать уже ожидающие во дворе машину и врача.
             if (!scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>().Contains("school_call_ambulance"))
                 foreach (var root in scene.GetRootGameObjects())
@@ -125,10 +141,8 @@ namespace Memories.Bootstrap
                             tracker.PersistentId == "garage.silicone_spray" || tracker.PersistentId == "garage.paper_wipes")
                             // Older saves may contain the former disabled interaction state.
                             tracker.GetComponent<ReactionInteractable>().SetInteractionEnabled(true);
-            if (isCurrentLocation)
-                foreach (var root in scene.GetRootGameObjects())
-                    foreach (var entrance in root.GetComponentsInChildren<SchoolGymEntranceReaction>(true))
-                        entrance.RestoreForDirectLoad();
+            if (isCurrentLocation && scene.path == TestLocationLauncher.SchoolPath)
+                LocationBindings.For(scene).GymEntrance.enabled = false;
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var interactable in root.GetComponentsInChildren<ReactionInteractable>(true))
                     interactable.RestoreInitialVisibility(scope.Container.Resolve<QuestInventory>());
