@@ -30,6 +30,10 @@ namespace Memories.Bootstrap
         public void Bind(Scene scene, LocationLifetimeScope scope, bool isCurrentLocation,
             TesterCheckpoint? testerCheckpoint, TesterCheckpointCatalog checkpointCatalog)
         {
+            // Apply authored runtime defaults before binding and restoring saved progress.
+            foreach (var root in scene.GetRootGameObjects())
+                foreach (var tracker in root.GetComponentsInChildren<ObjectStateTracker>(true))
+                    tracker.ApplyInitialVisibility();
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var highway in root.GetComponentsInChildren<Memories.Gameplay.HighwayLights>(true))
                     highway.InitializeControls(scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>());

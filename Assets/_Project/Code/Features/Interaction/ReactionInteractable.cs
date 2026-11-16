@@ -70,7 +70,7 @@ namespace Memories.Gameplay.Interaction
             if (initiallyVisible) return;
             // Показанный объект впоследствии может потерять интерактивность, оставаясь видимым.
             if (GetComponent<ObjectStateTracker>()?.HasRestoredState == true && !IsCollectedPickup(inventory)) return;
-            gameObject.SetActive(interactionEnabled && !IsCollectedPickup(inventory));
+            gameObject.SetActive(false);
         }
         private bool IsCollectedPickup(QuestInventory inventory)
         {

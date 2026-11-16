@@ -11,7 +11,14 @@ namespace Memories.Gameplay.Reactions
     {
         [SerializeField, Tooltip("Unique, permanent save key, for example school.medicine_cabinet. Set explicitly; do not change after releasing saves.")]
         private string persistentId;
+        [SerializeField, Tooltip("Active at the start of a new game. The object stays visible in the editor; saved state takes precedence at runtime.")]
+        private bool initiallyActive = true;
         public string PersistentId => persistentId;
+
+        public void ApplyInitialVisibility()
+        {
+            if (Application.isPlaying && !initiallyActive) gameObject.SetActive(false);
+        }
         public bool HasRestoredState { get; private set; }
         [Serializable] private sealed class Part { public string key; public string value; }
         [Serializable] private sealed class State

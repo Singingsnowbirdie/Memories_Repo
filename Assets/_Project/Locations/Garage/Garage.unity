@@ -2075,7 +2075,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2277101191908393175, guid: 7acce17562482f14d9a916f6d442448c, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2333295883881356058, guid: 7acce17562482f14d9a916f6d442448c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2952,6 +2952,7 @@ MonoBehaviour:
   m_Name:
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: garage.father_under_hood
+  initiallyActive: 0
 --- !u!1 &74618976
 GameObject:
   m_ObjectHideFlags: 0
@@ -3482,7 +3483,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2277101191908393175, guid: 7acce17562482f14d9a916f6d442448c, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2333295883881356058, guid: 7acce17562482f14d9a916f6d442448c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4331,6 +4332,7 @@ MonoBehaviour:
   m_Name:
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: garage.father_at_wheel
+  initiallyActive: 0
 --- !u!1 &80007881
 GameObject:
   m_ObjectHideFlags: 0
@@ -4512,6 +4514,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7104914069798235840, guid: 8c31e1e1c5d3caf4daf4be0ce84f5a2c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 506120749230371531, guid: 8c31e1e1c5d3caf4daf4be0ce84f5a2c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 16.828
@@ -4590,6 +4596,7 @@ MonoBehaviour:
   m_Name:
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: garage.vacuum_hose
+  initiallyActive: 0
 --- !u!1001 &95041459
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8318,6 +8325,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 572652661}
     m_Modifications:
+    - target: {fileID: 919132149155446097, guid: f0b5cfcbd4e314845a74a587547af180, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: -9093581500327080938, guid: f0b5cfcbd4e314845a74a587547af180, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 4
@@ -9274,6 +9285,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+  - component: {fileID: 991910001}
   - component: {fileID: 342514628}
   m_Layer: 0
   m_Name: "\u041F\u0435\u0442\u043B\u044F \u0431\u043E\u043A\u043E\u0432\u043E\u0439
@@ -9282,7 +9294,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &342514628
 Transform:
   m_ObjectHideFlags: 0
@@ -10930,6 +10942,7 @@ MonoBehaviour:
   m_Name:
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: garage.toolbox
+  initiallyActive: 0
 --- !u!1 &389828432
 GameObject:
   m_ObjectHideFlags: 0
@@ -11765,6 +11778,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5104098422038733671, guid: 400ea27121b396a41b11ecf6a4de6b82, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1246078046604546808, guid: 400ea27121b396a41b11ecf6a4de6b82, type: 3}
       propertyPath: m_LocalPosition.x
       value: 19.027
@@ -11847,6 +11864,7 @@ MonoBehaviour:
   m_Name:
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: garage.paper_wipes
+  initiallyActive: 0
 --- !u!1001 &425589895
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22202,6 +22220,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2475949763529322590, guid: 9abc848f207e30c458df91eadc803b52, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2475949763529322590, guid: 9abc848f207e30c458df91eadc803b52, type: 3}
       propertyPath: m_Name
       value: "\u041A\u043E\u043C\u043F\u0440\u0435\u0441\u0441\u043E\u0440"
       objectReference: {fileID: 0}
@@ -22287,6 +22309,7 @@ MonoBehaviour:
   m_Name:
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: garage.compressor_pickup
+  initiallyActive: 0
 --- !u!1001 &907546212
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24972,6 +24995,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1565009746815670037, guid: 5680227a80d74e9499b26ae202c423f0, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1565009746815670037, guid: 5680227a80d74e9499b26ae202c423f0, type: 3}
       propertyPath: m_Name
       value: "\u0411\u0430\u043B\u043B\u043E\u043D\u0447\u0438\u043A \u0441\u0438\u043B\u0438\u043A\u043E\u043D\u0430"
       objectReference: {fileID: 0}
@@ -25049,6 +25076,7 @@ MonoBehaviour:
   m_Name:
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: garage.silicone_spray
+  initiallyActive: 0
 --- !u!1001 &1043949390
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25689,7 +25717,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2277101191908393175, guid: 7acce17562482f14d9a916f6d442448c, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2333295883881356058, guid: 7acce17562482f14d9a916f6d442448c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -26458,6 +26486,7 @@ MonoBehaviour:
   m_Name:
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: garage.father_at_hood
+  initiallyActive: 0
 --- !u!1001 &1075263445
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -29295,6 +29324,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 207351999309502631, guid: 59fca67f14e86744591e9c23cc8adf45, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 207351999309502631, guid: 59fca67f14e86744591e9c23cc8adf45, type: 3}
       propertyPath: m_Name
       value: "\u041D\u0430\u043B\u043E\u0431\u043D\u044B\u0439 \u0444\u043E\u043D\u0430\u0440\u044C"
       objectReference: {fileID: 0}
@@ -29368,6 +29401,7 @@ MonoBehaviour:
   m_Name:
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: garage.headlamp
+  initiallyActive: 0
 --- !u!1001 &1282286595
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -41571,7 +41605,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2277101191908393175, guid: 7acce17562482f14d9a916f6d442448c, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2333295883881356058, guid: 7acce17562482f14d9a916f6d442448c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -42316,7 +42350,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2277101191908393175, guid: 7acce17562482f14d9a916f6d442448c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 991910002}
   m_SourcePrefab: {fileID: 100100000, guid: 7acce17562482f14d9a916f6d442448c, type: 3}
 --- !u!1 &1952435883 stripped
 GameObject:
@@ -47691,6 +47728,34 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 764c4c56818bece4889d231d7db9e81a, type: 3}
+--- !u!114 &991910001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 342514627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: garage.side_door
+  initiallyActive: 0
+--- !u!114 &991910002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1952435883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: garage.father_final
+  initiallyActive: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
