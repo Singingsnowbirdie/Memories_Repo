@@ -2930,9 +2930,13 @@ MonoBehaviour:
     target: {fileID: 1040506262}
   - key: PaperWipes
     target: {fileID: 424232207}
+  - key: final_father
+    target: {fileID: 1952435883}
+  - key: working_father
+    target: {fileID: 72671025}
+  - key: school_connection
+    target: {fileID: 880300001}
   customReactions:
-  - key: garage_final_stage
-    reaction: {fileID: 862074735}
   - key: open_gate_after_final_memory
     reaction: {fileID: 1402361889}
 --- !u!114 &72671029
@@ -21425,7 +21429,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 862074736}
-  - component: {fileID: 862074735}
   m_Layer: 0
   m_Name: "\u041F\u043E\u0441\u043B\u0435\u0434\u043D\u0435\u0435 \u0432\u043E\u0441\u043F\u043E\u043C\u0438\u043D\u0430\u043D\u0438\u0435
     \u2014 \u043E\u0442\u0435\u0446 \u0438 \u0432\u043E\u0440\u043E\u0442\u0430"
@@ -21434,26 +21437,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4
   m_IsActive: 1
---- !u!114 &862074735
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 862074734}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b1de4738015f3df4e97e81250b5437f3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.GarageFinalMemoryReaction
-  workingFather: {fileID: 72671025}
-  finalFather: {fileID: 1952435883}
-  gate: {fileID: 1402361889}
-  deliveredItems:
-  - {fileID: 11400000, guid: 9f6b3d8e562b9714da797ec28347c196, type: 2}
-  - {fileID: 11400000, guid: c7ed4c420ec87db40b9ab8bf9389ff7f, type: 2}
-  - {fileID: 11400000, guid: e21a10a2e25e8454fac67e026d619cf3, type: 2}
-  schoolConnection: {fileID: 880300003}
 --- !u!4 &862074736
 Transform:
   m_ObjectHideFlags: 0
@@ -47992,3 +47975,6 @@ MonoBehaviour:
   garageSideDoor: {fileID: 342514627}
   standingGarageFather: {fileID: 1205745552}
   kneelingGarageFather: {fileID: 79438513}
+  garageVariables: {fileID: 11400000, guid: 481b44f16de901f4d9a22606581568cb, type: 2}
+  workingGarageFather: {fileID: 72671025}
+  finalGarageFather: {fileID: 1952435883}

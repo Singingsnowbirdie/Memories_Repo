@@ -41,6 +41,12 @@ namespace Memories.Bootstrap
         public GameObject StandingGarageFather => Require(standingGarageFather, "стоящий отец в гараже");
         public GameObject KneelingGarageFather => Require(kneelingGarageFather, "отец на коленях в гараже");
 
+        [SerializeField] private CustomVariableBank garageVariables;
+        [SerializeField] private GameObject workingGarageFather, finalGarageFather;
+        public CustomVariableBank GarageVariables => Require(garageVariables, "переменные гаража");
+        public GameObject WorkingGarageFather => Require(workingGarageFather, "работающий отец");
+        public GameObject FinalGarageFather => Require(finalGarageFather, "отец после финального воспоминания");
+
         private static readonly Dictionary<int, HashSet<LocationBindings>> registered = new Dictionary<int, HashSet<LocationBindings>>();
         private int registeredScene;
 

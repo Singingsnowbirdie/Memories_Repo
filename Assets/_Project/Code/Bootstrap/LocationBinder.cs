@@ -159,10 +159,20 @@ namespace Memories.Bootstrap
                 foreach (var reaction in root.GetComponentsInChildren<GarageOpenHoodFatherReaction>(true))
                     reaction.Restore(scope.Container.Resolve<CustomVariableStore>(),
                         scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
-            foreach (var root in scene.GetRootGameObjects())
-                foreach (var reaction in root.GetComponentsInChildren<GarageFinalMemoryReaction>(true))
-                    reaction.Restore(scope.Container.Resolve<QuestInventory>(),
-                        scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
+            if (scene.path == TestLocationLauncher.GaragePath)
+            {
+                var bindings = LocationBindings.For(scene);
+                var variables = scope.Container.Resolve<CustomVariableStore>();
+                bool completed = variables.Get(bindings.GarageVariables, "father_final_items_delivered") ||
+                    scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>().Contains("garage_final_memory");
+                bindings.FinalGarageFather.SetActive(completed);
+                if (completed)
+                {
+                    variables.Set(bindings.GarageVariables, "father_final_items_delivered", true);
+                    bindings.WorkingGarageFather.SetActive(false);
+                    bindings.GarageGate.RestoreOpen();
+                }
+            }
             if (scene.path == TestLocationLauncher.BackyardPath)
             {
                 // Однократное восстановление, включая старые сохранения без флага завершения игры.
