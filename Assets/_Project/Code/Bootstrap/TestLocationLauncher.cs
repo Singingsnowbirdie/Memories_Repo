@@ -8,13 +8,13 @@ namespace Memories.Bootstrap
     public sealed class TestLocationLauncher : MonoBehaviour
     {
         public const string BootstrapPath = "Assets/_Project/Scenes/TestBootstrap.unity";
-        public const string HighwayPath = "Assets/_Project/Locations/Highway/Highway.unity";
-        public const string HousePath = "Assets/_Project/Locations/House/House.unity";
-        public const string BackyardPath = "Assets/_Project/Locations/Backyard/Backyard.unity";
+        public const string HighwayPath = "Assets/_Project/Locations/Highway.unity";
+        public const string HousePath = "Assets/_Project/Locations/House.unity";
+        public const string BackyardPath = "Assets/_Project/Locations/Backyard.unity";
 
-        public const string GaragePath = "Assets/_Project/Locations/Garage/Garage.unity";
+        public const string GaragePath = "Assets/_Project/Locations/Garage.unity";
 
-        public const string SchoolPath = "Assets/_Project/Locations/School/School.unity";
+        public const string SchoolPath = "Assets/_Project/Locations/School.unity";
 
         public enum Location
         {

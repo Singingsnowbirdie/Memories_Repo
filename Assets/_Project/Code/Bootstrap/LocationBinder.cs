@@ -188,7 +188,7 @@ namespace Memories.Bootstrap
                     visibility.Restore(scope.Container.Resolve<CustomVariableStore>());
             if (testerCheckpoint.HasValue) checkpointCatalog.ApplyScene(testerCheckpoint.Value, scene);
             // One-time restoration also covers old saves and tester checkpoints without object snapshots.
-            if (scene.path == "Assets/_Project/Locations/House/House.unity")
+            if (scene.path == "Assets/_Project/Locations/House.unity")
             {
                 bool doorsClosed = scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>()
                     .Contains("house-tv-baseball");
@@ -208,7 +208,7 @@ namespace Memories.Bootstrap
                                 break;
                         }
             }
-            if (scene.path == "Assets/_Project/Locations/House/House.unity")
+            if (scene.path == "Assets/_Project/Locations/House.unity")
             {
                 var trackers = scene.GetRootGameObjects()
                     .SelectMany(root => root.GetComponentsInChildren<ObjectStateTracker>(true)).ToArray();
@@ -219,7 +219,7 @@ namespace Memories.Bootstrap
                     RestoreCourtyardAsync(LocationBindings.For(scene).CourtyardConnection, trackers).Forget();
             }
             // House lighting is initialized once; completion of the highway animation runs its graph.
-            if (scene.path == "Assets/_Project/Locations/House/House.unity")
+            if (scene.path == "Assets/_Project/Locations/House.unity")
                 foreach (var root in scene.GetRootGameObjects())
                     foreach (var group in root.GetComponentsInChildren<LightingGroup>(true))
                     {
@@ -227,13 +227,13 @@ namespace Memories.Bootstrap
                         if (highway != null) highway.RegisterHouse(group);
                         else group.RestoreBrightness(1);
                     }
-            if (scene.path == "Assets/_Project/Locations/Park/Park.unity")
+            if (scene.path == "Assets/_Project/Locations/Park.unity")
                 RestoreParkCinema(LocationBindings.For(scene).ParkCinema,
                     scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<ObjectStateStore>());
-            if (scene.path == "Assets/_Project/Locations/Park/Park.unity")
+            if (scene.path == "Assets/_Project/Locations/Park.unity")
                 RestoreParkMimes(LocationBindings.For(scene).ParkMimes,
                     scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<ObjectStateStore>());
-            if (scene.path == "Assets/_Project/Locations/Park/Park.unity")
+            if (scene.path == "Assets/_Project/Locations/Park.unity")
                 RestoreParkCafe(LocationBindings.For(scene).ParkCafe,
                     scope.Container.Resolve<CustomVariableStore>(), scope.Container.Resolve<QuestInventory>());
             if (scene.path == TestLocationLauncher.GaragePath)

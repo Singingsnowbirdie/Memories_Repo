@@ -30,7 +30,7 @@ namespace Memories.Gameplay
 
         private static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            if (scene.path != "Assets/_Project/Locations/House/House.unity") return;
+            if (scene.path != "Assets/_Project/Locations/House.unity") return;
             foreach (var root in scene.GetRootGameObjects())
                 if (root.GetComponentInChildren<HouseAnimationProximity>(true) != null) return;
 
