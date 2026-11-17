@@ -89,6 +89,11 @@ namespace Memories.Bootstrap
             public Memories.Gameplay.Interaction.ReactionInteractable dockLily, dockBoat;
             public Memories.Gameplay.Interaction.ReactionInteractable gazeboLily;
             public LightingGroup gazeboLighting;
+            public Memories.Gameplay.Interaction.ReactionInteractable exitLily, exitBin;
+            public LightingGroup exitLighting;
+            public Memories.Gameplay.Interaction.QuestItem returnedBouquet;
+            public GameObject discardedBouquet;
+            public OpenParkExitGateReaction exitGate;
         }
         [SerializeField] private ParkCafeBindings parkCafe;
         public ParkCafeBindings ParkCafe => parkCafe;

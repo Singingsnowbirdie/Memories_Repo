@@ -329,14 +329,39 @@ namespace Memories.Bootstrap
             bindings.lighting.RestoreBrightness((arrived || bought) && !complete ? 1 : 0);
             bool gazeboReached = state.Get(bindings.dockVariables, "gazebo_reached") ||
                 memories.Contains("park-boat-conversation");
+            bool exitReached = state.Get(bindings.dockVariables, "exit_reached") ||
+                memories.Contains("park-gazebo-conversation");
+            bool bouquetReturned = state.Get(bindings.dockVariables, "bouquet_returned") ||
+                memories.Contains("park-exit-conversation");
+            bool bouquetDiscarded = state.Get(bindings.dockVariables, "bouquet_discarded") ||
+                (bindings.returnedBouquet != null && inventory.IsConsumed(bindings.returnedBouquet.Id));
+            exitReached |= bouquetReturned || bouquetDiscarded;
+            gazeboReached |= exitReached;
+            if (exitReached) state.Set(bindings.dockVariables, "exit_reached", true);
+            if (bouquetReturned) state.Set(bindings.dockVariables, "bouquet_returned", true);
+            if (bouquetDiscarded) state.Set(bindings.dockVariables, "bouquet_discarded", true);
             if (gazeboReached) state.Set(bindings.dockVariables, "gazebo_reached", true);
             if (bindings.lakeLighting != null) bindings.lakeLighting.RestoreBrightness(complete && !gazeboReached ? 1 : 0);
-            if (bindings.gazeboLighting != null) bindings.gazeboLighting.RestoreBrightness(gazeboReached ? 1 : 0);
+            if (bindings.gazeboLighting != null) bindings.gazeboLighting.RestoreBrightness(gazeboReached && !exitReached ? 1 : 0);
             if (bindings.gazeboLily != null)
             {
-                bindings.gazeboLily.gameObject.SetActive(gazeboReached);
+                bindings.gazeboLily.gameObject.SetActive(gazeboReached && !exitReached);
                 bindings.gazeboLily.SetInteractionEnabled(true);
             }
+            if (bindings.exitLighting != null) bindings.exitLighting.RestoreBrightness(exitReached ? 1 : 0);
+            if (bindings.exitLily != null)
+            {
+                bindings.exitLily.gameObject.SetActive(exitReached && !bouquetReturned && !bouquetDiscarded);
+                bindings.exitLily.SetInteractionEnabled(!bouquetReturned && !bouquetDiscarded);
+            }
+            if (bindings.exitBin != null) bindings.exitBin.SetInteractionEnabled(bouquetReturned && !bouquetDiscarded);
+            if (bindings.returnedBouquet != null)
+            {
+                if (bouquetDiscarded) inventory.TryConsume(bindings.returnedBouquet);
+                else if (bouquetReturned) inventory.TryAdd(bindings.returnedBouquet);
+            }
+            if (bindings.discardedBouquet != null) bindings.discardedBouquet.SetActive(bouquetDiscarded);
+            if (bindings.exitGate != null) bindings.exitGate.RestoreOpen(bouquetDiscarded);
             if (bindings.dockLily != null && bindings.dockBoat != null && bindings.dockVariables != null)
             {
                 bool talked = state.Get(bindings.dockVariables, "lily_spoken");

@@ -1,5 +1,29 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d75983646f649fb8acc996123fa2989, type: 3}
+  m_Name: ParkGazeboMemory
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Memories.MemoryGraph
+  nodes:
+  - {fileID: 7300000000}
+  - {fileID: 7300000001}
+  - {fileID: 7300000002}
+  - {fileID: 7300000003}
+  - {fileID: 7300000004}
+  - {fileID: 7300000005}
+  - {fileID: 7300000006}
+  - {fileID: 7300000007}
+  - {fileID: 7300000008}
+  - {fileID: 7300000009}
+  displayTitle: "\u0420\u0430\u0437\u0433\u043E\u0432\u043E\u0440 \u0432 \u0431\u0435\u0441\u0435\u0434\u043A\u0435"
 --- !u!114 &7300000000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -74,7 +98,10 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   image: {fileID: 2800000, guid: f87fb2739d59400dbe56bbf1011ae169, type: 3}
-  text: "\u0414\u0443\u043c\u0430\u044e, \u043d\u0430\u043c \u043e\u0431\u043e\u0438\u043c \u043d\u0430\u0434\u043e \u0432\u0437\u044f\u0442\u044c \u043f\u0430\u0443\u0437\u0443, \u0447\u0442\u043e\u0431\u044b \u043b\u0443\u0447\u0448\u0435 \u043f\u043e\u043d\u044f\u0442\u044c \u0441\u0435\u0431\u044f."
+  text: "\u0414\u0443\u043C\u0430\u044E, \u043D\u0430\u043C \u043E\u0431\u043E\u0438\u043C
+    \u043D\u0430\u0434\u043E \u0432\u0437\u044F\u0442\u044C \u043F\u0430\u0443\u0437\u0443,
+    \u0447\u0442\u043E\u0431\u044B \u043B\u0443\u0447\u0448\u0435 \u043F\u043E\u043D\u044F\u0442\u044C
+    \u0441\u0435\u0431\u044F."
   transition: 2
   transitionDuration: 0.4
   displayDuration: 7
@@ -122,7 +149,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   image: {fileID: 2800000, guid: e3aedc8b699b42f19cd08a70a2c4a69f, type: 3}
-  text: "\u0422\u044b \u0431\u0440\u043e\u0441\u0430\u0435\u0448\u044c \u043c\u0435\u043d\u044f."
+  text: "\u0422\u044B \u0431\u0440\u043E\u0441\u0430\u0435\u0448\u044C \u043C\u0435\u043D\u044F."
   transition: 2
   transitionDuration: 0.4
   displayDuration: 4
@@ -170,7 +197,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   image: {fileID: 2800000, guid: d1bcf4f8709d4f15bca0bee99750c160, type: 3}
-  text: "\u041c\u044b \u0431\u0435\u0440\u0435\u043c \u043f\u0430\u0443\u0437\u0443."
+  text: "\u041C\u044B \u0431\u0435\u0440\u0435\u043C \u043F\u0430\u0443\u0437\u0443."
   transition: 2
   transitionDuration: 0.4
   displayDuration: 4
@@ -218,7 +245,10 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   image: {fileID: 2800000, guid: 74a1db0319234e379a873c662cbb3b33, type: 3}
-  text: "\u0418\u043c\u0435\u043d\u043d\u043e \u0441\u0435\u0439\u0447\u0430\u0441. \u041a\u043e\u0433\u0434\u0430... \u043c\u043d\u0435... \u0442\u0440\u0443\u0434\u043d\u043e. \u0420\u0430\u0437\u0432\u0435... \u0442\u044b \u043d\u0435 \u0434\u043e\u043b\u0436\u043d\u0430 \u043f\u043e\u0434\u0434\u0435\u0440\u0436\u0430\u0442\u044c \u043c\u0435\u043d\u044f?"
+  text: "\u0418\u043C\u0435\u043D\u043D\u043E \u0441\u0435\u0439\u0447\u0430\u0441.
+    \u041A\u043E\u0433\u0434\u0430... \u043C\u043D\u0435... \u0442\u0440\u0443\u0434\u043D\u043E.
+    \u0420\u0430\u0437\u0432\u0435... \u0442\u044B \u043D\u0435 \u0434\u043E\u043B\u0436\u043D\u0430
+    \u043F\u043E\u0434\u0434\u0435\u0440\u0436\u0430\u0442\u044C \u043C\u0435\u043D\u044F?"
   transition: 2
   transitionDuration: 0.4
   displayDuration: 9
@@ -266,7 +296,7 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   image: {fileID: 2800000, guid: b2baf6f003e047a188d03eaba24b7d59, type: 3}
-  text: "\u042f \u0442\u0435\u0431\u044f \u043f\u043e\u0434\u0434\u0435\u0440\u0436\u0438\u0432\u0430\u043b\u0430!"
+  text: "\u042F \u0442\u0435\u0431\u044F \u043F\u043E\u0434\u0434\u0435\u0440\u0436\u0438\u0432\u0430\u043B\u0430!"
   transition: 2
   transitionDuration: 0.4
   displayDuration: 4
@@ -314,7 +344,8 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   image: {fileID: 2800000, guid: 6e4d7d0335c84b1fa0d37d346e9505d4, type: 3}
-  text: "\u0414\u0430. \u041a\u043e\u0433\u0434\u0430 \u044f \u0431\u044b\u043b \u043d\u0430 \u043a\u043e\u043d\u0435. \u0410 \u0442\u0435\u043f\u0435\u0440\u044c..."
+  text: "\u0414\u0430. \u041A\u043E\u0433\u0434\u0430 \u044F \u0431\u044B\u043B \u043D\u0430
+    \u043A\u043E\u043D\u0435. \u0410 \u0442\u0435\u043F\u0435\u0440\u044C..."
   transition: 2
   transitionDuration: 0.4
   displayDuration: 5
@@ -362,7 +393,10 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   image: {fileID: 2800000, guid: af0f77fcc3a941bc94687e237d3f0c86, type: 3}
-  text: "\u0412\u043e\u0442. \u041e\u0431 \u044d\u0442\u043e\u043c \u044f \u0438 \u0433\u043e\u0432\u043e\u0440\u044e. \u0420\u0430\u043d\u044c\u0448\u0435 \u0442\u044b \u043d\u0438\u043a\u043e\u0433\u0434\u0430 \u0431\u044b \u0442\u0430\u043a \u043d\u0435 \u0441\u043a\u0430\u0437\u0430\u043b!"
+  text: "\u0412\u043E\u0442. \u041E\u0431 \u044D\u0442\u043E\u043C \u044F \u0438
+    \u0433\u043E\u0432\u043E\u0440\u044E. \u0420\u0430\u043D\u044C\u0448\u0435 \u0442\u044B
+    \u043D\u0438\u043A\u043E\u0433\u0434\u0430 \u0431\u044B \u0442\u0430\u043A \u043D\u0435
+    \u0441\u043A\u0430\u0437\u0430\u043B!"
   transition: 2
   transitionDuration: 0.4
   displayDuration: 7
@@ -410,7 +444,8 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   image: {fileID: 2800000, guid: 135a88659f7549b3a59525f14420ad8c, type: 3}
-  text: "\u0420\u0430\u043d\u044c\u0448\u0435, \u0442\u044b \u043d\u0438\u043a\u043e\u0433\u0434\u0430 \u0442\u0430\u043a \u043d\u0435 \u0434\u0435\u043b\u0430\u043b\u0430."
+  text: "\u0420\u0430\u043D\u044C\u0448\u0435, \u0442\u044B \u043D\u0438\u043A\u043E\u0433\u0434\u0430
+    \u0442\u0430\u043A \u043D\u0435 \u0434\u0435\u043B\u0430\u043B\u0430."
   transition: 2
   transitionDuration: 0.4
   displayDuration: 5
@@ -444,27 +479,3 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   previous: {fileID: 0}
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d75983646f649fb8acc996123fa2989, type: 3}
-  m_Name: ParkGazeboMemory
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Memories.MemoryGraph
-  nodes:
-  - {fileID: 7300000000}
-  - {fileID: 7300000001}
-  - {fileID: 7300000002}
-  - {fileID: 7300000003}
-  - {fileID: 7300000004}
-  - {fileID: 7300000005}
-  - {fileID: 7300000006}
-  - {fileID: 7300000007}
-  - {fileID: 7300000008}
-  - {fileID: 7300000009}
-  displayTitle: "\u0420\u0430\u0437\u0433\u043e\u0432\u043e\u0440 \u0432 \u0431\u0435\u0441\u0435\u0434\u043a\u0435"
