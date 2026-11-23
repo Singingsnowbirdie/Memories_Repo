@@ -35,7 +35,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: previous
-        node: {fileID: -3347884620150149796}
+        node: {fileID: 8220282532665003021}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -46,51 +46,6 @@ MonoBehaviour:
   text: "\u041D\u0435 \u043F\u043E\u043C\u043D\u044E, \u043A\u0430\u043A \u044F \u0442\u0443\u0442
     \u043E\u043A\u0430\u0437\u0430\u043B\u0441\u044F."
   duration: 5
---- !u!114 &-3347884620150149796
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1c557d9753244f8b0f08cdac2036908, type: 3}
-  m_Name: "\u0422\u0435\u043A\u0441\u0442"
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Story.StoryTextNode
-  graph: {fileID: 11400000}
-  position: {x: 1810, y: 0}
-  ports:
-    keys:
-    - previous
-    - next
-    values:
-    - _fieldName: previous
-      _node: {fileID: -3347884620150149796}
-      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: next
-        node: {fileID: -6236647771415441216}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: next
-      _node: {fileID: -3347884620150149796}
-      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: previous
-        node: {fileID: 8220282532665003021}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 0
-  previous: {fileID: 0}
-  next: {fileID: 0}
-  text: "\u042F \u0447\u0442\u043E, \u0443\u043C\u0435\u0440?"
-  duration: 3
 --- !u!114 &-2350640789339161914
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -230,7 +185,6 @@ MonoBehaviour:
   - {fileID: 6351407595355708734}
   - {fileID: -2350640789339161914}
   - {fileID: -6236647771415441216}
-  - {fileID: -3347884620150149796}
   - {fileID: 8220282532665003021}
   pauseBetweenFragments: 0
   blockInteractionsForWholeSequence: 0
@@ -292,7 +246,7 @@ MonoBehaviour:
   m_Name: "\u041A\u043E\u043D\u0435\u0446"
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Story.StoryTextEndNode
   graph: {fileID: 11400000}
-  position: {x: 2200, y: 0}
+  position: {x: 1832, y: 8}
   ports:
     keys:
     - previous
@@ -302,7 +256,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: next
-        node: {fileID: -3347884620150149796}
+        node: {fileID: -6236647771415441216}
         reroutePoints: []
       _direction: 0
       _connectionType: 1
