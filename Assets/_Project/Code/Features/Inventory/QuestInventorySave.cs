@@ -17,12 +17,14 @@ namespace Memories.Gameplay.Interaction
 
         private readonly QuestInventory inventory;
         private readonly string key;
+        private readonly bool persist;
         private readonly List<string> unresolved = new List<string>();
 
         public QuestInventorySave(QuestInventory inventory, IEnumerable<QuestItem> catalog, string key = DefaultKey, bool persistProgress = true)
         {
             this.inventory = inventory;
             this.key = key;
+            persist = persistProgress;
             if (!persistProgress) return;
             var itemsById = new Dictionary<string, QuestItem>(StringComparer.Ordinal);
             foreach (var item in catalog)
@@ -52,6 +54,7 @@ namespace Memories.Gameplay.Interaction
 
         private void Save()
         {
+            if (!persist) return;
             var saved = new SavedInventory();
             foreach (var item in inventory.Items) saved.ids.Add(item.Id);
             foreach (var id in inventory.ConsumedIds) saved.consumedIds.Add(id);
@@ -68,5 +71,6 @@ namespace Memories.Gameplay.Interaction
         }
 
         public void Dispose() => inventory.Changed -= Save;
+        public void Flush() => Save();
     }
 }

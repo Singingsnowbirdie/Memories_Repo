@@ -23,6 +23,7 @@ namespace Memories.Bootstrap
         public TesterCheckpointCatalog Catalog { get; private set; }
         public bool IsJumping { get; private set; }
         public bool HasSelection => Selected.HasValue;
+        public TesterCheckpoint? ResumeCheckpoint { get; set; }
 
         public TesterCheckpointRunner(Func<LocationLifetimeScope> getLocationScope, Func<Scene> getCurrentScene,
             Func<bool> canJump, Func<UniTask> prepareSession, Func<string, UniTask> startSession,
@@ -43,7 +44,11 @@ namespace Memories.Bootstrap
                 scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<Gameplay.Memories.MemoryCollection>());
         }
 
-        public Transform GetSpawn(Scene scene) => PlayerSpawnPoint.Find(scene, Selected == TesterCheckpoint.HouseEntrance ? null : Selected);
+        public Transform GetSpawn(Scene scene)
+        {
+            var checkpoint = Selected ?? ResumeCheckpoint;
+            return PlayerSpawnPoint.Find(scene, checkpoint == TesterCheckpoint.HouseEntrance ? null : checkpoint);
+        }
 
         public async UniTask JumpToCheckpointAsync(TesterCheckpoint checkpoint)
         {

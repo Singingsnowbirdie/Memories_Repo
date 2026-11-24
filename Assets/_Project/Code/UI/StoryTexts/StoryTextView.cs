@@ -23,6 +23,8 @@ namespace Memories.Gameplay.UI
         private static bool shownThisSession;
         private bool hasAppeared;
         private static bool immediateReticle;
+        private const string PanelShownKey = "Memories.Progress.StoryPanelShown.v1";
+        private static bool persistAppearance;
         public static bool ReticleUnlocked => shownThisSession || immediateReticle;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
@@ -32,10 +34,18 @@ namespace Memories.Gameplay.UI
             immediateReticle = false;
         }
 
-        public static void BeginSession(bool directLocationStart)
+        public static void BeginSession(bool directLocationStart, bool persistProgress = true)
         {
             ResetSession();
+            persistAppearance = persistProgress;
+            shownThisSession = directLocationStart || (persistProgress && PlayerPrefs.GetInt(PanelShownKey, 0) == 1);
             immediateReticle = directLocationStart;
+        }
+
+        public static void ClearProgress()
+        {
+            PlayerPrefs.DeleteKey(PanelShownKey);
+            PlayerPrefs.Save();
         }
 
         public CancellationToken LifetimeToken => enabledLifetime?.Token ?? new CancellationToken(true);
@@ -104,6 +114,11 @@ namespace Memories.Gameplay.UI
                 return;
             }
             hasAppeared = shownThisSession = true;
+            if (persistAppearance)
+            {
+                PlayerPrefs.SetInt(PanelShownKey, 1);
+                PlayerPrefs.Save();
+            }
             int version = ++animationVersion;
             canvas.enabled = true;
             SetText(text);

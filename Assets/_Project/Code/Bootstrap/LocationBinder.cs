@@ -40,14 +40,6 @@ namespace Memories.Bootstrap
             if (scene.path == TestLocationLauncher.GaragePath)
             {
                 var bindings = LocationBindings.For(scene);
-                bool completed = scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>()
-                    .Contains("garage_first_memory");
-                bindings.StandingGarageFather.SetActive(!completed);
-                bindings.KneelingGarageFather.SetActive(completed);
-            }
-            if (scene.path == TestLocationLauncher.GaragePath)
-            {
-                var bindings = LocationBindings.For(scene);
                 bindings.GarageEntrance.enabled = !isCurrentLocation;
                 bindings.GarageSideDoor.SetActive(isCurrentLocation);
             }
@@ -176,8 +168,11 @@ namespace Memories.Bootstrap
                 bool laterStage = memories.Contains("garage_third_memory") || memories.Contains("garage_final_memory") ||
                     variables.Get(bindings.GarageVariables, "father_hood_items_delivered") ||
                     variables.Get(bindings.GarageVariables, "father_final_items_delivered");
+                // Restore progression after object snapshots so stale visibility cannot bring back the first father.
+                bool firstMemoryCompleted = memories.Contains("garage_first_memory");
+                bindings.StandingGarageFather.SetActive(!firstMemoryCompleted && !completed && !laterStage);
+                bindings.KneelingGarageFather.SetActive(firstMemoryCompleted && !completed && !laterStage);
                 bindings.HoodGarageFather.SetActive(completed && !laterStage);
-                if (completed || laterStage) bindings.KneelingGarageFather.SetActive(false);
             }
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var visibility in root.GetComponentsInChildren<SavedObjectVisibility>(true))
@@ -209,17 +204,42 @@ namespace Memories.Bootstrap
                 var trackers = scene.GetRootGameObjects()
                     .SelectMany(root => root.GetComponentsInChildren<ObjectStateTracker>(true)).ToArray();
                 bool courtyardOpen = scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>()
-                    .Contains("house-tv-baseball") || trackers.Any(t =>
-                        t.PersistentId == "house.courtyard.open" && t.HasRestoredState && t.gameObject.activeSelf);
+                    .Contains("house-tv-baseball");
+                // Keep the exit physically closed until the completed quest's backyard has loaded.
+                // Old saves may have hidden the parent containing the closed door.
+                foreach (var tracker in trackers)
+                    if (tracker.PersistentId == "house.courtyard.open") tracker.gameObject.SetActive(false);
+                    else if (tracker.PersistentId == "house.courtyard.closed" ||
+                        tracker.PersistentId == "house.courtyard.placeholders") tracker.gameObject.SetActive(true);
                 if (courtyardOpen)
                     RestoreCourtyardAsync(LocationBindings.For(scene).CourtyardConnection, trackers).Forget();
             }
             RestoreHighwayLighting(scene, scope.Container.Resolve<CustomVariableStore>());
+            // Direct starts outside the highway skip its sky reveal.
+            if (isCurrentLocation && scene.path != TestLocationLauncher.HighwayPath)
+                UnityEngine.Object.FindFirstObjectByType<Memories.Gameplay.GhostCosmosSky>()?.ShowImmediately();
             // Starting directly in the house (save/checkpoint) skips the highway introduction.
             if (scene.path == TestLocationLauncher.HousePath && isCurrentLocation)
                 foreach (var root in scene.GetRootGameObjects())
                     foreach (var group in root.GetComponentsInChildren<LightingGroup>(true))
                         group.RestoreBrightness(1);
+            // Legacy saves could deactivate the graph binding together with the house light.
+            // Restore the group's brightness first, then keep its graph available for explicit calls.
+            if (scene.path == TestLocationLauncher.HousePath)
+            {
+                var highway = SceneManager.GetSceneByPath(TestLocationLauncher.HighwayPath);
+                bool complete = isCurrentLocation || (highway.IsValid() && highway.isLoaded &&
+                    scope.Container.Resolve<CustomVariableStore>()
+                        .Get(LocationBindings.For(highway).HighwayVariables, "lighting_complete"));
+                foreach (var root in scene.GetRootGameObjects())
+                    foreach (var tracker in root.GetComponentsInChildren<ObjectStateTracker>(true))
+                        if (tracker.PersistentId == "house.lighting" &&
+                            tracker.TryGetComponent<LightingGroup>(out var lighting))
+                        {
+                            lighting.RestoreBrightness(complete ? 1 : 0);
+                            tracker.gameObject.SetActive(true);
+                        }
+            }
             if (scene.path == "Assets/_Project/Locations/Park.unity")
                 RestoreParkCinema(LocationBindings.For(scene).ParkCinema,
                     scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<ObjectStateStore>());
@@ -297,6 +317,7 @@ namespace Memories.Bootstrap
                 if (tracker == null) continue;
                 if (tracker.PersistentId == "house.courtyard.open") tracker.gameObject.SetActive(true);
                 else if (tracker.PersistentId == "house.courtyard.closed" ||
+                    tracker.PersistentId == "house.courtyard.placeholders" ||
                     tracker.PersistentId.StartsWith("house.courtyard.cover.", System.StringComparison.Ordinal))
                     tracker.gameObject.SetActive(false);
             }
@@ -422,7 +443,6 @@ namespace Memories.Bootstrap
                 foreach (var root in scene.GetRootGameObjects())
                     foreach (var group in root.GetComponentsInChildren<LightingGroup>(true))
                         group.RestoreBrightness(complete ? 1 : 0);
-                bindings.HighwayIntro.enabled = !complete;
                 var sky = UnityEngine.Object.FindFirstObjectByType<Memories.Gameplay.GhostCosmosSky>();
                 if (sky != null)
                 {

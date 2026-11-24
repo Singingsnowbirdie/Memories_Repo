@@ -24,7 +24,8 @@ namespace Memories.Gameplay
         private readonly List<Camera> cameras = new List<Camera>();
         private Material instance;
         private Color tint;
-        private bool sequenceActive, revealing;
+        private bool sequenceActive = true;
+        private bool revealing;
         private float revealElapsed;
         private float starIntensity;
         private float blueIntensity;
@@ -39,6 +40,8 @@ namespace Memories.Gameplay
             starIntensity = instance.GetFloat("_D2I");
             blueIntensity = instance.GetFloat("_BlueIntensity");
             redIntensity = instance.GetFloat("_RedIntensity");
+            // Prepare the private material before any camera can render it.
+            Apply();
             asteroidBelt = new AsteroidBelt(asteroidMeshes, asteroidMaterial, asteroidCount);
             SceneManager.sceneLoaded += OnSceneLoaded;
             SceneManager.activeSceneChanged += OnActiveSceneChanged;
@@ -99,7 +102,9 @@ namespace Memories.Gameplay
             instance.SetFloat("_D2I", starIntensity * stars);
             instance.SetFloat("_BlueIntensity", blueIntensity * nebula);
             instance.SetFloat("_RedIntensity", redIntensity * nebula);
-            if (SceneManager.GetActiveScene().name == "Highway")
+            // Additive loading can render the highway while Bootstrap is still active.
+            // Its ambient light must already follow the hidden/revealing sky state.
+            if (sequenceActive || SceneManager.GetActiveScene().name == "Highway")
             {
                 float ambient = !sequenceActive ? 1 : Mathf.SmoothStep(0, 1,
                     Mathf.Clamp01(revealElapsed / (starsDuration + Mathf.Max(0.1f, nebulaFadeDuration))));

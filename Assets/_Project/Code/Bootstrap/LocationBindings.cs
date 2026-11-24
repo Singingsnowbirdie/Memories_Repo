@@ -11,9 +11,9 @@ namespace Memories.Bootstrap
     public sealed class LocationBindings : MonoBehaviour
     {
         [SerializeField] private CustomVariableBank highwayVariables;
-        [SerializeField] private Memories.Gameplay.Triggers.SceneTrigger highwayIntro;
+        [SerializeField] private ReactionGraphBinding highwayIntro;
         public CustomVariableBank HighwayVariables => Require(highwayVariables, "переменные вступления шоссе");
-        public Memories.Gameplay.Triggers.SceneTrigger HighwayIntro => Require(highwayIntro, "вступление шоссе");
+        public ReactionGraphBinding HighwayIntro => Require(highwayIntro, "вступление шоссе");
         [SerializeField, InspectorName("Дом: загрузка двора")] private Transform courtyardConnection;
         [SerializeField, InspectorName("Двор: вход")] private Memories.Gameplay.Triggers.SceneTrigger backyardEntrance;
         [SerializeField, InspectorName("Двор: освещение входа")] private Transform backyardEntranceLighting;

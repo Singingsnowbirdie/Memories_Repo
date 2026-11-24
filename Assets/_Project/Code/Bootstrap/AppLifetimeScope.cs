@@ -26,7 +26,7 @@ namespace Memories.Bootstrap
         {
             get
             {
-                if (IsTesterSession) return false;
+                if (IsTesterSession) return true;
 #if UNITY_EDITOR
                 return !UseOpenLocationForEditorPlay;
 #else

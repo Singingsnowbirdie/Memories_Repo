@@ -28,6 +28,7 @@ namespace Memories.Bootstrap
         private readonly TesterCheckpointRunner checkpoints;
         private readonly LocationProgressStore progress = new LocationProgressStore();
         private bool trackHouseCheckpoint;
+        private bool saveLocationProgress;
         private Transform houseEntrance;
         private Vector3 previousEntrancePosition;
 
@@ -37,10 +38,13 @@ namespace Memories.Bootstrap
 #if UNITY_EDITOR
             useProgress &= !applicationScope.UseOpenLocationForEditorPlay;
 #endif
-            bool resumeHouse = useProgress && progress.HasReachedHouse;
-            trackHouseCheckpoint = useProgress && !resumeHouse;
-            return StartAsync(resumeHouse ? TestLocationLauncher.HousePath : scenePath, cancellationToken,
-                resumeHouse);
+            string savedScene = useProgress ? progress.ScenePath : string.Empty;
+            bool resume = !string.IsNullOrEmpty(savedScene) && Application.CanStreamedLevelBeLoaded(savedScene);
+            saveLocationProgress = useProgress;
+            checkpoints.ResumeCheckpoint = resume ? progress.Checkpoint : null;
+            trackHouseCheckpoint = useProgress && !resume;
+            return StartAsync(resume ? savedScene : scenePath, cancellationToken,
+                resume && savedScene == TestLocationLauncher.HousePath, resume);
         }
 
         public void UpdateHouseCheckpoint()
@@ -72,15 +76,29 @@ namespace Memories.Bootstrap
         public bool IsRunning => LocationScope != null;
         public bool IsTransitioning => busy || checkpoints.IsJumping;
 
-        public UniTask JumpToCheckpointAsync(TesterCheckpoint checkpoint) => checkpoints.JumpToCheckpointAsync(checkpoint);
+        public async UniTask JumpToCheckpointAsync(TesterCheckpoint checkpoint)
+        {
+            await checkpoints.JumpToCheckpointAsync(checkpoint);
+            SessionScope.Container.Resolve<QuestInventorySave>().Flush();
+            SessionScope.Container.Resolve<ObjectStateStore>().Flush();
+            progress.SaveCheckpoint(locationScene.path, checkpoint);
+            saveLocationProgress = true;
+        }
 
         private async UniTask PrepareTesterSessionAsync()
         {
+            saveLocationProgress = false;
             busy = true;
             try { await CleanupAsync(); }
             finally { busy = false; }
             applicationScope.IsTesterSession = true;
             trackHouseCheckpoint = false;
+            progress.Reset();
+            QuestInventorySave.Clear();
+            CustomVariableStore.Clear();
+            RevealPhotoReaction.ResetProgress();
+            Memories.Gameplay.Memories.MemoryCollection.Clear();
+            new ObjectStateStore().Reset();
         }
         public bool RestartGame()
         {
@@ -95,6 +113,7 @@ namespace Memories.Bootstrap
             if (applicationScope.PersistProgress)
             {
                 progress.Reset();
+                Memories.Gameplay.UI.StoryTextView.ClearProgress();
                 QuestInventorySave.Clear();
                 CustomVariableStore.Clear();
                 RevealPhotoReaction.ResetProgress();
@@ -137,7 +156,7 @@ namespace Memories.Bootstrap
         }
 
         public async UniTask StartAsync(string scenePath, CancellationToken cancellationToken = default,
-            bool resumeHouse = false)
+            bool resumeHouse = false, bool resumeLocation = false)
         {
             if (disposed) throw new ObjectDisposedException(nameof(GameSession));
             if (busy || SessionScope != null) throw new InvalidOperationException("A session is already running or transitioning.");
@@ -156,11 +175,18 @@ namespace Memories.Bootstrap
             try
             {
                 // Контрольные точки обходят вступление: прицел доступен сразу, без ожидания сюжетного текста.
-                Memories.Gameplay.UI.StoryTextView.BeginSession(useOpenScene || checkpoints.HasSelection);
+                Memories.Gameplay.UI.StoryTextView.BeginSession(
+                    useOpenScene || checkpoints.HasSelection || resumeLocation || scenePath != TestLocationLauncher.HighwayPath,
+                    applicationScope.PersistProgress);
                 SessionScope = applicationScope.CreateChild<SessionLifetimeScope>(childScopeName: "SessionLifetimeScope");
                 checkpoints.Seed(SessionScope);
+                // The completed TV memory closes the front door. Resume inside it,
+                // even when an older save still names the entrance checkpoint.
+                if (resumeLocation && scenePath == TestLocationLauncher.HousePath &&
+                    SessionScope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>().Contains("house-tv-baseball"))
+                    checkpoints.ResumeCheckpoint = TesterCheckpoint.HouseMemoryComplete;
                 await transitions.LoadInitialScenesAsync(scenePath, useOpenScene,
-                    resumeHouse || checkpoints.HasSelection ? Array.Empty<string>() : applicationScope.AdditionalLocationScenes,
+                    resumeLocation || resumeHouse || checkpoints.HasSelection ? Array.Empty<string>() : applicationScope.AdditionalLocationScenes,
                     cancellation.Token);
 
                 if (!checkpoints.HasSelection) applicationScope.TestLauncher?.Prepare(locationScene);
@@ -181,6 +207,13 @@ namespace Memories.Bootstrap
                 transitions.ActivateCurrentScene();
                 busy = false;
                 await transitions.RestoreBackyardGarageAsync();
+                if (locationScene.path == TestLocationLauncher.HighwayPath)
+                {
+                    var bindings = LocationBindings.For(locationScene);
+                    if (!SessionScope.Container.Resolve<CustomVariableStore>().Get(bindings.HighwayVariables, "lighting_complete") &&
+                        !LocationScope.Container.Resolve<ReactionManager>().TryRun(bindings.HighwayIntro))
+                        throw new InvalidOperationException("Не удалось запустить вступительный граф шоссе.");
+                }
             }
             catch
             {
@@ -198,6 +231,7 @@ namespace Memories.Bootstrap
         public async UniTask SwitchEnvironmentAsync(string scenePath)
         {
             await transitions.SwitchEnvironmentAsync(scenePath);
+            SaveCurrentLocation();
             await transitions.RestoreBackyardGarageAsync();
         }
 
@@ -223,7 +257,18 @@ namespace Memories.Bootstrap
             boundary.AddComponent<BoxCollider>().size = new Vector3(10, 5, 1);
         }
 
-        public UniTask ChangeLocationAsync(string scenePath) => transitions.ChangeLocationAsync(scenePath);
+        public async UniTask ChangeLocationAsync(string scenePath)
+        {
+            await transitions.ChangeLocationAsync(scenePath);
+            SaveCurrentLocation();
+        }
+
+        private void SaveCurrentLocation()
+        {
+            if (!saveLocationProgress || !applicationScope.PersistProgress || disposed || !IsRunning) return;
+            progress.SaveLocation(locationScene.path);
+            trackHouseCheckpoint = false;
+        }
 
         public async UniTask EndAsync()
         {
