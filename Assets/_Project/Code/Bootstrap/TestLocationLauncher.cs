@@ -49,13 +49,11 @@ namespace Memories.Bootstrap
             }
             else if (location == Location.House)
             {
-                var spawn = new GameObject("PlayerSpawn");
-                SceneManager.MoveGameObjectToScene(spawn, scene);
-                spawn.transform.position = new Vector3(0, 0.05f, 305);
+                var spawn = PlayerSpawnPoint.Find(scene);
                 var view = new GameObject("Тестовая камера дома");
                 SceneManager.MoveGameObjectToScene(view, scene);
                 view.tag = "MainCamera";
-                view.transform.position = spawn.transform.position + Vector3.up * 1.65f;
+                view.transform.position = spawn.position + Vector3.up * 1.65f;
                 var camera = view.AddComponent<Camera>();
                 camera.clearFlags = CameraClearFlags.SolidColor;
                 camera.backgroundColor = Color.black;

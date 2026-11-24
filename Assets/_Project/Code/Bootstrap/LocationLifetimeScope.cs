@@ -16,6 +16,7 @@ namespace Memories.Bootstrap
     {
         // Игровые сервисы на время сессии находятся в Bootstrap независимо от подгружаемого окружения.
         public Scene InitialScene { get; set; }
+        public Transform SpawnPoint { get; set; }
         protected override void Configure(IContainerBuilder builder)
         {
             builder.Register<LocationContext>(Lifetime.Singleton);

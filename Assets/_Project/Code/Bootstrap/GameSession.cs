@@ -107,7 +107,7 @@ namespace Memories.Bootstrap
         {
             if (disposed || busy || !IsRunning) return false;
             var player = LocationScope.Container.Resolve<PlayerMotor>();
-            var spawn = FindMarker(locationScene, "PlayerSpawn");
+            var spawn = locationScene == LocationScope.InitialScene ? LocationScope.SpawnPoint : PlayerSpawnPoint.Find(locationScene);
             var position = spawn != null ? spawn.position : player.InitialPosition;
             float yaw = spawn != null ? spawn.eulerAngles.y : player.InitialYaw;
             // Дом и шоссе используют одного игрока до следующего перехода через дверной проём.
@@ -115,8 +115,9 @@ namespace Memories.Bootstrap
             if (house.isLoaded && (locationScene == house ||
                 (locationScene.path == TestLocationLauncher.HighwayPath && player.transform.position.z >= 300f)))
             {
-                position = new Vector3(0, .05f, 305f);
-                yaw = 0;
+                var houseSpawn = house == LocationScope.InitialScene ? LocationScope.SpawnPoint : PlayerSpawnPoint.Find(house);
+                position = houseSpawn.position;
+                yaw = houseSpawn.eulerAngles.y;
             }
             player.Teleport(position, yaw);
             LocationScope.Container.Resolve<PlayerMovementModel>().ResetMotion(yaw);
@@ -164,12 +165,13 @@ namespace Memories.Bootstrap
 
                 if (!checkpoints.HasSelection) applicationScope.TestLauncher?.Prepare(locationScene);
                 if (resumeHouse || (checkpoints.HasSelection && scenePath == TestLocationLauncher.HousePath)) PrepareHouseStart(locationScene);
-                checkpoints.PrepareSpawn(locationScene);
+
                 var root = new GameObject("Persistent gameplay");
                 root.SetActive(false);
                 root.transform.SetParent(SessionScope.transform, false);
                 LocationScope = root.AddComponent<LocationLifetimeScope>();
                 LocationScope.InitialScene = locationScene;
+                LocationScope.SpawnPoint = checkpoints.GetSpawn(locationScene);
                 LocationScope.parentReference.Object = SessionScope;
                 root.SetActive(true);
                 foreach (var graphBinding in applicationScope.GetComponentsInChildren<ReactionGraphBinding>(true))
@@ -203,13 +205,11 @@ namespace Memories.Bootstrap
 
         private static void PrepareHouseStart(Scene scene)
         {
-            var spawn = new GameObject("PlayerSpawn");
-            SceneManager.MoveGameObjectToScene(spawn, scene);
-            spawn.transform.position = new Vector3(0, .05f, 305);
+            var spawn = PlayerSpawnPoint.Find(scene);
             var view = new GameObject("House start camera");
             SceneManager.MoveGameObjectToScene(view, scene);
             view.tag = "MainCamera";
-            view.transform.position = spawn.transform.position + Vector3.up * 1.65f;
+            view.transform.position = spawn.position + Vector3.up * 1.65f;
             var camera = view.AddComponent<Camera>();
             camera.clearFlags = CameraClearFlags.SolidColor;
             camera.backgroundColor = Color.black;

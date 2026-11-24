@@ -9,16 +9,10 @@ namespace Memories.Bootstrap
         public static PlayerMotor Create(LocationLifetimeScope scope, PlayerMovementSettings settings)
         {
             settings.Validate();
-            Transform spawn = null;
+            Transform spawn = scope.SpawnPoint;
             Camera viewCamera = null;
             foreach (var root in scope.InitialScene.GetRootGameObjects())
             {
-                foreach (var candidate in root.GetComponentsInChildren<Transform>(true))
-                    if (candidate.name == "PlayerSpawn")
-                    {
-                        if (spawn != null) throw new InvalidOperationException("Multiple PlayerSpawn points in location.");
-                        spawn = candidate;
-                    }
                 foreach (var candidate in root.GetComponentsInChildren<Camera>())
                     if (candidate.CompareTag("MainCamera"))
                     {

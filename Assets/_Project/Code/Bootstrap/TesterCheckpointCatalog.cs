@@ -8,21 +8,23 @@ using UnityEngine.SceneManagement;
 
 namespace Memories.Bootstrap
 {
-    public enum TesterCheckpoint { HouseEntrance, HouseMemoryComplete, BackyardMemoryComplete, GarageCorridorOpen, SchoolCourtyardOpen }
+    public enum TesterCheckpoint { HouseEntrance, HouseMemoryComplete, BackyardMemoryComplete, GarageCorridorOpen, SchoolCourtyardOpen, ParkExitOpen }
 
     public sealed class TesterCheckpointCatalog : ScriptableObject
     {
         public CustomVariableBank houseVariables, backyardVariables;
         public MemoryGraph houseMemory, backyardFirstMemory, backyardSecondMemory;
         public QuestItem[] houseItems, backyardItems;
-        public Vector3 houseMemoryPosition;
-        public float houseMemoryYaw;
         public CustomVariableBank garageVariables;
         public MemoryGraph[] garageMemories;
         public QuestItem[] garageItems;
         public CustomVariableBank schoolVariables;
         public MemoryGraph[] schoolMemories;
         public QuestItem[] schoolItems;
+        public CustomVariableBank parkVariables, parkBouquetVariables, parkMimesVariables, parkCafeVariables, parkDockVariables;
+        public QuestItem[] parkConsumedItems;
+        public QuestItem parkReceipt;
+        public MemoryGraph[] parkMemories;
 
         public void Seed(TesterCheckpoint checkpoint, CustomVariableStore variables, QuestInventory inventory, MemoryCollection memories)
         {
@@ -34,7 +36,7 @@ namespace Memories.Bootstrap
                 variables.Set(houseVariables, id, true);
             foreach (var item in houseItems) inventory.RestoreConsumed(item.Id);
             memories.Collect("house-tv-baseball", houseMemory);
-            if (checkpoint != TesterCheckpoint.BackyardMemoryComplete && checkpoint != TesterCheckpoint.GarageCorridorOpen && checkpoint != TesterCheckpoint.SchoolCourtyardOpen) return;
+            if (checkpoint != TesterCheckpoint.BackyardMemoryComplete && checkpoint != TesterCheckpoint.GarageCorridorOpen && checkpoint != TesterCheckpoint.SchoolCourtyardOpen && checkpoint != TesterCheckpoint.ParkExitOpen) return;
             foreach (string id in new [] {"ben_alex_inscription_read", "ben_home_first_interaction", "optional_interactives_memory_started",
                 "fishing_rods_inspected", "hose_inspected", "bicycle_inspected", "waterguns_inspected", "briefcase_inspected", "wheelbarrow_inspected",
                 "baseball_equipment_revealed", "ben_received_baseball", "ben_received_cap", "baseball_bat_found", "baseball_ball_found", "baseball_cap_found"})
@@ -44,7 +46,7 @@ namespace Memories.Bootstrap
             memories.Collect("backyard_optional_memory", backyardFirstMemory);
             memories.Collect("backyard_baseball_second_memory", backyardSecondMemory);
             variables.Set(backyardVariables, "baseball_game_completed", true);
-            if (checkpoint != TesterCheckpoint.GarageCorridorOpen && checkpoint != TesterCheckpoint.SchoolCourtyardOpen) return;
+            if (checkpoint != TesterCheckpoint.GarageCorridorOpen && checkpoint != TesterCheckpoint.SchoolCourtyardOpen && checkpoint != TesterCheckpoint.ParkExitOpen) return;
             foreach (string id in new[] { "father_compressor_requested", "father_hood_items_requested", "father_hood_items_delivered",
                 "father_compressor_delivered", "father_final_items_delivered", "compressor_found", "headlamp_found", "toolbox_found",
                 "vacuum_hose_found", "silicone_spray_found", "paper_wipes_found" })
@@ -52,7 +54,7 @@ namespace Memories.Bootstrap
             foreach (var item in garageItems) inventory.RestoreConsumed(item.Id);
             string[] memoryIds = { "garage_first_memory", "garage_second_memory", "garage_third_memory", "garage_final_memory" };
             for (int i = 0; i < memoryIds.Length; i++) memories.Collect(memoryIds[i], garageMemories[i]);
-            if (checkpoint != TesterCheckpoint.SchoolCourtyardOpen) return;
+            if (checkpoint != TesterCheckpoint.SchoolCourtyardOpen && checkpoint != TesterCheckpoint.ParkExitOpen) return;
             variables.Set(schoolVariables, "533df6a400b34918b24179ce48127816", true);
             foreach (string id in new[] { "first_aid_kit_found", "ice_pack_found", "teacher_ruler_found", "tissue_box_found", "vending_coin_found",
                 "school_supplies_returned", "school_ambulance_called" })
@@ -60,6 +62,19 @@ namespace Memories.Bootstrap
             foreach (var item in schoolItems) inventory.RestoreConsumed(item.Id);
             string[] schoolIds = { "school_commentator_memory", "school_giles_second_memory", "school_coach_third_memory", "school_coach_fourth_memory", "school_call_ambulance" };
             for (int i = 0; i < schoolIds.Length; i++) memories.Collect(schoolIds[i], schoolMemories[i]);
+            if (checkpoint != TesterCheckpoint.ParkExitOpen) return;
+            foreach (string id in new[] { "a8f963194df740f4b6015ef9d0b71c22", "cinema_tickets_bought", "cinema_completed", "paired_pendant_bought", "mimes_completed" })
+                variables.Set(parkVariables, id, true);
+            variables.Set(parkBouquetVariables, "17ac1f87d5534776ac8743fb8e0aa992", true);
+            variables.Set(parkMimesVariables, "mimes_purchase_unlocked", true);
+            foreach (string id in new[] { "unlocked", "ordered", "coffee_read", "napkin_read", "completed" })
+                variables.Set(parkCafeVariables, id, true);
+            foreach (string id in new[] { "lily_spoken", "gazebo_reached", "exit_reached", "bouquet_returned", "bouquet_discarded" })
+                variables.Set(parkDockVariables, id, true);
+            foreach (var item in parkConsumedItems) inventory.RestoreConsumed(item.Id);
+            inventory.TryAdd(parkReceipt);
+            string[] parkIds = { "park-boat-conversation", "park-gazebo-conversation", "park-exit-conversation" };
+            for (int i = 0; i < parkIds.Length; i++) memories.Collect(parkIds[i], parkMemories[i]);
         }
 
         public void ApplyScene(TesterCheckpoint checkpoint, Scene scene)

@@ -43,34 +43,7 @@ namespace Memories.Bootstrap
                 scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<Gameplay.Memories.MemoryCollection>());
         }
 
-        public void PrepareSpawn(Scene scene)
-        {
-            if (Selected == TesterCheckpoint.HouseMemoryComplete)
-            {
-                var spawn = FindMarker(scene, "PlayerSpawn");
-                spawn.SetPositionAndRotation(Catalog.houseMemoryPosition, Quaternion.Euler(0, Catalog.houseMemoryYaw, 0));
-            }
-            else if (Selected == TesterCheckpoint.BackyardMemoryComplete)
-            {
-                var entrance = FindMarker(scene, "Вход из дома");
-                FindMarker(scene, "PlayerSpawn").SetPositionAndRotation(
-                    entrance.TransformPoint(new Vector3(0, .05f, 16.84f)), entrance.rotation);
-            }
-            else if (Selected == TesterCheckpoint.SchoolCourtyardOpen)
-            {
-                var corridor = FindMarker(scene, "Школьный коридор");
-                var spawn = FindMarker(scene, "PlayerSpawn");
-                var position = corridor.TransformPoint(new Vector3(0, .05f, 33.8f));
-
-                spawn.SetPositionAndRotation(position, corridor.rotation);
-            }
-            else if (Selected == TesterCheckpoint.GarageCorridorOpen)
-            {
-                var exit = LocationBindings.For(scene).SchoolConnection;
-                FindMarker(scene, "PlayerSpawn").SetPositionAndRotation(
-                    exit.position - exit.forward * 1.5f + Vector3.up * .05f, exit.rotation);
-            }
-        }
+        public Transform GetSpawn(Scene scene) => PlayerSpawnPoint.Find(scene, Selected == TesterCheckpoint.HouseEntrance ? null : Selected);
 
         public async UniTask JumpToCheckpointAsync(TesterCheckpoint checkpoint)
         {
@@ -91,7 +64,8 @@ namespace Memories.Bootstrap
                 await prepareSession();
                 Selected = checkpoint;
                 Catalog = catalog;
-                string checkpointScene = checkpoint == TesterCheckpoint.SchoolCourtyardOpen ? TestLocationLauncher.SchoolPath :
+                string checkpointScene = checkpoint == TesterCheckpoint.ParkExitOpen ? "Assets/_Project/Locations/Park.unity" :
+                    checkpoint == TesterCheckpoint.SchoolCourtyardOpen ? TestLocationLauncher.SchoolPath :
                     checkpoint == TesterCheckpoint.GarageCorridorOpen ? TestLocationLauncher.GaragePath :
                     checkpoint == TesterCheckpoint.BackyardMemoryComplete ? TestLocationLauncher.BackyardPath : TestLocationLauncher.HousePath;
                 await startSession(checkpointScene);

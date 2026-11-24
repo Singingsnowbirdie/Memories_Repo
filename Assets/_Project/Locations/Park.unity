@@ -128,6 +128,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 201}
+  - component: {fileID: 202}
   m_Layer: 0
   m_Name: PlayerSpawn
   m_TagString: Untagged
@@ -150,6 +151,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7391e4269c8f37c439f340900ff9d153, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Bootstrap::Memories.Bootstrap.PlayerSpawnPoint
+  locationStart: 1
+  checkpoint: 0
 --- !u!1 &300
 GameObject:
   m_ObjectHideFlags: 0
@@ -124717,6 +124732,10 @@ MonoBehaviour:
   - 1.3
   - 15
   initialBrightness: 0
+  affectBaseColor: 1
+  glowMaterial: {fileID: 0}
+  overrideEmission: 0
+  emission: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &750486533
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -139737,6 +139756,10 @@ MonoBehaviour:
   - 15
   - 15
   initialBrightness: 0
+  affectBaseColor: 1
+  glowMaterial: {fileID: 0}
+  overrideEmission: 0
+  emission: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &837291122
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -144680,6 +144703,10 @@ MonoBehaviour:
   - 15
   - 15
   initialBrightness: 1
+  affectBaseColor: 1
+  glowMaterial: {fileID: 0}
+  overrideEmission: 0
+  emission: {r: 1, g: 1, b: 1, a: 1}
 --- !u!4 &868774593
 Transform:
   m_ObjectHideFlags: 0
@@ -185260,6 +185287,52 @@ Transform:
   - {fileID: 978591144}
   m_Father: {fileID: 1909778300}
   m_LocalEulerAnglesHint: {x: -0.343, y: 174.202, z: -3.373}
+--- !u!1 &1101978360
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1101978362}
+  - component: {fileID: 1101978361}
+  m_Layer: 0
+  m_Name: "Spawn \u2014 ParkExitOpen"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1101978361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1101978360}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7391e4269c8f37c439f340900ff9d153, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Bootstrap::Memories.Bootstrap.PlayerSpawnPoint
+  locationStart: 0
+  checkpoint: 5
+--- !u!4 &1101978362
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1101978360}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0.9060874, z: -0, w: -0.42309064}
+  m_LocalPosition: {x: 177.2952, y: 4.02, z: 326.95395}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1102154440
 GameObject:
   m_ObjectHideFlags: 0
@@ -283562,6 +283635,10 @@ MonoBehaviour:
   - 15
   - 15
   initialBrightness: 0
+  affectBaseColor: 1
+  glowMaterial: {fileID: 0}
+  overrideEmission: 0
+  emission: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1694060387
 GameObject:
   m_ObjectHideFlags: 0
@@ -319878,6 +319955,10 @@ MonoBehaviour:
   - {fileID: 415214587}
   sourceIntensities: []
   initialBrightness: 1
+  affectBaseColor: 1
+  glowMaterial: {fileID: 0}
+  overrideEmission: 0
+  emission: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &1908726679
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -363815,6 +363896,10 @@ MonoBehaviour:
   - 15
   - 15
   initialBrightness: 0
+  affectBaseColor: 1
+  glowMaterial: {fileID: 0}
+  overrideEmission: 0
+  emission: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &2800000100
 GameObject:
   m_ObjectHideFlags: 0
@@ -366236,6 +366321,10 @@ MonoBehaviour:
   - 2
   - 2
   initialBrightness: 0
+  affectBaseColor: 1
+  glowMaterial: {fileID: 0}
+  overrideEmission: 0
+  emission: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &2903000100
 GameObject:
   m_ObjectHideFlags: 0
@@ -369804,6 +369893,10 @@ MonoBehaviour:
   - 2
   - 2
   initialBrightness: 0
+  affectBaseColor: 1
+  glowMaterial: {fileID: 0}
+  overrideEmission: 0
+  emission: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &2930000100
 GameObject:
   m_ObjectHideFlags: 0
@@ -369998,6 +370091,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8094193f27f546838e99a1b9a63b063e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Memories.Bootstrap::Memories.Bootstrap.LocationBindings
+  highwayVariables: {fileID: 0}
+  highwayIntro: {fileID: 0}
   courtyardConnection: {fileID: 0}
   backyardEntrance: {fileID: 0}
   backyardEntranceLighting: {fileID: 0}
@@ -389987,3 +390082,4 @@ SceneRoots:
   - {fileID: 1259247857}
   - {fileID: 475821539}
   - {fileID: 1676729703}
+  - {fileID: 1101978362}
