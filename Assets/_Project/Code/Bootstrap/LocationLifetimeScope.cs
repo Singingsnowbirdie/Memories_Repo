@@ -20,6 +20,11 @@ namespace Memories.Bootstrap
         {
             builder.Register<LocationContext>(Lifetime.Singleton);
             builder.Register<GameplayModeState>(Lifetime.Singleton);
+            builder.Register<ReactionManager>(container => new ReactionManager(
+                container.Resolve<StoryTextPresenter>(), container.Resolve<MemoryPresenter>(), container.Resolve<GameSession>(),
+                container.Resolve<QuestInventory>(), container.Resolve<CustomVariableStore>(),
+                container.Resolve<PlayerLookAction>(), container.Resolve<GameplayModeState>()), Lifetime.Singleton)
+                .AsSelf().AsImplementedInterfaces();
             builder.RegisterBuildCallback(container => container.Resolve<LocationContext>());
             builder.Register<PlayerMotor>(container => PlayerFactory.Create(this, container.Resolve<PlayerMovementSettings>()), Lifetime.Singleton)
                 .AsSelf().As<IPlayerView>();

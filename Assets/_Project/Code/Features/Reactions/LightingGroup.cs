@@ -14,12 +14,15 @@ namespace Memories.Gameplay.Reactions
         private readonly MonoBehaviour owner;
         private MaterialPropertyBlock block;
         private Coroutine routine;
+        private readonly bool affectBaseColor;
         public float Brightness { get; private set; } = 1;
         public bool IsRunning => routine != null;
 
-        public LightingTransition(MonoBehaviour owner, Light[] sources, Renderer[] renderers, float[] intensities = null)
+        public LightingTransition(MonoBehaviour owner, Light[] sources, Renderer[] renderers, float[] intensities = null,
+            bool affectBaseColor = true, Material glowMaterial = null, bool overrideEmission = false, Color emission = default)
         {
             this.owner = owner;
+            this.affectBaseColor = affectBaseColor;
             var seen = new HashSet<Light>();
             for (int i = 0; sources != null && i < sources.Length; i++)
             {
@@ -38,11 +41,14 @@ namespace Memories.Gameplay.Reactions
                 for (int slot = 0; slot < materials.Length; slot++)
                 {
                     var material = materials[slot];
-                    if (!material || !material.IsKeywordEnabled("_EMISSION") ||
-                        !material.HasProperty("_EmissionColor") || !material.HasProperty("_BaseColor")) continue;
-                    var emission = material.GetColor("_EmissionColor");
-                    if (emission.maxColorComponent <= 0) continue;
-                    glow.Add((renderer, slot, emission, material.GetColor("_BaseColor")));
+                    if (!material || (glowMaterial != null && material != glowMaterial) ||
+                        !material.HasProperty("_EmissionColor") ||
+                        (!overrideEmission && !material.IsKeywordEnabled("_EMISSION")) ||
+                        (affectBaseColor && !material.HasProperty("_BaseColor"))) continue;
+                    var sourceEmission = overrideEmission ? emission : material.GetColor("_EmissionColor");
+                    if (sourceEmission.maxColorComponent <= 0) continue;
+                    glow.Add((renderer, slot, sourceEmission,
+                        material.HasProperty("_BaseColor") ? material.GetColor("_BaseColor") : Color.white));
                 }
             }
         }
@@ -94,7 +100,7 @@ namespace Memories.Gameplay.Reactions
                 block.Clear();
                 entry.renderer.GetPropertyBlock(block, entry.slot);
                 block.SetColor("_EmissionColor", entry.emission * Brightness);
-                block.SetColor("_BaseColor", Color.Lerp(entry.color * .12f, entry.color, Brightness));
+                if (affectBaseColor) block.SetColor("_BaseColor", Color.Lerp(entry.color * .12f, entry.color, Brightness));
                 entry.renderer.SetPropertyBlock(block, entry.slot);
             }
         }
@@ -108,12 +114,17 @@ namespace Memories.Gameplay.Reactions
         [SerializeField] private Renderer[] glowingRenderers = Array.Empty<Renderer>();
         [SerializeField] private float[] sourceIntensities = Array.Empty<float>();
         [SerializeField, Min(0)] private float initialBrightness = 1;
+        [SerializeField] private bool affectBaseColor = true;
+        [SerializeField] private Material glowMaterial;
+        [SerializeField] private bool overrideEmission;
+        [SerializeField, ColorUsage(true, true)] private Color emission = Color.white;
         private LightingTransition transition;
         private float targetBrightness = 1;
         public string StateKey => "lighting-group";
         public bool IsTransitioning => transition != null && transition.IsRunning;
         private LightingTransition Transition => transition ??= new LightingTransition(this, lights, glowingRenderers,
-            sourceIntensities.Length == lights.Length && sourceIntensities.Length > 0 ? sourceIntensities : null);
+            sourceIntensities.Length == lights.Length && sourceIntensities.Length > 0 ? sourceIntensities : null,
+            affectBaseColor, glowMaterial, overrideEmission, emission);
         private void Awake()
         {
             if (transition == null) RestoreBrightness(initialBrightness);

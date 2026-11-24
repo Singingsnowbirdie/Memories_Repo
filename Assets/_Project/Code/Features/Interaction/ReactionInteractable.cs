@@ -23,7 +23,7 @@ namespace Memories.Gameplay.Interaction
             interactionEnabled = value;
             GetComponent<ObjectStateTracker>()?.Capture();
         }
-        private ReactionRunner runner;
+        private ReactionManager reactions;
         public string StateKey => "reactionHints";
         public bool RequiresPersistence => RequiresSavedState(graph, new System.Collections.Generic.HashSet<ReactionGraph>());
 
@@ -43,11 +43,11 @@ namespace Memories.Gameplay.Interaction
             return false;
         }
 
-        public string CaptureState() => runner?.CaptureHints() ?? "";
-        public void RestoreState(string state) => runner?.RestoreHints(graph, state);
+        public string CaptureState() => reactions?.CaptureHints(this) ?? "";
+        public void RestoreState(string state) => reactions?.RestoreHints(this, state);
         public string Prompt => prompt;
-        public bool CanInteract => isActiveAndEnabled && interactionEnabled && runner != null && runner.CanRun(graph);
-        public bool IsRunning => runner != null && runner.IsRunning;
+        public bool CanInteract => isActiveAndEnabled && interactionEnabled && reactions != null && reactions.CanRun(this);
+        public bool IsRunning => reactions != null && reactions.IsRunning(this);
 
         public void Configure(ReactionGraph reactionGraph, string interactionPrompt)
         {
@@ -55,11 +55,11 @@ namespace Memories.Gameplay.Interaction
             prompt = interactionPrompt;
         }
 
-        public void Initialize(StoryTextPresenter texts, MemoryPresenter memories, ILocationTransition locations = null, QuestInventory inventory = null, CustomVariableStore variables = null, PlayerLookAction playerLook = null, GameplayModeState gameplayMode = null)
+        public void Initialize(ReactionManager reactions, QuestInventory inventory)
         {
             SetInteractionEnabled(initiallyInteractable);
-            runner?.Dispose();
-            runner = new ReactionRunner(texts, memories, this, locations, inventory, variables, objectBindings, customReactions, playerLook, gameplayMode);
+            this.reactions = reactions;
+            reactions.Bind(this, graph, objectBindings, customReactions);
             if (!initiallyVisible) gameObject.SetActive(false);
             if (IsCollectedPickup(inventory)) gameObject.SetActive(false);
         }
@@ -89,16 +89,7 @@ namespace Memories.Gameplay.Interaction
         }
         public void Interact()
         {
-            if (CanInteract) runner.TryRun(graph);
-        }
-        private void OnDisable()
-        {
-            // Подбираемый предмет может скрыть себя до завершения своей текстовой ветки.
-            if (runner != null && !runner.IsHidingOwner) runner.Stop();
-        }
-        private void OnDestroy()
-        {
-            runner?.Dispose();
+            if (CanInteract) reactions.TryRun(this);
         }
     }
 }

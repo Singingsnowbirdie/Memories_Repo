@@ -21,7 +21,7 @@ namespace Memories.Gameplay.Triggers
         private bool fired;
         [SerializeField, InspectorName("Объекты графа")] private ReactionObjectBinding[] objectBindings = new ReactionObjectBinding[0];
         [SerializeField, InspectorName("Кастомные реакции")] private CustomReactionBinding[] customReactions = new CustomReactionBinding[0];
-        private ReactionRunner runner;
+        private ReactionManager reactions;
         [System.Serializable] private sealed class SavedState
         {
             public bool fired;
@@ -30,30 +30,30 @@ namespace Memories.Gameplay.Triggers
         public string StateKey => "reactionHints";
         public bool RequiresPersistence => graph != null && graph.nodes.Exists(node =>
             node is ReactionNode action && action.Kind == ReactionKind.StartHints);
-        public string CaptureState() => JsonUtility.ToJson(new SavedState { fired = fired, hints = runner?.CaptureHints() });
+        public string CaptureState() => JsonUtility.ToJson(new SavedState { fired = fired, hints = reactions?.CaptureHints(this) });
         public void RestoreState(string state)
         {
             if (string.IsNullOrEmpty(state)) return;
             var saved = JsonUtility.FromJson<SavedState>(state);
             // Older reminder objects stored only the active hint list after interaction.
             fired = saved.hints == null || saved.fired;
-            runner?.RestoreHints(graph, saved.hints ?? state);
+            reactions?.RestoreHints(this, saved.hints ?? state);
         }
-        public bool IsRunning => runner != null && runner.IsRunning;
-        public void Initialize(StoryTextPresenter texts, MemoryPresenter memories, ILocationTransition locations = null, QuestInventory inventory = null, CustomVariableStore variables = null, PlayerLookAction playerLook = null, GameplayModeState gameplayMode = null)
+        public bool IsRunning => reactions != null && reactions.IsRunning(this);
+        public void Initialize(ReactionManager reactions)
         {
-            runner?.Dispose();
-            runner = new ReactionRunner(texts, memories, this, locations, inventory, variables, objectBindings, customReactions, playerLook, gameplayMode);
+            this.reactions = reactions;
+            reactions.Bind(this, graph, objectBindings, customReactions);
         }
         public bool TryActivate()
         {
             if (!isActiveAndEnabled) return false;
             if (graph != null)
             {
-                if (runner == null || (graph.RunOnce && fired)) return false;
+                if (reactions == null || (graph.RunOnce && fired)) return false;
                 bool wasFired = fired;
                 fired = true;
-                if (!runner.TryRun(graph)) { fired = wasFired; return false; }
+                if (!reactions.TryRun(this)) { fired = wasFired; return false; }
                 GetComponent<ObjectStateTracker>()?.Capture();
                 return true;
             }
@@ -84,7 +84,6 @@ namespace Memories.Gameplay.Triggers
         private void OnDisable()
         {
             occupants.Clear();
-            runner?.Stop();
         }
     }
 }

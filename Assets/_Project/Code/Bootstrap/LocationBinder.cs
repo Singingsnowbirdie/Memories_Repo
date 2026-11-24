@@ -35,9 +35,6 @@ namespace Memories.Bootstrap
                 foreach (var tracker in root.GetComponentsInChildren<ObjectStateTracker>(true))
                     tracker.ApplyInitialVisibility();
             foreach (var root in scene.GetRootGameObjects())
-                foreach (var highway in root.GetComponentsInChildren<Memories.Gameplay.HighwayLights>(true))
-                    highway.InitializeControls(scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>());
-            foreach (var root in scene.GetRootGameObjects())
                 foreach (var teleport in root.GetComponentsInChildren<TeleportPlayerReaction>(true))
                     teleport.Initialize(scope.Container.Resolve<PlayerMotor>(), scope.Container.Resolve<PlayerMovementModel>());
             if (scene.path == TestLocationLauncher.GaragePath)
@@ -71,16 +68,15 @@ namespace Memories.Bootstrap
                     focus.Initialize(scope.Container.Resolve<PlayerMotor>(), scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>());
             foreach (var root in scene.GetRootGameObjects())
             {
+                foreach (var graphBinding in root.GetComponentsInChildren<ReactionGraphBinding>(true))
+                    graphBinding.Initialize(scope.Container.Resolve<ReactionManager>());
                 foreach (var trigger in root.GetComponentsInChildren<Memories.Gameplay.Triggers.TriggerEvent>(true))
                     trigger.Initialize(scope.Container.Resolve<Memories.Gameplay.UI.StoryTextPresenter>(),
                         scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>());
                 foreach (var trigger in root.GetComponentsInChildren<Memories.Gameplay.Triggers.SceneTrigger>(true))
-                    trigger.Initialize(scope.Container.Resolve<Memories.Gameplay.UI.StoryTextPresenter>(),
-                        scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>(), locations,
-                        scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<CustomVariableStore>(), scope.Container.Resolve<PlayerLookAction>(), scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>());
+                    trigger.Initialize(scope.Container.Resolve<ReactionManager>());
                 foreach (var interactable in root.GetComponentsInChildren<ReactionInteractable>(true))
-                    interactable.Initialize(scope.Container.Resolve<Memories.Gameplay.UI.StoryTextPresenter>(),
-                        scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>(), locations, scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<CustomVariableStore>(), scope.Container.Resolve<PlayerLookAction>(), scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>());
+                    interactable.Initialize(scope.Container.Resolve<ReactionManager>(), scope.Container.Resolve<QuestInventory>());
             }
             HintProgressRestoration.Restore(scope.Container.Resolve<QuestInventory>(),
                 scope.Container.Resolve<CustomVariableStore>(), scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
@@ -218,15 +214,12 @@ namespace Memories.Bootstrap
                 if (courtyardOpen)
                     RestoreCourtyardAsync(LocationBindings.For(scene).CourtyardConnection, trackers).Forget();
             }
-            // House lighting is initialized once; completion of the highway animation runs its graph.
-            if (scene.path == "Assets/_Project/Locations/House.unity")
+            RestoreHighwayLighting(scene, scope.Container.Resolve<CustomVariableStore>());
+            // Starting directly in the house (save/checkpoint) skips the highway introduction.
+            if (scene.path == TestLocationLauncher.HousePath && isCurrentLocation)
                 foreach (var root in scene.GetRootGameObjects())
                     foreach (var group in root.GetComponentsInChildren<LightingGroup>(true))
-                    {
-                        var highway = UnityEngine.Object.FindFirstObjectByType<Memories.Gameplay.HighwayLights>();
-                        if (highway != null) highway.RegisterHouse(group);
-                        else group.RestoreBrightness(1);
-                    }
+                        group.RestoreBrightness(1);
             if (scene.path == "Assets/_Project/Locations/Park.unity")
                 RestoreParkCinema(LocationBindings.For(scene).ParkCinema,
                     scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<ObjectStateStore>());
@@ -417,6 +410,26 @@ namespace Memories.Bootstrap
             bindings.cashier.GetComponent<ReactionInteractable>().SetInteractionEnabled(!bought && !finished);
             bindings.cinemaLighting.RestoreBrightness(arrived && !finished ? 1 : 0);
             bindings.benchLighting.RestoreBrightness(finished ? 0 : 1);
+        }
+
+        private static void RestoreHighwayLighting(Scene scene, CustomVariableStore variables)
+        {
+            // Restore completed presentation once; live lighting is invoked only by graph nodes.
+            if (scene.path == TestLocationLauncher.HighwayPath)
+            {
+                var bindings = LocationBindings.For(scene);
+                bool complete = variables.Get(bindings.HighwayVariables, "lighting_complete");
+                foreach (var root in scene.GetRootGameObjects())
+                    foreach (var group in root.GetComponentsInChildren<LightingGroup>(true))
+                        group.RestoreBrightness(complete ? 1 : 0);
+                bindings.HighwayIntro.enabled = !complete;
+                var sky = UnityEngine.Object.FindFirstObjectByType<Memories.Gameplay.GhostCosmosSky>();
+                if (sky != null)
+                {
+                    if (complete) sky.ShowImmediately();
+                    else sky.Prepare();
+                }
+            }
         }
     }
 }

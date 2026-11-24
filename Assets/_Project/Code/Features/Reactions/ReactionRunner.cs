@@ -11,8 +11,8 @@ using UnityEngine;
 
 namespace Memories.Gameplay.Reactions
 {
-    // Воспроизведение и состояние одноразового запуска принадлежат вызывающему объекту, а не общему ресурсу графа.
-    public sealed class ReactionRunner : IDisposable
+    // Источник хранит состояние запуска; выполнение принадлежит игровой сессии, а не объекту сцены.
+    internal sealed class ReactionRunner : IDisposable
     {
         private readonly StoryTextPresenter texts;
         private readonly MemoryPresenter memories;
@@ -24,6 +24,8 @@ namespace Memories.Gameplay.Reactions
         private readonly CustomReactionBinding[] customReactions;
         private readonly PlayerLookAction playerLook;
         private readonly GameplayModeState gameplayMode;
+        private readonly ReactionManager manager;
+        private readonly CancellationToken sessionToken;
         private bool controlsHeld;
         private CancellationTokenSource playback;
         private bool fired;
@@ -31,6 +33,7 @@ namespace Memories.Gameplay.Reactions
         private string currentHintId;
         private readonly Dictionary<string, CancellationTokenSource> hintTimers = new Dictionary<string, CancellationTokenSource>();
         private readonly HashSet<string> activeHints = new HashSet<string>();
+        private readonly HashSet<ReactionRunner> hintRuns = new HashSet<ReactionRunner>();
         [Serializable] private sealed class HintState { public List<string> active = new List<string>(); }
 
         public string CaptureHints() => JsonUtility.ToJson(new HintState { active = activeHints.ToList() });
@@ -47,11 +50,10 @@ namespace Memories.Gameplay.Reactions
                     StartHint(action);
         }
         public bool IsRunning => playback != null;
-        public bool IsHidingOwner { get; private set; }
-        public ReactionRunner(StoryTextPresenter texts, MemoryPresenter memories, UnityEngine.Object owner,
+        internal ReactionRunner(ReactionManager manager, CancellationToken sessionToken, StoryTextPresenter texts, MemoryPresenter memories, UnityEngine.Object owner,
             ILocationTransition locations = null, QuestInventory inventory = null, CustomVariableStore variables = null, ReactionObjectBinding[] objectBindings = null, CustomReactionBinding[] customReactions = null, PlayerLookAction playerLook = null, GameplayModeState gameplayMode = null)
-        { this.texts = texts; this.memories = memories; this.owner = owner; this.locations = locations; this.inventory = inventory; this.variables = variables; this.objectBindings = objectBindings; this.customReactions = customReactions; this.playerLook = playerLook; this.gameplayMode = gameplayMode; hintOwner = this; }
-        public bool CanRun(ReactionGraph graph, bool allowDuringMemory = false) => graph != null && !IsRunning &&
+        { this.manager = manager; this.sessionToken = sessionToken; this.texts = texts; this.memories = memories; this.owner = owner; this.locations = locations; this.inventory = inventory; this.variables = variables; this.objectBindings = objectBindings; this.customReactions = customReactions; this.playerLook = playerLook; this.gameplayMode = gameplayMode; hintOwner = this; }
+        public bool CanRun(ReactionGraph graph, bool allowDuringMemory = false) => !sessionToken.IsCancellationRequested && graph != null && !IsRunning &&
             !(graph.RunOnce && fired) && (memories == null || memories.CanStartPlayback ||
                 (allowDuringMemory && memories.IsPlaying));
         public bool TryRun(ReactionGraph graph, bool allowDuringMemory = false)
@@ -59,6 +61,8 @@ namespace Memories.Gameplay.Reactions
             if (!CanRun(graph, allowDuringMemory)) return false;
             if (!graph.TryGetSequence(out var actions, out var error))
             { Debug.LogWarning("Цепочка реакций не запущена: " + error, owner); return false; }
+            if (gameplayMode == null && graph.nodes.OfType<ReactionStartNode>().Single().BlockControls)
+                return false;
             var conditions = actions.Select(action => action.graph)
                 .Concat(actions.Where(action => action.Kind == ReactionKind.RunGraph).Select(action => action.ReactionGraph))
                 .Append(graph).Distinct()
@@ -70,13 +74,14 @@ namespace Memories.Gameplay.Reactions
             { Debug.LogWarning("Хранилище кастомных переменных не подключено.", owner); return false; }
             foreach (var action in actions)
             {
-                if (action.Kind == ReactionKind.SwitchEnvironment &&
-                    (locations == null || (action.HoldControlsUntilGraphEnd && gameplayMode == null)))
+                if (action.Kind == ReactionKind.SwitchEnvironment && locations == null)
                 { Debug.LogWarning("Не подключены переключение окружения или управление игроком.", owner); return false; }
                 if (action.Kind == ReactionKind.StopAnimation &&
                     (!ReactionObjectBinding.TryResolve(objectBindings, action.ObjectKey, out var animationTarget) ||
                      animationTarget.GetComponent<IStoppableAnimation>() == null))
                 { Debug.LogWarning("Назначьте объект с компонентом анимации: " + action.ObjectKey, owner); return false; }
+                if (action.Kind == ReactionKind.RunGraph && gameplayMode == null &&
+                    action.ReactionGraph.nodes.OfType<ReactionStartNode>().Single().BlockControls) return false;
                 if (action.Kind == ReactionKind.ChangeLighting &&
                     (!ReactionObjectBinding.TryResolve(objectBindings, action.ObjectKey, out var lightingTarget) ||
                      !lightingTarget.TryGetComponent<LightingGroup>(out var lighting) || !lighting.isActiveAndEnabled))
@@ -106,7 +111,8 @@ namespace Memories.Gameplay.Reactions
                 if (!ReactionObjectBinding.TryResolve(objectBindings, activity.ObjectKey, out _))
                 { Debug.LogWarning("Не назначен объект графа или имя повторяется: " + activity.ObjectKey, owner); return false; }
             fired = true;
-            playback = new CancellationTokenSource();
+            playback = CancellationTokenSource.CreateLinkedTokenSource(sessionToken);
+            manager.Started(this);
             RunAsync(graph, playback).Forget();
             return true;
         }
@@ -129,6 +135,12 @@ namespace Memories.Gameplay.Reactions
         {
             playback?.Cancel();
             if (hintOwner != this) return;
+            foreach (var child in hintRuns.ToArray()) child.Stop();
+            StopHintTimers();
+        }
+
+        private void StopHintTimers()
+        {
             var timers = hintTimers.Values.ToArray();
             hintTimers.Clear();
             foreach (var timer in timers) timer.Cancel();
@@ -138,7 +150,7 @@ namespace Memories.Gameplay.Reactions
         private void StopHint(string id)
         {
             activeHints.Remove(id);
-            if (owner is Component component) component.GetComponent<ObjectStateTracker>()?.Capture();
+            if (owner is Component component && component != null) component.GetComponent<ObjectStateTracker>()?.Capture();
             if (!hintTimers.TryGetValue(id, out var timer)) return;
             hintTimers.Remove(id);
             timer.Cancel();
@@ -146,9 +158,9 @@ namespace Memories.Gameplay.Reactions
 
         private void StartHint(ReactionNode action)
         {
-            if (hintTimers.ContainsKey(action.HintId)) return;
+            if (sessionToken.IsCancellationRequested || hintTimers.ContainsKey(action.HintId)) return;
             activeHints.Add(action.HintId);
-            var timer = new CancellationTokenSource();
+            var timer = CancellationTokenSource.CreateLinkedTokenSource(sessionToken);
             hintTimers.Add(action.HintId, timer);
             RunHintAsync(action.HintId, action.HintGraph, action.HintTimeout, action.RepeatHint, timer).Forget();
         }
@@ -167,13 +179,14 @@ namespace Memories.Gameplay.Reactions
                         (memories == null || memories.CanStartPlayback) && Time.timeScale > 0,
                         cancellationToken: timer.Token);
                     timer.Token.ThrowIfCancellationRequested();
-                    child = new ReactionRunner(texts, memories, owner, locations, inventory, variables, objectBindings, customReactions, playerLook, gameplayMode);
+                    child = manager.CreateRunner(owner, objectBindings, customReactions);
                     child.hintOwner = this;
                     child.currentHintId = id;
                     // Условия самого графа выбирают текст и завершают подсказку по кастомной переменной.
-                    if (!child.TryRun(graph)) return;
+                    hintRuns.Add(child);
+                    if (!child.TryRun(graph)) { hintRuns.Remove(child); return; }
                     await UniTask.WaitUntil(() => !child.IsRunning, cancellationToken: timer.Token);
-                    child.Dispose();
+                    hintRuns.Remove(child);
                     child = null;
                     if (!repeat) activeHints.Remove(id);
                 } while (repeat);
@@ -182,7 +195,6 @@ namespace Memories.Gameplay.Reactions
             catch (Exception exception) { Debug.LogException(exception, owner); }
             finally
             {
-                child?.Dispose();
                 if (hintTimers.TryGetValue(id, out var current) && current == timer) hintTimers.Remove(id);
                 timer.Dispose();
             }
@@ -191,6 +203,11 @@ namespace Memories.Gameplay.Reactions
         {
             try
             {
+                if (graph.nodes.OfType<ReactionStartNode>().Single().BlockControls)
+                {
+                    gameplayMode.BlockControls(this);
+                    controlsHeld = true;
+                }
                 await RunPathAsync(ReactionGraph.Next(graph.nodes.OfType<ReactionStartNode>().Single()), source);
             }
             catch (OperationCanceledException) { }
@@ -203,6 +220,8 @@ namespace Memories.Gameplay.Reactions
                     controlsHeld = false;
                 }
                 if (playback == source) playback = null;
+                manager.Finished(this);
+                if (hintOwner != this) hintOwner.hintRuns.Remove(this);
                 source.Dispose();
             }
         }
@@ -257,9 +276,28 @@ namespace Memories.Gameplay.Reactions
                         continue;
                     }
                     var action = (ReactionNode)node;
+                    if (action.Kind == ReactionKind.RunBoundGraph)
+                    {
+                        if (!manager.TryRunGraph(action.ReactionGraph))
+                            throw new InvalidOperationException("Не удалось вызвать граф с собственными привязками: " + action.ReactionGraph.name);
+                        node = ReactionGraph.Next(node);
+                        continue;
+                    }
+                    if (action.Kind == ReactionKind.ReleaseControls)
+                    {
+                        if (controlsHeld) gameplayMode.ReleaseControls(this);
+                        controlsHeld = false;
+                        node = ReactionGraph.Next(node);
+                        continue;
+                    }
                     if (action.Kind == ReactionKind.RunGraph)
                     {
-                        // Вложенное выполнение использует общие привязки, отмену и время жизни владельца.
+                        if (action.ReactionGraph.nodes.OfType<ReactionStartNode>().Single().BlockControls && !controlsHeld)
+                        {
+                            gameplayMode.BlockControls(this);
+                            controlsHeld = true;
+                        }
+                        // Вложенное выполнение использует привязки и отмену текущего запуска.
                         returns.Push(ReactionGraph.Next(node));
                         node = ReactionGraph.Next(action.ReactionGraph.nodes.OfType<ReactionStartNode>().Single());
                         continue;
@@ -268,16 +306,11 @@ namespace Memories.Gameplay.Reactions
                     {
                         if (!ReactionObjectBinding.TryResolve(objectBindings, action.ObjectKey, out var target))
                             throw new InvalidOperationException("Объект графа недоступен: " + action.ObjectKey);
-                        IsHidingOwner = !action.Active && owner is Component component && target == component.gameObject;
-                        try
-                        {
-                            if (action.Active && !target.activeSelf && action.RevealDuration > 0 && action.RevealShader != null)
-                                ObjectReveal.Play(target, action.RevealShader, action.RevealDuration, action.RevealDelay);
-                            else if (!action.Active && target.activeInHierarchy && action.RevealDuration > 0 && action.RevealShader != null)
-                                await ObjectReveal.DissolveAsync(target, action.RevealShader, action.RevealDuration, action.RevealDelay, source.Token);
-                            else target.SetActive(action.Active);
-                        }
-                        finally { IsHidingOwner = false; }
+                        if (action.Active && !target.activeSelf && action.RevealDuration > 0 && action.RevealShader != null)
+                            ObjectReveal.Play(target, action.RevealShader, action.RevealDuration, action.RevealDelay);
+                        else if (!action.Active && target.activeInHierarchy && action.RevealDuration > 0 && action.RevealShader != null)
+                            await ObjectReveal.DissolveAsync(target, action.RevealShader, action.RevealDuration, action.RevealDelay, source.Token);
+                        else target.SetActive(action.Active);
                         node = ReactionGraph.Next(node);
                         continue;
                     }
@@ -290,11 +323,6 @@ namespace Memories.Gameplay.Reactions
                     {
                         if (!locations.CanSwitchEnvironment(action.LocationScenePath))
                             throw new InvalidOperationException("Окружение не загружено или переход недоступен: " + action.LocationScenePath);
-                        if (action.HoldControlsUntilGraphEnd && !controlsHeld)
-                        {
-                            gameplayMode.BlockControls(this);
-                            controlsHeld = true;
-                        }
                         await locations.SwitchEnvironmentAsync(action.LocationScenePath);
                     }
                     else if (action.Kind == ReactionKind.StopAnimation)
@@ -387,10 +415,7 @@ namespace Memories.Gameplay.Reactions
                         {
                             if (!CustomReactionBinding.TryResolve(customReactions, action.MemoryStartedReactionKey, out var started))
                                 throw new InvalidOperationException("Missing memory start reaction: " + action.MemoryStartedReactionKey);
-                            // Полноэкранный комикс уже виден. Явная смена сцены может скрыть владельца этого взаимодействия.
-                            IsHidingOwner = true;
-                            try { started.Execute(); }
-                            finally { IsHidingOwner = false; }
+                            started.Execute();
                             if (started.TransfersMemoryOwnership)
                             {
                                 ownsMemory = false;

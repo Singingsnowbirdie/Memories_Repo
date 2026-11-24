@@ -12,6 +12,8 @@ namespace Memories.Gameplay.Reactions
         [FormerlySerializedAs("triggerOnce"), SerializeField] private bool runOnce = true;
         [SerializeField, Output(ShowBackingValue.Never, ConnectionType.Override)] private Node next;
         public bool RunOnce => runOnce;
+        [SerializeField] private bool blockControls;
+        public bool BlockControls => blockControls;
         protected override void Init() => name = "Начало";
         public override object GetValue(NodePort port) => null;
     }

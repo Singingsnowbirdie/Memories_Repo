@@ -6,8 +6,7 @@ using Memories.Gameplay.Reactions;
 namespace Memories.Gameplay
 {
     /// <summary>
-    /// Execute явно вызывается HighwayLights после завершения включения всех фонарей шоссе;
-    /// при поздней регистрации на уже освещённом шоссе запускается сразу.
+    /// Execute вызывается явной нодой графа после включения фонарей.
     /// Плавно проявляет сначала звёзды, затем туманности. LateUpdate выполняет анимацию и отрисовку,
     /// но не отслеживает игровой прогресс. ShowImmediately показывает небо без ожидания этой последовательности.
     /// </summary>
@@ -64,8 +63,6 @@ namespace Memories.Gameplay
         {
             foreach (var root in scene.GetRootGameObjects())
             {
-                var highway = root.GetComponentInChildren<HighwayLights>(true);
-                if (highway != null) highway.RegisterSky(this);
                 foreach (var camera in root.GetComponentsInChildren<Camera>(true))
                     if (camera.CompareTag("MainCamera")) Bind(camera);
             }

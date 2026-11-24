@@ -6,7 +6,7 @@ using XNode;
 
 namespace Memories.Gameplay.Reactions
 {
-    public enum ReactionKind { StoryText, Memory, ChangeLocation, CustomReaction, SetCustomVariable, ObjectActivity, AddInventoryItem, StartHints, StopHints, ConsumeInventoryItem, ObjectInteractivity, RunGraph, LookAtObject, ChangeLighting, LoadSegment, Pause, StopAnimation, SwitchEnvironment }
+    public enum ReactionKind { StoryText, Memory, ChangeLocation, CustomReaction, SetCustomVariable, ObjectActivity, AddInventoryItem, StartHints, StopHints, ConsumeInventoryItem, ObjectInteractivity, RunGraph, LookAtObject, ChangeLighting, LoadSegment, Pause, StopAnimation, SwitchEnvironment, ReleaseControls, RunBoundGraph }
 
     [Node.CreateNodeMenu("Реакция"), Node.NodeWidth(320), Node.NodeTint("#284C53")]
     [MovedFrom(true, sourceNamespace: "Memories.Gameplay.Triggers", sourceAssembly: "Memories.Gameplay", sourceClassName: "TriggerActionNode")]
@@ -29,8 +29,6 @@ namespace Memories.Gameplay.Reactions
         [SerializeField] private string locationScenePath;
         [SerializeField] private string arrivalMarker;
         public string ArrivalMarker => arrivalMarker;
-        [SerializeField] private bool holdControlsUntilGraphEnd;
-        public bool HoldControlsUntilGraphEnd => holdControlsUntilGraphEnd;
         [SerializeField] private CustomVariableBank variableBank;
         [SerializeField] private string variableId;
         [SerializeField] private bool variableValue = true;
@@ -84,6 +82,13 @@ namespace Memories.Gameplay.Reactions
         public bool Validate(out string error)
         {
             error = null;
+            if (kind == ReactionKind.ReleaseControls) return true;
+            if (kind == ReactionKind.RunBoundGraph)
+            {
+                if (reactionGraph != null) return true;
+                error = "Назначьте вызываемый граф с собственными привязками.";
+                return false;
+            }
             if (kind == ReactionKind.SwitchEnvironment)
             {
                 if (!string.IsNullOrWhiteSpace(locationScenePath) && locationScenePath.EndsWith(".unity")) return true;

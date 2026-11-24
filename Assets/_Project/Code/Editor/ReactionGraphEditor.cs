@@ -86,6 +86,7 @@ namespace Memories.Editor
         {
             serializedObject.Update();
             EditorGUILayout.PropertyField(serializedObject.FindProperty("runOnce"), new GUIContent("Одноразовый"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("blockControls"), new GUIContent("Блокировать управление"));
             EditorGUILayout.HelpBox("Выключено: повторный запуск разрешён. Состояние хранится отдельно у каждого объекта до выгрузки сцены.", MessageType.Info);
             NodeEditorGUILayout.PortField(new GUIContent("Далее"), target.GetOutputPort("next"));
             serializedObject.ApplyModifiedProperties();
@@ -167,6 +168,7 @@ namespace Memories.Editor
             }
             foreach (var owner in Resources.FindObjectsOfTypeAll<ReactionInteractable>()) Collect(owner);
             foreach (var owner in Resources.FindObjectsOfTypeAll<SceneTrigger>()) Collect(owner);
+            foreach (var owner in Resources.FindObjectsOfTypeAll<ReactionGraphBinding>()) Collect(owner);
             if (names.Count == 0) names = prefabNames;
 
             EditorGUILayout.LabelField("Кастомная реакция");
@@ -214,15 +216,22 @@ namespace Memories.Editor
                 ? (int)ReactionKind.AddInventoryItem : kind.intValue;
             EditorGUI.BeginChangeCheck();
             int chosenKind = EditorGUILayout.IntPopup(displayedKind,
-                new[] { "Показать текст", "Показать воспоминание", "Сменить сцену локации", "Запустить реакцию объекта", "Установить кастомную переменную", "Активность объекта", "Инвентарный предмет", "Запустить подсказки", "Остановить подсказки", "Интерактивность предмета", "Запустить граф реакций", "Посмотреть на объект", "Изменить освещение", "Подгрузить сегмент локации", "Пауза", "Остановить анимацию", "Переключить окружение" },
-                new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17 });
+                new[] { "Показать текст", "Показать воспоминание", "Сменить сцену локации", "Запустить реакцию объекта", "Установить кастомную переменную", "Активность объекта", "Инвентарный предмет", "Запустить подсказки", "Остановить подсказки", "Интерактивность предмета", "Запустить граф реакций", "Посмотреть на объект", "Изменить освещение", "Подгрузить сегмент локации", "Пауза", "Остановить анимацию", "Переключить окружение", "Освободить управление", "Вызвать граф с его привязками" },
+                new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 });
             if (EditorGUI.EndChangeCheck()) kind.intValue = chosenKind;
             EditorGUILayout.Space(8);
-            if (kind.intValue == (int)ReactionKind.Pause)
+            if (kind.intValue == (int)ReactionKind.ReleaseControls)
+                EditorGUILayout.HelpBox("Снимает блокировку текущего выполнения графа. При завершении, отмене или ошибке она снимается автоматически.", MessageType.Info);
+            else if (kind.intValue == (int)ReactionKind.Pause)
             {
                 EditorGUILayout.LabelField("Длительность, сек.");
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("pauseDuration"), GUIContent.none);
                 EditorGUILayout.HelpBox("Ожидание по игровому времени. После паузы граф продолжится; остановка графа отменяет ожидание.", MessageType.Info);
+            }
+            else if (kind.intValue == (int)ReactionKind.RunBoundGraph)
+            {
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("reactionGraph"), new GUIContent("Вызываемый граф"));
+                EditorGUILayout.HelpBox("Запускает отдельное выполнение через ReactionManager. Объекты и реакции берутся из компонента привязок вызываемого графа. Следующая нода выполняется сразу. Для графа должен быть зарегистрирован ровно один активный набор привязок.", MessageType.Info);
             }
             else if (kind.intValue == (int)ReactionKind.RunGraph)
             {
@@ -282,7 +291,6 @@ namespace Memories.Editor
                 if (EditorGUI.EndChangeCheck()) path.stringValue = scene == null ? "" : AssetDatabase.GetAssetPath(scene);
                 if (kind.intValue == (int)ReactionKind.SwitchEnvironment)
                 {
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("holdControlsUntilGraphEnd"), new GUIContent("Удерживать управление до конца графа"));
                     EditorGUILayout.HelpBox("Переключает на уже загруженный сегмент и выгружает прежнее окружение. Игрок и камера остаются в Bootstrap. Затем граф продолжается.", MessageType.Info);
                 }
                 else EditorGUILayout.HelpBox("Переход завершает цепочку. Сцена должна быть включена в Build Settings.", MessageType.Info);

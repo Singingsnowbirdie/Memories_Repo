@@ -10,9 +10,13 @@ GameObject:
   m_Component:
   - component: {fileID: 101}
   - component: {fileID: 102}
+  - component: {fileID: 3330001219876477406}
   m_Layer: 0
   m_Name: SharedSky
   m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &101
 Transform:
@@ -25,8 +29,10 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &102
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37,8 +43,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f7fdafb1db2045c0b79146d84b31d882, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
+  m_Name: 
+  m_EditorClassIdentifier: 
   skyMaterial: {fileID: 2100000, guid: 1d06f9b7001848bd93dce65bcd218fa2, type: 2}
   shimmer: 0.025
   starsFadeDuration: 6
@@ -51,3 +57,20 @@ MonoBehaviour:
   - {fileID: -2218285450774669110, guid: be6cfaf08273697408f6fd884776443d, type: 3}
   asteroidMaterial: {fileID: 2100000, guid: 772d9d9117eab56479d2738f542c054c, type: 2}
   asteroidCount: 180
+--- !u!114 &3330001219876477406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1ff5020df3c4ff090347df6f8038a20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ReactionGraphBinding
+  graph: {fileID: 11400000, guid: 463dd40bd826edc499c80d08f96203c1, type: 2}
+  objectBindings: []
+  customReactions:
+  - key: "\u041D\u0435\u0431\u043E"
+    reaction: {fileID: 102}

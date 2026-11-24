@@ -36,7 +36,9 @@ namespace Memories.Bootstrap
         }
         internal TestLocationLauncher TestLauncher => GetComponent<TestLocationLauncher>();
         public System.Collections.Generic.IReadOnlyList<string> AdditionalLocationScenes =>
-            TestLauncher != null ? System.Array.Empty<string>() : additionalLocationScenes;
+            TestLauncher == null ? additionalLocationScenes :
+            TestLauncher.SelectedLocation == TestLocationLauncher.Location.Highway
+                ? new[] { TestLocationLauncher.HousePath } : System.Array.Empty<string>();
 
         protected override void Configure(IContainerBuilder builder)
         {

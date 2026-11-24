@@ -172,6 +172,8 @@ namespace Memories.Bootstrap
                 LocationScope.InitialScene = locationScene;
                 LocationScope.parentReference.Object = SessionScope;
                 root.SetActive(true);
+                foreach (var graphBinding in applicationScope.GetComponentsInChildren<ReactionGraphBinding>(true))
+                    graphBinding.Initialize(LocationScope.Container.Resolve<ReactionManager>());
                 BindLocation(locationScene, LocationScope);
                 foreach (var additional in transitions.AdditionalScenes) BindLocation(additional, LocationScope);
                 transitions.ActivateCurrentScene();
@@ -245,6 +247,8 @@ namespace Memories.Bootstrap
 
         private void ReleaseScopes()
         {
+            // Cancel graph executions before disposing their presenters and player services.
+            if (LocationScope != null) LocationScope.Container.Resolve<ReactionManager>().Dispose();
             transitions.RestoreConnectionCovers();
             if (SessionScope != null) SessionScope.Container.Resolve<ObjectStateStore>().Flush();
             if (LocationScope != null) LocationScope.Dispose();
