@@ -101907,3 +101907,145 @@ SceneRoots:
   - {fileID: 1928639259}
   - {fileID: 1979742056}
   - {fileID: 1068994603}
+  - {fileID: 1008702526}
+--- !u!23 &184014086 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 7076577477161117158, guid: bd245d8168461204e9e59160701e47e9, type: 3}
+  m_PrefabInstance: {fileID: 184014085}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &409931067 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 5575509954783200853, guid: eb2bd89f109fe604fba5270bc4c94831, type: 3}
+  m_PrefabInstance: {fileID: 409931066}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &409931068 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2536035363261173656, guid: eb2bd89f109fe604fba5270bc4c94831, type: 3}
+  m_PrefabInstance: {fileID: 409931066}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &409931069 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2603502419882600048, guid: eb2bd89f109fe604fba5270bc4c94831, type: 3}
+  m_PrefabInstance: {fileID: 409931066}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &409931070 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 561047957991433349, guid: eb2bd89f109fe604fba5270bc4c94831, type: 3}
+  m_PrefabInstance: {fileID: 409931066}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &409931071 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 5330576930200175403, guid: eb2bd89f109fe604fba5270bc4c94831, type: 3}
+  m_PrefabInstance: {fileID: 409931066}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &409931072 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 6732613138493478513, guid: eb2bd89f109fe604fba5270bc4c94831, type: 3}
+  m_PrefabInstance: {fileID: 409931066}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &573156690 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 7676647925401436707, guid: c12421756c2aa214f8a8f03d6789ec87, type: 3}
+  m_PrefabInstance: {fileID: 573156689}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &616028856 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 1017080773878473367, guid: f49cdfd8a3be3654292eb7ba97254233, type: 3}
+  m_PrefabInstance: {fileID: 616028855}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &670630957 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 3889003338485644242, guid: 9f8712d9a066efa48862424553a53b34, type: 3}
+  m_PrefabInstance: {fileID: 670630956}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &687411246 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 6155880501669968022, guid: 7fcffd206d176c54faf24066eab9e2c8, type: 3}
+  m_PrefabInstance: {fileID: 687411245}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &699004537 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 5916558348062329089, guid: 2bf26720e5bc05041888498317f73270, type: 3}
+  m_PrefabInstance: {fileID: 699004536}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1008702524
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1008702526}
+  - component: {fileID: 1008702525}
+  m_Layer: 0
+  m_Name: Floating Island Lighting
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1008702525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1008702524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e844d42c835106468e33e99fa116751, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.IslandAmbientLighting
+  targets:
+  - {fileID: 1462190982}
+  - {fileID: 616028856}
+  - {fileID: 573156690}
+  - {fileID: 409931072}
+  - {fileID: 409931071}
+  - {fileID: 409931070}
+  - {fileID: 409931069}
+  - {fileID: 409931068}
+  - {fileID: 409931067}
+  - {fileID: 687411246}
+  - {fileID: 184014086}
+  - {fileID: 1300739388}
+  - {fileID: 1486043576}
+  - {fileID: 670630957}
+  - {fileID: 2115183226}
+  - {fileID: 699004537}
+--- !u!4 &1008702526
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1008702524}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &1300739388 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 7638935305512003428, guid: ed0d53bff53cd7a4182b1cd7eb6b7802, type: 3}
+  m_PrefabInstance: {fileID: 1300739387}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &1462190982 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 3052322195820143546, guid: 2ec6b4ac49f12bb4495a7415c5f6e4f3, type: 3}
+  m_PrefabInstance: {fileID: 1462190981}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &1486043576 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 5246117427990212492, guid: f66e9025bf3f814478d0a0927c302226, type: 3}
+  m_PrefabInstance: {fileID: 1486043575}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &2115183226 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 6866801342702859110, guid: e2485ce0dce6ba643b8f80f51d89b9ea, type: 3}
+  m_PrefabInstance: {fileID: 2115183225}
+  m_PrefabAsset: {fileID: 0}
