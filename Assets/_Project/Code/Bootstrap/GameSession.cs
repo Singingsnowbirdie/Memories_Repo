@@ -175,7 +175,7 @@ namespace Memories.Bootstrap
             {
                 // Контрольные точки обходят вступление: прицел доступен сразу, без ожидания сюжетного текста.
                 Memories.Gameplay.UI.StoryTextView.BeginSession(
-                    useOpenScene || checkpoints.HasSelection || resumeLocation || scenePath != TestLocationLauncher.HighwayPath,
+                    checkpoints.HasSelection || resumeLocation || scenePath != TestLocationLauncher.HighwayPath,
                     applicationScope.PersistProgress);
                 SessionScope = applicationScope.CreateChild<SessionLifetimeScope>(childScopeName: "SessionLifetimeScope");
                 checkpoints.Seed(SessionScope);
