@@ -57832,9 +57832,7 @@ MonoBehaviour:
   <IceContainer>k__BackingField: {fileID: 993100005}
   <TeacherRuler>k__BackingField: {fileID: 993000004}
   <TissueBox>k__BackingField: {fileID: 992300004}
-  <Classroom102Door>k__BackingField: {fileID: 4228472100727748184}
   <ArrivalMarker>k__BackingField: {fileID: 880320021}
-  <ClassroomDoorHinge>k__BackingField: {fileID: 531606136}
 --- !u!1 &991000000
 GameObject:
   m_ObjectHideFlags: 0
@@ -62308,7 +62306,7 @@ MonoBehaviour:
   graph: {fileID: 11400000, guid: cc6df232d6b645e8a1269def262b1c7d, type: 2}
   initiallyInteractable: 1
   initiallyVisible: 1
-  prompt: "\u0412\u0437\u044F\u0442\u044C \u043B\u0438\u043D\u0435\u0439\u043A\u0443"
+  prompt: "\u0423\u0447\u0438\u0442\u0435\u043B\u044C\u0441\u043A\u0430\u044F \u043B\u0438\u043D\u0435\u0439\u043A\u0430 "
   objectBindings:
   - key: "\u0423\u0447\u0438\u0442\u0435\u043B\u044C\u0441\u043A\u0430\u044F \u043B\u0438\u043D\u0435\u0439\u043A\u0430"
     target: {fileID: 993000001}
@@ -129547,7 +129545,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: RoadBicycle90s
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2738130911393421982, guid: bd12404ca3be7ad4f917ded3f0542c97, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
