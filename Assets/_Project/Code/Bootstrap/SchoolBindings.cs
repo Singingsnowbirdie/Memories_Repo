@@ -89,14 +89,10 @@ namespace Memories.Bootstrap
         [field: SerializeField]
         public ObjectStateTracker TissueBox { get; private set; }
 
-        [field: SerializeField]
-        public ObjectStateTracker Classroom102Door { get; private set; }
 
 
         [field: Header("СОЕДИНЕНИЕ С ГАРАЖОМ"), Space]
         [field: SerializeField] public Transform ArrivalMarker { get; private set; }
-        [field: Header("ДВЕРЬ КЛАССА"), Space]
-        [field: SerializeField] public Transform ClassroomDoorHinge { get; private set; }
 
         protected override void ValidateBindings()
         {

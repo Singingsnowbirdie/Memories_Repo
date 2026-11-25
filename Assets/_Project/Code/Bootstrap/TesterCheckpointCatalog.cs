@@ -112,8 +112,6 @@ namespace Memories.Bootstrap
             State(bindings.AmbulanceBeacons, true, false);
             State(bindings.YardAnimation, true, false);
             State(bindings.AmbulanceDoctor, true, false);
-            State(bindings.Classroom102Door, true, false);
-            bindings.ClassroomDoorHinge.localRotation *= Quaternion.Euler(0, 100, 0);
             State(bindings.EnvironmentCorridor, true, false);
             State(bindings.EnvironmentLockerRooms, true, false);
             State(bindings.GarageCorridor, false, false);
