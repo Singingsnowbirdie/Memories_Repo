@@ -60,6 +60,8 @@ namespace Memories.Bootstrap
                     focus.Initialize(scope.Container.Resolve<PlayerMotor>(), scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>());
             foreach (var root in scene.GetRootGameObjects())
             {
+                foreach (var wind in root.GetComponentsInChildren<Memories.Gameplay.HighwayGrassWind>(true))
+                    wind.Initialize(scope.Container.Resolve<PlayerMotor>().transform);
                 foreach (var graphBinding in root.GetComponentsInChildren<ReactionGraphBinding>(true))
                     graphBinding.Initialize(scope.Container.Resolve<ReactionManager>());
                 foreach (var trigger in root.GetComponentsInChildren<Memories.Gameplay.Triggers.TriggerEvent>(true))
