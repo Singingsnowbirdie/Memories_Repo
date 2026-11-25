@@ -2949,7 +2949,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: garage.father_under_hood
   initiallyActive: 0
@@ -4329,7 +4329,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: garage.father_at_wheel
   initiallyActive: 0
@@ -4514,10 +4514,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 7104914069798235840, guid: 8c31e1e1c5d3caf4daf4be0ce84f5a2c, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 506120749230371531, guid: 8c31e1e1c5d3caf4daf4be0ce84f5a2c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 16.828
@@ -4567,6 +4563,10 @@ PrefabInstance:
       value: "\u0412\u0430\u043A\u0443\u0443\u043C\u043D\u044B\u0439 \u0448\u043B\u0430\u043D\u0433"
       objectReference: {fileID: 0}
     - target: {fileID: 7104914069798235840, guid: 8c31e1e1c5d3caf4daf4be0ce84f5a2c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7104914069798235840, guid: 8c31e1e1c5d3caf4daf4be0ce84f5a2c, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 4
       objectReference: {fileID: 0}
@@ -4593,7 +4593,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: garage.vacuum_hose
   initiallyActive: 0
@@ -5539,6 +5539,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1405499456}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &137474389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 137474387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7391e4269c8f37c439f340900ff9d153, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Bootstrap::Memories.Bootstrap.PlayerSpawnPoint
+  locationStart: 1
+  checkpoint: 0
 --- !u!4 &143222674 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2421169740900560480, guid: 2295c31016ca9974baa5442b5e59f96c, type: 3}
@@ -8326,10 +8340,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 572652661}
     m_Modifications:
-    - target: {fileID: 919132149155446097, guid: f0b5cfcbd4e314845a74a587547af180, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: -9093581500327080938, guid: f0b5cfcbd4e314845a74a587547af180, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 4
@@ -8393,6 +8403,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: f0b5cfcbd4e314845a74a587547af180, type: 3}
       propertyPath: m_Name
       value: toolbox
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: f0b5cfcbd4e314845a74a587547af180, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: f0b5cfcbd4e314845a74a587547af180, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -9286,11 +9300,10 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 991910001}
   - component: {fileID: 342514628}
+  - component: {fileID: 991910001}
   m_Layer: 0
-  m_Name: "\u041F\u0435\u0442\u043B\u044F \u0431\u043E\u043A\u043E\u0432\u043E\u0439
-    \u0434\u0432\u0435\u0440\u0438"
+  m_Name: "Боковая дверь гаража — закрытая"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10925,7 +10938,7 @@ MonoBehaviour:
   graph: {fileID: 11400000, guid: c0b887558a18af541bca0aa64339ca03, type: 2}
   initiallyInteractable: 1
   initiallyVisible: 0
-  prompt: "\u0412\u0437\u044F\u0442\u044C \u043D\u0430\u0431\u043E\u0440 \u0438\u043D\u0441\u0442\u0440\u0443\u043C\u0435\u043D\u0442\u043E\u0432"
+  prompt: "\u041D\u0430\u0431\u043E\u0440 \u0438\u043D\u0441\u0442\u0440\u0443\u043C\u0435\u043D\u0442\u043E\u0432"
   objectBindings:
   - key: "\u041F\u0440\u0435\u0434\u043C\u0435\u0442"
     target: {fileID: 286626001}
@@ -10940,7 +10953,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: garage.toolbox
   initiallyActive: 0
@@ -11779,10 +11792,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 5104098422038733671, guid: 400ea27121b396a41b11ecf6a4de6b82, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1246078046604546808, guid: 400ea27121b396a41b11ecf6a4de6b82, type: 3}
       propertyPath: m_LocalPosition.x
       value: 19.027
@@ -11828,6 +11837,10 @@ PrefabInstance:
       value: "\u0411\u0443\u043C\u0430\u0436\u043D\u044B\u0435 \u0441\u0430\u043B\u0444\u0435\u0442\u043A\u0438"
       objectReference: {fileID: 0}
     - target: {fileID: 5104098422038733671, guid: 400ea27121b396a41b11ecf6a4de6b82, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5104098422038733671, guid: 400ea27121b396a41b11ecf6a4de6b82, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 4
       objectReference: {fileID: 0}
@@ -11862,7 +11875,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: garage.paper_wipes
   initiallyActive: 0
@@ -22221,12 +22234,12 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2475949763529322590, guid: 9abc848f207e30c458df91eadc803b52, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2475949763529322590, guid: 9abc848f207e30c458df91eadc803b52, type: 3}
       propertyPath: m_Name
       value: "\u041A\u043E\u043C\u043F\u0440\u0435\u0441\u0441\u043E\u0440"
+      objectReference: {fileID: 0}
+    - target: {fileID: 2475949763529322590, guid: 9abc848f207e30c458df91eadc803b52, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2475949763529322590, guid: 9abc848f207e30c458df91eadc803b52, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -22307,7 +22320,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: garage.compressor_pickup
   initiallyActive: 0
@@ -23442,6 +23455,68 @@ Transform:
   - {fileID: 344143877}
   m_Father: {fileID: 713442586}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &990900000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 990900001}
+  - component: {fileID: 990900002}
+  m_Layer: 0
+  m_Name: LocationBindings
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &990900001
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 990900000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &990900002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 990900000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9ceed62d33b4076bb69b3b59d89a7b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Bootstrap::Memories.Bootstrap.GarageBindings
+  <SchoolConnection>k__BackingField: {fileID: 880300002}
+  <GarageGate>k__BackingField: {fileID: 1402361889}
+  <GarageEntrance>k__BackingField: {fileID: 2032875913}
+  <GarageSideDoor>k__BackingField: {fileID: 342514627}
+  <GarageVariables>k__BackingField: {fileID: 11400000, guid: 481b44f16de901f4d9a22606581568cb, type: 2}
+  <GarageHood>k__BackingField: {fileID: 1121034354}
+  <StandingGarageFather>k__BackingField: {fileID: 1205745552}
+  <KneelingGarageFather>k__BackingField: {fileID: 79438513}
+  <WorkingGarageFather>k__BackingField: {fileID: 72671025}
+  <FinalGarageFather>k__BackingField: {fileID: 1952435883}
+  <HoodGarageFather>k__BackingField: {fileID: 1074503755}
+  <Headlamp>k__BackingField: {fileID: 1280315323}
+  <Toolbox>k__BackingField: {fileID: 382634883}
+  <CompressorPickup>k__BackingField: {fileID: 907313831}
+  <VacuumHose>k__BackingField: {fileID: 91965151}
+  <SiliconeSpray>k__BackingField: {fileID: 1040506263}
+  <PaperWipes>k__BackingField: {fileID: 424232208}
+  <ArrivalMarker>k__BackingField: {fileID: 615026664}
 --- !u!1001 &991765945
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23520,6 +23595,34 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7649458238844565691, guid: ea9c866d97c43a24e991178274945176, type: 3}
   m_PrefabInstance: {fileID: 991765945}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &991910001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 342514627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: garage.side_door
+  initiallyActive: 0
+--- !u!114 &991910002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1952435883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: garage.father_final
+  initiallyActive: 0
 --- !u!1001 &995285553
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24810,11 +24913,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1205745557}
   m_SourcePrefab: {fileID: 100100000, guid: 7acce17562482f14d9a916f6d442448c, type: 3}
---- !u!4 &1018955869 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3214564616511841017, guid: 7acce17562482f14d9a916f6d442448c, type: 3}
-  m_PrefabInstance: {fileID: 1018955868}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1028849481
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24996,12 +25094,12 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1565009746815670037, guid: 5680227a80d74e9499b26ae202c423f0, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1565009746815670037, guid: 5680227a80d74e9499b26ae202c423f0, type: 3}
       propertyPath: m_Name
       value: "\u0411\u0430\u043B\u043B\u043E\u043D\u0447\u0438\u043A \u0441\u0438\u043B\u0438\u043A\u043E\u043D\u0430"
+      objectReference: {fileID: 0}
+    - target: {fileID: 1565009746815670037, guid: 5680227a80d74e9499b26ae202c423f0, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1565009746815670037, guid: 5680227a80d74e9499b26ae202c423f0, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -25074,7 +25172,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: garage.silicone_spray
   initiallyActive: 0
@@ -26484,7 +26582,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: garage.father_at_hood
   initiallyActive: 0
@@ -27370,7 +27468,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2644593832765577649, guid: 1d92f5d9bdf26ed418fb11ff7e7cfef3, type: 3}
   m_PrefabInstance: {fileID: 686901171}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 686901173}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 17874c27076875b4cb9c784d4520ef29, type: 3}
@@ -27386,9 +27484,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: garage.car_hood
+  initiallyActive: 1
 --- !u!4 &1125041639 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5717346234106124422, guid: ae1b00ab0436c534c8afc42e19ab6e96, type: 3}
@@ -28675,9 +28774,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: garage.father_standing
+  initiallyActive: 1
 --- !u!1001 &1221597719
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -29325,12 +29425,12 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 207351999309502631, guid: 59fca67f14e86744591e9c23cc8adf45, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 207351999309502631, guid: 59fca67f14e86744591e9c23cc8adf45, type: 3}
       propertyPath: m_Name
       value: "\u041D\u0430\u043B\u043E\u0431\u043D\u044B\u0439 \u0444\u043E\u043D\u0430\u0440\u044C"
+      objectReference: {fileID: 0}
+    - target: {fileID: 207351999309502631, guid: 59fca67f14e86744591e9c23cc8adf45, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 207351999309502631, guid: 59fca67f14e86744591e9c23cc8adf45, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -29399,7 +29499,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: garage.headlamp
   initiallyActive: 0
@@ -31861,7 +31961,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1402361887}
   - component: {fileID: 1402361889}
-  - component: {fileID: 1402361888}
   - component: {fileID: 1402361890}
   m_Layer: 0
   m_Name: "\u041F\u043E\u0434\u044A\u0451\u043C\u043D\u044B\u0435 \u0433\u0430\u0440\u0430\u0436\u043D\u044B\u0435
@@ -31889,30 +31988,6 @@ Transform:
   - {fileID: 1329233744}
   m_Father: {fileID: 1405499456}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1402361888
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1402361886}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ba68190f9594ee8b2fc0603419ed015, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Interaction.ReactionInteractable
-  graph: {fileID: 11400000, guid: fe32fe1b3ea451c4ead6432b08bcbeb9, type: 2}
-  initiallyInteractable: 1
-  initiallyVisible: 1
-  prompt: "\u041F\u043E\u0434\u043D\u044F\u0442\u044C \u0433\u0430\u0440\u0430\u0436\u043D\u044B\u0435
-    \u0432\u043E\u0440\u043E\u0442\u0430"
-  objectBindings:
-  - key: school_connection
-    target: {fileID: 880300001}
-  customReactions:
-  - key: "\u041F\u043E\u0434\u043D\u044F\u0442\u044C \u0433\u0430\u0440\u0430\u0436\u043D\u044B\u0435
-      \u0432\u043E\u0440\u043E\u0442\u0430"
-    reaction: {fileID: 1402361889}
 --- !u!114 &1402361889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31938,9 +32013,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
   persistentId: garage.gate
+  initiallyActive: 1
 --- !u!1 &1405499455
 GameObject:
   m_ObjectHideFlags: 0
@@ -44609,12 +44685,12 @@ GameObject:
   m_Component:
   - component: {fileID: 2032875911}
   - component: {fileID: 2032875915}
-  - component: {fileID: 2032875916}
   - component: {fileID: 2032875917}
   - component: {fileID: 2032875914}
   - component: {fileID: 2032875913}
   m_Layer: 0
-  m_Name: "\u0412\u0441\u0442\u0443\u043F\u043B\u0435\u043D\u0438\u0435 \u0432 \u0433\u0430\u0440\u0430\u0436"
+  m_Name: "\u0422\u0440\u0438\u0433\u0433\u0435\u0440 \u0437\u0430\u043A\u0440\u044B\u0442\u0438\u044F
+    \u0434\u0432\u0435\u0440\u0438"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44702,29 +44778,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.5, y: 2.2, z: 0.4}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &2032875916
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2032875910}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.3, y: 2.2, z: 2}
-  m_Center: {x: -0.6, y: 0, z: -0.8}
+  m_Size: {x: 2.6718667, y: 2.2, z: 0.4}
+  m_Center: {x: -0.58593345, y: 0, z: 0.0000001396974}
 --- !u!65 &2032875917
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -44745,7 +44800,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 0.3, y: 2.2, z: 2}
-  m_Center: {x: 0.6, y: 0, z: -0.8}
+  m_Center: {x: 1.02, y: 0, z: -0.8}
 --- !u!4 &2041025079 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8269519949735409331, guid: 2e93d5fa678210c48bae8e7cdad4e9e6, type: 3}
@@ -47773,94 +47828,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 764c4c56818bece4889d231d7db9e81a, type: 3}
---- !u!114 &991910001
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 342514627}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
-  persistentId: garage.side_door
-  initiallyActive: 0
---- !u!114 &991910002
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1952435883}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
-  persistentId: garage.father_final
-  initiallyActive: 0
---- !u!114 &137474389
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 137474387}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7391e4269c8f37c439f340900ff9d153, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Memories.Bootstrap::Memories.Bootstrap.PlayerSpawnPoint
-  locationStart: 1
-  checkpoint: 0
---- !u!1 &375104638
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 375104640}
-  - component: {fileID: 375104639}
-  m_Layer: 0
-  m_Name: "Spawn \u2014 GarageCorridorOpen"
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &375104640
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 375104638}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: -1}
-  m_LocalPosition: {x: 16.150002, y: 0.05, z: 334.958}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &375104639
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 375104638}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7391e4269c8f37c439f340900ff9d153, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Memories.Bootstrap::Memories.Bootstrap.PlayerSpawnPoint
-  locationStart: 0
-  checkpoint: 3
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -47887,63 +47854,3 @@ SceneRoots:
   - {fileID: 862074736}
   - {fileID: 1495673688}
   - {fileID: 713442586}
---- !u!1 &990900000
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 990900001}
-  - component: {fileID: 990900002}
-  m_Layer: 0
-  m_Name: LocationBindings
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &990900001
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 990900000}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &990900002
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 990900000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8094193f27f546838e99a1b9a63b063e, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: Memories.Bootstrap::Memories.Bootstrap.LocationBindings
-  courtyardDoor: {fileID: 0}
-  backyardEntrance: {fileID: 0}
-  garageAttachment: {fileID: 0}
-  schoolConnection: {fileID: 880300002}
-  garageGate: {fileID: 1402361889}
-  gymEntrance: {fileID: 0}
-  garageEntrance: {fileID: 2032875913}
-  garageSideDoor: {fileID: 342514627}
-  standingGarageFather: {fileID: 1205745552}
-  kneelingGarageFather: {fileID: 79438513}
-  garageVariables: {fileID: 11400000, guid: 481b44f16de901f4d9a22606581568cb, type: 2}
-  workingGarageFather: {fileID: 72671025}
-  finalGarageFather: {fileID: 1952435883}
-  hoodGarageFather: {fileID: 1074503755}
-  garageHood: {fileID: 1121034354}
-  - {fileID: 375104640}

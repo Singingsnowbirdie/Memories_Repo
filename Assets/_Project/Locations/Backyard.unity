@@ -66831,29 +66831,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 990900000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8094193f27f546838e99a1b9a63b063e, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: Memories.Bootstrap::Memories.Bootstrap.LocationBindings
-  courtyardDoor: {fileID: 0}
-  backyardEntrance: {fileID: 990800004}
-  backyardEntranceLighting: {fileID: 1127370108}
-  garageAttachment: {fileID: 342514628}
-  garageFenceSections:
+  m_Script: {fileID: 11500000, guid: df576e281aad4175aa6b97758b2b95cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Bootstrap::Memories.Bootstrap.BackyardBindings
+  <BackyardEntrance>k__BackingField: {fileID: 990800004}
+  <BackyardEntranceLighting>k__BackingField: {fileID: 1127370108}
+  <GarageAttachment>k__BackingField: {fileID: 342514628}
+  <GarageFenceSections>k__BackingField:
   - {fileID: 1697630376}
   - {fileID: 1731664384}
   - {fileID: 1152939405}
   - {fileID: 1374426130}
-  schoolConnection: {fileID: 0}
-  garageGate: {fileID: 0}
-  gymEntrance: {fileID: 0}
-  backyardVariables: {fileID: 11400000, guid: 83af6fcb806c087438f339fcbcc76145, type: 2}
-  baseballBat: {fileID: 11400000, guid: 45b3a15aab17b7846a70e34d18147536, type: 2}
-  baseballAreaNormal: {fileID: 990820100}
-  baseballAreaReady: {fileID: 470461204}
-  intactBaseballWindow: {fileID: 1948161214}
-  brokenBaseballWindow: {fileID: 2025464472}
-  benPitcher: {fileID: 1844888136}
-  seatedBen: {fileID: 2071776372}
+  <BackyardVariables>k__BackingField: {fileID: 11400000, guid: 83af6fcb806c087438f339fcbcc76145, type: 2}
+  <BaseballBat>k__BackingField: {fileID: 11400000, guid: 45b3a15aab17b7846a70e34d18147536, type: 2}
+  <BaseballAreaNormal>k__BackingField: {fileID: 990820100}
+  <BaseballAreaReady>k__BackingField: {fileID: 470461204}
+  <IntactBaseballWindow>k__BackingField: {fileID: 1948161214}
+  <BrokenBaseballWindow>k__BackingField: {fileID: 2025464472}
+  <BenPitcher>k__BackingField: {fileID: 1844888136}
+  <SeatedBen>k__BackingField: {fileID: 2071776372}
+  <ArrivalMarker>k__BackingField: {fileID: 582786484}
+  <ConnectionIslands>k__BackingField:
+  - {fileID: 1027818138}
+  - {fileID: 53033246}
+  <ConnectionHouses>k__BackingField:
+  - {fileID: 594799893}
 --- !u!1 &910800189
 GameObject:
   m_ObjectHideFlags: 0

@@ -83,63 +83,53 @@ namespace Memories.Bootstrap
             if (scene.path != TestLocationLauncher.HousePath) return;
             bool completed = checkpoint != TesterCheckpoint.HouseEntrance;
             // Восстанавливаем результат завершённой реакции, включая привязки с локализованными названиями.
-            Set(scene, "Гостиная/Prop_OldTV/TV Static Screen", !completed);
-            Set(scene, "Гостиная/Prop_OldTV/TV Baseball Screen", completed);
-            Set(scene, "Гостиная/FEMALE Gray Seated/Remote in hand", completed);
+            var house = LocationBindings.For<HouseBindings>(scene);
+            house.TvStaticScreen.gameObject.SetActive(!completed);
+            house.TvBaseballScreen.gameObject.SetActive(completed);
+            house.RemoteInHand.gameObject.SetActive(completed);
         }
 
         private static void RestoreSchoolCourtyard(Scene scene)
         {
             // Восстанавливаем готовый этап без запуска игровых графов и воспоминаний.
-            var trackers = scene.GetRootGameObjects().SelectMany(root => root.GetComponentsInChildren<ObjectStateTracker>(true))
-                .ToDictionary(tracker => tracker.PersistentId);
-            void State(string id, bool active, bool interactive)
+            var bindings = LocationBindings.For<SchoolBindings>(scene);
+            void State(ObjectStateTracker target, bool active, bool interactive)
             {
-                var target = trackers[id];
                 target.GetComponent<ReactionInteractable>()?.SetInteractionEnabled(interactive);
                 target.gameObject.SetActive(active);
             }
-            State("school.spectator_commentator", true, false);
-            State("school.lily", false, false);
-            State("school.giles", true, false);
-            State("school.coach", false, false);
-            State("school.first_aid_cabinet", true, false);
-            State("school.ice_container", true, false);
-            State("school.teacher_ruler", false, false);
-            State("school.tissue_box", false, false);
-            State("school.vending_coin", false, false);
-            State("school.payphone", true, false);
-            State("school.ambulance", true, true);
-            State("school.ambulance_beacons", true, false);
-            State("school.yard_animation", true, false);
-            State("school.ambulance_doctor", true, false);
-            State("school.classroom_102_door", true, false);
-            var door = trackers["school.classroom_102_door"];
-            door.GetComponentsInChildren<Transform>(true).Single(t => t.name == "Петля").localRotation *= Quaternion.Euler(0, 100, 0);
-            State("school.environment_corridor", true, false);
-            State("school.environment_locker_rooms", true, false);
-            State("school.garage_corridor", false, false);
-            State("school.garage_opening_left", false, false);
-            State("school.garage_opening_right", false, false);
-            State("school.gym_door_closed", false, false);
-            State("school.gym_door_open", true, false);
-            State("school.interior_animation", true, false);
-            LocationBindings.For(scene).GymEntrance.enabled = false;
-            State("school.courtyard_left_closed", false, false);
-            State("school.courtyard_left_open", true, false);
-            State("school.courtyard_right_closed", false, false);
-            State("school.courtyard_right_open", true, false);
-            foreach (var tracker in trackers.Values) tracker.Capture();
+            State(bindings.SpectatorCommentator, true, false);
+            State(bindings.Lily, false, false);
+            State(bindings.Giles, true, false);
+            State(bindings.Coach, false, false);
+            State(bindings.FirstAidCabinet, true, false);
+            State(bindings.IceContainer, true, false);
+            State(bindings.TeacherRuler, false, false);
+            State(bindings.TissueBox, false, false);
+            State(bindings.VendingCoin, false, false);
+            State(bindings.Payphone, true, false);
+            State(bindings.Ambulance, true, true);
+            State(bindings.AmbulanceBeacons, true, false);
+            State(bindings.YardAnimation, true, false);
+            State(bindings.AmbulanceDoctor, true, false);
+            State(bindings.Classroom102Door, true, false);
+            bindings.ClassroomDoorHinge.localRotation *= Quaternion.Euler(0, 100, 0);
+            State(bindings.EnvironmentCorridor, true, false);
+            State(bindings.EnvironmentLockerRooms, true, false);
+            State(bindings.GarageCorridor, false, false);
+            State(bindings.GarageOpeningLeft, false, false);
+            State(bindings.GarageOpeningRight, false, false);
+            State(bindings.GymDoorClosed, false, false);
+            State(bindings.GymDoorOpen, true, false);
+            State(bindings.InteriorAnimation, true, false);
+            LocationBindings.For<SchoolBindings>(scene).GymEntrance.enabled = false;
+            State(bindings.CourtyardLeftClosed, false, false);
+            State(bindings.CourtyardLeftOpen, true, false);
+            State(bindings.CourtyardRightClosed, false, false);
+            State(bindings.CourtyardRightOpen, true, false);
+            foreach (var root in scene.GetRootGameObjects())
+                foreach (var tracker in root.GetComponentsInChildren<ObjectStateTracker>(true)) tracker.Capture();
             Physics.SyncTransforms();
         }
-        public static Transform Find(Scene scene, string path)
-        {
-            int split = path.IndexOf('/');
-            string rootName = split < 0 ? path : path.Substring(0, split);
-            var root = scene.GetRootGameObjects().SingleOrDefault(g => g.name == rootName);
-            var target = root == null ? null : split < 0 ? root.transform : root.transform.Find(path.Substring(split + 1));
-            return target != null ? target : throw new InvalidOperationException("Checkpoint object missing: " + path);
-        }
-        private static void Set(Scene scene, string path, bool active) => Find(scene, path).gameObject.SetActive(active);
     }
 }

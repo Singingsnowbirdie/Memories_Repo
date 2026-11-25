@@ -161,12 +161,12 @@ namespace Memories.Bootstrap
             finally { busy = false; }
         }
 
-        internal static Transform FindMarker(Scene scene, string name)
+        private static Transform GetArrivalMarker(Scene scene)
         {
-            foreach (var root in scene.GetRootGameObjects())
-                foreach (var candidate in root.GetComponentsInChildren<Transform>(true))
-                    if (candidate.name == name) return candidate;
-            return null;
+            if (scene.path == TestLocationLauncher.BackyardPath) return LocationBindings.For<BackyardBindings>(scene).ArrivalMarker;
+            if (scene.path == TestLocationLauncher.GaragePath) return LocationBindings.For<GarageBindings>(scene).ArrivalMarker;
+            if (scene.path == TestLocationLauncher.SchoolPath) return LocationBindings.For<SchoolBindings>(scene).ArrivalMarker;
+            throw new InvalidOperationException("No connection configured for scene: " + scene.path);
         }
 
         private static void ValidateConnection(Transform entrance, Transform exit)
@@ -194,7 +194,7 @@ namespace Memories.Bootstrap
             if (disposed || locationScene.path != TestLocationLauncher.BackyardPath ||
                 !SessionScope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>()
                     .Contains("backyard_baseball_second_memory")) return;
-            var bindings = LocationBindings.For(locationScene);
+            var bindings = LocationBindings.For<BackyardBindings>(locationScene);
             await LoadConnectedSceneAsync(TestLocationLauncher.GaragePath, bindings.GarageAttachment, "Вход из двора");
             if (bindings == null) return;
             foreach (var section in bindings.GarageFenceSections)
@@ -231,7 +231,7 @@ namespace Memories.Bootstrap
                 await SceneManager.LoadSceneAsync(path, LoadSceneMode.Additive);
                 scene = SceneManager.GetSceneByPath(path);
                 cancellation.Token.ThrowIfCancellationRequested();
-                var arrival = FindMarker(scene, arrivalMarker);
+                var arrival = GetArrivalMarker(scene);
                 if (arrival == null) throw new InvalidOperationException("Missing entrance marker: " + arrivalMarker);
                 ValidateConnection(arrival, connection);
                 DisableLocationCameras(scene);
@@ -241,41 +241,41 @@ namespace Memories.Bootstrap
                 float clearance = controller.radius + controller.skinWidth + .05f;
                 var cover = new ConnectionCover();
                 if (path == TestLocationLauncher.BackyardPath)
-                    foreach (var root in scene.GetRootGameObjects())
-                        foreach (var t in root.GetComponentsInChildren<Transform>(true))
-                            if (t.name == "Остров_6" || t.name == "Остров_5")
-                            {
-                                foreach (var collider in t.GetComponentsInChildren<Collider>())
-                                    if (collider.enabled) { cover.Colliders.Add(collider); collider.enabled = false; }
-                                foreach (var renderer in t.GetComponentsInChildren<Renderer>())
-                                    if (renderer.enabled) { cover.Renderers.Add(renderer); renderer.enabled = false; }
-                            }
-                            else
-                            if (t.name.StartsWith("Фанерный дом", StringComparison.Ordinal))
-                            {
-                                foreach (var collider in t.GetComponentsInChildren<Collider>())
-                                {
-                                    if (!collider.enabled) continue;
-                                    var bounds = collider.bounds;
-                                    var forward = connection.forward;
-                                    float extent = Vector3.Dot(bounds.extents,
-                                        new Vector3(Mathf.Abs(forward.x), Mathf.Abs(forward.y), Mathf.Abs(forward.z)));
-                                    if (bounds.max.y > connection.position.y + controller.radius &&
-                                        bounds.min.y < connection.position.y + controller.height - controller.radius)
-                                        clearance = Mathf.Max(clearance,
-                                            Vector3.Dot(bounds.center - connection.position, forward) + extent +
-                                            controller.radius + controller.skinWidth + .05f);
-                                    cover.Colliders.Add(collider);
-                                    collider.enabled = false;
-                                }
-                                foreach (var renderer in t.GetComponentsInChildren<Renderer>())
-                                    if (renderer.enabled) { cover.Renderers.Add(renderer); renderer.enabled = false; }
-                            }
+                {
+                    var backyard = LocationBindings.For<BackyardBindings>(scene);
+                    foreach (var t in backyard.ConnectionIslands)
+                    {
+                        foreach (var collider in t.GetComponentsInChildren<Collider>())
+                            if (collider.enabled) { cover.Colliders.Add(collider); collider.enabled = false; }
+                        foreach (var renderer in t.GetComponentsInChildren<Renderer>())
+                            if (renderer.enabled) { cover.Renderers.Add(renderer); renderer.enabled = false; }
+                    }
+                    foreach (var t in backyard.ConnectionHouses)
+                    {
+                        foreach (var collider in t.GetComponentsInChildren<Collider>())
+                        {
+                            if (!collider.enabled) continue;
+                            var bounds = collider.bounds;
+                            var forward = connection.forward;
+                            float extent = Vector3.Dot(bounds.extents,
+                                new Vector3(Mathf.Abs(forward.x), Mathf.Abs(forward.y), Mathf.Abs(forward.z)));
+                            if (bounds.max.y > connection.position.y + controller.radius &&
+                                bounds.min.y < connection.position.y + controller.height - controller.radius)
+                                clearance = Mathf.Max(clearance,
+                                    Vector3.Dot(bounds.center - connection.position, forward) + extent +
+                                    controller.radius + controller.skinWidth + .05f);
+                            cover.Colliders.Add(collider);
+                            collider.enabled = false;
+                        }
+                        foreach (var renderer in t.GetComponentsInChildren<Renderer>())
+                            if (renderer.enabled) { cover.Renderers.Add(renderer); renderer.enabled = false; }
+                    }
+                }
                 connectionCovers[scene.handle] = cover;
                 if (path == TestLocationLauncher.BackyardPath)
                 {
                     // Контакт с триггером начинается только после того, как капсула игрока минует старый фасад.
-                    var trigger = LocationBindings.For(scene).BackyardEntrance;
+                    var trigger = LocationBindings.For<BackyardBindings>(scene).BackyardEntrance;
                     trigger.transform.SetPositionAndRotation(
                         connection.position + connection.forward * (clearance + controller.radius + .2f),
                         connection.rotation);

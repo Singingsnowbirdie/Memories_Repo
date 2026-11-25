@@ -57087,15 +57087,39 @@ MonoBehaviour:
   m_GameObject: {fileID: 990900000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8094193f27f546838e99a1b9a63b063e, type: 3}
+  m_Script: {fileID: 11500000, guid: 10279a1ad31b4c7a9005708a1c266a86, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Memories.Bootstrap::Memories.Bootstrap.LocationBindings
-  courtyardDoor: {fileID: 0}
-  backyardEntrance: {fileID: 0}
-  garageAttachment: {fileID: 0}
-  schoolConnection: {fileID: 0}
-  garageGate: {fileID: 0}
-  gymEntrance: {fileID: 880320034}
+  m_EditorClassIdentifier: Memories.Bootstrap::Memories.Bootstrap.SchoolBindings
+  <GymEntrance>k__BackingField: {fileID: 880320034}
+  <GymDoorClosed>k__BackingField: {fileID: 9906600100}
+  <GymDoorOpen>k__BackingField: {fileID: 9906600101}
+  <EnvironmentCorridor>k__BackingField: {fileID: 9918600001}
+  <EnvironmentLockerRooms>k__BackingField: {fileID: 9918600003}
+  <GarageCorridor>k__BackingField: {fileID: 9918500001}
+  <GarageOpeningLeft>k__BackingField: {fileID: 9918500002}
+  <GarageOpeningRight>k__BackingField: {fileID: 9918500003}
+  <AmbulanceBeacons>k__BackingField: {fileID: 9918200001}
+  <YardAnimation>k__BackingField: {fileID: 9918700002}
+  <CourtyardLeftClosed>k__BackingField: {fileID: 9918000025}
+  <CourtyardLeftOpen>k__BackingField: {fileID: 9918000024}
+  <CourtyardRightClosed>k__BackingField: {fileID: 9918000050}
+  <CourtyardRightOpen>k__BackingField: {fileID: 9918000049}
+  <Ambulance>k__BackingField: {fileID: 405212550}
+  <AmbulanceDoctor>k__BackingField: {fileID: 327514064}
+  <Giles>k__BackingField: {fileID: 1657148733}
+  <InteriorAnimation>k__BackingField: {fileID: 9918800001}
+  <Payphone>k__BackingField: {fileID: 993300015}
+  <VendingCoin>k__BackingField: {fileID: 993202004}
+  <Coach>k__BackingField: {fileID: 2041208591}
+  <SpectatorCommentator>k__BackingField: {fileID: 8700000000023}
+  <Lily>k__BackingField: {fileID: 1249460133}
+  <FirstAidCabinet>k__BackingField: {fileID: 991000012}
+  <IceContainer>k__BackingField: {fileID: 993100005}
+  <TeacherRuler>k__BackingField: {fileID: 993000004}
+  <TissueBox>k__BackingField: {fileID: 992300004}
+  <Classroom102Door>k__BackingField: {fileID: 4228472100727748184}
+  <ArrivalMarker>k__BackingField: {fileID: 880320021}
+  <ClassroomDoorHinge>k__BackingField: {fileID: 531606136}
 --- !u!1 &991000000
 GameObject:
   m_ObjectHideFlags: 0

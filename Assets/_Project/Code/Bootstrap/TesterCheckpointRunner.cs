@@ -47,7 +47,9 @@ namespace Memories.Bootstrap
         public Transform GetSpawn(Scene scene)
         {
             var checkpoint = Selected ?? ResumeCheckpoint;
-            return PlayerSpawnPoint.Find(scene, checkpoint == TesterCheckpoint.HouseEntrance ? null : checkpoint);
+            return PlayerSpawnPoint.Find(scene,
+                checkpoint == TesterCheckpoint.HouseEntrance || checkpoint == TesterCheckpoint.GarageCorridorOpen
+                    ? null : checkpoint);
         }
 
         public async UniTask JumpToCheckpointAsync(TesterCheckpoint checkpoint)

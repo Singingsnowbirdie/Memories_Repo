@@ -55,8 +55,7 @@ namespace Memories.Bootstrap
             var player = LocationScope.Container.Resolve<PlayerMotor>();
             if (houseEntrance == null)
             {
-                foreach (var root in house.GetRootGameObjects())
-                    if (root.name == "Дом — два этажа") houseEntrance = root.transform;
+                houseEntrance = LocationBindings.For<HouseBindings>(house).EntranceFrame;
                 if (houseEntrance == null) return;
                 previousEntrancePosition = houseEntrance.InverseTransformPoint(player.transform.position);
                 return;
@@ -209,7 +208,7 @@ namespace Memories.Bootstrap
                 await transitions.RestoreBackyardGarageAsync();
                 if (locationScene.path == TestLocationLauncher.HighwayPath)
                 {
-                    var bindings = LocationBindings.For(locationScene);
+                    var bindings = LocationBindings.For<HighwayBindings>(locationScene);
                     if (!SessionScope.Container.Resolve<CustomVariableStore>().Get(bindings.HighwayVariables, "lighting_complete") &&
                         !LocationScope.Container.Resolve<ReactionManager>().TryRun(bindings.HighwayIntro))
                         throw new InvalidOperationException("Не удалось запустить вступительный граф шоссе.");

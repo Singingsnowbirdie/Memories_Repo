@@ -1,7 +1,4 @@
-using Memories.Gameplay.Memories;
-using Memories.Contracts;
 using Memories.Gameplay.Reactions;
-using Memories.Gameplay.UI;
 using UnityEngine;
 
 namespace Memories.Gameplay.Interaction

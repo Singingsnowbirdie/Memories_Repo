@@ -41865,75 +41865,47 @@ MonoBehaviour:
   m_GameObject: {fileID: 990900000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8094193f27f546838e99a1b9a63b063e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7587b11ee5d440db859ecbf667a95b25, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Memories.Bootstrap::Memories.Bootstrap.LocationBindings
-  highwayVariables: {fileID: 0}
-  highwayIntro: {fileID: 0}
-  courtyardConnection: {fileID: 1911400794}
-  backyardEntrance: {fileID: 0}
-  backyardEntranceLighting: {fileID: 0}
-  garageAttachment: {fileID: 0}
-  garageFenceSections: []
-  schoolConnection: {fileID: 0}
-  garageGate: {fileID: 0}
-  gymEntrance: {fileID: 0}
-  backyardVariables: {fileID: 0}
-  baseballBat: {fileID: 0}
-  baseballAreaNormal: {fileID: 0}
-  baseballAreaReady: {fileID: 0}
-  intactBaseballWindow: {fileID: 0}
-  brokenBaseballWindow: {fileID: 0}
-  benPitcher: {fileID: 0}
-  seatedBen: {fileID: 0}
-  garageEntrance: {fileID: 0}
-  garageSideDoor: {fileID: 0}
-  standingGarageFather: {fileID: 0}
-  kneelingGarageFather: {fileID: 0}
-  garageVariables: {fileID: 0}
-  workingGarageFather: {fileID: 0}
-  finalGarageFather: {fileID: 0}
-  garageHood: {fileID: 0}
-  hoodGarageFather: {fileID: 0}
-  parkCinema:
-    lily: {fileID: 0}
-    cashier: {fileID: 0}
-    entranceLily: {fileID: 0}
-    approachLighting: {fileID: 0}
-    tickets: {fileID: 0}
-    bouquetItem: {fileID: 0}
-    cinemaLighting: {fileID: 0}
-    benchLighting: {fileID: 0}
-  parkMimes:
-    lily: {fileID: 0}
-    cafeLily: {fileID: 0}
-    suitcase: {fileID: 0}
-    pendants: {fileID: 0}
-    tickets: {fileID: 0}
-    lighting: {fileID: 0}
-    cafeLighting: {fileID: 0}
-  parkCafe:
-    variables: {fileID: 0}
-    receipt: {fileID: 0}
-    lily: {fileID: 0}
-    truck: {fileID: 0}
-    coffeeOne: {fileID: 0}
-    coffeeTwo: {fileID: 0}
-    napkin: {fileID: 0}
-    order: {fileID: 0}
-    lighting: {fileID: 0}
-    lakeLighting: {fileID: 0}
-    dockVariables: {fileID: 0}
-    dockLily: {fileID: 0}
-    dockBoat: {fileID: 0}
-    gazeboLily: {fileID: 0}
-    gazeboLighting: {fileID: 0}
-    exitLily: {fileID: 0}
-    exitBin: {fileID: 0}
-    exitLighting: {fileID: 0}
-    returnedBouquet: {fileID: 0}
-    discardedBouquet: {fileID: 0}
-    exitGate: {fileID: 0}
+  m_EditorClassIdentifier: Memories.Bootstrap::Memories.Bootstrap.HouseBindings
+  <CourtyardConnection>k__BackingField: {fileID: 1911400794}
+  <EntranceOpen>k__BackingField: {fileID: 1993246560}
+  <EntranceClosed>k__BackingField: {fileID: 1993246559}
+  <StairOpen>k__BackingField: {fileID: 910800100}
+  <StairClosed>k__BackingField: {fileID: 910800101}
+  <CourtyardOpen>k__BackingField: {fileID: 910800137}
+  <CourtyardClosed>k__BackingField: {fileID: 910800136}
+  <CourtyardPlaceholders>k__BackingField: {fileID: 7273531}
+  <Lighting>k__BackingField: {fileID: 1936102302}
+  <TvStaticScreen>k__BackingField: {fileID: 880001105}
+  <TvBaseballScreen>k__BackingField: {fileID: 880001209}
+  <RemoteInHand>k__BackingField: {fileID: 1669012059}
+  <CourtyardCovers>k__BackingField:
+  - {fileID: 910800138}
+  - {fileID: 910800139}
+  - {fileID: 910800140}
+  - {fileID: 910800141}
+  - {fileID: 910800142}
+  - {fileID: 910800143}
+  - {fileID: 910800144}
+  - {fileID: 910800145}
+  - {fileID: 910800146}
+  - {fileID: 910800147}
+  - {fileID: 910800148}
+  - {fileID: 910800149}
+  - {fileID: 910800150}
+  - {fileID: 910800151}
+  - {fileID: 910800152}
+  - {fileID: 910800153}
+  - {fileID: 910800154}
+  - {fileID: 910800155}
+  - {fileID: 910800156}
+  - {fileID: 910800157}
+  - {fileID: 910800158}
+  - {fileID: 910800159}
+  - {fileID: 910800160}
+  - {fileID: 910800161}
+  <EntranceFrame>k__BackingField: {fileID: 1531510894}
 --- !u!1 &991281976
 GameObject:
   m_ObjectHideFlags: 0
@@ -98470,3 +98442,25 @@ SceneRoots:
   - {fileID: 7273532}
   - {fileID: 1739669847}
   - {fileID: 698403545}
+--- !u!114 &1993246560 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 910800083, guid: b7d651134251215439006063f8efd54e, type: 3}
+  m_PrefabInstance: {fileID: 1993246558}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910800104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+--- !u!114 &1993246559 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 910800084, guid: b7d651134251215439006063f8efd54e, type: 3}
+  m_PrefabInstance: {fileID: 1993246558}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910800105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker

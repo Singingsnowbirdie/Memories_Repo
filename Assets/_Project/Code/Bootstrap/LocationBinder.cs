@@ -39,13 +39,13 @@ namespace Memories.Bootstrap
                     teleport.Initialize(scope.Container.Resolve<PlayerMotor>(), scope.Container.Resolve<PlayerMovementModel>());
             if (scene.path == TestLocationLauncher.GaragePath)
             {
-                var bindings = LocationBindings.For(scene);
+                var bindings = LocationBindings.For<GarageBindings>(scene);
                 bindings.GarageEntrance.enabled = !isCurrentLocation;
                 bindings.GarageSideDoor.SetActive(isCurrentLocation);
             }
             if (scene.path == TestLocationLauncher.BackyardPath)
             {
-                var bindings = LocationBindings.For(scene);
+                var bindings = LocationBindings.For<BackyardBindings>(scene);
                 bindings.BackyardEntrance.enabled = !isCurrentLocation;
                 if (isCurrentLocation)
                     foreach (var group in bindings.BackyardEntranceLighting.GetComponentsInChildren<LightingGroup>(true))
@@ -73,94 +73,81 @@ namespace Memories.Bootstrap
             HintProgressRestoration.Restore(scope.Container.Resolve<QuestInventory>(),
                 scope.Container.Resolve<CustomVariableStore>(), scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
             scope.Container.Resolve<ObjectStateStore>().RestoreScene(scene);
-            bool legacyGymDoorOpen = scope.Container.Resolve<ObjectStateStore>()
-                .GetSavedPart("school.gym_entrance", "school-gym-entry") == "corridor-open";
-            // Новые створки восстанавливаются из собственных состояний; старые сохранения — по завершённому звонку.
-            bool courtyardWasOpened = scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>().Contains("school_call_ambulance");
-            foreach (var root in scene.GetRootGameObjects())
-                foreach (var tracker in root.GetComponentsInChildren<ObjectStateTracker>(true))
-                {
-                    if (isCurrentLocation && !tracker.HasRestoredState &&
-                        (tracker.PersistentId == "school.gym_door_closed" || tracker.PersistentId == "school.gym_door_open"))
-                        tracker.gameObject.SetActive(legacyGymDoorOpen == (tracker.PersistentId == "school.gym_door_open"));
-                    if (tracker.PersistentId.StartsWith("school.environment_") && !tracker.HasRestoredState && isCurrentLocation)
-                        tracker.gameObject.SetActive(true);
-                    // Older school saves have no separate entrance object states.
-                    if ((tracker.PersistentId == "school.garage_corridor" ||
-                         tracker.PersistentId == "school.garage_opening_left" ||
-                         tracker.PersistentId == "school.garage_opening_right") && !tracker.HasRestoredState && isCurrentLocation)
-                        tracker.gameObject.SetActive(false);
-                    if ((tracker.PersistentId == "school.ambulance_beacons" ||
-                         tracker.PersistentId == "school.yard_animation") && !tracker.HasRestoredState)
-                        tracker.gameObject.SetActive(courtyardWasOpened);
-                    if (tracker.PersistentId.StartsWith("school.courtyard_") && !tracker.HasRestoredState)
-                        tracker.gameObject.SetActive(courtyardWasOpened == tracker.PersistentId.EndsWith("_open"));
-                    if (tracker.PersistentId == "school.ambulance" && !courtyardWasOpened)
-                        tracker.GetComponent<ReactionInteractable>().SetInteractionEnabled(true);
-                }
-            var schoolTrackers = scene.GetRootGameObjects()
-                .SelectMany(root => root.GetComponentsInChildren<ObjectStateTracker>(true)).ToArray();
-            var giles = schoolTrackers.FirstOrDefault(tracker => tracker.PersistentId == "school.giles");
-            if (giles != null)
+            if (scene.path == TestLocationLauncher.SchoolPath)
             {
-                var store = scope.Container.Resolve<ObjectStateStore>();
-                string legacy = store.GetSavedPart("school.gym_entrance", "school-first-aid");
-                if (!string.IsNullOrEmpty(legacy))
+                var school = LocationBindings.For<SchoolBindings>(scene);
+                bool legacyGymDoorOpen = scope.Container.Resolve<ObjectStateStore>()
+                    .GetSavedPart("school.gym_entrance", "school-gym-entry") == "corridor-open";
+                // Новые створки восстанавливаются из собственных состояний; старые сохранения — по завершённому звонку.
+                bool courtyardWasOpened = scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>().Contains("school_call_ambulance");
+                void RestoreDefault(ObjectStateTracker tracker, bool active)
                 {
-                    var state = UnityEngine.JsonUtility.FromJson<LegacyFirstAidState>(legacy);
-                    var hints = string.IsNullOrEmpty(state.hints) ? null : UnityEngine.JsonUtility.FromJson<LegacyFirstAidHints>(state.hints);
-                    if (state.started && hints?.active != null && System.Array.Exists(hints.active, id =>
-                        id == "school.first-aid-kit" || id == "school.ice-pack" || id == "school.ruler" ||
-                        id == "school.tissues" || id == "school.return-to-coach"))
-                        giles.GetComponent<ReactionInteractable>().RestoreState("{\"active\":[\"school.first-aid-kit\"]}");
-                    giles.Capture();
-                    store.RemoveSavedPart("school.gym_entrance", "school-first-aid");
+                    if (!tracker.HasRestoredState) tracker.gameObject.SetActive(active);
                 }
+                if (isCurrentLocation)
+                {
+                    RestoreDefault(school.GymDoorClosed, !legacyGymDoorOpen);
+                    RestoreDefault(school.GymDoorOpen, legacyGymDoorOpen);
+                    RestoreDefault(school.EnvironmentCorridor, true);
+                    RestoreDefault(school.EnvironmentLockerRooms, true);
+                    RestoreDefault(school.GarageCorridor, false);
+                    RestoreDefault(school.GarageOpeningLeft, false);
+                    RestoreDefault(school.GarageOpeningRight, false);
+                }
+                RestoreDefault(school.AmbulanceBeacons, courtyardWasOpened);
+                RestoreDefault(school.YardAnimation, courtyardWasOpened);
+                RestoreDefault(school.CourtyardLeftOpen, courtyardWasOpened);
+                RestoreDefault(school.CourtyardRightOpen, courtyardWasOpened);
+                RestoreDefault(school.CourtyardLeftClosed, !courtyardWasOpened);
+                RestoreDefault(school.CourtyardRightClosed, !courtyardWasOpened);
+                if (!courtyardWasOpened)
+                    school.Ambulance.GetComponent<ReactionInteractable>().SetInteractionEnabled(true);
+                var giles = school.Giles;
+                if (giles != null)
+                {
+                    var store = scope.Container.Resolve<ObjectStateStore>();
+                    string legacy = store.GetSavedPart("school.gym_entrance", "school-first-aid");
+                    if (!string.IsNullOrEmpty(legacy))
+                    {
+                        var state = UnityEngine.JsonUtility.FromJson<LegacyFirstAidState>(legacy);
+                        var hints = string.IsNullOrEmpty(state.hints) ? null : UnityEngine.JsonUtility.FromJson<LegacyFirstAidHints>(state.hints);
+                        if (state.started && hints?.active != null && System.Array.Exists(hints.active, id =>
+                            id == "school.first-aid-kit" || id == "school.ice-pack" || id == "school.ruler" ||
+                            id == "school.tissues" || id == "school.return-to-coach"))
+                            giles.GetComponent<ReactionInteractable>().RestoreState("{\"active\":[\"school.first-aid-kit\"]}");
+                        giles.Capture();
+                        store.RemoveSavedPart("school.gym_entrance", "school-first-aid");
+                    }
+                }
+                var interiorAnimation = school.InteriorAnimation;
+                if (interiorAnimation != null && !interiorAnimation.HasRestoredState)
+                    interiorAnimation.gameObject.SetActive(school.GymDoorOpen.gameObject.activeSelf);
+                // До вызова скорой старые сохранения могли скрывать уже ожидающие во дворе машину и врача.
+                if (!scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>().Contains("school_call_ambulance"))
+                    foreach (var tracker in new[] { school.Ambulance, school.AmbulanceDoctor })
+                        if (tracker.HasRestoredState) tracker.gameObject.SetActive(true);
+                // В старых сохранениях до появления телефона и монеты интерактивность была отключена отдельно.
+                if (!scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>().Contains("school_coach_fourth_memory"))
+                    foreach (var tracker in new[] { school.Payphone, school.VendingCoin })
+                        if (tracker.HasRestoredState) tracker.GetComponent<ReactionInteractable>().SetInteractionEnabled(true);
+                // До первого школьного воспоминания Джайлз скрыт, но готов к взаимодействию после появления.
+                if (!scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>().Contains("school_commentator_memory") && school.Giles.HasRestoredState)
+                    school.Giles.GetComponent<ReactionInteractable>().SetInteractionEnabled(true);
+                // Старые сохранения до появления тренера содержат лишнее отключение интерактивности.
+                if (!scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>().Contains("school_giles_second_memory") && school.Coach.HasRestoredState)
+                    school.Coach.GetComponent<ReactionInteractable>().SetInteractionEnabled(true);
             }
-            var interiorAnimation = schoolTrackers.FirstOrDefault(tracker => tracker.PersistentId == "school.interior_animation");
-            if (interiorAnimation != null && !interiorAnimation.HasRestoredState)
-                interiorAnimation.gameObject.SetActive(schoolTrackers.Any(tracker =>
-                    tracker.PersistentId == "school.gym_door_open" && tracker.gameObject.activeSelf));
-            // До вызова скорой старые сохранения могли скрывать уже ожидающие во дворе машину и врача.
-            if (!scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>().Contains("school_call_ambulance"))
-                foreach (var root in scene.GetRootGameObjects())
-                    foreach (var tracker in root.GetComponentsInChildren<ObjectStateTracker>(true))
-                        if ((tracker.PersistentId == "school.ambulance" || tracker.PersistentId == "school.ambulance_doctor") && tracker.HasRestoredState)
-                            tracker.gameObject.SetActive(true);
-            // В старых сохранениях до появления телефона и монеты интерактивность была отключена отдельно.
-            if (!scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>().Contains("school_coach_fourth_memory"))
-                foreach (var root in scene.GetRootGameObjects())
-                    foreach (var tracker in root.GetComponentsInChildren<ObjectStateTracker>(true))
-                        if ((tracker.PersistentId == "school.payphone" || tracker.PersistentId == "school.vending_coin") && tracker.HasRestoredState)
-                            tracker.GetComponent<ReactionInteractable>().SetInteractionEnabled(true);
-            // До первого школьного воспоминания Джайлз скрыт, но готов к взаимодействию после появления.
-            if (!scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>().Contains("school_commentator_memory"))
-                foreach (var root in scene.GetRootGameObjects())
-                    foreach (var tracker in root.GetComponentsInChildren<ObjectStateTracker>(true))
-                        if (tracker.PersistentId == "school.giles" && tracker.HasRestoredState)
-                            tracker.GetComponent<ReactionInteractable>().SetInteractionEnabled(true);
-            // Старые сохранения до появления тренера содержат лишнее отключение интерактивности.
-            if (!scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>().Contains("school_giles_second_memory"))
-                foreach (var root in scene.GetRootGameObjects())
-                    foreach (var tracker in root.GetComponentsInChildren<ObjectStateTracker>(true))
-                        if (tracker.PersistentId == "school.coach" && tracker.HasRestoredState)
-                            tracker.GetComponent<ReactionInteractable>().SetInteractionEnabled(true);
             if (scene.path == TestLocationLauncher.GaragePath)
-                foreach (var root in scene.GetRootGameObjects())
-                    foreach (var tracker in root.GetComponentsInChildren<ObjectStateTracker>(true))
-                        if (tracker.PersistentId == "garage.headlamp" || tracker.PersistentId == "garage.toolbox" ||
-                            tracker.PersistentId == "garage.compressor_pickup" || tracker.PersistentId == "garage.vacuum_hose" ||
-                            tracker.PersistentId == "garage.silicone_spray" || tracker.PersistentId == "garage.paper_wipes")
-                            // Older saves may contain the former disabled interaction state.
-                            tracker.GetComponent<ReactionInteractable>().SetInteractionEnabled(true);
+                foreach (var tracker in LocationBindings.For<GarageBindings>(scene).PickupItems)
+                    tracker.GetComponent<ReactionInteractable>().SetInteractionEnabled(true);
             if (isCurrentLocation && scene.path == TestLocationLauncher.SchoolPath)
-                LocationBindings.For(scene).GymEntrance.enabled = false;
+                LocationBindings.For<SchoolBindings>(scene).GymEntrance.enabled = false;
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var interactable in root.GetComponentsInChildren<ReactionInteractable>(true))
                     interactable.RestoreInitialVisibility(scope.Container.Resolve<QuestInventory>());
             if (scene.path == TestLocationLauncher.GaragePath)
             {
-                var bindings = LocationBindings.For(scene);
+                var bindings = LocationBindings.For<GarageBindings>(scene);
                 var memories = scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>();
                 var variables = scope.Container.Resolve<CustomVariableStore>();
                 bool completed = memories.Contains("garage_second_memory") ||
@@ -183,36 +170,23 @@ namespace Memories.Bootstrap
             {
                 bool doorsClosed = scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>()
                     .Contains("house-tv-baseball");
-                foreach (var root in scene.GetRootGameObjects())
-                    foreach (var tracker in root.GetComponentsInChildren<ObjectStateTracker>(true))
-                        switch (tracker.PersistentId)
-                        {
-                            case "house.entrance.open":
-                            case "house.stair.open":
-                                if (!tracker.HasRestoredState || testerCheckpoint.HasValue)
-                                    tracker.gameObject.SetActive(!doorsClosed);
-                                break;
-                            case "house.entrance.closed":
-                            case "house.stair.closed":
-                                if (!tracker.HasRestoredState || testerCheckpoint.HasValue)
-                                    tracker.gameObject.SetActive(doorsClosed);
-                                break;
-                        }
+                var house = LocationBindings.For<HouseBindings>(scene);
+                foreach (var tracker in new[] { house.EntranceOpen, house.StairOpen })
+                    if (!tracker.HasRestoredState || testerCheckpoint.HasValue)
+                        tracker.gameObject.SetActive(!doorsClosed);
+                foreach (var tracker in new[] { house.EntranceClosed, house.StairClosed })
+                    if (!tracker.HasRestoredState || testerCheckpoint.HasValue)
+                        tracker.gameObject.SetActive(doorsClosed);
             }
-            if (scene.path == "Assets/_Project/Locations/House.unity")
+            if (scene.path == TestLocationLauncher.HousePath)
             {
-                var trackers = scene.GetRootGameObjects()
-                    .SelectMany(root => root.GetComponentsInChildren<ObjectStateTracker>(true)).ToArray();
+                var house = LocationBindings.For<HouseBindings>(scene);
                 bool courtyardOpen = scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>()
                     .Contains("house-tv-baseball");
-                // Keep the exit physically closed until the completed quest's backyard has loaded.
-                // Old saves may have hidden the parent containing the closed door.
-                foreach (var tracker in trackers)
-                    if (tracker.PersistentId == "house.courtyard.open") tracker.gameObject.SetActive(false);
-                    else if (tracker.PersistentId == "house.courtyard.closed" ||
-                        tracker.PersistentId == "house.courtyard.placeholders") tracker.gameObject.SetActive(true);
-                if (courtyardOpen)
-                    RestoreCourtyardAsync(LocationBindings.For(scene).CourtyardConnection, trackers).Forget();
+                house.CourtyardOpen.gameObject.SetActive(false);
+                house.CourtyardClosed.gameObject.SetActive(true);
+                house.CourtyardPlaceholders.gameObject.SetActive(true);
+                if (courtyardOpen) RestoreCourtyardAsync(house).Forget();
             }
             RestoreHighwayLighting(scene, scope.Container.Resolve<CustomVariableStore>());
             // Direct starts outside the highway skip its sky reveal.
@@ -230,29 +204,24 @@ namespace Memories.Bootstrap
                 var highway = SceneManager.GetSceneByPath(TestLocationLauncher.HighwayPath);
                 bool complete = isCurrentLocation || (highway.IsValid() && highway.isLoaded &&
                     scope.Container.Resolve<CustomVariableStore>()
-                        .Get(LocationBindings.For(highway).HighwayVariables, "lighting_complete"));
-                foreach (var root in scene.GetRootGameObjects())
-                    foreach (var tracker in root.GetComponentsInChildren<ObjectStateTracker>(true))
-                        if (tracker.PersistentId == "house.lighting" &&
-                            tracker.TryGetComponent<LightingGroup>(out var lighting))
-                        {
-                            lighting.RestoreBrightness(complete ? 1 : 0);
-                            tracker.gameObject.SetActive(true);
-                        }
+                        .Get(LocationBindings.For<HighwayBindings>(highway).HighwayVariables, "lighting_complete"));
+                var tracker = LocationBindings.For<HouseBindings>(scene).Lighting;
+                tracker.GetComponent<LightingGroup>().RestoreBrightness(complete ? 1 : 0);
+                tracker.gameObject.SetActive(true);
             }
             if (scene.path == "Assets/_Project/Locations/Park.unity")
-                RestoreParkCinema(LocationBindings.For(scene).ParkCinema,
+                RestoreParkCinema(LocationBindings.For<ParkBindings>(scene).ParkCinema,
                     scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<ObjectStateStore>());
             if (scene.path == "Assets/_Project/Locations/Park.unity")
-                RestoreParkMimes(LocationBindings.For(scene).ParkMimes,
+                RestoreParkMimes(LocationBindings.For<ParkBindings>(scene).ParkMimes,
                     scope.Container.Resolve<QuestInventory>(), scope.Container.Resolve<ObjectStateStore>());
             if (scene.path == "Assets/_Project/Locations/Park.unity")
-                RestoreParkCafe(LocationBindings.For(scene).ParkCafe,
+                RestoreParkCafe(LocationBindings.For<ParkBindings>(scene).ParkCafe,
                     scope.Container.Resolve<CustomVariableStore>(), scope.Container.Resolve<QuestInventory>(),
                     scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>());
             if (scene.path == TestLocationLauncher.GaragePath)
             {
-                var bindings = LocationBindings.For(scene);
+                var bindings = LocationBindings.For<GarageBindings>(scene);
                 bool completed = scope.Container.Resolve<CustomVariableStore>()
                     .Get(bindings.GarageVariables, "father_hood_items_delivered") ||
                     scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>().Contains("garage_third_memory");
@@ -265,7 +234,7 @@ namespace Memories.Bootstrap
             }
             if (scene.path == TestLocationLauncher.GaragePath)
             {
-                var bindings = LocationBindings.For(scene);
+                var bindings = LocationBindings.For<GarageBindings>(scene);
                 var variables = scope.Container.Resolve<CustomVariableStore>();
                 bool completed = variables.Get(bindings.GarageVariables, "father_final_items_delivered") ||
                     scope.Container.Resolve<Memories.Gameplay.Memories.MemoryCollection>().Contains("garage_final_memory");
@@ -280,7 +249,7 @@ namespace Memories.Bootstrap
             if (scene.path == TestLocationLauncher.BackyardPath)
             {
                 // Однократное восстановление, включая старые сохранения без флага завершения игры.
-                var bindings = LocationBindings.For(scene);
+                var bindings = LocationBindings.For<BackyardBindings>(scene);
                 var variables = scope.Container.Resolve<CustomVariableStore>();
                 var inventory = scope.Container.Resolve<QuestInventory>();
                 var bank = bindings.BackyardVariables;
@@ -305,24 +274,19 @@ namespace Memories.Bootstrap
             }
         }
 
-        private async UniTask RestoreCourtyardAsync(UnityEngine.Transform courtyard, ObjectStateTracker[] trackers)
+        private async UniTask RestoreCourtyardAsync(HouseBindings house)
         {
-            // Restore the saved presentation once; do not run gameplay graphs while loading.
             await UniTask.NextFrame();
-            if (courtyard == null) return;
-            await locations.LoadSegmentAsync(TestLocationLauncher.BackyardPath, courtyard, "Вход из дома");
-            if (courtyard == null) return;
-            foreach (var tracker in trackers)
-            {
-                if (tracker == null) continue;
-                if (tracker.PersistentId == "house.courtyard.open") tracker.gameObject.SetActive(true);
-                else if (tracker.PersistentId == "house.courtyard.closed" ||
-                    tracker.PersistentId == "house.courtyard.placeholders" ||
-                    tracker.PersistentId.StartsWith("house.courtyard.cover.", System.StringComparison.Ordinal))
-                    tracker.gameObject.SetActive(false);
-            }
+            if (house == null) return;
+            await locations.LoadSegmentAsync(TestLocationLauncher.BackyardPath, house.CourtyardConnection, "Вход из дома");
+            if (house == null) return;
+            house.CourtyardOpen.gameObject.SetActive(true);
+            house.CourtyardClosed.gameObject.SetActive(false);
+            house.CourtyardPlaceholders.gameObject.SetActive(false);
+            foreach (var cover in house.CourtyardCovers)
+                if (cover != null) cover.gameObject.SetActive(false);
         }
-        private static void RestoreParkCafe(LocationBindings.ParkCafeBindings bindings,
+        private static void RestoreParkCafe(ParkBindings.ParkCafeBindings bindings,
             CustomVariableStore state, QuestInventory inventory, Memories.Gameplay.Memories.MemoryCollection memories)
         {
             bool arrived = bindings.lily.gameObject.activeSelf;
@@ -384,7 +348,7 @@ namespace Memories.Bootstrap
                 bindings.dockBoat.SetInteractionEnabled(complete && talked && !gazeboReached);
             }
         }
-        private static void RestoreParkMimes(LocationBindings.ParkMimeBindings bindings,
+        private static void RestoreParkMimes(ParkBindings.ParkMimeBindings bindings,
             QuestInventory inventory, ObjectStateStore states)
         {
             int.TryParse(states.GetSavedPart("park.mimes.sequence", "park.mimes.sequence"), out int legacyStage);
@@ -401,7 +365,7 @@ namespace Memories.Bootstrap
             if (bindings.cafeLily) bindings.cafeLily.SetActive(finished);
         }
 
-        private static void RestoreParkCinema(LocationBindings.ParkCinemaBindings bindings,
+        private static void RestoreParkCinema(ParkBindings.ParkCinemaBindings bindings,
             QuestInventory inventory, ObjectStateStore states)
         {
             int.TryParse(states.GetSavedPart("park.lily.bouquet", "park.cinema.sequence"), out int legacyStage);
@@ -438,7 +402,7 @@ namespace Memories.Bootstrap
             // Restore completed presentation once; live lighting is invoked only by graph nodes.
             if (scene.path == TestLocationLauncher.HighwayPath)
             {
-                var bindings = LocationBindings.For(scene);
+                var bindings = LocationBindings.For<HighwayBindings>(scene);
                 bool complete = variables.Get(bindings.HighwayVariables, "lighting_complete");
                 foreach (var root in scene.GetRootGameObjects())
                     foreach (var group in root.GetComponentsInChildren<LightingGroup>(true))
