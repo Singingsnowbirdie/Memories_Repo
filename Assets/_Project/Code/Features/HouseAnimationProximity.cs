@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 namespace Memories.Gameplay
 {
-    // Создаётся только для дома; также приостанавливает траву и шейдерный ветер листвы, пока игрок внутри.
+    // Создаётся только для дома; также приостанавливает шейдерный ветер листвы, пока игрок внутри.
     public sealed class HouseAnimationProximity : MonoBehaviour
     {
         private static readonly int VegetationWindPaused = Shader.PropertyToID("_MemoriesVegetationWindPaused");
@@ -14,7 +14,6 @@ namespace Memories.Gameplay
         private readonly List<FloatingScenery> animations = new List<FloatingScenery>();
         private Bounds houseBounds;
         private PlayerMotor player;
-        private HighwayGrassWind highwayGrass;
         private bool nearby;
         private float nextCheck;
 
@@ -81,8 +80,6 @@ namespace Memories.Gameplay
             }
             Shader.SetGlobalFloat(VegetationWindPaused, insideHouse ? 1 : 0);
             nearby = shouldRun;
-            if (highwayGrass == null) highwayGrass = FindFirstObjectByType<HighwayGrassWind>();
-            if (highwayGrass != null) highwayGrass.PausedInsideHouse = insideHouse;
             foreach (var animation in animations)
                 if (animation != null) animation.DistancePaused = !nearby;
         }
@@ -90,7 +87,6 @@ namespace Memories.Gameplay
         private void OnDisable()
         {
             Shader.SetGlobalFloat(VegetationWindPaused, 0);
-            if (highwayGrass != null) highwayGrass.PausedInsideHouse = false;
             foreach (var animation in animations)
                 if (animation != null) animation.DistancePaused = false;
         }

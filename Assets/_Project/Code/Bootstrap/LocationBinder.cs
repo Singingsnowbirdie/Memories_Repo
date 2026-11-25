@@ -60,8 +60,6 @@ namespace Memories.Bootstrap
                     focus.Initialize(scope.Container.Resolve<PlayerMotor>(), scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>());
             foreach (var root in scene.GetRootGameObjects())
             {
-                foreach (var wind in root.GetComponentsInChildren<Memories.Gameplay.HighwayGrassWind>(true))
-                    wind.Initialize(scope.Container.Resolve<PlayerMotor>().transform);
                 foreach (var graphBinding in root.GetComponentsInChildren<ReactionGraphBinding>(true))
                     graphBinding.Initialize(scope.Container.Resolve<ReactionManager>());
                 foreach (var trigger in root.GetComponentsInChildren<Memories.Gameplay.Triggers.TriggerEvent>(true))
@@ -295,7 +293,7 @@ namespace Memories.Bootstrap
             bool complete = state.Get(bindings.variables, "completed") || (coffeeRead && napkinRead);
             if (bought) state.Set(bindings.variables, "ordered", true);
             if (complete) state.Set(bindings.variables, "completed", true);
-            bindings.lily.gameObject.SetActive((arrived || bought) && !complete);
+            bindings.lily.gameObject.SetActive(arrived && !bought && !complete);
             // Hidden objects stay ready for their explicit reveal graph; progress controls interaction.
             bindings.lily.SetInteractionEnabled(!bought && !complete && !state.Get(bindings.variables, "unlocked"));
             bindings.truck.SetInteractionEnabled(!bought && !complete && state.Get(bindings.variables, "unlocked"));
