@@ -242,7 +242,7 @@ namespace Memories.Bootstrap
                     var garage = LocationBindings.For<GarageBindings>(connection.gameObject.scene);
                     garage.GymEntrance.Initialize(LocationScope.Container.Resolve<ReactionManager>(), new[]
                     {
-                        new ReactionObjectBinding("school_corridor", school.EnvironmentCorridor.gameObject),
+                        new ReactionObjectBinding("school_interior", school.EnvironmentInterior.gameObject),
                         new ReactionObjectBinding("school_locker_rooms", school.EnvironmentLockerRooms.gameObject),
                         new ReactionObjectBinding("gym_closed_door", school.GymDoorClosed.gameObject),
                     });

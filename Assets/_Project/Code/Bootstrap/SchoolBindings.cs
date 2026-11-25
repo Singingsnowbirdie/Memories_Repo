@@ -14,7 +14,7 @@ namespace Memories.Bootstrap
         public ObjectStateTracker GymDoorOpen { get; private set; }
 
         [field: SerializeField]
-        public ObjectStateTracker EnvironmentCorridor { get; private set; }
+        public ObjectStateTracker EnvironmentInterior { get; private set; }
 
         [field: SerializeField]
         public ObjectStateTracker EnvironmentLockerRooms { get; private set; }

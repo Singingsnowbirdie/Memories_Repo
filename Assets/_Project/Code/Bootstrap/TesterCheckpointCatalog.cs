@@ -112,7 +112,7 @@ namespace Memories.Bootstrap
             State(bindings.AmbulanceBeacons, true, false);
             State(bindings.YardAnimation, true, false);
             State(bindings.AmbulanceDoctor, true, false);
-            State(bindings.EnvironmentCorridor, true, false);
+            State(bindings.EnvironmentInterior, true, false);
             State(bindings.EnvironmentLockerRooms, true, false);
             State(bindings.GymDoorClosed, false, false);
             State(bindings.GymDoorOpen, true, false);

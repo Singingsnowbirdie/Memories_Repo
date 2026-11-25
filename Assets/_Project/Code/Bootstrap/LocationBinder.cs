@@ -90,7 +90,7 @@ namespace Memories.Bootstrap
                 {
                     RestoreDefault(school.GymDoorClosed, !legacyGymDoorOpen);
                     RestoreDefault(school.GymDoorOpen, legacyGymDoorOpen);
-                    RestoreDefault(school.EnvironmentCorridor, true);
+                    RestoreDefault(school.EnvironmentInterior, true);
                     RestoreDefault(school.EnvironmentLockerRooms, true);
                 }
                 RestoreDefault(school.AmbulanceBeacons, courtyardWasOpened);
