@@ -114,8 +114,6 @@ namespace Memories.Bootstrap
             State(bindings.AmbulanceDoctor, true, false);
             State(bindings.EnvironmentCorridor, true, false);
             State(bindings.EnvironmentLockerRooms, true, false);
-            State(bindings.GarageOpeningLeft, false, false);
-            State(bindings.GarageOpeningRight, false, false);
             State(bindings.GymDoorClosed, false, false);
             State(bindings.GymDoorOpen, true, false);
             State(bindings.InteriorAnimation, true, false);

@@ -20,12 +20,6 @@ namespace Memories.Bootstrap
         public ObjectStateTracker EnvironmentLockerRooms { get; private set; }
 
         [field: SerializeField]
-        public ObjectStateTracker GarageOpeningLeft { get; private set; }
-
-        [field: SerializeField]
-        public ObjectStateTracker GarageOpeningRight { get; private set; }
-
-        [field: SerializeField]
         public ObjectStateTracker AmbulanceBeacons { get; private set; }
 
         [field: SerializeField]

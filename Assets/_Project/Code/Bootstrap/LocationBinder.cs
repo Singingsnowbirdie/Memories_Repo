@@ -92,8 +92,6 @@ namespace Memories.Bootstrap
                     RestoreDefault(school.GymDoorOpen, legacyGymDoorOpen);
                     RestoreDefault(school.EnvironmentCorridor, true);
                     RestoreDefault(school.EnvironmentLockerRooms, true);
-                    RestoreDefault(school.GarageOpeningLeft, false);
-                    RestoreDefault(school.GarageOpeningRight, false);
                 }
                 RestoreDefault(school.AmbulanceBeacons, courtyardWasOpened);
                 RestoreDefault(school.YardAnimation, courtyardWasOpened);

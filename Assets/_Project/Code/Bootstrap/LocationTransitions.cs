@@ -245,8 +245,6 @@ namespace Memories.Bootstrap
                         new ReactionObjectBinding("school_corridor", school.EnvironmentCorridor.gameObject),
                         new ReactionObjectBinding("school_locker_rooms", school.EnvironmentLockerRooms.gameObject),
                         new ReactionObjectBinding("gym_closed_door", school.GymDoorClosed.gameObject),
-                        new ReactionObjectBinding("garage_opening_left", school.GarageOpeningLeft.gameObject),
-                        new ReactionObjectBinding("garage_opening_right", school.GarageOpeningRight.gameObject)
                     });
                 }
                 additionalScenes.Add(scene);
