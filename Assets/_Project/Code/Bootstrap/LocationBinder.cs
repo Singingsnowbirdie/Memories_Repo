@@ -295,7 +295,7 @@ namespace Memories.Bootstrap
             bool complete = state.Get(bindings.variables, "completed") || (coffeeRead && napkinRead);
             if (bought) state.Set(bindings.variables, "ordered", true);
             if (complete) state.Set(bindings.variables, "completed", true);
-            bindings.lily.gameObject.SetActive(arrived && !bought);
+            bindings.lily.gameObject.SetActive((arrived || bought) && !complete);
             // Hidden objects stay ready for their explicit reveal graph; progress controls interaction.
             bindings.lily.SetInteractionEnabled(!bought && !complete && !state.Get(bindings.variables, "unlocked"));
             bindings.truck.SetInteractionEnabled(!bought && !complete && state.Get(bindings.variables, "unlocked"));
@@ -393,7 +393,7 @@ namespace Memories.Bootstrap
             bindings.lily.GetComponent<ReactionInteractable>().SetInteractionEnabled(!finished);
             bindings.cashier.GetComponent<ReactionInteractable>().SetInteractionEnabled(!bought && !finished);
             bindings.cinemaLighting.RestoreBrightness(arrived && !finished ? 1 : 0);
-            bindings.benchLighting.RestoreBrightness(finished ? 0 : 1);
+            bindings.benchLighting.RestoreBrightness(bouquetDelivered || arrived || finished ? 0 : 1);
         }
 
         private static void RestoreHighwayLighting(Scene scene, CustomVariableStore variables)
