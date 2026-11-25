@@ -236,6 +236,19 @@ namespace Memories.Bootstrap
                 ValidateConnection(arrival, connection);
                 DisableLocationCameras(scene);
                 BindDoors(scene, LocationScope);
+                if (path == TestLocationLauncher.SchoolPath)
+                {
+                    var school = LocationBindings.For<SchoolBindings>(scene);
+                    var garage = LocationBindings.For<GarageBindings>(connection.gameObject.scene);
+                    garage.GymEntrance.Initialize(LocationScope.Container.Resolve<ReactionManager>(), new[]
+                    {
+                        new ReactionObjectBinding("school_corridor", school.EnvironmentCorridor.gameObject),
+                        new ReactionObjectBinding("school_locker_rooms", school.EnvironmentLockerRooms.gameObject),
+                        new ReactionObjectBinding("gym_closed_door", school.GymDoorClosed.gameObject),
+                        new ReactionObjectBinding("garage_opening_left", school.GarageOpeningLeft.gameObject),
+                        new ReactionObjectBinding("garage_opening_right", school.GarageOpeningRight.gameObject)
+                    });
+                }
                 additionalScenes.Add(scene);
                 var controller = LocationScope.Container.Resolve<PlayerMotor>().GetComponent<CharacterController>();
                 float clearance = controller.radius + controller.skinWidth + .05f;

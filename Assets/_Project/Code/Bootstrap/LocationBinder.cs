@@ -66,7 +66,9 @@ namespace Memories.Bootstrap
                     trigger.Initialize(scope.Container.Resolve<Memories.Gameplay.UI.StoryTextPresenter>(),
                         scope.Container.Resolve<Memories.Gameplay.Memories.MemoryPresenter>());
                 foreach (var trigger in root.GetComponentsInChildren<Memories.Gameplay.Triggers.SceneTrigger>(true))
-                    trigger.Initialize(scope.Container.Resolve<ReactionManager>());
+                    if (scene.path != TestLocationLauncher.GaragePath ||
+                        trigger != LocationBindings.For<GarageBindings>(scene).GymEntrance)
+                        trigger.Initialize(scope.Container.Resolve<ReactionManager>());
                 foreach (var interactable in root.GetComponentsInChildren<ReactionInteractable>(true))
                     interactable.Initialize(scope.Container.Resolve<ReactionManager>(), scope.Container.Resolve<QuestInventory>());
             }
@@ -90,7 +92,6 @@ namespace Memories.Bootstrap
                     RestoreDefault(school.GymDoorOpen, legacyGymDoorOpen);
                     RestoreDefault(school.EnvironmentCorridor, true);
                     RestoreDefault(school.EnvironmentLockerRooms, true);
-                    RestoreDefault(school.GarageCorridor, false);
                     RestoreDefault(school.GarageOpeningLeft, false);
                     RestoreDefault(school.GarageOpeningRight, false);
                 }
@@ -140,8 +141,6 @@ namespace Memories.Bootstrap
             if (scene.path == TestLocationLauncher.GaragePath)
                 foreach (var tracker in LocationBindings.For<GarageBindings>(scene).PickupItems)
                     tracker.GetComponent<ReactionInteractable>().SetInteractionEnabled(true);
-            if (isCurrentLocation && scene.path == TestLocationLauncher.SchoolPath)
-                LocationBindings.For<SchoolBindings>(scene).GymEntrance.enabled = false;
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var interactable in root.GetComponentsInChildren<ReactionInteractable>(true))
                     interactable.RestoreInitialVisibility(scope.Container.Resolve<QuestInventory>());

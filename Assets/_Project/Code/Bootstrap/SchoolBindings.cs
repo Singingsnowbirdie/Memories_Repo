@@ -6,10 +6,6 @@ namespace Memories.Bootstrap
     [AddComponentMenu("Memories/Locations/School Bindings")]
     public sealed class SchoolBindings : LocationBindings
     {
-        [field: Header("ВХОД В СПОРТЗАЛ"), Space]
-        [field: SerializeField, InspectorName("Школа: вход в спортзал")]
-        public Memories.Gameplay.Triggers.SceneTrigger GymEntrance { get; private set; }
-
         [field: Header("ВОССТАНОВЛЕНИЕ СОСТОЯНИЯ"), Space]
         [field: SerializeField]
         public ObjectStateTracker GymDoorClosed { get; private set; }
@@ -22,9 +18,6 @@ namespace Memories.Bootstrap
 
         [field: SerializeField]
         public ObjectStateTracker EnvironmentLockerRooms { get; private set; }
-
-        [field: SerializeField]
-        public ObjectStateTracker GarageCorridor { get; private set; }
 
         [field: SerializeField]
         public ObjectStateTracker GarageOpeningLeft { get; private set; }
@@ -96,7 +89,7 @@ namespace Memories.Bootstrap
 
         protected override void ValidateBindings()
         {
-            Require(GymEntrance, "вход в спортзал");
+            Require(ArrivalMarker, "соединение с гаражом");
         }
     }
 }

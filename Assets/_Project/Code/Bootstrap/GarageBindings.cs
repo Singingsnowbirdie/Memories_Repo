@@ -10,6 +10,9 @@ namespace Memories.Bootstrap
         [field: SerializeField, InspectorName("Гараж: соединение со школой")]
         public Transform SchoolConnection { get; private set; }
 
+        [field: SerializeField]
+        public Memories.Gameplay.Triggers.SceneTrigger GymEntrance { get; private set; }
+
         [field: SerializeField, InspectorName("Гараж: ворота")]
         public OpenGarageGateReaction GarageGate { get; private set; }
 
@@ -79,6 +82,7 @@ namespace Memories.Bootstrap
             Require(FinalGarageFather, "отец после финального воспоминания");
             Require(GarageHood, "car hood");
             Require(HoodGarageFather, "отец у закрытого капота");
+            Require(GymEntrance, "переход в спортзал");
             Require(SchoolConnection, "соединение со школой");
             Require(GarageGate, "ворота гаража");
         }

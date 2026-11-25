@@ -1,5 +1,6 @@
 using Memories.Gameplay.Interaction;
 using System.Collections.Generic;
+using System.Linq;
 using Memories.Contracts;
 using Memories.Gameplay.Memories;
 using Memories.Gameplay.UI;
@@ -40,10 +41,10 @@ namespace Memories.Gameplay.Triggers
             reactions?.RestoreHints(this, saved.hints ?? state);
         }
         public bool IsRunning => reactions != null && reactions.IsRunning(this);
-        public void Initialize(ReactionManager reactions)
+        public void Initialize(ReactionManager reactions, ReactionObjectBinding[] connectedObjects = null)
         {
             this.reactions = reactions;
-            reactions.Bind(this, graph, objectBindings, customReactions);
+            reactions.Bind(this, graph, connectedObjects == null ? objectBindings : objectBindings.Concat(connectedObjects).ToArray(), customReactions);
         }
         public bool TryActivate()
         {
