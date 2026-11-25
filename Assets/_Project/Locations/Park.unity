@@ -159920,11 +159920,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 1.161
       objectReference: {fileID: 0}
-    - target: {fileID: 2078798551422880578, guid: 4ee27b028a294b244bb1f9ab2c26b4e1, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2078798551422880578, guid: 4ee27b028a294b244bb1f9ab2c26b4e1, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -227381,11 +227378,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2078798551422880578, guid: 4ee27b028a294b244bb1f9ab2c26b4e1, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2078798551422880578, guid: 4ee27b028a294b244bb1f9ab2c26b4e1, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -331330,7 +331324,6 @@ GameObject:
   - component: {fileID: 1624209251}
   - component: {fileID: 1624209254}
   - component: {fileID: 1624209253}
-  - component: {fileID: 1624209252}
   m_Layer: 0
   m_Name: "\u0412\u0435\u0441\u043B\u043E \u043B\u0435\u0432\u043E\u0435"
   m_TagString: Untagged
@@ -331353,28 +331346,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 849925610}
   m_LocalEulerAnglesHint: {x: 29.009, y: 136.817, z: -19.995}
---- !u!64 &1624209252
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1624209250}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 3256123080762291287, guid: e084d19dfb16d5048904de5a4f3c4f28, type: 3}
 --- !u!23 &1624209253
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -425425,7 +425396,6 @@ GameObject:
   - component: {fileID: 2090419294}
   - component: {fileID: 2090419297}
   - component: {fileID: 2090419296}
-  - component: {fileID: 2090419295}
   m_Layer: 0
   m_Name: "\u0412\u0435\u0441\u043B\u043E \u043F\u0440\u0430\u0432\u043E\u0435"
   m_TagString: Untagged
@@ -425448,28 +425418,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 849925610}
   m_LocalEulerAnglesHint: {x: 23.911, y: 48.236, z: 46.702}
---- !u!64 &2090419295
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2090419293}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 3256123080762291287, guid: e084d19dfb16d5048904de5a4f3c4f28, type: 3}
 --- !u!23 &2090419296
 MeshRenderer:
   m_ObjectHideFlags: 0
