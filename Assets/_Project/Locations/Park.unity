@@ -125835,6 +125835,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 604968301}
+  - component: {fileID: 8800000000102}
   m_Layer: 0
   m_Name: "\u041E\u0441\u0442\u0440\u043E\u0432\u0430"
   m_TagString: Untagged
@@ -125842,6 +125843,34 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &8800000000102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 604968300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fca2ebe3e6854401a8bfc5b353d0e0a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.FloatingScenery
+  objects:
+  - {fileID: 903762609}
+  - {fileID: 1444381789}
+  - {fileID: 1309397780}
+  - {fileID: 650240478}
+  - {fileID: 775037951}
+  - {fileID: 1501360909}
+  - {fileID: 1393852600}
+  - {fileID: 243665837}
+  - {fileID: 1167904237}
+  - {fileID: 1187105282}
+  - {fileID: 2085552754}
+  bobHeight: 0.125
+  period: 28
+  tiltAngle: 1
+  turnAngle: 3
 --- !u!4 &604968301
 Transform:
   m_ObjectHideFlags: 0
