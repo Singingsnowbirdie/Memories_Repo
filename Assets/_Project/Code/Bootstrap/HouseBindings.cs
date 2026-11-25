@@ -45,7 +45,7 @@ namespace Memories.Bootstrap
         public ObjectStateTracker RemoteInHand { get; private set; }
 
         [field: SerializeField]
-        public ObjectStateTracker[] CourtyardCovers { get; private set; }
+        public GameObject CourtyardCoverRoot { get; private set; }
 
         [field: Header("ВХОД В ДОМ"), Space]
         [field: SerializeField] public Transform EntranceFrame { get; private set; }
@@ -53,6 +53,7 @@ namespace Memories.Bootstrap
         protected override void ValidateBindings()
         {
             Require(CourtyardConnection, "дверь во двор");
+            Require(CourtyardCoverRoot, "перекрытие прохода во двор");
         }
     }
 }

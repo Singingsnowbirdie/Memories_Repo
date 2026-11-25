@@ -186,6 +186,7 @@ namespace Memories.Bootstrap
                 house.CourtyardOpen.gameObject.SetActive(false);
                 house.CourtyardClosed.gameObject.SetActive(true);
                 house.CourtyardPlaceholders.gameObject.SetActive(true);
+                house.CourtyardCoverRoot.SetActive(true);
                 if (courtyardOpen) RestoreCourtyardAsync(house).Forget();
             }
             RestoreHighwayLighting(scene, scope.Container.Resolve<CustomVariableStore>());
@@ -283,8 +284,7 @@ namespace Memories.Bootstrap
             house.CourtyardOpen.gameObject.SetActive(true);
             house.CourtyardClosed.gameObject.SetActive(false);
             house.CourtyardPlaceholders.gameObject.SetActive(false);
-            foreach (var cover in house.CourtyardCovers)
-                if (cover != null) cover.gameObject.SetActive(false);
+            house.CourtyardCoverRoot.SetActive(false);
         }
         private static void RestoreParkCafe(ParkBindings.ParkCafeBindings bindings,
             CustomVariableStore state, QuestInventory inventory, Memories.Gameplay.Memories.MemoryCollection memories)

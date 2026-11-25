@@ -33,7 +33,6 @@ namespace Memories.Bootstrap
         [field: SerializeField] public GameObject BrokenBaseballWindow { get; private set; }
 
         [field: Header("МАНЕКЕНЫ"), Space]
-        [field: SerializeField] public GameObject StandingBen { get; private set; }
         [field: SerializeField] public GameObject BenPitcher { get; private set; }
         [field: SerializeField] public GameObject SeatedBen { get; private set; }
 
@@ -45,7 +44,6 @@ namespace Memories.Bootstrap
 
         protected override void ValidateBindings()
         {
-            Require(StandingBen, "стоящий Бен");
             Require(BenPitcher, "Бен-питчер");
             Require(SeatedBen, "сидящий Бен");
             Require(BackyardVariables, "переменные двора");
