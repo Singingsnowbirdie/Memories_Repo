@@ -330,6 +330,9 @@ namespace Memories.Bootstrap
                 bindings.exitLily.SetInteractionEnabled(!bouquetReturned && !bouquetDiscarded);
             }
             if (bindings.exitBin != null) bindings.exitBin.SetInteractionEnabled(bouquetReturned && !bouquetDiscarded);
+            if (bindings.bouquetBins != null)
+                foreach (var bin in bindings.bouquetBins)
+                    if (bin != null) bin.SetInteractionEnabled(bouquetReturned && !bouquetDiscarded);
             if (bindings.returnedBouquet != null)
             {
                 if (bouquetDiscarded) inventory.TryConsume(bindings.returnedBouquet);

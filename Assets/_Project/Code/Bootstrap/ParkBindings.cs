@@ -59,6 +59,7 @@ namespace Memories.Bootstrap
             public LightingGroup gazeboLighting;
             [Header("ВЫХОД ИЗ ПАРКА"), Space]
             public Memories.Gameplay.Interaction.ReactionInteractable exitLily, exitBin;
+            public Memories.Gameplay.Interaction.ReactionInteractable[] bouquetBins;
             public LightingGroup exitLighting;
             public Memories.Gameplay.Interaction.QuestItem returnedBouquet;
             public GameObject discardedBouquet;
