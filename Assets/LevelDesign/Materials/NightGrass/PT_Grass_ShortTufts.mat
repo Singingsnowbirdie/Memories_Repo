@@ -16,6 +16,7 @@ Material:
   - _TRANSLUCENCYONOFF_ON
   m_InvalidKeywords:
   - _ALPHAPREMULTIPLY_ON
+  - _CUSTOMCOLORSTINTING_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
@@ -70,39 +71,58 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _AlphaCutoff: 0.5
     - _BumpScale: 1
     - _CUSTOMCOLORSTINTING: 1
     - _CUSTOMWIND: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 10
+    - _EnvironmentReflections: 1
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
-    - _Gradient: 1.4
+    - _Gradient: 1.31
     - _GradientPower: 1
-    - _LeavesThickness: 0.5
+    - _LeavesThickness: 0.583
     - _MaskClipValue: 0.5
     - _Metallic: 0
     - _Mode: 3
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _QueueControl: -1
+    - _QueueOffset: 0
+    - _ReceiveShadows: 1
     - _SNOWONOFF: 0
     - _Smoothness: 0
     - _SmoothnessTextureChannel: 0
     - _SnowAmount: 1
-    - _SnowCoverage: 0.45
+    - _SnowCoverage: 0.492
     - _SnowGradient: 0.83
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _TRANSLUCENCYONOFF: 1
-    - _TransAmbient: 0.05
-    - _TransDirect: 0.25
+    - _TransAmbient: 0.11
+    - _TransDirect: 0.275
+    - _TransNormal: 0.5
     - _TransNormalDistortion: 0.1
-    - _TransScattering: 2
+    - _TransScattering: 1
     - _TransShadow: 0.9
+    - _TransStrength: 1
     - _Translucency: 1
     - _UVSec: 0
     - _WindDensity: 1
@@ -113,6 +133,7 @@ Material:
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _GroundColor: {r: 0.10, g: 0.19, b: 0.065, a: 1}
-    - _TopColor: {r: 0.27, g: 0.39, b: 0.15, a: 1}
+    - _GroundColor: {r: 0.02193842, g: 0.16037738, b: 0.07969421, a: 1}
+    - _TopColor: {r: 0.22283775, g: 0.518, b: 0.14904715, a: 1}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1
