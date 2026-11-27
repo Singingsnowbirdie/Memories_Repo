@@ -53,8 +53,7 @@ namespace Memories.Bootstrap
             }
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var photo in root.GetComponentsInChildren<RevealPhotoReaction>(true))
-                    photo.Restore(scope.Container.Resolve<CustomVariableStore>(), scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>(),
-                        scope.Container.Resolve<PlayerMotor>());
+                    photo.Restore(scope.Container.Resolve<CustomVariableStore>());
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var focus in root.GetComponentsInChildren<FocusCameraReaction>(true))
                     focus.Initialize(scope.Container.Resolve<PlayerMotor>(), scope.Container.Resolve<Memories.Gameplay.UI.GameplayModeState>());

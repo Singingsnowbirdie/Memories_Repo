@@ -7100,7 +7100,9 @@ MonoBehaviour:
   initiallyInteractable: 1
   initiallyVisible: 1
   prompt: A+B
-  objectBindings: []
+  objectBindings:
+  - key: Ben
+    target: {fileID: 1415036113}
   customReactions: []
 --- !u!65 &952283534
 BoxCollider:
@@ -7843,8 +7845,30 @@ PrefabInstance:
     m_RemovedGameObjects:
     - {fileID: 1954166746969178691, guid: f0ac6fb9ada49f24683e3eca20786103, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5557327951299580288, guid: f0ac6fb9ada49f24683e3eca20786103, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1094719609}
   m_SourcePrefab: {fileID: 100100000, guid: f0ac6fb9ada49f24683e3eca20786103, type: 3}
+--- !u!1 &1094719608 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5557327951299580288, guid: f0ac6fb9ada49f24683e3eca20786103, type: 3}
+  m_PrefabInstance: {fileID: 1094719607}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1094719609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1094719608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: hangar.mannequin.police
+  initiallyActive: 0
 --- !u!1001 &1136798922
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9578,7 +9602,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1378937447313203076, guid: b3ed7d2fd3a59c84489fb71d0cabee50, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 189.60625
+      value: 189.426
       objectReference: {fileID: 0}
     - target: {fileID: 1378937447313203076, guid: b3ed7d2fd3a59c84489fb71d0cabee50, type: 3}
       propertyPath: m_LocalPosition.y
@@ -9586,7 +9610,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1378937447313203076, guid: b3ed7d2fd3a59c84489fb71d0cabee50, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 310.7723
+      value: 311.351
       objectReference: {fileID: 0}
     - target: {fileID: 1378937447313203076, guid: b3ed7d2fd3a59c84489fb71d0cabee50, type: 3}
       propertyPath: m_LocalRotation.w
@@ -9623,8 +9647,30 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1758982080326665534, guid: b3ed7d2fd3a59c84489fb71d0cabee50, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1415036114}
   m_SourcePrefab: {fileID: 100100000, guid: b3ed7d2fd3a59c84489fb71d0cabee50, type: 3}
+--- !u!1 &1415036113 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1758982080326665534, guid: b3ed7d2fd3a59c84489fb71d0cabee50, type: 3}
+  m_PrefabInstance: {fileID: 1415036112}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1415036114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1415036113}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: hangar.mannequin.ben
+  initiallyActive: 0
 --- !u!1 &1424542099
 GameObject:
   m_ObjectHideFlags: 0
@@ -10872,8 +10918,30 @@ PrefabInstance:
     m_RemovedGameObjects:
     - {fileID: -1227418807377963515, guid: d484111924b67cb468459a1452754720, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d484111924b67cb468459a1452754720, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1567892918}
   m_SourcePrefab: {fileID: 100100000, guid: d484111924b67cb468459a1452754720, type: 3}
+--- !u!1 &1567892917 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d484111924b67cb468459a1452754720, type: 3}
+  m_PrefabInstance: {fileID: 1567892916}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1567892918
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1567892917}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: hangar.mannequin.female_police
+  initiallyActive: 0
 --- !u!1001 &1587725098
 PrefabInstance:
   m_ObjectHideFlags: 0

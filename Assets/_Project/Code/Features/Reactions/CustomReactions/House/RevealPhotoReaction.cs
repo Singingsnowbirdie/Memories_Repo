@@ -8,7 +8,7 @@ namespace Memories.Gameplay.Reactions
     /// <summary>
     /// Запускается узлом «Появление фотографии» графа Photo_Interaction при взаимодействии с рамкой,
     /// когда граф выбирает ветку проявления фотографии.
-    /// Плавно проявляет снимок, приближает к нему камеру и возвращает её обратно; на время показа блокирует управление.
+    /// Плавно проявляет снимок, не изменяя камеру и не блокируя управление.
     /// Restore отдельно восстанавливает уже проявленное фото по сохранённой переменной без повторной анимации.
     /// </summary>
     [DisallowMultipleComponent]
@@ -25,12 +25,6 @@ namespace Memories.Gameplay.Reactions
         private RenderTexture revealedTexture;
         private Texture photo;
         private bool initialized, revealed;
-        private UI.GameplayModeState gameplayState;
-        private Player.PlayerMotor player;
-        private Transform focusedCamera;
-        private Vector3 originalCameraPosition;
-        private Quaternion originalCameraRotation;
-        private bool previousCameraControl;
         private CancellationTokenSource revealCancellation;
 
         public static void ResetProgress()
@@ -39,11 +33,8 @@ namespace Memories.Gameplay.Reactions
             PlayerPrefs.Save();
         }
 
-        public void Restore(CustomVariableStore variables, UI.GameplayModeState gameplayState = null,
-            Player.PlayerMotor player = null)
+        public void Restore(CustomVariableStore variables)
         {
-            this.gameplayState = gameplayState;
-            this.player = player;
             if (variables.PersistProgress && PlayerPrefs.HasKey(SaveKey))
             {
                 if (!variables.HasSavedValue(variableBank, revealedVariableId))
@@ -91,95 +82,26 @@ namespace Memories.Gameplay.Reactions
                 cancellationToken, this.GetCancellationTokenOnDestroy());
             revealCancellation = lifetime;
             try { await Reveal().ToUniTask(cancellationToken: lifetime.Token); }
-            catch
-            {
-                RestoreCamera();
-                gameplayState?.ReleaseControls(this);
-                throw;
-            }
             finally { revealCancellation = null; }
         }
 
         private IEnumerator Reveal()
         {
-            gameplayState?.BlockControls(this);
-            bool returningCamera = false;
-            try
-            {
-                IEnumerator cameraMovement = null;
-                if (player != null && player.CameraTransform != null)
-                {
-                    focusedCamera = player.CameraTransform;
-                    originalCameraPosition = focusedCamera.localPosition;
-                    originalCameraRotation = focusedCamera.localRotation;
-                    previousCameraControl = player.CameraPoseControlled;
-                    player.CameraPoseControlled = true;
-                    var center = photoRenderer.bounds.center;
-                    var offset = focusedCamera.position - center;
-                    float distance = Mathf.Min(offset.magnitude, Mathf.Max(.75f, photoRenderer.bounds.size.magnitude));
-                    var targetPosition = center + offset.normalized * distance;
-                    var targetRotation = Quaternion.LookRotation(center - targetPosition, Vector3.up);
-                    cameraMovement = MoveCamera(focusedCamera.parent.InverseTransformPoint(targetPosition),
-                        Quaternion.Inverse(focusedCamera.parent.rotation) * targetRotation);
-                }
-                float elapsed = 0;
-                while (elapsed < 3f)
-                {
-                    if (cameraMovement != null && !cameraMovement.MoveNext()) cameraMovement = null;
-                    elapsed += Time.deltaTime;
-                    blendMaterial.SetFloat("_Reveal", Mathf.SmoothStep(0, 1, elapsed / 3f));
-                    Graphics.Blit(photo, revealedTexture, blendMaterial);
-                    yield return null;
-                }
-                photoMaterial.mainTexture = photo;
-                // Continue the graph as soon as the photo is visible; return the camera in parallel.
-                StartCoroutine(ReturnCamera());
-                returningCamera = true;
-            }
-            finally
-            {
-                if (!returningCamera) { RestoreCamera(); gameplayState?.ReleaseControls(this); }
-            }
-        }
-
-        private IEnumerator ReturnCamera()
-        {
-            try
-            {
-                if (focusedCamera != null) yield return MoveCamera(originalCameraPosition, originalCameraRotation);
-            }
-            finally { RestoreCamera(); gameplayState?.ReleaseControls(this); }
-        }
-
-        private IEnumerator MoveCamera(Vector3 position, Quaternion rotation)
-        {
-            var fromPosition = focusedCamera.localPosition;
-            var fromRotation = focusedCamera.localRotation;
             float elapsed = 0;
-            while (elapsed < .8f && focusedCamera != null)
+            while (elapsed < 3f)
             {
                 elapsed += Time.deltaTime;
-                float t = Mathf.SmoothStep(0, 1, elapsed / .8f);
-                focusedCamera.SetLocalPositionAndRotation(Vector3.Lerp(fromPosition, position, t),
-                    Quaternion.Slerp(fromRotation, rotation, t));
+                blendMaterial.SetFloat("_Reveal", Mathf.SmoothStep(0, 1, elapsed / 3f));
+                Graphics.Blit(photo, revealedTexture, blendMaterial);
                 yield return null;
             }
-        }
-
-        private void RestoreCamera()
-        {
-            if (focusedCamera == null) return;
-            focusedCamera.SetLocalPositionAndRotation(originalCameraPosition, originalCameraRotation);
-            focusedCamera = null;
-            if (player != null) player.CameraPoseControlled = previousCameraControl;
+            photoMaterial.mainTexture = photo;
         }
 
         private void OnDisable()
         {
             revealCancellation?.Cancel();
             StopAllCoroutines();
-            RestoreCamera();
-            gameplayState?.ReleaseControls(this);
             if (revealed && photoMaterial != null) photoMaterial.mainTexture = photo;
         }
 
