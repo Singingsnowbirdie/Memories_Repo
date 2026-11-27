@@ -6554,6 +6554,7 @@ GameObject:
   - component: {fileID: 31568181}
   - component: {fileID: 31568180}
   - component: {fileID: 31568183}
+  - component: {fileID: 31568184}
   m_Layer: 0
   m_Name: Prop_CTPTrashCan_02
   m_TagString: Untagged
@@ -6695,6 +6696,20 @@ MonoBehaviour:
   customReactions:
   - key: "\u0412\u043E\u0440\u043E\u0442\u0430"
     reaction: {fileID: 2930000102}
+--- !u!114 &31568184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 31568178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: park.trash_can.inspect.04
+  initiallyActive: 1
 --- !u!1001 &31690434
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -48220,6 +48235,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2807142278202659315, guid: f48b59678641a2e4db118e9159220dc1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 237452448}
+    - targetCorrespondingSourceObject: {fileID: 2807142278202659315, guid: f48b59678641a2e4db118e9159220dc1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 237452449}
   m_SourcePrefab: {fileID: 100100000, guid: f48b59678641a2e4db118e9159220dc1, type: 3}
 --- !u!4 &237452446 stripped
 Transform:
@@ -48271,6 +48289,20 @@ MonoBehaviour:
   customReactions:
   - key: "\u0412\u043E\u0440\u043E\u0442\u0430"
     reaction: {fileID: 2930000102}
+--- !u!114 &237452449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 237452447}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: park.trash_can.inspect.05
+  initiallyActive: 1
 --- !u!1 &237826170
 GameObject:
   m_ObjectHideFlags: 0
@@ -239903,6 +239935,7 @@ GameObject:
   - component: {fileID: 1154191531}
   - component: {fileID: 1154191530}
   - component: {fileID: 1154191533}
+  - component: {fileID: 1154191534}
   m_Layer: 0
   m_Name: Prop_CTPTrashCan_02
   m_TagString: Untagged
@@ -240044,6 +240077,20 @@ MonoBehaviour:
   customReactions:
   - key: "\u0412\u043E\u0440\u043E\u0442\u0430"
     reaction: {fileID: 2930000102}
+--- !u!114 &1154191534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1154191528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: park.trash_can.inspect.01
+  initiallyActive: 1
 --- !u!1001 &1154370086
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -264135,6 +264182,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2807142278202659315, guid: f48b59678641a2e4db118e9159220dc1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1278869239}
+    - targetCorrespondingSourceObject: {fileID: 2807142278202659315, guid: f48b59678641a2e4db118e9159220dc1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1278869240}
   m_SourcePrefab: {fileID: 100100000, guid: f48b59678641a2e4db118e9159220dc1, type: 3}
 --- !u!4 &1278869237 stripped
 Transform:
@@ -264186,6 +264236,20 @@ MonoBehaviour:
   customReactions:
   - key: "\u0412\u043E\u0440\u043E\u0442\u0430"
     reaction: {fileID: 2930000102}
+--- !u!114 &1278869240
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1278869238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: park.trash_can.inspect.02
+  initiallyActive: 1
 --- !u!1001 &1279211164
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -300615,6 +300679,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2807142278202659315, guid: f48b59678641a2e4db118e9159220dc1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1458414793}
+    - targetCorrespondingSourceObject: {fileID: 2807142278202659315, guid: f48b59678641a2e4db118e9159220dc1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1458414794}
   m_SourcePrefab: {fileID: 100100000, guid: f48b59678641a2e4db118e9159220dc1, type: 3}
 --- !u!4 &1458414791 stripped
 Transform:
@@ -300666,6 +300733,20 @@ MonoBehaviour:
   customReactions:
   - key: "\u0412\u043E\u0440\u043E\u0442\u0430"
     reaction: {fileID: 2930000102}
+--- !u!114 &1458414794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1458414792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: park.trash_can.inspect.06
+  initiallyActive: 1
 --- !u!1 &1459632995
 GameObject:
   m_ObjectHideFlags: 0
@@ -393235,6 +393316,7 @@ GameObject:
   - component: {fileID: 1908075336}
   - component: {fileID: 1908075335}
   - component: {fileID: 1908075338}
+  - component: {fileID: 1908075339}
   m_Layer: 0
   m_Name: Prop_CTPTrashCan_02
   m_TagString: Untagged
@@ -393376,6 +393458,20 @@ MonoBehaviour:
   customReactions:
   - key: "\u0412\u043E\u0440\u043E\u0442\u0430"
     reaction: {fileID: 2930000102}
+--- !u!114 &1908075339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1908075333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: park.trash_can.inspect.03
+  initiallyActive: 1
 --- !u!1 &1908340618
 GameObject:
   m_ObjectHideFlags: 0
