@@ -119,6 +119,142 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1001 &48778853
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6558665586814004437, guid: 4b006db8a0b153b4094665cb1a6b5501, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.0407639
+      objectReference: {fileID: 0}
+    - target: {fileID: 6558665586814004437, guid: 4b006db8a0b153b4094665cb1a6b5501, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.0407639
+      objectReference: {fileID: 0}
+    - target: {fileID: 6558665586814004437, guid: 4b006db8a0b153b4094665cb1a6b5501, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 171.01927
+      objectReference: {fileID: 0}
+    - target: {fileID: 6558665586814004437, guid: 4b006db8a0b153b4094665cb1a6b5501, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 7.2560005
+      objectReference: {fileID: 0}
+    - target: {fileID: 6558665586814004437, guid: 4b006db8a0b153b4094665cb1a6b5501, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 316.5691
+      objectReference: {fileID: 0}
+    - target: {fileID: 6558665586814004437, guid: 4b006db8a0b153b4094665cb1a6b5501, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.3415303
+      objectReference: {fileID: 0}
+    - target: {fileID: 6558665586814004437, guid: 4b006db8a0b153b4094665cb1a6b5501, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6558665586814004437, guid: 4b006db8a0b153b4094665cb1a6b5501, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.9398708
+      objectReference: {fileID: 0}
+    - target: {fileID: 6558665586814004437, guid: 4b006db8a0b153b4094665cb1a6b5501, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6558665586814004437, guid: 4b006db8a0b153b4094665cb1a6b5501, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6558665586814004437, guid: 4b006db8a0b153b4094665cb1a6b5501, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6558665586814004437, guid: 4b006db8a0b153b4094665cb1a6b5501, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091580919018847941, guid: 4b006db8a0b153b4094665cb1a6b5501, type: 3}
+      propertyPath: m_Name
+      value: "\u0422\u0440\u0435\u0442\u0438\u0439 \u043C\u0430\u043D\u0435\u043A\u0435\u043D
+        \u043C\u0438\u0441\u0442\u0435\u0440\u0430 \u042D\u0432\u0430\u043D\u0441\u0430
+        \u2014 \u0443 \u0441\u0442\u043E\u043B\u0430"
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8091580919018847941, guid: 4b006db8a0b153b4094665cb1a6b5501, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 48778855}
+    - targetCorrespondingSourceObject: {fileID: 8091580919018847941, guid: 4b006db8a0b153b4094665cb1a6b5501, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 48778857}
+    - targetCorrespondingSourceObject: {fileID: 8091580919018847941, guid: 4b006db8a0b153b4094665cb1a6b5501, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 48778856}
+  m_SourcePrefab: {fileID: 100100000, guid: 4b006db8a0b153b4094665cb1a6b5501, type: 3}
+--- !u!1 &48778854 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8091580919018847941, guid: 4b006db8a0b153b4094665cb1a6b5501, type: 3}
+  m_PrefabInstance: {fileID: 48778853}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &48778855
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 48778854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848401c0fc8e52f46a3b19690f7d200a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Reactions.ObjectStateTracker
+  persistentId: hangar.mannequin.evans.third
+  initiallyActive: 0
+--- !u!136 &48778856
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 48778854}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.3074665
+  m_Height: 1.6814575
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.84072876, z: 0}
+--- !u!114 &48778857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 48778854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ba68190f9594ee8b2fc0603419ed015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Memories.Gameplay::Memories.Gameplay.Interaction.ReactionInteractable
+  graph: {fileID: 11400000, guid: acc8ff450ee0c78449f7ad9fd3798c05, type: 2}
+  initiallyInteractable: 1
+  initiallyVisible: 1
+  prompt: "\u041C\u0438\u0441\u0442\u0435\u0440 \u042D\u0432\u0430\u043D\u0441"
+  objectBindings: []
+  customReactions: []
 --- !u!1 &86078274
 GameObject:
   m_ObjectHideFlags: 0
@@ -14714,7 +14850,11 @@ MonoBehaviour:
   initiallyInteractable: 1
   initiallyVisible: 1
   prompt: "\u041C\u0438\u0441\u0442\u0435\u0440 \u042D\u0432\u0430\u043D\u0441"
-  objectBindings: []
+  objectBindings:
+  - key: EvansSecond
+    target: {fileID: 1961746832}
+  - key: EvansThird
+    target: {fileID: 48778854}
   customReactions: []
 --- !u!1001 &1975797368
 PrefabInstance:
@@ -17085,3 +17225,4 @@ SceneRoots:
   - {fileID: 194700417}
   - {fileID: 1961746831}
   - {fileID: 1844110304}
+  - {fileID: 48778853}
