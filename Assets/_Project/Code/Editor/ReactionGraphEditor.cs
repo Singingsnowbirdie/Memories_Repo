@@ -85,8 +85,10 @@ namespace Memories.Editor
         public override void OnBodyGUI()
         {
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("runOnce"), new GUIContent("Одноразовый"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("blockControls"), new GUIContent("Блокировать управление"));
+            var runOnce = serializedObject.FindProperty("runOnce");
+            runOnce.boolValue = EditorGUILayout.ToggleLeft("Одноразовый", runOnce.boolValue);
+            var blockControls = serializedObject.FindProperty("blockControls");
+            blockControls.boolValue = EditorGUILayout.ToggleLeft("Блокировать управление", blockControls.boolValue);
             EditorGUILayout.HelpBox("Выключено: повторный запуск разрешён. Состояние хранится отдельно у каждого объекта до выгрузки сцены.", MessageType.Info);
             NodeEditorGUILayout.PortField(new GUIContent("Далее"), target.GetOutputPort("next"));
             serializedObject.ApplyModifiedProperties();
